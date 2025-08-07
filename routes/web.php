@@ -11,4 +11,4 @@ Route::get('/about-citylife', [AboutController::class, 'index'])->name('about');
 
 // Route for the course controller
 Route::get('/courses', [CourseController::class, 'index'])->name('courses.index');
-Route::get('/courses/{id}', [CourseController::class, 'show'])->name('courses.show');
+Route::get('/courses/{slug}', [CourseController::class, 'show'])->name('courses.show');

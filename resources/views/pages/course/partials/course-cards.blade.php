@@ -32,7 +32,7 @@
                 </div>
 
                 <h3 class="donation-card__title">
-                    <a href="{{ route('courses.show', $course->id) }}">{{ $course->title }}</a>
+                    <a href="{{ route('courses.show', $course->slug) }}">{{ $course->title }}</a>
                 </h3>
 
                 <p class="course-card__description">
@@ -59,7 +59,7 @@
                 </div>
 
                 <div class="course-card__actions">
-                    <a href="{{ route('courses.show', $course->id) }}" class="donation-card__btn cleenhearts-btn cleenhearts-btn--border-base">
+                    <a href="{{ route('courses.show', $course->slug) }}" class="donation-card__btn cleenhearts-btn cleenhearts-btn--border-base">
                         <div class="cleenhearts-btn__icon-box">
                             <div class="cleenhearts-btn__icon-box__inner"><span class="icon-duble-arrow"></span></div>
                         </div>
