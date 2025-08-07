@@ -64,6 +64,11 @@ class Course extends Model
     }
 
     // Scopes
+    public function scopePublished($query)
+    {
+        return $query->where('is_registration_open', true);
+    }
+
     public function scopeRegistrationOpen($query)
     {
         return $query->where('is_registration_open', true);

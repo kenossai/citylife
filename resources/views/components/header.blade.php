@@ -39,7 +39,7 @@
                             </ul>
                         </li>
                         <li class="dropdown">
-                            <a href="index.html#">Courses</a>
+                            <a href="{{ route('courses.index') }}">Courses</a>
                             <ul>
                                 <li><a href="gallery.html">Bible School Int'l</a></li>
                                 <li><a href="gallery.html">Christian Development</a></li>

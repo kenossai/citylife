@@ -52,7 +52,9 @@ class CourseResource extends Resource
                 Forms\Components\TextInput::make('location')
                     ->maxLength(255),
                 Forms\Components\FileUpload::make('featured_image')
-                    ->image(),
+                    ->image()
+                    ->directory('courses')
+                    ->disk('public'),
                 Forms\Components\Textarea::make('requirements')
                     ->columnSpanFull(),
                 Forms\Components\Textarea::make('what_you_learn')
