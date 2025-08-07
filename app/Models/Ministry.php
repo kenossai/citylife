@@ -40,4 +40,20 @@ class Ministry extends Model
     {
         return $query->where('is_active', true);
     }
+
+    // Relationships
+    public function members()
+    {
+        return $this->belongsToMany(Member::class, 'member_ministry')->withPivot('role', 'joined_date', 'left_date', 'is_active')->withTimestamps();
+    }
+
+    public function activeMembers()
+    {
+        return $this->belongsToMany(Member::class, 'member_ministry')->wherePivot('is_active', true)->withPivot('role', 'joined_date')->withTimestamps();
+    }
+
+    public function leaders()
+    {
+        return $this->belongsToMany(Member::class, 'member_ministry')->wherePivot('role', 'Leader')->wherePivot('is_active', true)->withPivot('joined_date')->withTimestamps();
+    }
 }

@@ -6,35 +6,42 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
-class Page extends Model
+class ChurchLife extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'title',
         'slug',
-        'excerpt',
+        'description',
         'content',
-        'meta_title',
-        'meta_description',
+        'section_type',
         'featured_image',
+        'gallery_images',
         'is_published',
         'sort_order',
     ];
 
     protected $casts = [
+        'gallery_images' => 'array',
         'is_published' => 'boolean',
     ];
 
     public function setTitleAttribute($value)
     {
         $this->attributes['title'] = $value;
-        // Always auto-generate slug from title
-        $this->attributes['slug'] = Str::slug($value);
+        if (empty($this->attributes['slug'])) {
+            $this->attributes['slug'] = Str::slug($value);
+        }
     }
 
     public function scopePublished($query)
     {
         return $query->where('is_published', true);
+    }
+
+    public function scopeBySection($query, $section)
+    {
+        return $query->where('section_type', $section);
     }
 }

@@ -1,0 +1,190 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
+
+class Member extends Model
+{
+    use HasFactory;
+
+    protected $fillable = [
+        'membership_number',
+        'title',
+        'first_name',
+        'last_name',
+        'middle_name',
+        'preferred_name',
+        'date_of_birth',
+        'gender',
+        'marital_status',
+        'email',
+        'phone',
+        'alternative_phone',
+        'address',
+        'city',
+        'postal_code',
+        'country',
+        'emergency_contact_name',
+        'emergency_contact_phone',
+        'emergency_contact_relationship',
+        'occupation',
+        'employer',
+        'membership_status',
+        'first_visit_date',
+        'membership_date',
+        'baptism_status',
+        'baptism_date',
+        'previous_church',
+        'ministries_involved',
+        'skills_talents',
+        'prayer_requests',
+        'special_needs',
+        'receives_newsletter',
+        'receives_sms',
+        'photo',
+        'notes',
+        'is_active',
+    ];
+
+    protected $casts = [
+        'date_of_birth' => 'date',
+        'first_visit_date' => 'date',
+        'membership_date' => 'date',
+        'baptism_date' => 'date',
+        'ministries_involved' => 'array',
+        'skills_talents' => 'array',
+        'receives_newsletter' => 'boolean',
+        'receives_sms' => 'boolean',
+        'is_active' => 'boolean',
+    ];
+
+    // Auto-generate membership number when creating
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($member) {
+            if (empty($member->membership_number)) {
+                $member->membership_number = 'CL' . date('Y') . str_pad(static::count() + 1, 4, '0', STR_PAD_LEFT);
+            }
+        });
+    }
+
+    // Relationships
+    public function courseEnrollments()
+    {
+        return $this->hasMany(CourseEnrollment::class, 'user_id');
+    }
+
+    public function ministries()
+    {
+        return $this->belongsToMany(Ministry::class, 'member_ministry')->withTimestamps();
+    }
+
+    // Scopes
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
+    public function scopeMembers($query)
+    {
+        return $query->where('membership_status', 'member');
+    }
+
+    public function scopeVisitors($query)
+    {
+        return $query->where('membership_status', 'visitor');
+    }
+
+    public function scopeRegularAttendees($query)
+    {
+        return $query->where('membership_status', 'regular_attendee');
+    }
+
+    public function scopeBirthdays($query, $month = null)
+    {
+        $month = $month ?? now()->month;
+        return $query->whereMonth('date_of_birth', $month);
+    }
+
+    // Accessors
+    public function getFullNameAttribute()
+    {
+        $name = $this->first_name;
+        if ($this->middle_name) {
+            $name .= ' ' . $this->middle_name;
+        }
+        $name .= ' ' . $this->last_name;
+        return $name;
+    }
+
+    public function getDisplayNameAttribute()
+    {
+        return $this->preferred_name ?: $this->first_name;
+    }
+
+    public function getAgeAttribute()
+    {
+        return $this->date_of_birth ? Carbon::parse($this->date_of_birth)->age : null;
+    }
+
+    public function getFullAddressAttribute()
+    {
+        $address = $this->address;
+        if ($this->city) {
+            $address .= ', ' . $this->city;
+        }
+        if ($this->postal_code) {
+            $address .= ' ' . $this->postal_code;
+        }
+        if ($this->country && $this->country !== 'United Kingdom') {
+            $address .= ', ' . $this->country;
+        }
+        return $address;
+    }
+
+    public function getMembershipDurationAttribute()
+    {
+        if (!$this->membership_date) return null;
+        
+        return Carbon::parse($this->membership_date)->diffForHumans(null, true);
+    }
+
+    public function getStatusBadgeAttribute()
+    {
+        return match($this->membership_status) {
+            'visitor' => '<span class="badge badge-info">Visitor</span>',
+            'regular_attendee' => '<span class="badge badge-warning">Regular Attendee</span>',
+            'member' => '<span class="badge badge-success">Member</span>',
+            'inactive' => '<span class="badge badge-secondary">Inactive</span>',
+            'transferred' => '<span class="badge badge-primary">Transferred</span>',
+            default => '<span class="badge badge-secondary">Unknown</span>',
+        };
+    }
+
+    // Methods
+    public function markAsMember()
+    {
+        $this->update([
+            'membership_status' => 'member',
+            'membership_date' => now(),
+        ]);
+    }
+
+    public function getUpcomingBirthday()
+    {
+        if (!$this->date_of_birth) return null;
+        
+        $birthday = Carbon::parse($this->date_of_birth)->setYear(now()->year);
+        
+        if ($birthday->isPast()) {
+            $birthday->addYear();
+        }
+        
+        return $birthday;
+    }
+}
