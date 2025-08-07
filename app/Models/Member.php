@@ -20,6 +20,8 @@ class Member extends Model
         'date_of_birth',
         'gender',
         'marital_status',
+        'spouse_is_member',
+        'spouse_member_id',
         'email',
         'phone',
         'alternative_phone',
@@ -82,6 +84,18 @@ class Member extends Model
     public function ministries()
     {
         return $this->belongsToMany(Ministry::class, 'member_ministry')->withTimestamps();
+    }
+
+    // Spouse relationship
+    public function spouse()
+    {
+        return $this->belongsTo(Member::class, 'spouse_member_id');
+    }
+
+    // Members who have this member as their spouse
+    public function spouseOf()
+    {
+        return $this->hasOne(Member::class, 'spouse_member_id');
     }
 
     // Scopes
