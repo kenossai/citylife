@@ -17,7 +17,11 @@ class MinistryResource extends Resource
 {
     protected static ?string $model = Ministry::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-user-group';
+
+    protected static ?string $navigationGroup = 'Member Management';
+
+    protected static ?int $navigationSort = 2;
 
     public static function form(Form $form): Form
     {

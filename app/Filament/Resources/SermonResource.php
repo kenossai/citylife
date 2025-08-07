@@ -17,7 +17,11 @@ class SermonResource extends Resource
 {
     protected static ?string $model = Sermon::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-microphone';
+
+    protected static ?string $navigationGroup = 'Content Management';
+
+    protected static ?int $navigationSort = 2;
 
     public static function form(Form $form): Form
     {
