@@ -13,6 +13,15 @@ return new class extends Migration
     {
         Schema::create('pages', function (Blueprint $table) {
             $table->id();
+            $table->string('title');
+            $table->string('slug')->unique();
+            $table->text('excerpt')->nullable();
+            $table->longText('content');
+            $table->string('meta_title')->nullable();
+            $table->text('meta_description')->nullable();
+            $table->string('featured_image')->nullable();
+            $table->boolean('is_published')->default(false);
+            $table->integer('sort_order')->default(0);
             $table->timestamps();
         });
     }

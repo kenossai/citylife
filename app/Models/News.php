@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
-class Page extends Model
+class News extends Model
 {
     use HasFactory;
 
@@ -15,15 +15,17 @@ class Page extends Model
         'slug',
         'excerpt',
         'content',
-        'meta_title',
-        'meta_description',
         'featured_image',
+        'is_featured',
         'is_published',
-        'sort_order',
+        'published_at',
+        'author',
     ];
 
     protected $casts = [
+        'is_featured' => 'boolean',
         'is_published' => 'boolean',
+        'published_at' => 'datetime',
     ];
 
     public function setTitleAttribute($value)
@@ -37,5 +39,10 @@ class Page extends Model
     public function scopePublished($query)
     {
         return $query->where('is_published', true);
+    }
+
+    public function scopeFeatured($query)
+    {
+        return $query->where('is_featured', true);
     }
 }

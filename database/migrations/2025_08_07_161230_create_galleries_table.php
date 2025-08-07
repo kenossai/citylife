@@ -11,21 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sermons', function (Blueprint $table) {
+        Schema::create('galleries', function (Blueprint $table) {
             $table->id();
             $table->string('title');
             $table->string('slug')->unique();
             $table->text('description')->nullable();
-            $table->string('speaker');
-            $table->string('series')->nullable();
-            $table->text('scripture_reference')->nullable();
-            $table->date('sermon_date');
-            $table->string('audio_url')->nullable();
-            $table->string('video_url')->nullable();
-            $table->string('thumbnail')->nullable();
-            $table->integer('duration')->nullable(); // in minutes
-            $table->boolean('is_featured')->default(false);
+            $table->json('images'); // Store array of image paths
+            $table->string('featured_image')->nullable();
+            $table->date('event_date')->nullable();
             $table->boolean('is_published')->default(false);
+            $table->integer('sort_order')->default(0);
             $table->timestamps();
         });
     }
@@ -35,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sermons');
+        Schema::dropIfExists('galleries');
     }
 };

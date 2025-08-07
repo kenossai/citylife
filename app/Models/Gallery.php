@@ -6,38 +6,37 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
-class Ministry extends Model
+class Gallery extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'name',
+        'title',
         'slug',
         'description',
-        'content',
-        'leader',
-        'contact_email',
-        'meeting_time',
-        'meeting_location',
+        'images',
         'featured_image',
+        'event_date',
+        'is_published',
         'sort_order',
-        'is_active',
     ];
 
     protected $casts = [
-        'is_active' => 'boolean',
+        'images' => 'array',
+        'event_date' => 'date',
+        'is_published' => 'boolean',
     ];
 
-    public function setNameAttribute($value)
+    public function setTitleAttribute($value)
     {
-        $this->attributes['name'] = $value;
+        $this->attributes['title'] = $value;
         if (empty($this->attributes['slug'])) {
             $this->attributes['slug'] = Str::slug($value);
         }
     }
 
-    public function scopeActive($query)
+    public function scopePublished($query)
     {
-        return $query->where('is_active', true);
+        return $query->where('is_published', true);
     }
 }
