@@ -62,7 +62,7 @@ class CourseEnrollment extends Model
         // For 6-week courses, calculate progress automatically
         $totalWeeks = 6; // Fixed 6-week courses
         $completedLessons = $this->lessonProgress()->where('status', 'completed')->count();
-        
+
         $this->update([
             'completed_lessons' => $completedLessons,
             'progress_percentage' => $totalWeeks > 0 ? ($completedLessons / $totalWeeks) * 100 : 0,
@@ -72,10 +72,10 @@ class CourseEnrollment extends Model
         if ($completedLessons >= $totalWeeks && $this->status !== 'completed') {
             $this->markAsCompleted();
         }
-        
+
         // Auto-issue certificate if student attended minimum required classes (5 out of 6)
-        if ($this->course->has_certificate && 
-            !$this->certificate_issued && 
+        if ($this->course->has_certificate &&
+            !$this->certificate_issued &&
             $completedLessons >= $this->course->min_attendance_for_certificate) {
             $this->issueCertificate();
         }

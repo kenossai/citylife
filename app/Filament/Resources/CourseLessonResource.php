@@ -5,6 +5,8 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\CourseLessonResource\Pages;
 use App\Filament\Resources\CourseLessonResource\RelationManagers;
 use App\Models\CourseLesson;
+use App\Models\Course;
+use Illuminate\Support\Str;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -27,40 +29,42 @@ class CourseLessonResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('course_id')
-                    ->required()
-                    ->numeric(),
+                Forms\Components\Select::make('course_id')
+                    ->label('Course')
+                    ->options(Course::pluck('title', 'id'))
+                    ->searchable()
+                    ->required(),
                 Forms\Components\TextInput::make('title')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->live(onBlur: true)
+                    ->afterStateUpdated(fn ($state, callable $set) => $set('slug', Str::slug($state))),
                 Forms\Components\TextInput::make('slug')
                     ->required()
-                    ->maxLength(255),
-                Forms\Components\Textarea::make('description')
-                    ->columnSpanFull(),
-                Forms\Components\Textarea::make('content')
-                    ->columnSpanFull(),
+                    ->maxLength(255)
+                    ->unique(CourseLesson::class, 'slug', ignoreRecord: true),
                 Forms\Components\TextInput::make('lesson_number')
-                    ->required()
-                    ->numeric(),
-                Forms\Components\TextInput::make('duration_minutes')
-                    ->numeric(),
-                Forms\Components\TextInput::make('video_url')
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('audio_url')
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('attachments'),
-                Forms\Components\Textarea::make('homework')
-                    ->columnSpanFull(),
-                Forms\Components\Textarea::make('quiz_questions')
-                    ->columnSpanFull(),
-                Forms\Components\TextInput::make('passing_score')
+                    ->label('Lesson Number')
                     ->required()
                     ->numeric()
-                    ->default(70),
+                    ->minValue(1)
+                    ->maxValue(12),
+                Forms\Components\Textarea::make('description')
+                    ->label('Description')
+                    ->rows(3)
+                    ->columnSpanFull(),
+                Forms\Components\RichEditor::make('content')
+                    ->label('Lesson Content')
+                    ->columnSpanFull(),
+                Forms\Components\Textarea::make('quiz_questions')
+                    ->label('Quiz Questions (JSON format)')
+                    ->rows(4)
+                    ->columnSpanFull(),
                 Forms\Components\Toggle::make('is_published')
-                    ->required(),
-                Forms\Components\DatePicker::make('available_date'),
+                    ->label('Published')
+                    ->default(false),
+                Forms\Components\DatePicker::make('available_date')
+                    ->label('Available Date'),
             ]);
     }
 
@@ -68,26 +72,32 @@ class CourseLessonResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('course_id')
+                Tables\Columns\TextColumn::make('course.title')
+                    ->label('Course')
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('lesson_number')
+                    ->label('Lesson #')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('title')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('slug')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('lesson_number')
-                    ->numeric()
+                    ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('duration_minutes')
-                    ->numeric()
+                Tables\Columns\IconColumn::make('is_published')
+                    ->label('Published')
+                    ->boolean(),
+                Tables\Columns\TextColumn::make('available_date')
+                    ->label('Available')
+                    ->date()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('video_url')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('audio_url')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('passing_score')
-                    ->numeric()
-                    ->sortable(),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('updated_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\IconColumn::make('is_published')
                     ->boolean(),
                 Tables\Columns\TextColumn::make('available_date')

@@ -62,10 +62,10 @@ class CourseLesson extends Model
     public function getFormattedDurationAttribute()
     {
         if (!$this->duration_minutes) return null;
-        
+
         $hours = floor($this->duration_minutes / 60);
         $minutes = $this->duration_minutes % 60;
-        
+
         if ($hours > 0) {
             return $hours . 'h ' . $minutes . 'm';
         }

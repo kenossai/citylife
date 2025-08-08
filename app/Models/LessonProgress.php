@@ -79,10 +79,10 @@ class LessonProgress extends Model
     public function getFormattedTimeSpentAttribute()
     {
         if (!$this->time_spent_minutes) return '0m';
-        
+
         $hours = floor($this->time_spent_minutes / 60);
         $minutes = $this->time_spent_minutes % 60;
-        
+
         if ($hours > 0) {
             return $hours . 'h ' . $minutes . 'm';
         }

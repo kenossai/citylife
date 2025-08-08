@@ -4,11 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 use Carbon\Carbon;
 
 class Member extends Model
 {
-    use HasFactory;
+    use HasFactory, Notifiable;
 
     protected $fillable = [
         'membership_number',
@@ -164,7 +165,7 @@ class Member extends Model
     public function getMembershipDurationAttribute()
     {
         if (!$this->membership_date) return null;
-        
+
         return Carbon::parse($this->membership_date)->diffForHumans(null, true);
     }
 
@@ -192,13 +193,13 @@ class Member extends Model
     public function getUpcomingBirthday()
     {
         if (!$this->date_of_birth) return null;
-        
+
         $birthday = Carbon::parse($this->date_of_birth)->setYear(now()->year);
-        
+
         if ($birthday->isPast()) {
             $birthday->addYear();
         }
-        
+
         return $birthday;
     }
 }

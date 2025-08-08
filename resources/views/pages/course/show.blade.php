@@ -16,6 +16,34 @@
 </section>
 <section class="donation-details section-space">
     <div class="container">
+        {{-- Flash Messages --}}
+        @if (session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <div class="d-flex align-items-center">
+                    <i class="icon-check-circle me-3" style="font-size: 1.5rem; color: #28a745;"></i>
+                    <div>
+                        <h5 class="alert-heading mb-1">Registration Successful!</h5>
+                        <p class="mb-0">{{ session('success') }}</p>
+                    </div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
+        @if (session('error'))
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <div class="d-flex align-items-center">
+                    <i class="icon-times-circle me-3" style="font-size: 1.5rem; color: #dc3545;"></i>
+                    <div>
+                        <h5 class="alert-heading mb-1">Registration Error</h5>
+                        <p class="mb-0">{{ session('error') }}</p>
+                    </div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+        {{-- End Flash Messages --}}
+
         <div class="row gutter-y-50">
             <div class="col-lg-8">
                 <div class="donation-details__details">
@@ -87,15 +115,29 @@
                                 </div><!-- /.course-details__inner__content -->
 
                                 <div class="donation-details__donation">
+                                    @if($isEnrolled)
+                                    {{-- User is enrolled - show enrollment status --}}
+                                    <div class="donation-details__donation__info wow fadeInUp animated" data-wow-duration="1500ms" data-wow-delay="00ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 0ms; animation-name: fadeInUp;">
+                                        <div class="donation-details__donation__icon">
+                                            <span class="icon-check-circle" style="color: #28a745;"></span>
+                                        </div><!-- /.donation-details__donation__icon -->
+                                        <div class="donation-details__donation__content">
+                                            <h4 class="donation-details__donation__title">Your Status</h4>
+                                            <p class="donation-details__donation__text" style="color: #28a745; font-weight: bold;">✓ Enrolled</p>
+                                        </div><!-- /.donation-details__donation__content -->
+                                    </div><!-- /.donation-details__donation__info -->
+                                    @else
+                                    {{-- User is not enrolled - show actual enrollment count --}}
                                     <div class="donation-details__donation__info wow fadeInUp animated" data-wow-duration="1500ms" data-wow-delay="00ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 0ms; animation-name: fadeInUp;">
                                         <div class="donation-details__donation__icon">
                                             <span class="icon-group"></span>
                                         </div><!-- /.donation-details__donation__icon -->
                                         <div class="donation-details__donation__content">
-                                            <h4 class="donation-details__donation__title">Enrolled</h4>
-                                            <p class="donation-details__donation__text">{{ $course->current_enrollments ?? 0 }}</p>
+                                            <h4 class="donation-details__donation__title">Total Enrolled</h4>
+                                            <p class="donation-details__donation__text">{{ $actualEnrollmentCount }} {{ $actualEnrollmentCount == 1 ? 'student' : 'students' }}</p>
                                         </div><!-- /.donation-details__donation__content -->
                                     </div><!-- /.donation-details__donation__info -->
+                                    @endif
                                     @if($course->duration_weeks)
                                     <div class="donation-details__donation__info wow fadeInUp animated" data-wow-duration="1500ms" data-wow-delay="200ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 200ms; animation-name: fadeInUp;">
                                         <div class="donation-details__donation__icon">
@@ -107,18 +149,30 @@
                                         </div><!-- /.donation-details__donation__content -->
                                     </div><!-- /.donation-details__donation__info -->
                                     @endif
-                                    @if($course->is_registration_open)
+                                    @if($isEnrolled)
+                                    {{-- User is already enrolled --}}
                                     <div class="donation-details__donation__button wow fadeInUp animated" data-wow-duration="1500ms" data-wow-delay="400ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 400ms; animation-name: fadeInUp;">
-                                        <a href="#" class="cleenhearts-btn donation-details__donation__btn">
+                                        <div class="alert alert-success mb-0">
+                                            <div class="d-flex align-items-center">
+                                                <i class="icon-check-circle me-2" style="font-size: 1.2rem;"></i>
+                                                <span><strong>You're enrolled!</strong> We'll contact you with course details.</span>
+                                            </div>
+                                        </div>
+                                    </div><!-- /.donation-details__donation__button -->
+                                    @elseif($course->is_registration_open)
+                                    {{-- Registration is open and user not enrolled --}}
+                                    <div class="donation-details__donation__button wow fadeInUp animated" data-wow-duration="1500ms" data-wow-delay="400ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 400ms; animation-name: fadeInUp;">
+                                        <a href="{{ route('courses.register.form', $course->slug) }}" class="cleenhearts-btn donation-details__donation__btn">
                                             <div class="cleenhearts-btn__icon-box">
                                                 <div class="cleenhearts-btn__icon-box__inner"><span class="icon-duble-arrow"></span></div>
                                             </div>
-                                            <span class="cleenhearts-btn__text">Enroll Now</span>
+                                            <span class="cleenhearts-btn__text">Register</span>
                                         </a>
                                     </div><!-- /.donation-details__donation__button -->
                                     @else
+                                    {{-- Registration is closed --}}
                                     <div class="donation-details__donation__button wow fadeInUp animated" data-wow-duration="1500ms" data-wow-delay="400ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 400ms; animation-name: fadeInUp;">
-                                        <span class="btn btn-secondary">Registration Closed</span>
+                                        <span class="btn btn-secondary">Closed</span>
                                     </div><!-- /.donation-details__donation__button -->
                                     @endif
                                 </div><!-- /.donation-details__donation -->
@@ -225,11 +279,21 @@
                                 </div><!-- /.sidebar-donation__campaings__content -->
                             </div><!-- /.sidebar-donation__campaings__post -->
                             @endif
-                            @if($course->current_enrollments)
+                            @if($actualEnrollmentCount > 0)
                             <div class="sidebar-donation__campaings__post">
                                 <div class="sidebar-donation__campaings__content">
-                                    <div class="sidebar-donation__campaings__meta">Enrolled</div>
-                                    <h4 class="sidebar-donation__campaings__title">{{ $course->current_enrollments }} students</h4>
+                                    <div class="sidebar-donation__campaings__meta">Total Enrolled</div>
+                                    <h4 class="sidebar-donation__campaings__title">{{ $actualEnrollmentCount }} {{ $actualEnrollmentCount == 1 ? 'student' : 'students' }}</h4>
+                                </div><!-- /.sidebar-donation__campaings__content -->
+                            </div><!-- /.sidebar-donation__campaings__post -->
+                            @endif
+                            @if($isEnrolled && $userEnrollment)
+                            <div class="sidebar-donation__campaings__post">
+                                <div class="sidebar-donation__campaings__content">
+                                    <div class="sidebar-donation__campaings__meta">Your Enrollment</div>
+                                    <h4 class="sidebar-donation__campaings__title" style="color: #28a745;">
+                                        <i class="icon-check-circle"></i> Registered on {{ $userEnrollment->enrollment_date->format('M d, Y') }}
+                                    </h4>
                                 </div><!-- /.sidebar-donation__campaings__content -->
                             </div><!-- /.sidebar-donation__campaings__post -->
                             @endif

@@ -35,4 +35,18 @@ return [
         ],
     ],
 
+    'sms' => [
+        'driver' => env('SMS_DRIVER', 'log'), // Options: 'log', 'twilio', 'vonage'
+        'twilio' => [
+            'sid' => env('TWILIO_SID'),
+            'token' => env('TWILIO_TOKEN'),
+            'from' => env('TWILIO_FROM'),
+        ],
+        'vonage' => [
+            'api_key' => env('VONAGE_API_KEY'),
+            'api_secret' => env('VONAGE_API_SECRET'),
+            'from' => env('VONAGE_FROM'),
+        ],
+    ],
+
 ];

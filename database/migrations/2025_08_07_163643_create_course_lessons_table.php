@@ -25,7 +25,7 @@ return new class extends Migration
             $table->boolean('is_published')->default(false);
             $table->date('available_date')->nullable(); // When lesson becomes available
             $table->timestamps();
-            
+
             $table->unique(['course_id', 'lesson_number']);
         });
     }

@@ -213,7 +213,7 @@ class MemberResource extends Resource
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
                         'inactive' => 'danger',
-                        'visitor' => 'warning', 
+                        'visitor' => 'warning',
                         'member' => 'success',
                         'regular_attendee' => 'primary',
                         default => 'gray',

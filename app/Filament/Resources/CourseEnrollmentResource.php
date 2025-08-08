@@ -5,6 +5,8 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\CourseEnrollmentResource\Pages;
 use App\Filament\Resources\CourseEnrollmentResource\RelationManagers;
 use App\Models\CourseEnrollment;
+use App\Models\Course;
+use App\Models\Member;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -27,31 +29,51 @@ class CourseEnrollmentResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('course_id')
-                    ->required()
-                    ->numeric(),
-                Forms\Components\TextInput::make('user_id')
-                    ->required()
-                    ->numeric(),
-                Forms\Components\DatePicker::make('enrollment_date')
+                Forms\Components\Select::make('course_id')
+                    ->label('Course')
+                    ->options(Course::pluck('title', 'id'))
+                    ->searchable()
                     ->required(),
-                Forms\Components\TextInput::make('status')
+                Forms\Components\Select::make('user_id')
+                    ->label('Member')
+                    ->options(Member::selectRaw("id, CONCAT(first_name, ' ', last_name, ' (', email, ')') as full_name")
+                        ->pluck('full_name', 'id'))
+                    ->searchable()
+                    ->required(),
+                Forms\Components\DatePicker::make('enrollment_date')
                     ->required()
-                    ->maxLength(255)
+                    ->default(now()),
+                Forms\Components\Select::make('status')
+                    ->options([
+                        'active' => 'Active',
+                        'completed' => 'Completed',
+                        'dropped' => 'Dropped',
+                        'suspended' => 'Suspended',
+                    ])
+                    ->required()
                     ->default('active'),
                 Forms\Components\TextInput::make('progress_percentage')
-                    ->required()
+                    ->label('Progress (%)')
                     ->numeric()
-                    ->default(0.00),
+                    ->default(0.00)
+                    ->minValue(0)
+                    ->maxValue(100)
+                    ->step(0.01),
                 Forms\Components\TextInput::make('completed_lessons')
-                    ->required()
+                    ->label('Completed Lessons')
                     ->numeric()
-                    ->default(0),
+                    ->default(0)
+                    ->minValue(0),
                 Forms\Components\TextInput::make('overall_grade')
-                    ->numeric(),
-                Forms\Components\DatePicker::make('completion_date'),
+                    ->label('Overall Grade')
+                    ->numeric()
+                    ->minValue(0)
+                    ->maxValue(100),
+                Forms\Components\DatePicker::make('completion_date')
+                    ->label('Completion Date'),
                 Forms\Components\Toggle::make('certificate_issued')
-                    ->required(),
+                    ->label('Certificate Issued')
+                    ->default(false),
                 Forms\Components\TextInput::make('certificate_number')
                     ->maxLength(255),
                 Forms\Components\Textarea::make('notes')
@@ -64,33 +86,56 @@ class CourseEnrollmentResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('course_id')
-                    ->numeric()
+                Tables\Columns\TextColumn::make('course.title')
+                    ->label('Course')
+                    ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('user_id')
-                    ->numeric()
+                Tables\Columns\TextColumn::make('user.first_name')
+                    ->label('Member')
+                    ->formatStateUsing(fn ($record) => $record->user->first_name . ' ' . $record->user->last_name)
+                    ->searchable(['first_name', 'last_name'])
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('user.email')
+                    ->label('Email')
+                    ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('enrollment_date')
+                    ->label('Enrolled')
                     ->date()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('status')
+                Tables\Columns\BadgeColumn::make('status')
+                    ->colors([
+                        'success' => 'active',
+                        'primary' => 'completed',
+                        'warning' => 'suspended',
+                        'danger' => 'dropped',
+                    ])
                     ->searchable(),
                 Tables\Columns\TextColumn::make('progress_percentage')
+                    ->label('Progress')
+                    ->formatStateUsing(fn ($state) => $state . '%')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('completed_lessons')
+                    ->label('Lessons Done')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('overall_grade')
+                    ->label('Grade')
+                    ->formatStateUsing(fn ($state) => $state ? $state . '%' : '-')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('completion_date')
+                    ->label('Completed')
                     ->date()
                     ->sortable(),
                 Tables\Columns\IconColumn::make('certificate_issued')
+                    ->label('Certificate')
                     ->boolean(),
                 Tables\Columns\TextColumn::make('certificate_number')
-                    ->searchable(),
+                    ->label('Cert. Number')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
