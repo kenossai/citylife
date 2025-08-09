@@ -38,6 +38,11 @@ class CoreValuesRelationManager extends RelationManager
                     ->maxLength(255)
                     ->helperText('Bible verse reference (e.g., John 3:16)'),
 
+                Forms\Components\FileUpload::make('featured_image')
+                    ->image()
+                    ->directory('core-values')
+                    ->helperText('Featured image for this core value'),
+
                 Forms\Components\Toggle::make('is_active')
                     ->default(true)
                     ->helperText('Whether this core value is active and visible'),
@@ -63,6 +68,10 @@ class CoreValuesRelationManager extends RelationManager
                     ->sortable()
                     ->weight('bold'),
 
+                Tables\Columns\ImageColumn::make('featured_image')
+                    ->circular()
+                    ->size(50),
+
                 Tables\Columns\TextColumn::make('excerpt')
                     ->limit(50)
                     ->tooltip(function (Tables\Columns\TextColumn $column): ?string {
@@ -75,9 +84,7 @@ class CoreValuesRelationManager extends RelationManager
 
                 Tables\Columns\TextColumn::make('bible_reference')
                     ->badge()
-                    ->color('primary'),
-
-                Tables\Columns\IconColumn::make('is_active')
+                    ->color('primary'),                Tables\Columns\IconColumn::make('is_active')
                     ->boolean()
                     ->trueIcon('heroicon-o-check-circle')
                     ->falseIcon('heroicon-o-x-circle')

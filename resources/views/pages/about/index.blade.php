@@ -19,7 +19,7 @@
     <section class="about-one section-space">
         <div class="about-one__bg">
             <div class="about-one__bg__border"></div><!-- /.about-one__bg__border -->
-            <div class="about-one__bg__inner" style="background-image: url('{{ asset('assets/images/shapes/about-shape-1-1.png') }}');"></div><!-- /.about-one__left__bg__inner -->
+            <div class="about-one__bg__inner" style="background-image: url('{{ $aboutPage->featured_image_url ?: asset('assets/images/backgrounds/page-header-bg-1-1.jpg') }}');"></div><!-- /.about-one__left__bg__inner -->
         </div><!-- /.about-one__left__bg -->
         <div class="container">
             <div class="row gutter-y-50">
@@ -111,7 +111,7 @@
                 </div>
             </div><!-- /.row -->
         </div><!-- /.container -->
-        <img src="assets/images/shapes/about-shape-1-2.png" alt="cleenhearts" class="about-one__hand">
+        <img src="{{ asset('assets/images/shapes/about-shape-1-2.png') }}" alt="cleenhearts" class="about-one__hand">
     </section>
 
     {{-- Core Values Section --}}
@@ -163,7 +163,7 @@
                         <div class="owl-item" style="width: 1170px; margin-right: 20px;"><div class="item wow fadeInUp animated" data-wow-duration="1500ms" data-wow-delay="200ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 200ms; animation-name: fadeInUp;">
                             <div class="event-card-four">
                                 <a href="javascript:void(0)" class="event-card-four__image">
-                                    <img src="assets/images/events/event-2-4.jpg" alt="The generated Lorem Ipsum is therefore always free from repetition">
+                                    <img src="{{ $value->featured_image_url ?: asset('assets/images/events/event-2-4.jpg') }}" alt="{{ $value->title }}" style="object-fit: cover;">
                                 </a><!-- /.event-card-four__image -->
                                 <div class="event-card-four__content">
                                     <div class="event-card-four__time">
@@ -171,6 +171,7 @@
                                     </div><!-- /.event-card-four__time -->
                                     <h4 class="event-card-four__title">{{ $value->excerpt }}</h4><!-- /.event-card-four__title -->
                                      @if($value->bible_verse)
+                                    <div class="event-card-four__text"><em>{{ $value->description }}</em></div><!-- /.event-card-four__text -->
                                     <div class="event-card-four__text"><em>{{ $value->bible_verse }}</em></div><!-- /.event-card-four__text -->
                                     <ul class="event-card-four__meta">
                                         @if($value->bible_reference)
