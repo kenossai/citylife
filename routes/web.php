@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\TeamController;
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\CourseController;
 
@@ -15,3 +16,8 @@ Route::get('/courses', [CourseController::class, 'index'])->name('courses.index'
 Route::get('/courses/{slug}', [CourseController::class, 'show'])->name('courses.show');
 Route::get('/courses/{slug}/register', [CourseController::class, 'showRegistrationForm'])->name('courses.register.form');
 Route::post('/courses/{slug}/register', [CourseController::class, 'processRegistration'])->name('courses.register');
+
+Route::get('/team/pastoral', [TeamController::class, 'pastoral'])->name('team.pastoral');
+Route::get('/team/leadership', [TeamController::class, 'leadership'])->name('team.leadership');
+Route::get('/team', [TeamController::class, 'index'])->name('team.index');
+Route::get('/team/{slug}', [TeamController::class, 'show'])->name('team.member');
