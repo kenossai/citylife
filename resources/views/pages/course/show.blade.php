@@ -145,7 +145,7 @@
                                         </div><!-- /.donation-details__donation__icon -->
                                         <div class="donation-details__donation__content">
                                             <h4 class="donation-details__donation__title">Duration</h4>
-                                            <p class="donation-details__donation__text">{{ $course->duration_weeks }} weeks</p>
+                                            <p class="donation-details__donation__text">{{ $course->duration_weeks }} Weeks</p>
                                         </div><!-- /.donation-details__donation__content -->
                                     </div><!-- /.donation-details__donation__info -->
                                     @endif

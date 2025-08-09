@@ -65,7 +65,7 @@ class CourseRegistrationConfirmation extends Notification // Temporarily disable
         $message = "Hello {$notifiable->first_name}! You've successfully registered for {$this->course->title}. ";
         $message .= "Start date: " . $this->course->start_date?->format('M j, Y') . ". ";
         $message .= "We'll contact you soon with more details. - CityLife Team";
-        
+
         return $message;
     }
 

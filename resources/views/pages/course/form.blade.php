@@ -185,7 +185,9 @@
                                         </p>
                                     </div>
                                 </div><!-- /.become-volunteer__form__bottom -->
-                    </div><!-- /.col-lg-6 -->
+                            </div><!-- /.become-volunteer__form__inner -->
+                        </form>
+                    </div><!-- /.col-lg-12 -->
                 </div><!-- /.row -->
             </div><!-- /.container -->
         </section>

@@ -76,6 +76,13 @@ class Member extends Model
         });
     }
 
+    // Mutators to ensure data consistency
+    public function setEmailAttribute($value)
+    {
+        // Normalize email: trim whitespace and convert to lowercase
+        $this->attributes['email'] = !empty($value) ? strtolower(trim($value)) : null;
+    }
+
     // Relationships
     public function courseEnrollments()
     {

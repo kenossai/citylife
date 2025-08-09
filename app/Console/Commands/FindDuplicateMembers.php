@@ -51,7 +51,7 @@ class FindDuplicateMembers extends Command
 
             $this->newLine();
             $this->info("Email: {$duplicate->email_lower} ({$duplicate->count} duplicates)");
-            
+
             $tableData = $members->map(function ($member) {
                 return [
                     $member->id,

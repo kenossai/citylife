@@ -16,7 +16,7 @@ class SmsService
 
     /**
      * Send SMS notification
-     * 
+     *
      * @param string $phone
      * @param string $message
      * @return bool
@@ -40,7 +40,7 @@ class SmsService
                 'driver' => $this->driver,
                 'error' => $e->getMessage()
             ]);
-            
+
             return false;
         }
     }
@@ -56,7 +56,7 @@ class SmsService
             'message' => $message,
             'timestamp' => now()
         ]);
-        
+
         return true;
     }
 
@@ -71,7 +71,7 @@ class SmsService
             'message' => $message,
             'timestamp' => now()
         ]);
-        
+
         return true;
     }
 
@@ -85,13 +85,13 @@ class SmsService
             'message' => $message,
             'timestamp' => now()
         ]);
-        
+
         return true;
     }
 
     /**
      * Format phone number for SMS
-     * 
+     *
      * @param string $phone
      * @return string
      */
@@ -99,12 +99,12 @@ class SmsService
     {
         // Remove all non-numeric characters
         $phone = preg_replace('/[^0-9]/', '', $phone);
-        
+
         // Add country code if not present (assuming US/Canada +1)
         if (strlen($phone) === 10) {
             $phone = '1' . $phone;
         }
-        
+
         return '+' . $phone;
     }
 }

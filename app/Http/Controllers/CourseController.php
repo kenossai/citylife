@@ -38,11 +38,11 @@ class CourseController extends Controller
     {
         // Logic to display a single course
         $course = Course::where('slug', $slug)->firstOrFail();
-        
+
         // Check if current session has enrollment for this course (for guests)
         $userEnrollment = null;
         $isEnrolled = false;
-        
+
         // Try to find enrollment by session email (if available from recent registration)
         if (session('user_email')) {
             $member = Member::where('email', session('user_email'))->first();
@@ -53,12 +53,12 @@ class CourseController extends Controller
                 $isEnrolled = $userEnrollment !== null;
             }
         }
-        
+
         // Get the actual enrollment count (active enrollments only)
         $actualEnrollmentCount = CourseEnrollment::where('course_id', $course->id)
             ->where('status', 'active')
             ->count();
-        
+
         return view('pages.course.show', compact('course', 'userEnrollment', 'isEnrolled', 'actualEnrollmentCount'));
     }
 
@@ -78,6 +78,14 @@ class CourseController extends Controller
 
     public function processRegistration(Request $request, $slug)
     {
+        // Log the incoming request for debugging
+        Log::info('Course registration form submitted', [
+            'slug' => $slug,
+            'request_data' => $request->except(['_token']), // Log everything except token
+            'user_agent' => $request->userAgent(),
+            'ip' => $request->ip()
+        ]);
+
         // Find the course
         $course = Course::where('slug', $slug)->firstOrFail();
 
@@ -102,15 +110,22 @@ class CourseController extends Controller
         try {
             DB::beginTransaction();
 
+            // Normalize email for consistent matching
+            $normalizedEmail = strtolower(trim($validated['email']));
+            
             // Check if member already exists by email (case insensitive)
-            $member = Member::whereRaw('LOWER(email) = ?', [strtolower($validated['email'])])->first();
+            $member = Member::whereRaw('LOWER(TRIM(email)) = ?', [$normalizedEmail])->first();
 
             if (!$member) {
+                // Generate a unique membership number
+                $membershipNumber = 'CL' . date('Y') . str_pad(Member::count() + 1, 4, '0', STR_PAD_LEFT);
+                
                 // Create new member
                 $member = Member::create([
+                    'membership_number' => $membershipNumber,
                     'first_name' => $validated['first_name'],
                     'last_name' => $validated['last_name'],
-                    'email' => strtolower($validated['email']), // Store email in lowercase
+                    'email' => $normalizedEmail, // Store normalized email
                     'phone' => $validated['phone'],
                     'membership_status' => $validated['membership_status'],
                     'emergency_contact_name' => $validated['emergency_contact_name'],
@@ -118,7 +133,7 @@ class CourseController extends Controller
                     'first_visit_date' => now(),
                     'is_active' => true,
                 ]);
-                
+
                 Log::info('New member created during course registration', [
                     'member_id' => $member->id,
                     'email' => $member->email,
@@ -127,19 +142,19 @@ class CourseController extends Controller
             } else {
                 // Update existing member with any new information (only if not empty)
                 $updateData = [];
-                
+
                 if (!empty($validated['phone']) && $validated['phone'] !== $member->phone) {
                     $updateData['phone'] = $validated['phone'];
                 }
-                
+
                 if (!empty($validated['emergency_contact_name']) && $validated['emergency_contact_name'] !== $member->emergency_contact_name) {
                     $updateData['emergency_contact_name'] = $validated['emergency_contact_name'];
                 }
-                
+
                 if (!empty($validated['emergency_contact_relationship']) && $validated['emergency_contact_relationship'] !== $member->emergency_contact_relationship) {
                     $updateData['emergency_contact_relationship'] = $validated['emergency_contact_relationship'];
                 }
-                
+
                 // Update name if current member has incomplete name info
                 if (empty($member->first_name) || empty($member->last_name)) {
                     if (!empty($validated['first_name'])) {
@@ -149,12 +164,12 @@ class CourseController extends Controller
                         $updateData['last_name'] = $validated['last_name'];
                     }
                 }
-                
+
                 // Ensure member is active
                 if (!$member->is_active) {
                     $updateData['is_active'] = true;
                 }
-                
+
                 if (!empty($updateData)) {
                     $member->update($updateData);
                     Log::info('Existing member updated during course registration', [
@@ -201,7 +216,7 @@ class CourseController extends Controller
             try {
                 // Send email notification
                 $member->notify(new CourseRegistrationConfirmation($course, $enrollment));
-                
+
                 // Send SMS notification if phone number is available
                 if ($member->phone) {
                     $smsService = app(SmsService::class);
@@ -227,11 +242,11 @@ class CourseController extends Controller
             // Redirect with success message and notification status
             $successMessage = 'Successfully registered for ' . $course->title . '! ';
             $successMessage .= 'A confirmation email has been sent to ' . $member->email;
-            
+
             if ($member->phone) {
                 $successMessage .= ' and an SMS notification has been sent to your phone';
             }
-            
+
             $successMessage .= '. We will contact you soon with more details.';
 
             return redirect()->route('courses.show', $slug)
@@ -239,9 +254,18 @@ class CourseController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
+            
+            // Log the detailed error for debugging
+            Log::error('Course registration failed', [
+                'course_id' => $course->id,
+                'email' => $validated['email'] ?? 'unknown',
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
             return redirect()->back()
                 ->withInput()
-                ->with('error', 'An error occurred during registration. Please try again.');
+                ->with('error', 'An error occurred during registration: ' . $e->getMessage());
         }
     }
 }
