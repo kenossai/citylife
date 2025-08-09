@@ -4,7 +4,7 @@
     @section('keywords', $aboutPage->meta_keywords ? implode(', ', $aboutPage->meta_keywords) : '')
 
     <section class="page-header">
-        <div class="page-header__bg" style="background-image: url('{{ $aboutPage->featured_image_url ?: asset('assets/images/backgrounds/page-header-bg-1-1.jpg') }}');"></div>
+        <div class="page-header__bg" style="background-image: url('{{ asset('assets/images/backgrounds/worship-banner-1.jpg') }}');"></div>
         <!-- /.page-header__bg -->
         <div class="container">
             <h2 class="page-header__title">{{ $aboutPage->title }}</h2>
@@ -19,7 +19,7 @@
     <section class="about-one section-space">
         <div class="about-one__bg">
             <div class="about-one__bg__border"></div><!-- /.about-one__bg__border -->
-            <div class="about-one__bg__inner" style="background-image: url('{{ $aboutPage->featured_image_url ?: asset('assets/images/backgrounds/page-header-bg-1-1.jpg') }}');"></div><!-- /.about-one__left__bg__inner -->
+            <div class="about-one__bg__inner" style="background-image: url('{{ asset('assets/images/backgrounds/worship-banner-1.jpg') }}');"></div><!-- /.about-one__left__bg__inner -->
         </div><!-- /.about-one__left__bg -->
         <div class="container">
             <div class="row gutter-y-50">
@@ -54,16 +54,10 @@
                             <h3 class="sec-title__title">{{ $aboutPage->church_name }} <span class="sec-title__title__inner">{{ $aboutPage->church_description }}</span></h3><!-- /.sec-title__title -->
                         </div><!-- /.sec-title -->
                         <div class="about-one__text-box wow fadeInUp" data-wow-delay="00ms" data-wow-duration="1500ms">
+                            <p class="about-one__text"><strong>Affiliated with:</strong> {{ $aboutPage->affiliation }}</p>
+                        </div><!-- /.about-one__text-box -->
+                        <div class="about-one__text-box wow fadeInUp" data-wow-delay="00ms" data-wow-duration="1500ms">
                             <p class="about-one__text">{{ $aboutPage->introduction }}</p>
-
-                            @if($aboutPage->affiliation)
-                            <div class="about-one__affiliation mt-3">
-                                <strong>Affiliated with:</strong> {{ $aboutPage->affiliation }}
-                                @if($aboutPage->location_description)
-                                    <br><strong>Location:</strong> {{ $aboutPage->location_description }}
-                                @endif
-                            </div>
-                            @endif
                         </div><!-- /.about-one__text-box -->
 
                         {{-- Contact Information --}}
