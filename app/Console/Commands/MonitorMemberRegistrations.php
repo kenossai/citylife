@@ -29,17 +29,17 @@ class MonitorMemberRegistrations extends Command
     public function handle()
     {
         $hours = $this->option('recent');
-        
+
         $this->info("Member Registration Monitor");
         $this->info("=" . str_repeat("=", 50));
-        
+
         // Check for recent registrations
         $this->info("\n📊 Recent Activity (last {$hours} hours):");
-        
+
         $recentMembers = Member::where('created_at', '>=', now()->subHours($hours))
             ->orderBy('created_at', 'desc')
             ->get();
-            
+
         if ($recentMembers->count() > 0) {
             $this->table(
                 ['ID', 'Name', 'Email', 'Status', 'Created'],
@@ -56,21 +56,21 @@ class MonitorMemberRegistrations extends Command
         } else {
             $this->line("  No recent registrations found.");
         }
-        
+
         // Check for potential duplicates
         $this->info("\n🔍 Duplicate Detection:");
-        
+
         $duplicates = DB::select("
-            SELECT 
+            SELECT
                 LOWER(TRIM(email)) as normalized_email,
                 COUNT(*) as count,
                 GROUP_CONCAT(id) as member_ids
-            FROM members 
+            FROM members
             WHERE email IS NOT NULL AND email != ''
             GROUP BY LOWER(TRIM(email))
             HAVING COUNT(*) > 1
         ");
-        
+
         if (count($duplicates) > 0) {
             $this->error("  ⚠️  Found " . count($duplicates) . " duplicate email(s):");
             foreach ($duplicates as $duplicate) {
@@ -79,15 +79,15 @@ class MonitorMemberRegistrations extends Command
         } else {
             $this->info("  ✅ No duplicate emails found!");
         }
-        
+
         // Check course enrollments
         $this->info("\n📚 Course Enrollment Summary:");
-        
+
         $recentEnrollments = CourseEnrollment::where('enrollment_date', '>=', now()->subHours($hours))
             ->with(['course', 'user'])
             ->orderBy('enrollment_date', 'desc')
             ->get();
-            
+
         if ($recentEnrollments->count() > 0) {
             $this->table(
                 ['Course', 'Member', 'Email', 'Enrolled'],
@@ -103,10 +103,10 @@ class MonitorMemberRegistrations extends Command
         } else {
             $this->line("  No recent course enrollments found.");
         }
-        
+
         // Database integrity check
         $this->info("\n🔧 Database Integrity:");
-        
+
         // Check for members without emails
         $membersWithoutEmail = Member::whereNull('email')->orWhere('email', '')->count();
         if ($membersWithoutEmail > 0) {
@@ -114,24 +114,24 @@ class MonitorMemberRegistrations extends Command
         } else {
             $this->info("  ✅ All members have email addresses");
         }
-        
+
         // Check for orphaned enrollments
         $orphanedEnrollments = CourseEnrollment::leftJoin('members', 'course_enrollments.user_id', '=', 'members.id')
             ->whereNull('members.id')
             ->count();
-            
+
         if ($orphanedEnrollments > 0) {
             $this->error("  ⚠️  {$orphanedEnrollments} orphaned course enrollments found");
         } else {
             $this->info("  ✅ No orphaned course enrollments");
         }
-        
+
         // Summary statistics
         $this->info("\n📈 Summary Statistics:");
         $totalMembers = Member::count();
         $activeMembers = Member::where('is_active', true)->count();
         $totalEnrollments = CourseEnrollment::where('status', 'active')->count();
-        
+
         $this->table(
             ['Metric', 'Count'],
             [
@@ -142,9 +142,9 @@ class MonitorMemberRegistrations extends Command
                 ['Recent Enrollments', $recentEnrollments->count()],
             ]
         );
-        
+
         $this->info("\n✅ Monitoring complete!");
-        
+
         return 0;
     }
 }

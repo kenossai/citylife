@@ -66,7 +66,7 @@ Member::where('email', 'test.registration@example.com')->delete();
 
 try {
     $membershipNumber = 'TEST' . time();
-    
+
     $member = Member::create([
         'membership_number' => $membershipNumber,
         'first_name' => $testData['first_name'],
@@ -84,11 +84,11 @@ try {
     echo "   ID: {$member->id}\n";
     echo "   Email: {$member->email}\n";
     echo "   Membership Number: {$member->membership_number}\n";
-    
+
     // Clean up
     $member->delete();
     echo "✅ Test member cleaned up\n";
-    
+
 } catch (\Exception $e) {
     echo "❌ Member creation failed: " . $e->getMessage() . "\n";
 }

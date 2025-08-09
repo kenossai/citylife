@@ -1,39 +1,46 @@
 <x-app-layout>
-    @section('title', 'About Us')
-    <section class="page-header @@extraClassName">
-        <div class="page-header__bg" style="background-image: url('assets/images/backgrounds/page-header-bg-1-1.jpg');"></div>
+    @section('title', $aboutPage->title . ' - ' . $aboutPage->church_name)
+    @section('description', $aboutPage->meta_description ?: $aboutPage->introduction)
+    @section('keywords', $aboutPage->meta_keywords ? implode(', ', $aboutPage->meta_keywords) : '')
+
+    <section class="page-header">
+        <div class="page-header__bg" style="background-image: url('{{ $aboutPage->featured_image_url ?: asset('assets/images/backgrounds/page-header-bg-1-1.jpg') }}');"></div>
         <!-- /.page-header__bg -->
         <div class="container">
-            <h2 class="page-header__title">About us</h2>
+            <h2 class="page-header__title">{{ $aboutPage->title }}</h2>
             <ul class="cleenhearts-breadcrumb list-unstyled">
-                <li><i class="icon-home"></i> <a href="index.html">Home</a></li>
-                <li><span>About Us</span></li>
+                <li><i class="icon-home"></i> <a href="{{ route('home') }}">Home</a></li>
+                <li><span>{{ $aboutPage->title }}</span></li>
             </ul><!-- /.thm-breadcrumb list-unstyled -->
         </div><!-- /.container -->
     </section>
-    <section class="about-one @@extraClassName section-space">
+
+    {{-- Church Introduction Section --}}
+    <section class="about-one section-space">
         <div class="about-one__bg">
             <div class="about-one__bg__border"></div><!-- /.about-one__bg__border -->
-            <div class="about-one__bg__inner" style="background-image: url('assets/images/shapes/about-shape-1-1.png');"></div><!-- /.about-one__left__bg__inner -->
+            <div class="about-one__bg__inner" style="background-image: url('{{ asset('assets/images/shapes/about-shape-1-1.png') }}');"></div><!-- /.about-one__left__bg__inner -->
         </div><!-- /.about-one__left__bg -->
         <div class="container">
             <div class="row gutter-y-50">
                 <div class="col-xl-6 wow fadeInLeft" data-wow-delay="00ms" data-wow-duration="1500ms">
                     <div class="about-one__left">
                         <div class="about-one__image">
-                            <img src="assets/images/about/about-1-1.png" alt="about" class="about-one__image__one">
-                            <div class="about-one__video" style="background-image: url('assets/images/about/about-1-2.png');">
-                                <a href="https://www.youtube.com/watch?v=h9MbznbxlLc" class="about-one__video__btn video-button video-popup">
+                            <img src="{{ $aboutPage->featured_image_url ?: asset('assets/images/backgrounds/page-header-bg-1-1.jpg') }}" alt="about" class="about-one__image__one">
+                            @if($aboutPage->social_media_links && isset($aboutPage->social_media_links['youtube']))
+                            <div class="about-one__video" style="background-image: url('{{ asset('assets/images/about/about-1-2.png') }}');">
+                                <a href="{{ $aboutPage->social_media_links['youtube'] }}" class="about-one__video__btn video-button video-popup">
                                     <span class="icon-play"></span>
                                     <i class="video-button__ripple"></i>
                                 </a><!-- /.about-one__video__btn -->
                             </div><!-- /.about-one__video -->
+                            @endif
                             <div class="about-one__profile volunteer-profile">
                                 <div class="volunteer-profile__inner">
-                                    <img src="assets/images/resources/robert-joe-kerry.png" alt="Robert Joe Kerry" class="volunteer-profile__image">
+                                    <img src="{{ asset('assets/images/resources/robert-joe-kerry.png') }}" alt="Pastor" class="volunteer-profile__image">
                                     <div class="volunteer-profile__info">
-                                        <h4 class="volunteer-profile__name"><a href="volunteer-details.html">Robert Joe Kerry</a></h4><!-- /.volunteer-profile__name -->
-                                        <p class="volunteer-profile__designation">Founder</p><!-- /.volunteer-profile__designation -->
+                                        <h4 class="volunteer-profile__name"><a href="#">Lead Pastor</a></h4><!-- /.volunteer-profile__name -->
+                                        <p class="volunteer-profile__designation">{{ $aboutPage->church_name }}</p><!-- /.volunteer-profile__designation -->
                                     </div><!-- /.volunteer-profile__info -->
                                 </div><!-- /.volunteer-profile__inner -->
                             </div><!-- /.about-one__profile -->
@@ -43,56 +50,48 @@
                 <div class="col-xl-6">
                     <div class="about-one__content">
                         <div class="sec-title">
-
-                            <h6 class="sec-title__tagline @@extraClassName">ABOUT CLEAN HEART</h6><!-- /.sec-title__tagline -->
-
-                            <h3 class="sec-title__title">Helping Each Other can Make World <span class="sec-title__title__inner">Better</span></h3><!-- /.sec-title__title -->
+                            <h6 class="sec-title__tagline">{{ strtoupper($aboutPage->title) }}</h6><!-- /.sec-title__tagline -->
+                            <h3 class="sec-title__title">{{ $aboutPage->church_name }} <span class="sec-title__title__inner">{{ $aboutPage->church_description }}</span></h3><!-- /.sec-title__title -->
                         </div><!-- /.sec-title -->
                         <div class="about-one__text-box wow fadeInUp" data-wow-delay="00ms" data-wow-duration="1500ms">
-                            <div class="about-one__text-box__image">
-                                <img src="assets/images/about/about-1-3.jpg" alt="about">
-                            </div><!-- /.about-one__text-box__image -->
-                            <p class="about-one__text">We help companies develop powerful corporate social responsibility, grantmaking, and employee engagement strategies.</p>
+                            <p class="about-one__text">{{ $aboutPage->introduction }}</p>
+
+                            @if($aboutPage->affiliation)
+                            <div class="about-one__affiliation mt-3">
+                                <strong>Affiliated with:</strong> {{ $aboutPage->affiliation }}
+                                @if($aboutPage->location_description)
+                                    <br><strong>Location:</strong> {{ $aboutPage->location_description }}
+                                @endif
+                            </div>
+                            @endif
                         </div><!-- /.about-one__text-box -->
-                        <div class="about-one__wrapper">
-                            <div class="row gutter-y-40">
-                                <div class="col-lg-4 col-sm-4 wow fadeInUp" data-wow-delay="00ms" data-wow-duration="1500ms">
-                                    <div class="about-one__donate about-one__donate--one">
-                                        <div class="about-one__donate__icon">
-                                            <span class="icon-team"></span>
-                                        </div><!-- /.about-one__donate__icon -->
-                                        <h4 class="about-one__donate__title">join our team</h4><!-- /.about-one__donate__title -->
-                                        <div class="about-one__donate__text">
-                                            <span>6,472</span>
-                                        </div><!-- /.about-one__donate__text -->
-                                    </div><!-- /.about-one__donate -->
-                                </div><!-- /.col-lg-4 col-sm-4 -->
-                                <div class="col-lg-4 col-sm-4 wow fadeInUp" data-wow-delay="200ms" data-wow-duration="1500ms">
-                                    <div class="about-one__donate about-one__donate--two">
-                                        <div class="about-one__donate__icon">
-                                            <span class="icon-donation"></span>
-                                        </div><!-- /.about-one__donate__icon -->
-                                        <h4 class="about-one__donate__title">donate now</h4><!-- /.about-one__donate__title -->
-                                        <div class="about-one__donate__text">
-                                            <span>$38,768</span>
-                                        </div><!-- /.about-one__donate__text -->
-                                    </div><!-- /.about-one__donate -->
-                                </div><!-- /.col-lg-4 col-sm-4 -->
-                                <div class="col-lg-4 col-sm-4 wow fadeInUp" data-wow-delay="400ms" data-wow-duration="1500ms">
-                                    <div class="about-one__donate about-one__donate--three">
-                                        <div class="about-one__donate__icon">
-                                            <span class="icon-money"></span>
-                                        </div><!-- /.about-one__donate__icon -->
-                                        <h4 class="about-one__donate__title">total fund Raised</h4><!-- /.about-one__donate__title -->
-                                        <div class="about-one__donate__text">
-                                            <span>1,193,210</span>
-                                        </div><!-- /.about-one__donate__text -->
-                                    </div><!-- /.about-one__donate -->
-                                </div><!-- /.col-lg-4 col-sm-4 -->
-                            </div><!-- /.row -->
-                        </div><!-- /.about-one__wrapper -->
-                        <div class="contact-information">
-                            <a href="contact.html" class="contact-information__btn cleenhearts-btn">
+
+                        {{-- Contact Information --}}
+                        @if($aboutPage->phone_number || $aboutPage->email_address)
+                        <div class="about-one__contact mt-4">
+                            <div class="row">
+                                @if($aboutPage->phone_number)
+                                <div class="col-md-6">
+                                    <div class="contact-info-item">
+                                        <span class="icon-phone"></span>
+                                        <a href="tel:{{ str_replace(' ', '', $aboutPage->phone_number) }}">{{ $aboutPage->phone_number }}</a>
+                                    </div>
+                                </div>
+                                @endif
+                                @if($aboutPage->email_address)
+                                <div class="col-md-6">
+                                    <div class="contact-info-item">
+                                        <span class="icon-email"></span>
+                                        <a href="mailto:{{ $aboutPage->email_address }}">{{ $aboutPage->email_address }}</a>
+                                    </div>
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+                        @endif
+
+                        <div class="contact-information mt-4">
+                            <a href="{{ route('courses.index') }}" class="contact-information__btn cleenhearts-btn">
                                 <div class="cleenhearts-btn__icon-box">
                                     <div class="cleenhearts-btn__icon-box__inner"><span class="icon-duble-arrow"></span></div>
                                 </div>
@@ -115,15 +114,89 @@
         <img src="assets/images/shapes/about-shape-1-2.png" alt="cleenhearts" class="about-one__hand">
     </section>
 
+    {{-- Core Values Section --}}
+
+<section class="events-list-page section-space">
+            <div class="container">
+                <div class="sec-title text-center">
+                    <h6 class="sec-title__tagline">our values</h6>
+                    <h3 class="sec-title__title">Core Values That Guide Us</h3>
+                </div>
+                <div class="events-list-page__carousel cleenhearts-owl__carousel cleenhearts-owl__carousel--basic-nav owl-theme owl-carousel owl-loaded owl-drag" data-owl-options="{
+            &quot;items&quot;: 2,
+            &quot;margin&quot;: 30,
+            &quot;smartSpeed&quot;: 700,
+            &quot;loop&quot;:true,
+            &quot;autoplay&quot;: 6000,
+            &quot;nav&quot;:false,
+            &quot;dots&quot;:true,
+            &quot;navText&quot;: [&quot;&lt;span class=\&quot;icon-arrow-left\&quot;&gt;&lt;/span&gt;&quot;,&quot;&lt;span class=\&quot;icon-arrow-right\&quot;&gt;&lt;/span&gt;&quot;],
+            &quot;responsive&quot;:{
+                &quot;0&quot;:{
+                    &quot;items&quot;: 1,
+                    &quot;margin&quot;: 20
+                },
+                &quot;575&quot;:{
+                    &quot;items&quot;: 1,
+                    &quot;margin&quot;: 20
+                },
+                &quot;768&quot;:{
+                    &quot;items&quot;: 1,
+                    &quot;margin&quot;: 20
+                },
+                &quot;992&quot;:{
+                    &quot;items&quot;: 1,
+                    &quot;margin&quot;: 20
+                },
+                &quot;1200&quot;:{
+                    &quot;items&quot;: 1,
+                    &quot;margin&quot;: 20
+                }
+            }
+            }">
+                    <!-- /.item -->
+                    <!-- /.item -->
+                    <!-- /.item -->
+                    <!-- /.item -->
+                <div class="owl-stage-outer"><div class="owl-stage" style="transform: translate3d(-4760px, 0px, 0px); transition: 0.7s; width: 9520px;">
+                    @foreach($coreValues as $index => $value)
+                        <div class="owl-item" style="width: 1170px; margin-right: 20px;"><div class="item wow fadeInUp animated" data-wow-duration="1500ms" data-wow-delay="200ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 200ms; animation-name: fadeInUp;">
+                            <div class="event-card-four">
+                                <a href="javascript:void(0)" class="event-card-four__image">
+                                    <img src="assets/images/events/event-2-4.jpg" alt="The generated Lorem Ipsum is therefore always free from repetition">
+                                </a><!-- /.event-card-four__image -->
+                                <div class="event-card-four__content">
+                                    <div class="event-card-four__time">
+                                       {{ $value->title }}
+                                    </div><!-- /.event-card-four__time -->
+                                    <h4 class="event-card-four__title">{{ $value->excerpt }}</h4><!-- /.event-card-four__title -->
+                                     @if($value->bible_verse)
+                                    <div class="event-card-four__text"><em>{{ $value->bible_verse }}</em></div><!-- /.event-card-four__text -->
+                                    <ul class="event-card-four__meta">
+                                        @if($value->bible_reference)
+                                        <li>
+                                            <h5 class="event-card-four__meta__title">{{ $value->bible_reference }}</h5>
+                                        </li>
+                                        @endif
+                                    </ul><!-- /.event-card-four__meta -->
+                                    @endif
+                                </div><!-- /.event-card-four__content -->
+                            </div><!-- /.event-card-four -->
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+
+                <div class="owl-nav disabled"><button type="button" role="presentation" class="owl-prev" aria-label="carousel button"><span class="icon-arrow-left"></span></button><button type="button" role="presentation" class="owl-next" aria-label="carousel button"><span class="icon-arrow-right"></span></button></div></div><!-- /.row -->
+            </div><!-- /.container -->
+        </section>
     {{-- City Life Story --}}
     <section class="story-one section-space-top cleenhearts-jarallax" data-jarallax data-speed="0.3" style="background-image: url('assets/images/backgrounds/story-bg-1-1.jpg');">
         <div class="container">
             <div class="sec-title">
-
-                <h6 class="sec-title__tagline @@extraClassName">CITY LIFE STORY</h6><!-- /.sec-title__tagline -->
-
-                <h3 class="sec-title__title">A Journey Through City Life <span class="sec-title__title__inner">Story</span></h3><!-- /.sec-title__title -->
-            </div><!-- /.sec-title -->
+                <h6 class="sec-title__tagline">{{ strtoupper($aboutPage->church_name) }} STORY</h6>
+                <h3 class="sec-title__title">{{ $aboutPage->history_title ?? 'A Journey Through Our Story' }} <span class="sec-title__title__inner">Story</span></h3>
+            </div>
 
             <div class="story-one__tabs-box tabs-box">
                 <div class="tabs-content">
@@ -136,18 +209,26 @@
                             </div><!-- /.col-xl-6 -->
                             <div class="col-xl-6 animated fadeInRight" data-wow-duration="1500ms" data-wow-delay="100ms">
                                 <div class="story-one__content">
-                                    <h3 class="story-one__title">our mission and vission</h3><!-- /.story-one__title -->
-                                    <p class="story-one__text story-one__text--one">Nam ultrices odio a felis lobortis convallis. In ex nunc, ornare non condimentum et, egestas vel massa. Nullam hendrerit felis quis pellentesque porttitor. Aenean lobortis bibendum turpis et auctor. Nam iaculis, lectus vulputate cursus interdum</p><!-- /.story-one__text story-one__text--one -->
-                                    <p class="story-one__text story-one__text--two">Nam ultrices odio a felis lobortis convallis. In ex nunc, ornare non condimentum et, egestas vel massa. Nullam hendrerit</p><!-- /.story-one__text story-one__text--two -->
+                                    <h3 class="story-one__title">{{ $aboutPage->mission_title ?? 'Our Mission and Vision' }}</h3>
+                                    @if($aboutPage->mission_statement)
+                                    <p class="story-one__text story-one__text--one">{{ $aboutPage->mission_statement }}</p>
+                                    @endif
+                                    @if($aboutPage->vision_statement)
+                                    <p class="story-one__text story-one__text--two">{{ $aboutPage->vision_statement }}</p>
+                                    @endif
                                     <div class="volunteer-profile">
                                         <div class="volunteer-profile__inner">
-                                            <img src="assets/images/resources/robert-joe-kerry.png" alt="Velma P. Hawkins" class="Robert Joe Kerry">
+                                            <img src="{{ asset('assets/images/resources/robert-joe-kerry.png') }}" alt="Lead Pastor" class="lead-pastor">
                                             <div class="volunteer-profile__info">
-                                                <h4 class="volunteer-profile__name"><a href="volunteer-details.html">Robert Joe Kerry</a></h4><!-- /.volunteer-profile__name -->
-                                                <p class="volunteer-profile__designation">Founder</p><!-- /.volunteer-profile__designation -->
-                                            </div><!-- /.volunteer-profile__info -->
-                                        </div><!-- /.volunteer-profile__inner -->
-                                        <img src="assets/images/resources/volunteer-d-signature.png" alt="Robert Joe Kerry signature" class="volunteer-profile__signature">
+                                                <h4 class="volunteer-profile__name"><a href="#">{{ $aboutPage->lead_pastor_name ?? 'Lead Pastor' }}</a></h4>
+                                                <p class="volunteer-profile__designation">{{ $aboutPage->lead_pastor_title ?? 'Lead Pastor' }}</p>
+                                            </div>
+                                        </div>
+                                        @if($aboutPage->lead_pastor_signature)
+                                        <img src="{{ $aboutPage->pastor_signature_url }}" alt="Pastor signature" class="volunteer-profile__signature">
+                                        @else
+                                        <img src="{{ asset('assets/images/resources/volunteer-d-signature.png') }}" alt="Pastor signature" class="volunteer-profile__signature">
+                                        @endif
                                     </div><!-- /.volunteer-profile -->
                                 </div><!-- /.story-one__content -->
                             </div><!-- /.col-xl-6 -->

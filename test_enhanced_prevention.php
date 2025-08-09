@@ -41,21 +41,21 @@ $testData = [
 
 foreach ($emailVariations as $index => $email) {
     echo "Test " . ($index + 1) . ": Registering with email '{$email}'\n";
-    
+
     try {
         DB::beginTransaction();
 
         // Normalize email for consistent matching
         $normalizedEmail = strtolower(trim($email));
-        
+
         echo "  Normalized email: '{$normalizedEmail}'\n";
-        
+
         // Check if member already exists by email (case insensitive with trim)
         $member = Member::whereRaw('LOWER(TRIM(email)) = ?', [$normalizedEmail])->first();
 
         if (!$member) {
             echo "  ✓ No existing member found. Creating new member...\n";
-            
+
             $member = Member::create(array_merge($testData, [
                 'email' => $email, // The mutator will normalize this
             ]));
@@ -78,7 +78,7 @@ foreach ($emailVariations as $index => $email) {
             echo "  → Registration blocked (as expected)\n";
         } else {
             echo "  ✓ No existing enrollment found. Creating enrollment...\n";
-            
+
             $enrollment = CourseEnrollment::create([
                 'course_id' => $course->id,
                 'user_id' => $member->id,
@@ -95,7 +95,7 @@ foreach ($emailVariations as $index => $email) {
         DB::rollBack();
         echo "  ✗ Error: " . $e->getMessage() . "\n";
     }
-    
+
     echo "\n";
 }
 

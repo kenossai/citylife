@@ -31,7 +31,7 @@ foreach ($emailGroups as $normalizedEmail => $group) {
         $duplicatesFound = true;
         echo "DUPLICATE EMAIL FOUND: {$normalizedEmail}\n";
         echo "Number of records: " . $group->count() . "\n";
-        
+
         foreach ($group as $member) {
             echo "  - ID: {$member->id}, Name: {$member->first_name} {$member->last_name}, Email: '{$member->email}', Created: {$member->created_at}\n";
         }

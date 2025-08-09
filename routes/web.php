@@ -7,6 +7,7 @@ use App\Http\Controllers\CourseController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about-citylife', [AboutController::class, 'index'])->name('about');
+Route::get('/about/core-values/{slug}', [AboutController::class, 'showCoreValue'])->name('about.core-value');
 
 
 // Route for the course controller

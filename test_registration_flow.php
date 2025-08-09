@@ -45,7 +45,7 @@ try {
 
     if (!$member) {
         echo "✓ No existing member found. Creating new member...\n";
-        
+
         $member = Member::create([
             'membership_number' => 'TEST-' . time(),
             'first_name' => $testData['first_name'],
@@ -76,7 +76,7 @@ try {
         DB::rollBack();
     } else {
         echo "✓ No existing enrollment found. Creating enrollment...\n";
-        
+
         $enrollment = CourseEnrollment::create([
             'course_id' => $course->id,
             'user_id' => $member->id,
@@ -85,15 +85,15 @@ try {
         ]);
 
         echo "✓ Enrollment created with ID: {$enrollment->id}\n";
-        
+
         // Update course enrollment count
         $actualCount = CourseEnrollment::where('course_id', $course->id)
             ->where('status', 'active')
             ->count();
         $course->update(['current_enrollments' => $actualCount]);
-        
+
         echo "✓ Course enrollment count updated to: {$actualCount}\n";
-        
+
         DB::commit();
         echo "\n✅ Registration completed successfully!\n";
     }

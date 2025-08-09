@@ -112,14 +112,14 @@ class CourseController extends Controller
 
             // Normalize email for consistent matching
             $normalizedEmail = strtolower(trim($validated['email']));
-            
+
             // Check if member already exists by email (case insensitive)
             $member = Member::whereRaw('LOWER(TRIM(email)) = ?', [$normalizedEmail])->first();
 
             if (!$member) {
                 // Generate a unique membership number
                 $membershipNumber = 'CL' . date('Y') . str_pad(Member::count() + 1, 4, '0', STR_PAD_LEFT);
-                
+
                 // Create new member
                 $member = Member::create([
                     'membership_number' => $membershipNumber,
@@ -254,7 +254,7 @@ class CourseController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
-            
+
             // Log the detailed error for debugging
             Log::error('Course registration failed', [
                 'course_id' => $course->id,
@@ -262,7 +262,7 @@ class CourseController extends Controller
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
             ]);
-            
+
             return redirect()->back()
                 ->withInput()
                 ->with('error', 'An error occurred during registration: ' . $e->getMessage());

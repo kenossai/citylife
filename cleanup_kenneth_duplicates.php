@@ -77,7 +77,7 @@ try {
     echo "\nDeleting duplicate records:\n";
     $kenneth61->delete();
     echo "  - Deleted ID 61 ({$kenneth61->email})\n";
-    
+
     $kenneth62->delete();
     echo "  - Deleted ID 62 ({$kenneth62->email})\n";
 
