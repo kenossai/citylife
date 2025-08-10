@@ -123,11 +123,11 @@ class TeamMember extends Model
         if ($this->short_description) {
             return $this->short_description;
         }
-        
+
         if ($this->bio) {
             return Str::limit(strip_tags($this->bio), 150);
         }
-        
+
         return 'Team member at ' . config('app.name');
     }
 
@@ -136,7 +136,7 @@ class TeamMember extends Model
         if (!$this->joined_church) {
             return null;
         }
-        
+
         return now()->year - $this->joined_church;
     }
 
@@ -145,7 +145,7 @@ class TeamMember extends Model
         if (!$this->started_ministry) {
             return null;
         }
-        
+
         return now()->year - $this->started_ministry;
     }
 

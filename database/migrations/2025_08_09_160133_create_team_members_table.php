@@ -40,7 +40,7 @@ return new class extends Migration
             // Media
             $table->string('profile_image')->nullable();
             $table->string('featured_image')->nullable(); // For banners/headers
-            
+
             // Books and Publications
             $table->json('books_written')->nullable(); // Array of book objects with title, cover_image, links, etc.
             $table->json('courses_taught')->nullable(); // Courses they teach

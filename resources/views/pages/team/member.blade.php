@@ -1,5 +1,5 @@
 <x-app-layout>
-    @section('title', '{{ $teamMember->full_name }} - CityLife Church')
+    @section('title', $teamMember->full_name . ' - CityLife Church')
 <section class="page-header">
     <div class="page-header__bg" style="background-image: url('{{ $teamMember->featured_image_url }}');"></div>
     <!-- /.page-header__bg -->
