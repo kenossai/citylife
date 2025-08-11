@@ -1,84 +1,50 @@
 <section class="events-one section-space">
     <div class="container">
         <div class="sec-title">
-
-            <h6 class="sec-title__tagline sec-title__tagline--center">Worldwide non profit charity</h6><!-- /.sec-title__tagline -->
-
+            <h6 class="sec-title__tagline sec-title__tagline--center">Church Events</h6><!-- /.sec-title__tagline -->
             <h3 class="sec-title__title">See Upcoming <span class="sec-title__title__inner">Events</span></h3><!-- /.sec-title__title -->
         </div><!-- /.sec-title -->
+
+        @if($events->count() > 0)
         <div class="horizontal-accordion">
-            <div class="events-one__card card choice">
+            @foreach($events as $index => $event)
+            <div class="events-one__card card choice {{ $index === 1 ? 'expand' : '' }}">
                 <div class="card-body">
-                    <div class="events-one__card__top" style="background-image: url('assets/images/events/event-bg-1-1.jpg');">
-                        <h4 class="events-one__card__title">Your little Help Can Heal Pains</h4>
+                    <div class="events-one__card__top" style="background-image: url('{{ $event->featured_image_url }}'); background-size: cover; background-position: center;">
+                        <h4 class="events-one__card__title">{{ $event->title }}</h4>
                         <span class="events-one__card__icon icon-plus"></span><!-- /.accordion-title__icon -->
                     </div><!-- /.accordian-title -->
                     <div class="event-card-two">
-                        <a href="event-details-right.html" class="event-card-two__image">
-                            <img src="assets/images/events/event-2-5.jpg" alt="cleenhearts">
+                        <a href="#" class="event-card-two__image">
+                            <img src="{{ $event->featured_image_url }}" alt="{{ $event->title }}">
                             <div class="event-card-two__time">
-                                <span class="event-card-two__time__icon fa fa-clock"></span>Dec 13, 2024 @ 10:00 am
+                                <span class="event-card-two__time__icon fa fa-clock"></span>{{ $event->formatted_start_date }}
                             </div><!-- /.event-card-four__time -->
                         </a><!-- /.event-card-four__image -->
                         <div class="event-card-two__content">
-                            <h4 class="event-card-two__title"><a href="event-details-right.html">Your little Help Can Heal Pains</a></h4><!-- /.event-card-four__title -->
-                            <div class="event-card-two__text">Dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernaturaut odit</div><!-- /.event-card-two__text -->
+                            <h4 class="event-card-two__title"><a href="#">{{ $event->title }}</a></h4><!-- /.event-card-four__title -->
+                            <div class="event-card-two__text">{{ Str::limit($event->description, 100) }}</div><!-- /.event-card-two__text -->
                             <div class="event-card-two__meta">
-                                <h5 class="event-card-two__meta__title">Vanue</h5>
-                                350 5th AveNew York, NY 10118 United States
+                                <h5 class="event-card-two__meta__title">Venue</h5>
+                                {{ $event->location }}
                             </div><!-- /.event-card-four__meta -->
                         </div><!-- /.event-card-four__content -->
                     </div><!-- /.event-card-two -->
                 </div>
             </div>
-            <div class="events-one__card card choice expand">
-                <div class="card-body">
-                    <div class="events-one__card__top" style="background-image: url('assets/images/events/event-bg-1-2.jpg');">
-                        <h4 class="events-one__card__title">Let’s education for children get good</h4>
-                        <span class="events-one__card__icon icon-plus"></span><!-- /.accordion-title__icon -->
-                    </div><!-- /.accordian-title -->
-                    <div class="event-card-two">
-                        <a href="event-details-right.html" class="event-card-two__image">
-                            <img src="assets/images/events/event-2-6.jpg" alt="cleenhearts">
-                            <div class="event-card-two__time">
-                                <span class="event-card-two__time__icon fa fa-clock"></span>Dec 13, 2024 @ 10:00 am
-                            </div><!-- /.event-card-four__time -->
-                        </a><!-- /.event-card-four__image -->
-                        <div class="event-card-two__content">
-                            <h4 class="event-card-two__title"><a href="event-details-right.html">Let’s education for children get good life</a></h4><!-- /.event-card-four__title -->
-                            <div class="event-card-two__text">Dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernaturaut odit</div><!-- /.event-card-two__text -->
-                            <div class="event-card-two__meta">
-                                <h5 class="event-card-two__meta__title">Vanue</h5>
-                                350 5th AveNew York, NY 10118 United States
-                            </div><!-- /.event-card-four__meta -->
-                        </div><!-- /.event-card-four__content -->
-                    </div><!-- /.event-card-two -->
-                </div>
-            </div>
-            <div class="events-one__card card choice">
-                <div class="card-body">
-                    <div class="events-one__card__top" style="background-image: url('assets/images/events/event-bg-1-3.jpg');">
-                        <h4 class="events-one__card__title">Give African Childrens Education</h4>
-                        <span class="events-one__card__icon icon-plus"></span><!-- /.accordion-title__icon -->
-                    </div><!-- /.accordian-title -->
-                    <div class="event-card-two">
-                        <a href="event-details-right.html" class="event-card-two__image">
-                            <img src="assets/images/events/event-2-7.jpg" alt="cleenhearts">
-                            <div class="event-card-two__time">
-                                <span class="event-card-two__time__icon fa fa-clock"></span>Dec 13, 2024 @ 10:00 am
-                            </div><!-- /.event-card-four__time -->
-                        </a><!-- /.event-card-four__image -->
-                        <div class="event-card-two__content">
-                            <h4 class="event-card-two__title"><a href="event-details-right.html">Give African Childrens Education</a></h4><!-- /.event-card-four__title -->
-                            <div class="event-card-two__text">Dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernaturaut odit</div><!-- /.event-card-two__text -->
-                            <div class="event-card-two__meta">
-                                <h5 class="event-card-two__meta__title">Vanue</h5>
-                                350 5th AveNew York, NY 10118 United States
-                            </div><!-- /.event-card-four__meta -->
-                        </div><!-- /.event-card-four__content -->
-                    </div><!-- /.event-card-two -->
-                </div>
-            </div>
+            @endforeach
         </div>
+
+        @else
+        <div class="text-center">
+            <p>No upcoming events at this time. Please check back later for updates.</p>
+        </div>
+        @endif
+        <a href="become-a-volunteer.html" class="cleenhearts-btn">
+            <div class="cleenhearts-btn__icon-box">
+                <div class="cleenhearts-btn__icon-box__inner"><span class="icon-duble-arrow"></span></div>
+            </div>
+            <span class="cleenhearts-btn__text">See All Events</span>
+        </a>
     </div><!-- /.container -->
 </section>

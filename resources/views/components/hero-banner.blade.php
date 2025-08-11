@@ -1,7 +1,3 @@
-@php
-    $banners = \App\Models\Banner::active()->ordered()->get();
-@endphp
-
 <section class="main-slider-one">
     <div class="main-slider-one__wrapper">
         <div class="main-slider-one__carousel cleenhearts-owl__carousel owl-carousel" data-owl-options='{

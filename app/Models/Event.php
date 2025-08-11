@@ -54,4 +54,28 @@ class Event extends Model
     {
         return $query->where('start_date', '>=', now());
     }
+
+    public function getFeaturedImageUrlAttribute()
+    {
+        if (!$this->featured_image) {
+            return asset('assets/images/events/event-2-5.jpg'); // default
+        }
+
+        if (str_starts_with($this->featured_image, 'http://') || str_starts_with($this->featured_image, 'https://')) {
+            return $this->featured_image;
+        }
+
+        // If the path starts with 'assets/' it's a public asset
+        if (str_starts_with($this->featured_image, 'assets/')) {
+            return asset($this->featured_image);
+        }
+
+        // Otherwise it's a storage file
+        return asset('storage/' . $this->featured_image);
+    }
+
+    public function getFormattedStartDateAttribute()
+    {
+        return $this->start_date->format('M j, Y @ g:i a');
+    }
 }
