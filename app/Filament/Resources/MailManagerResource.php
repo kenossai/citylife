@@ -246,7 +246,7 @@ class MailManagerResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListMailManagers::route('/'),
+            'index' => Pages\ListMailManager::route('/'),
             'view' => Pages\ViewMailManager::route('/{record}'),
         ];
     }
