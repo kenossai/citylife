@@ -64,7 +64,7 @@
             </div><!-- /.col-lg-6 -->
             @endforeach
         </div><!-- /.row -->
-        
+
         <!-- Pagination -->
         @if($events->hasPages())
         <div class="row">
@@ -75,7 +75,7 @@
             </div>
         </div>
         @endif
-        
+
         @else
         <div class="row">
             <div class="col-12 text-center">

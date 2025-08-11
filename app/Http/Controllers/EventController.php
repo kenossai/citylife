@@ -13,7 +13,7 @@ class EventController extends Controller
             ->upcoming()
             ->orderBy('start_date')
             ->paginate(12);
-        
+
         return view('pages.event.index', compact('events'));
     }
 
@@ -22,7 +22,7 @@ class EventController extends Controller
         $event = Event::where('slug', $slug)
             ->published()
             ->firstOrFail();
-        
+
         return view('pages.event.show', compact('event'));
     }
 }

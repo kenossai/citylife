@@ -28,7 +28,7 @@ return new class extends Migration
         Schema::table('events', function (Blueprint $table) {
             $table->dropColumn([
                 'event_anchor',
-                'guest_speaker', 
+                'guest_speaker',
                 'requires_registration',
                 'registration_details',
                 'max_attendees'
