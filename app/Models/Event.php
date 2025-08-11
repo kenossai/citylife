@@ -18,6 +18,11 @@ class Event extends Model
         'start_date',
         'end_date',
         'location',
+        'event_anchor',
+        'guest_speaker',
+        'requires_registration',
+        'registration_details',
+        'max_attendees',
         'featured_image',
         'is_featured',
         'is_published',
@@ -29,6 +34,7 @@ class Event extends Model
         'end_date' => 'datetime',
         'is_featured' => 'boolean',
         'is_published' => 'boolean',
+        'requires_registration' => 'boolean',
         'recurring_settings' => 'array',
     ];
 

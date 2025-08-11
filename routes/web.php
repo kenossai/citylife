@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\EventController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about-citylife', [AboutController::class, 'index'])->name('about');
@@ -16,6 +17,10 @@ Route::get('/courses', [CourseController::class, 'index'])->name('courses.index'
 Route::get('/courses/{slug}', [CourseController::class, 'show'])->name('courses.show');
 Route::get('/courses/{slug}/register', [CourseController::class, 'showRegistrationForm'])->name('courses.register.form');
 Route::post('/courses/{slug}/register', [CourseController::class, 'processRegistration'])->name('courses.register');
+
+// Route for the events controller
+Route::get('/events', [EventController::class, 'index'])->name('events.index');
+Route::get('/events/{slug}', [EventController::class, 'show'])->name('events.show');
 
 Route::get('/team/pastoral', [TeamController::class, 'pastoral'])->name('team.pastoral');
 Route::get('/team/leadership', [TeamController::class, 'leadership'])->name('team.leadership');

@@ -57,10 +57,10 @@
                             </ul>
                         </li>
                         <li>
-                            <a href="contact.html">Events</a>
+                            <a href="{{ route('events.index') }}">Events</a>
                         </li>
                         <li>
-                            <a href="contact.html">Contact Us</a>
+                            <a href="{{ route('contact') }}">Contact Us</a>
                         </li>
                     </ul>
                 </nav><!-- /.main-header__nav -->

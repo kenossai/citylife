@@ -85,6 +85,39 @@ class EventResource extends Resource
                             ->required(),
                     ])->columns(1),
 
+                Forms\Components\Section::make('Event Staff')
+                    ->schema([
+                        Forms\Components\TextInput::make('event_anchor')
+                            ->label('Event Anchor/Host')
+                            ->maxLength(255)
+                            ->placeholder('Person anchoring/hosting the event'),
+                        
+                        Forms\Components\TextInput::make('guest_speaker')
+                            ->label('Guest Speaker')
+                            ->maxLength(255)
+                            ->placeholder('Special guest or speaker for this event'),
+                    ])->columns(2),
+
+                Forms\Components\Section::make('Registration')
+                    ->schema([
+                        Forms\Components\Toggle::make('requires_registration')
+                            ->label('Requires Registration')
+                            ->helperText('Enable if attendees need to register for this event')
+                            ->live(),
+                        
+                        Forms\Components\Textarea::make('registration_details')
+                            ->label('Registration Instructions')
+                            ->rows(3)
+                            ->visible(fn (Forms\Get $get): bool => $get('requires_registration'))
+                            ->helperText('Instructions for how to register'),
+                        
+                        Forms\Components\TextInput::make('max_attendees')
+                            ->label('Maximum Attendees')
+                            ->numeric()
+                            ->visible(fn (Forms\Get $get): bool => $get('requires_registration'))
+                            ->helperText('Leave empty for unlimited capacity'),
+                    ])->columns(1),
+
                 Forms\Components\Section::make('Settings')
                     ->schema([
                         Forms\Components\Toggle::make('is_published')
@@ -122,6 +155,23 @@ class EventResource extends Resource
                     ->searchable()
                     ->limit(40)
                     ->color('gray'),
+                
+                Tables\Columns\TextColumn::make('event_anchor')
+                    ->label('Anchor')
+                    ->searchable()
+                    ->limit(20)
+                    ->placeholder('—'),
+                
+                Tables\Columns\TextColumn::make('guest_speaker')
+                    ->label('Speaker')
+                    ->searchable()
+                    ->limit(20)
+                    ->placeholder('—'),
+                
+                Tables\Columns\IconColumn::make('requires_registration')
+                    ->label('Registration')
+                    ->boolean()
+                    ->tooltip(fn ($record) => $record->requires_registration ? 'Registration Required' : 'No Registration'),
                 
                 Tables\Columns\IconColumn::make('is_featured')
                     ->label('Featured')
