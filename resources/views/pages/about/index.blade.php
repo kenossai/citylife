@@ -35,15 +35,6 @@
                                 </a><!-- /.about-one__video__btn -->
                             </div><!-- /.about-one__video -->
                             @endif
-                            <div class="about-one__profile volunteer-profile">
-                                <div class="volunteer-profile__inner">
-                                    <img src="{{ asset('assets/images/resources/robert-joe-kerry.png') }}" alt="Pastor" class="volunteer-profile__image">
-                                    <div class="volunteer-profile__info">
-                                        <h4 class="volunteer-profile__name"><a href="#">Lead Pastor</a></h4><!-- /.volunteer-profile__name -->
-                                        <p class="volunteer-profile__designation">{{ $aboutPage->church_name }}</p><!-- /.volunteer-profile__designation -->
-                                    </div><!-- /.volunteer-profile__info -->
-                                </div><!-- /.volunteer-profile__inner -->
-                            </div><!-- /.about-one__profile -->
                         </div><!-- /.about-one__image -->
                     </div><!-- /.about-one__left -->
                 </div>
@@ -61,7 +52,7 @@
                         </div><!-- /.about-one__text-box -->
 
                         {{-- Contact Information --}}
-                        @if($aboutPage->phone_number || $aboutPage->email_address)
+                        {{-- @if($aboutPage->phone_number || $aboutPage->email_address)
                         <div class="about-one__contact mt-4">
                             <div class="row">
                                 @if($aboutPage->phone_number)
@@ -82,7 +73,7 @@
                                 @endif
                             </div>
                         </div>
-                        @endif
+                        @endif --}}
 
                         <div class="contact-information mt-4">
                             <a href="{{ route('courses.index') }}" class="contact-information__btn cleenhearts-btn">
@@ -91,21 +82,13 @@
                                 </div>
                                 <span class="cleenhearts-btn__text">more about us</span>
                             </a><!-- /.contact-information__btn -->
-                            <div class="contact-information__phone">
-                                <div class="contact-information__phone__icon">
-                                    <span class="icon-phone"></span>
-                                </div><!-- /.contact-information__phone__icon -->
-                                <div class="contact-information__phone__text">
-                                    <span>call any time</span>
-                                    <h5><a href="tel:+912659302003">+91 2659 302 003</a></h5>
-                                </div><!-- /.contact-information__phone__text -->
-                            </div><!-- /.contact-information__phone -->
+                            
                         </div><!-- /.contact-information -->
                     </div><!-- /.about-one__content -->
                 </div>
             </div><!-- /.row -->
         </div><!-- /.container -->
-        <img src="{{ asset('assets/images/shapes/about-shape-1-2.png') }}" alt="cleenhearts" class="about-one__hand">
+        <img src="{{ asset('assets/images/shapes/about-shape-1-2.png') }}" alt="citylife" class="about-one__hand">
     </section>
 
     {{-- Core Values Section --}}

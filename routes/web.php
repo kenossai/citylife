@@ -4,9 +4,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\AboutController;
-use App\Http\Controllers\CourseController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\CourseController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\VolunteerController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about-citylife', [AboutController::class, 'index'])->name('about');
@@ -31,3 +32,7 @@ Route::get('/team/pastoral', [TeamController::class, 'pastoral'])->name('team.pa
 Route::get('/team/leadership', [TeamController::class, 'leadership'])->name('team.leadership');
 Route::get('/team', [TeamController::class, 'index'])->name('team.index');
 Route::get('/team/{slug}', [TeamController::class, 'show'])->name('team.member');
+
+Route::get('/volunteer', [VolunteerController::class, 'index'])->name('volunteer.index');
+Route::post('/volunteer', [VolunteerController::class, 'store'])->name('volunteer.store');
+

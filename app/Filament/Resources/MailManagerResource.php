@@ -138,7 +138,7 @@ class MailManagerResource extends Resource
                     ->searchable()
                     ->sortable()
                     ->weight(fn ($record) => $record->status === 'new' ? FontWeight::Bold : FontWeight::Medium)
-                    ->formatStateUsing(fn ($record) => $record->name . ' <' . $record->email . '>'),
+                    ->formatStateUsing(fn ($record) => $record->name . ' ' . $record->email . ' '),
 
                 Tables\Columns\TextColumn::make('subject')
                     ->label('Subject')

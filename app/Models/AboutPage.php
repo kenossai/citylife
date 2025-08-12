@@ -80,4 +80,10 @@ class AboutPage extends Model
     {
         $this->attributes['slug'] = Str::slug($value ?: $this->title);
     }
+
+    // Static methods
+    public static function getActiveChurchDetails()
+    {
+        return static::active()->first();
+    }
 }

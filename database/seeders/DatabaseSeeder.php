@@ -21,12 +21,14 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->call([
+            AboutPageSeeder::class,
             MemberSeeder::class,
             CourseSeeder::class,
             CourseLessonSeeder::class,
             TeamMemberSeeder::class,
             BannerSeeder::class,
             EventSeeder::class,
+            BecomingSectionSeeder::class,
         ]);
     }
 }
