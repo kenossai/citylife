@@ -250,4 +250,14 @@ class MailManagerResource extends Resource
             'view' => Pages\ViewMailManager::route('/{record}'),
         ];
     }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::where('status', 'new')->count();
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return static::getModel()::where('status', 'new')->count() > 0 ? 'warning' : 'primary';
+    }
 }
