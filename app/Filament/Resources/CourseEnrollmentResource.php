@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\CourseEnrollmentResource\Pages;
 use App\Filament\Resources\CourseEnrollmentResource\RelationManagers;
+use App\Filament\Resources\AttendanceResource;
 use App\Models\CourseEnrollment;
 use App\Models\Course;
 use App\Models\Member;
@@ -122,26 +123,6 @@ class CourseEnrollmentResource extends Resource
                     ->helperText('Payment info can only be set during enrollment creation'),
                 Forms\Components\Textarea::make('notes')
                     ->columnSpanFull(),
-
-                // Attendance Summary Section
-                Forms\Components\Section::make('Attendance Summary')
-                    ->schema([
-                        Forms\Components\Placeholder::make('attendance_stats')
-                            ->label('')
-                            ->content(function ($record) {
-                                if (!$record) return 'No attendance data yet.';
-
-                                $totalAttendance = $record->attendance()->count();
-                                $attendedCount = $record->attendance()->where('attended', true)->count();
-                                $attendanceRate = $totalAttendance > 0 ? round(($attendedCount / $totalAttendance) * 100, 1) : 0;
-
-                                return "Total Sessions: {$totalAttendance} | Attended: {$attendedCount} | Rate: {$attendanceRate}%";
-                            }),
-                    ])
-                    ->collapsible()
-                    ->collapsed()
-                    ->visible(fn ($record) => $record !== null)
-                    ->columnSpanFull(),
             ]);
     }
 
@@ -232,10 +213,41 @@ class CourseEnrollmentResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('user_id')
+                    ->label('Student')
+                    ->options(function () {
+                        return Member::selectRaw("id, CONCAT(first_name, ' ', last_name) as full_name")
+                            ->pluck('full_name', 'id');
+                    })
+                    ->searchable(),
+
+                Tables\Filters\SelectFilter::make('course_id')
+                    ->label('Course')
+                    ->relationship('course', 'title')
+                    ->searchable(),
+
+                Tables\Filters\SelectFilter::make('status')
+                    ->options([
+                        'active' => 'Active',
+                        'completed' => 'Completed',
+                        'dropped' => 'Dropped',
+                        'suspended' => 'Suspended',
+                    ]),
+
+                Tables\Filters\Filter::make('certificate_issued')
+                    ->label('Certificate Issued')
+                    ->query(fn (Builder $query): Builder => $query->where('certificate_issued', true)),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make('mark_attendance')
+                    ->label('Mark Attendance')
+                    ->icon('heroicon-o-clipboard-document-check')
+                    ->color('success')
+                    ->url(fn ($record) => AttendanceResource::getUrl('create', [
+                        'course_enrollment_id' => $record->id
+                    ]))
+                    ->openUrlInNewTab(false),
                 Tables\Actions\Action::make('recalculate_progress')
                     ->label('Recalc Progress')
                     ->icon('heroicon-o-calculator')
@@ -281,7 +293,7 @@ class CourseEnrollmentResource extends Resource
     public static function getRelations(): array
     {
         return [
-            RelationManagers\AttendanceRelationManager::class,
+            // Removed AttendanceRelationManager - now handled by dedicated AttendanceResource
         ];
     }
 
