@@ -34,7 +34,7 @@ class CityLifeTalkTimeController extends Controller
         }
 
         $talkTimes = $query->paginate(12);
-        
+
         // Get featured episodes for homepage
         $featuredTalkTimes = CityLifeTalkTime::published()
             ->featured()

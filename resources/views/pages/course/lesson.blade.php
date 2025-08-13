@@ -125,9 +125,9 @@
                                         </div>
                                         <div class="col-md-6">
                                             @if($lesson->quiz_questions)
-                                                <a href="{{ route('courses.lesson.quiz', [$course->slug, $lesson->slug]) }}" 
+                                                <a href="{{ route('courses.lesson.quiz', [$course->slug, $lesson->slug]) }}"
                                                    class="btn {{ $progress->quiz_score ? 'btn-outline-info' : 'btn-info' }}">
-                                                    <i class="icon-question"></i> 
+                                                    <i class="icon-question"></i>
                                                     @if($progress->quiz_score)
                                                         Retake Quiz ({{ round($progress->quiz_score) }}%)
                                                     @else
@@ -153,18 +153,18 @@
                                     <a href="{{ route('courses.lessons', $course->slug) }}" class="btn btn-outline-primary">
                                         <i class="icon-list"></i> All Lessons
                                     </a>
-                                    
+
                                     @php
                                         $prevLesson = $course->lessons()->where('lesson_number', '<', $lesson->lesson_number)->orderBy('lesson_number', 'desc')->first();
                                         $nextLesson = $course->lessons()->where('lesson_number', '>', $lesson->lesson_number)->orderBy('lesson_number')->first();
                                     @endphp
-                                    
+
                                     @if($prevLesson)
                                         <a href="{{ route('courses.lesson.show', [$course->slug, $prevLesson->slug]) }}" class="btn btn-outline-secondary">
                                             <i class="icon-arrow-left"></i> Previous Lesson
                                         </a>
                                     @endif
-                                    
+
                                     @if($nextLesson)
                                         <a href="{{ route('courses.lesson.show', [$course->slug, $nextLesson->slug]) }}" class="btn btn-outline-secondary">
                                             <i class="icon-arrow-right"></i> Next Lesson
@@ -179,10 +179,10 @@
                             <div class="card-body">
                                 <h6 class="card-title">Course Progress</h6>
                                 <div class="progress mb-3">
-                                    <div class="progress-bar bg-success" role="progressbar" 
-                                         style="width: {{ $userEnrollment->progress_percentage }}%" 
-                                         aria-valuenow="{{ $userEnrollment->progress_percentage }}" 
-                                         aria-valuemin="0" 
+                                    <div class="progress-bar bg-success" role="progressbar"
+                                         style="width: {{ $userEnrollment->progress_percentage }}%"
+                                         aria-valuenow="{{ $userEnrollment->progress_percentage }}"
+                                         aria-valuemin="0"
                                          aria-valuemax="100">
                                         {{ round($userEnrollment->progress_percentage) }}%
                                     </div>
@@ -211,7 +211,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const markCompleteBtn = document.getElementById('markCompleteBtn');
-            
+
             if (markCompleteBtn) {
                 markCompleteBtn.addEventListener('click', function() {
                     if (confirm('Are you sure you want to mark this lesson as complete?')) {
@@ -236,19 +236,19 @@
             line-height: 1.8;
             font-size: 16px;
         }
-        
+
         .lesson-meta .badge {
             font-size: 12px;
         }
-        
+
         .lesson-actions .card {
             border-left: 4px solid #007bff;
         }
-        
+
         .lesson-navigation .btn {
             font-size: 14px;
         }
-        
+
         .progress {
             height: 15px;
         }

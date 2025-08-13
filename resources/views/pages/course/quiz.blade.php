@@ -58,7 +58,7 @@
                     <div class="quiz-container">
                         <form id="quizForm" action="{{ route('courses.lesson.quiz.submit', [$course->slug, $lesson->slug]) }}" method="POST">
                             @csrf
-                            
+
                             @foreach($quizQuestions as $index => $question)
                                 <div class="question-card mb-4">
                                     <div class="card">
@@ -76,9 +76,9 @@
                                                     <div class="multiple-choice-options">
                                                         @foreach($question['options'] as $optionIndex => $option)
                                                             <div class="form-check mb-2">
-                                                                <input class="form-check-input" type="radio" 
-                                                                       name="answers[{{ $index }}]" 
-                                                                       value="{{ chr(65 + $optionIndex) }}" 
+                                                                <input class="form-check-input" type="radio"
+                                                                       name="answers[{{ $index }}]"
+                                                                       value="{{ chr(65 + $optionIndex) }}"
                                                                        id="question_{{ $index }}_option_{{ $optionIndex }}"
                                                                        required>
                                                                 <label class="form-check-label" for="question_{{ $index }}_option_{{ $optionIndex }}">
@@ -89,18 +89,18 @@
                                                     </div>
                                                 @elseif($question['type'] === 'short_answer')
                                                     <div class="short-answer">
-                                                        <textarea class="form-control" 
-                                                                  name="answers[{{ $index }}]" 
-                                                                  rows="3" 
+                                                        <textarea class="form-control"
+                                                                  name="answers[{{ $index }}]"
+                                                                  rows="3"
                                                                   placeholder="Enter your answer here..."
                                                                   required></textarea>
                                                         <small class="form-text text-muted">Provide a brief answer (2-3 sentences).</small>
                                                     </div>
                                                 @elseif($question['type'] === 'essay')
                                                     <div class="essay-answer">
-                                                        <textarea class="form-control" 
-                                                                  name="answers[{{ $index }}]" 
-                                                                  rows="6" 
+                                                        <textarea class="form-control"
+                                                                  name="answers[{{ $index }}]"
+                                                                  rows="6"
                                                                   placeholder="Write your detailed response here..."
                                                                   required></textarea>
                                                         <small class="form-text text-muted">Provide a detailed response explaining your thoughts and understanding.</small>
@@ -118,7 +118,7 @@
                                     <div class="card-body text-center">
                                         <h6 class="card-title">Ready to Submit?</h6>
                                         <p class="text-muted mb-4">Please review your answers before submitting. You can retake the quiz if needed.</p>
-                                        
+
                                         <div class="submit-actions">
                                             <button type="button" class="btn btn-outline-secondary me-3" onclick="window.history.back()">
                                                 <i class="icon-arrow-left"></i> Back to Lesson
@@ -162,22 +162,22 @@
             const quizForm = document.getElementById('quizForm');
             const submitBtn = document.getElementById('submitQuizBtn');
             const resultsModal = new bootstrap.Modal(document.getElementById('quizResultsModal'));
-            
+
             quizForm.addEventListener('submit', function(e) {
                 e.preventDefault();
-                
+
                 // Confirm submission
                 if (!confirm('Are you sure you want to submit your quiz? You can retake it later if needed.')) {
                     return;
                 }
-                
+
                 // Disable submit button
                 submitBtn.disabled = true;
                 submitBtn.innerHTML = '<i class="spinner-border spinner-border-sm me-2"></i>Submitting...';
-                
+
                 // Get form data
                 const formData = new FormData(quizForm);
-                
+
                 // Submit via AJAX
                 fetch(quizForm.action, {
                     method: 'POST',
@@ -204,14 +204,14 @@
                     submitBtn.innerHTML = '<i class="icon-check"></i> Submit Quiz';
                 });
             });
-            
+
             function showResults(data) {
                 const resultContent = document.getElementById('quizResultsContent');
                 const continueBtn = document.getElementById('continueBtn');
-                
+
                 const passed = data.passed;
                 const score = Math.round(data.score);
-                
+
                 resultContent.innerHTML = `
                     <div class="quiz-results">
                         <div class="score-display mb-4">
@@ -222,28 +222,28 @@
                                 ${passed ? 'Congratulations! You Passed!' : 'Keep Trying!'}
                             </h4>
                         </div>
-                        
+
                         <div class="score-details mb-4">
                             <p class="mb-2"><strong>Score:</strong> ${data.correct_answers} out of ${data.total_questions} correct</p>
                             <p class="mb-2"><strong>Percentage:</strong> ${score}%</p>
-                            <p class="mb-0"><strong>Status:</strong> 
+                            <p class="mb-0"><strong>Status:</strong>
                                 <span class="badge ${passed ? 'bg-success' : 'bg-warning'}">${passed ? 'Passed' : 'Not Passed'}</span>
                             </p>
                         </div>
-                        
+
                         <div class="next-steps">
-                            ${passed 
-                                ? '<p class="text-success">Great job! You can now proceed to the next lesson.</p>' 
+                            ${passed
+                                ? '<p class="text-success">Great job! You can now proceed to the next lesson.</p>'
                                 : '<p class="text-warning">You need 70% or higher to pass. You can retake the quiz anytime.</p>'
                             }
                         </div>
                     </div>
                 `;
-                
+
                 continueBtn.onclick = function() {
                     window.location.href = data.redirect_url;
                 };
-                
+
                 resultsModal.show();
             }
         });
@@ -254,50 +254,50 @@
         .question-card {
             transition: all 0.3s ease;
         }
-        
+
         .question-card:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
-        
+
         .question-number .badge {
             font-size: 14px;
         }
-        
+
         .form-check-input:checked {
             background-color: #007bff;
             border-color: #007bff;
         }
-        
+
         .form-check-label {
             font-size: 15px;
             line-height: 1.6;
             cursor: pointer;
         }
-        
+
         .form-check {
             padding: 8px 12px;
             border-radius: 6px;
             transition: background-color 0.2s ease;
         }
-        
+
         .form-check:hover {
             background-color: #f8f9fa;
         }
-        
+
         .quiz-submit .card {
             background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
         }
-        
+
         textarea.form-control {
             resize: vertical;
             min-height: 80px;
         }
-        
+
         .previous-score {
             text-align: center;
         }
-        
+
         .spinner-border-sm {
             width: 1rem;
             height: 1rem;

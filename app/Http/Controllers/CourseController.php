@@ -276,10 +276,10 @@ class CourseController extends Controller
     public function lessons($slug)
     {
         $course = Course::where('slug', $slug)->firstOrFail();
-        
+
         // Check if user is enrolled
         $userEnrollment = $this->getUserEnrollment($course);
-        
+
         if (!$userEnrollment) {
             return redirect()->route('courses.show', $slug)
                 ->with('error', 'You must be enrolled in this course to access lessons.');
@@ -309,10 +309,10 @@ class CourseController extends Controller
     {
         $course = Course::where('slug', $courseSlug)->firstOrFail();
         $lesson = $course->lessons()->where('slug', $lessonSlug)->firstOrFail();
-        
+
         // Check if user is enrolled
         $userEnrollment = $this->getUserEnrollment($course);
-        
+
         if (!$userEnrollment) {
             return redirect()->route('courses.show', $courseSlug)
                 ->with('error', 'You must be enrolled in this course to access lessons.');
@@ -339,10 +339,10 @@ class CourseController extends Controller
     {
         $course = Course::where('slug', $courseSlug)->firstOrFail();
         $lesson = $course->lessons()->where('slug', $lessonSlug)->firstOrFail();
-        
+
         // Check if user is enrolled
         $userEnrollment = $this->getUserEnrollment($course);
-        
+
         if (!$userEnrollment) {
             return redirect()->route('courses.show', $courseSlug)
                 ->with('error', 'You must be enrolled in this course to access quizzes.');
@@ -377,10 +377,10 @@ class CourseController extends Controller
     {
         $course = Course::where('slug', $courseSlug)->firstOrFail();
         $lesson = $course->lessons()->where('slug', $lessonSlug)->firstOrFail();
-        
+
         // Check if user is enrolled
         $userEnrollment = $this->getUserEnrollment($course);
-        
+
         if (!$userEnrollment) {
             return response()->json(['error' => 'Not enrolled in course'], 403);
         }
@@ -396,7 +396,7 @@ class CourseController extends Controller
 
         $quizQuestions = json_decode($lesson->quiz_questions, true);
         $answers = $request->input('answers', []);
-        
+
         // Calculate score
         $totalQuestions = count($quizQuestions);
         $correctAnswers = 0;
@@ -420,8 +420,8 @@ class CourseController extends Controller
             'completed_at' => now(),
         ]);
 
-        // Update enrollment progress
-        $userEnrollment->updateProgress();
+        // Update enrollment progress based on attendance, not quiz completion
+        $userEnrollment->updateProgressFromAttendance();
 
         return response()->json([
             'success' => true,
@@ -439,14 +439,14 @@ class CourseController extends Controller
     public function dashboard(Request $request)
     {
         $email = $request->input('email') ?: session('user_email');
-        
+
         if (!$email) {
             return redirect()->route('courses.index')
                 ->with('error', 'Please provide your email to access your courses.');
         }
 
         $member = Member::where('email', $email)->first();
-        
+
         if (!$member) {
             return redirect()->route('courses.index')
                 ->with('error', 'No member found with this email address.');
@@ -469,13 +469,13 @@ class CourseController extends Controller
     private function getUserEnrollment($course)
     {
         $email = session('user_email');
-        
+
         if (!$email) {
             return null;
         }
 
         $member = Member::where('email', $email)->first();
-        
+
         if (!$member) {
             return null;
         }
@@ -488,7 +488,7 @@ class CourseController extends Controller
     public function downloadCertificate($enrollment_id)
     {
         $enrollment = CourseEnrollment::findOrFail($enrollment_id);
-        
+
         // Check if certificate is issued and file exists
         if (!$enrollment->certificate_issued || !$enrollment->certificate_file_path) {
             abort(404, 'Certificate not available');
@@ -506,13 +506,13 @@ class CourseController extends Controller
         }
 
         $filePath = storage_path('app/public/' . $enrollment->certificate_file_path);
-        
+
         if (!file_exists($filePath)) {
             abort(404, 'Certificate file not found');
         }
 
         $fileName = 'Certificate_' . $enrollment->course->title . '_' . $member->first_name . '_' . $member->last_name . '.pdf';
-        
+
         return response()->download($filePath, $fileName);
     }
 }

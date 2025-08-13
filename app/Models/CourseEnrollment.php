@@ -107,17 +107,20 @@ class CourseEnrollment extends Model
     {
         // Get total lessons count from the course
         $totalLessons = $this->course->lessons()->count();
-        
+
         // Get attended lessons count
         $attendedLessons = $this->attendance()->where('attended', true)->count();
-        
+
         // Calculate progress percentage based on attendance
         $progressPercentage = $totalLessons > 0 ? round(($attendedLessons / $totalLessons) * 100, 2) : 0;
-        
+
         $this->update([
             'progress_percentage' => $progressPercentage,
             'completed_lessons' => $attendedLessons,
         ]);
+
+        // Update overall grade based on quiz scores
+        $this->updateOverallGrade();
 
         // Auto-complete course if student attended all or most lessons
         if ($attendedLessons >= $totalLessons && $this->status !== 'completed') {
@@ -128,6 +131,23 @@ class CourseEnrollment extends Model
         $minimumAttendance = $this->course->min_attendance_for_certificate ?? ceil($totalLessons * 0.8); // Default 80%
         if (!$this->certificate_issued && $attendedLessons >= $minimumAttendance) {
             $this->issueCertificate();
+        }
+    }
+
+    public function updateOverallGrade()
+    {
+        // Get all quiz scores from lesson progress
+        $quizScores = $this->lessonProgress()
+            ->whereNotNull('quiz_score')
+            ->pluck('quiz_score');
+
+        if ($quizScores->count() > 0) {
+            // Calculate average quiz score
+            $averageGrade = round($quizScores->avg(), 2);
+
+            $this->update([
+                'overall_grade' => $averageGrade
+            ]);
         }
     }    public function markAsCompleted()
     {

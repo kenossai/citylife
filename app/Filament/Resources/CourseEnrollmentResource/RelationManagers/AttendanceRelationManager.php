@@ -29,21 +29,21 @@ class AttendanceRelationManager extends RelationManager
                     })
                     ->required()
                     ->searchable(),
-                    
+
                 Forms\Components\Toggle::make('attended')
                     ->label('Attended')
                     ->default(false),
-                    
+
                 Forms\Components\DatePicker::make('attendance_date')
                     ->label('Attendance Date')
                     ->default(now())
                     ->required(),
-                    
+
                 Forms\Components\Textarea::make('notes')
                     ->label('Notes')
                     ->rows(2)
                     ->columnSpanFull(),
-                    
+
                 Forms\Components\Hidden::make('marked_by')
                     ->default(function () {
                         return filament()->auth()->user()?->id;
@@ -59,11 +59,11 @@ class AttendanceRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('lesson.title')
                     ->label('Lesson')
                     ->sortable(),
-                    
+
                 Tables\Columns\TextColumn::make('lesson.lesson_number')
                     ->label('Lesson #')
                     ->sortable(),
-                    
+
                 Tables\Columns\IconColumn::make('attended')
                     ->label('Attended')
                     ->boolean()
@@ -71,12 +71,12 @@ class AttendanceRelationManager extends RelationManager
                     ->falseIcon('heroicon-o-x-circle')
                     ->trueColor('success')
                     ->falseColor('danger'),
-                    
+
                 Tables\Columns\TextColumn::make('attendance_date')
                     ->label('Date')
                     ->date()
                     ->sortable(),
-                    
+
                 Tables\Columns\TextColumn::make('notes')
                     ->label('Notes')
                     ->limit(50)
@@ -96,11 +96,13 @@ class AttendanceRelationManager extends RelationManager
                     ]),
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
+                Tables\Actions\CreateAction::make()
+                    ->label('Mark Attendance'),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->label('Edit Attendance'),
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([

@@ -41,9 +41,9 @@ return new class extends Migration
     {
         Schema::table('course_enrollments', function (Blueprint $table) {
             $table->dropColumn([
-                'attendance_record', 
-                'certificate_file_path', 
-                'certificate_issued_at', 
+                'attendance_record',
+                'certificate_file_path',
+                'certificate_issued_at',
                 'issued_by',
                 'overall_grade',
                 'certificate_number',

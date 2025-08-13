@@ -33,16 +33,19 @@ class CourseEnrollmentResource extends Resource
                     ->label('Course')
                     ->options(Course::pluck('title', 'id'))
                     ->searchable()
-                    ->required(),
+                    ->required()
+                    ->disabled(fn ($record) => $record !== null), // Disable editing existing enrollments
                 Forms\Components\Select::make('user_id')
                     ->label('Member')
                     ->options(Member::selectRaw("id, CONCAT(first_name, ' ', last_name, ' (', email, ')') as full_name")
                         ->pluck('full_name', 'id'))
                     ->searchable()
-                    ->required(),
+                    ->required()
+                    ->disabled(fn ($record) => $record !== null), // Disable editing existing enrollments
                 Forms\Components\DatePicker::make('enrollment_date')
                     ->required()
-                    ->default(now()),
+                    ->default(now())
+                    ->disabled(fn ($record) => $record !== null), // Disable editing existing enrollments
                 Forms\Components\Select::make('status')
                     ->options([
                         'active' => 'Active',
@@ -58,27 +61,36 @@ class CourseEnrollmentResource extends Resource
                     ->default(0.00)
                     ->minValue(0)
                     ->maxValue(100)
-                    ->step(0.01),
+                    ->step(0.01)
+                    ->disabled()
+                    ->helperText('Auto-calculated based on attendance'),
                 Forms\Components\TextInput::make('completed_lessons')
                     ->label('Completed Lessons')
                     ->numeric()
                     ->default(0)
-                    ->minValue(0),
+                    ->minValue(0)
+                    ->disabled()
+                    ->helperText('Auto-calculated based on attendance'),
                 Forms\Components\TextInput::make('overall_grade')
                     ->label('Overall Grade')
                     ->numeric()
                     ->minValue(0)
-                    ->maxValue(100),
+                    ->maxValue(100)
+                    ->disabled()
+                    ->helperText('Auto-calculated based on quiz scores'),
                 Forms\Components\DatePicker::make('completion_date')
-                    ->label('Completion Date'),
+                    ->label('Completion Date')
+                    ->disabled()
+                    ->helperText('Auto-set when course is completed'),
                 Forms\Components\Toggle::make('certificate_issued')
                     ->label('Certificate Issued')
                     ->default(false)
                     ->live()
-                    ->afterStateUpdated(function ($state, $set) {
+                    ->afterStateUpdated(function ($state, $set, $record) {
                         if ($state) {
-                            $set('certificate_issued_at', now());
-                            $set('issued_by', \Illuminate\Support\Facades\Auth::user()->name ?? 'Admin');
+                            $set('certificate_issued_at', now()->format('Y-m-d H:i:s'));
+                            $currentUser = filament()->auth()->user();
+                            $set('issued_by', $currentUser->name ?? 'Admin');
                         } else {
                             $set('certificate_issued_at', null);
                             $set('issued_by', null);
@@ -105,10 +117,12 @@ class CourseEnrollmentResource extends Resource
                     ->maxLength(255)
                     ->visible(fn ($get) => $get('certificate_issued'))
                     ->disabled(),
-                Forms\Components\TextInput::make('payment_info'),
+                Forms\Components\TextInput::make('payment_info')
+                    ->disabled(fn ($record) => $record !== null)
+                    ->helperText('Payment info can only be set during enrollment creation'),
                 Forms\Components\Textarea::make('notes')
                     ->columnSpanFull(),
-                
+
                 // Attendance Summary Section
                 Forms\Components\Section::make('Attendance Summary')
                     ->schema([
@@ -116,11 +130,11 @@ class CourseEnrollmentResource extends Resource
                             ->label('')
                             ->content(function ($record) {
                                 if (!$record) return 'No attendance data yet.';
-                                
+
                                 $totalAttendance = $record->attendance()->count();
                                 $attendedCount = $record->attendance()->where('attended', true)->count();
                                 $attendanceRate = $totalAttendance > 0 ? round(($attendedCount / $totalAttendance) * 100, 1) : 0;
-                                
+
                                 return "Total Sessions: {$totalAttendance} | Attended: {$attendedCount} | Rate: {$attendanceRate}%";
                             }),
                     ])

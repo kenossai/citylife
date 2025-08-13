@@ -158,7 +158,7 @@
                                                 <span><strong>You're enrolled!</strong> Access your lessons and track your progress.</span>
                                             </div>
                                         </div>
-                                        
+
                                         {{-- Course Access Buttons --}}
                                         <div class="enrolled-user-actions">
                                             <div class="d-grid gap-2">
@@ -168,12 +168,12 @@
                                                     </div>
                                                     <span class="cleenhearts-btn__text">Access Lessons</span>
                                                 </a>
-                                                
+
                                                 <a href="{{ route('courses.dashboard') }}?email={{ urlencode(session('user_email')) }}" class="btn btn-outline-primary">
                                                     <i class="icon-dashboard me-2"></i>My Dashboard
                                                 </a>
                                             </div>
-                                            
+
                                             @if($userEnrollment)
                                                 <div class="enrollment-stats mt-3 p-3 bg-light rounded">
                                                     <div class="row text-center">

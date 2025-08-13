@@ -42,7 +42,7 @@ class CityLifeTalkTime extends Model
             if (empty($talkTime->slug)) {
                 $talkTime->slug = Str::slug($talkTime->title);
             }
-            
+
             // Auto-generate episode number if not provided
             if (empty($talkTime->episode_number)) {
                 $talkTime->episode_number = static::generateEpisodeNumber();
@@ -64,10 +64,10 @@ class CityLifeTalkTime extends Model
         // Get the current year for season numbering
         $currentYear = now()->year;
         $season = $currentYear - 2023; // Start with Season 1 in 2024
-        
+
         // Count episodes created this year
         $episodeCount = static::whereYear('created_at', $currentYear)->count() + 1;
-        
+
         // Format as S{season}E{episode} with zero padding
         return sprintf('S%02dE%02d', $season, $episodeCount);
     }

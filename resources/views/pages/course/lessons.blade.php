@@ -24,10 +24,10 @@
                         <div class="course-lessons__header mb-5">
                             <h3>Course Progress</h3>
                             <div class="progress mb-3">
-                                <div class="progress-bar bg-success" role="progressbar" 
-                                     style="width: {{ $userEnrollment->progress_percentage }}%" 
-                                     aria-valuenow="{{ $userEnrollment->progress_percentage }}" 
-                                     aria-valuemin="0" 
+                                <div class="progress-bar bg-success" role="progressbar"
+                                     style="width: {{ $userEnrollment->progress_percentage }}%"
+                                     aria-valuenow="{{ $userEnrollment->progress_percentage }}"
+                                     aria-valuemin="0"
                                      aria-valuemax="100">
                                     {{ round($userEnrollment->progress_percentage) }}%
                                 </div>
@@ -61,7 +61,7 @@
                                                                 @endif
                                                             </div>
                                                             <p class="card-text small text-muted mb-3">{{ $lesson->description }}</p>
-                                                            <a href="{{ route('courses.lesson.quiz', [$course->slug, $lesson->slug]) }}" 
+                                                            <a href="{{ route('courses.lesson.quiz', [$course->slug, $lesson->slug]) }}"
                                                                class="btn btn-info btn-sm w-100">
                                                                 <i class="icon-question"></i>
                                                                 @if($quizScore !== null)
@@ -144,7 +144,7 @@
                                                 </div>
                                                 <div class="col-md-2">
                                                     <div class="lesson-actions">
-                                                        <a href="{{ route('courses.lesson.show', [$course->slug, $lesson->slug]) }}" 
+                                                        <a href="{{ route('courses.lesson.show', [$course->slug, $lesson->slug]) }}"
                                                            class="btn {{ $isCompleted ? 'btn-outline-success' : 'btn-primary' }} btn-sm mb-2 w-100">
                                                             @if($isCompleted)
                                                                 <i class="icon-check"></i> Review
@@ -154,11 +154,11 @@
                                                                 <i class="icon-play"></i> Start
                                                             @endif
                                                         </a>
-                                                        
+
                                                         @if($lesson->quiz_questions)
-                                                            <a href="{{ route('courses.lesson.quiz', [$course->slug, $lesson->slug]) }}" 
+                                                            <a href="{{ route('courses.lesson.quiz', [$course->slug, $lesson->slug]) }}"
                                                                class="btn btn-outline-info btn-sm w-100">
-                                                                <i class="icon-question"></i> 
+                                                                <i class="icon-question"></i>
                                                                 @if($quizScore !== null)
                                                                     Retake Quiz ({{ round($quizScore) }}%)
                                                                 @else
@@ -232,31 +232,31 @@
         .lesson-card {
             transition: all 0.3s ease;
         }
-        
+
         .lesson-card:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
-        
+
         .lesson-number {
             display: flex;
             align-items: center;
             justify-content: center;
         }
-        
+
         .score-badge .badge {
             font-size: 14px;
             min-width: 50px;
         }
-        
+
         .progress {
             height: 20px;
         }
-        
+
         .lesson-actions .btn {
             font-size: 12px;
         }
-        
+
         .quiz-section {
             background: linear-gradient(135deg, #f8f9ff 0%, #e3f2fd 100%);
             border-radius: 10px;
@@ -264,17 +264,17 @@
             border: 2px dashed #17a2b8;
             margin-bottom: 2rem;
         }
-        
+
         .quiz-card .card {
             transition: all 0.3s ease;
             height: 100%;
         }
-        
+
         .quiz-card .card:hover {
             transform: translateY(-3px);
             box-shadow: 0 6px 20px rgba(23, 162, 184, 0.15);
         }
-        
+
         .quiz-section h4 {
             color: #17a2b8;
             font-weight: 600;

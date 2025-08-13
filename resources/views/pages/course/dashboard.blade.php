@@ -81,7 +81,7 @@
                                 $course = $enrollment->course;
                                 $progressPercentage = $enrollment->progress_percentage;
                             @endphp
-                            
+
                             <div class="col-lg-6 mb-4">
                                 <div class="course-enrollment-card">
                                     <div class="card h-100">
@@ -108,11 +108,11 @@
                                                     <small class="text-muted">{{ round($progressPercentage) }}%</small>
                                                 </div>
                                                 <div class="progress" style="height: 8px;">
-                                                    <div class="progress-bar {{ $progressPercentage >= 100 ? 'bg-success' : 'bg-primary' }}" 
-                                                         role="progressbar" 
+                                                    <div class="progress-bar {{ $progressPercentage >= 100 ? 'bg-success' : 'bg-primary' }}"
+                                                         role="progressbar"
                                                          style="width: {{ $progressPercentage }}%"
-                                                         aria-valuenow="{{ $progressPercentage }}" 
-                                                         aria-valuemin="0" 
+                                                         aria-valuenow="{{ $progressPercentage }}"
+                                                         aria-valuemin="0"
                                                          aria-valuemax="100">
                                                     </div>
                                                 </div>
@@ -178,7 +178,7 @@
                                                             <i class="icon-play"></i> Continue Learning
                                                         </a>
                                                     @endif
-                                                    
+
                                                     <div class="btn-group" role="group">
                                                         <a href="{{ route('courses.show', $course->slug) }}" class="btn btn-outline-secondary btn-sm">
                                                             <i class="icon-info"></i> Details
@@ -256,62 +256,62 @@
             border: none;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-        
+
         .stat-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 4px 20px rgba(0,0,0,0.15);
         }
-        
+
         .stat-number {
             font-size: 2.5rem;
             font-weight: bold;
             margin: 0;
         }
-        
+
         .course-enrollment-card .card {
             transition: all 0.3s ease;
             border: none;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-        
+
         .course-enrollment-card .card:hover {
             transform: translateY(-3px);
             box-shadow: 0 4px 20px rgba(0,0,0,0.15);
         }
-        
+
         .course-title {
             color: #333;
             font-weight: 600;
         }
-        
+
         .progress {
             background-color: #e9ecef;
         }
-        
+
         .stat-item {
             padding: 8px 0;
         }
-        
+
         .stat-value {
             font-size: 18px;
             font-weight: 600;
             color: #333;
         }
-        
+
         .course-actions .btn {
             border-radius: 6px;
         }
-        
+
         .no-enrollments {
             background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
             border-radius: 10px;
         }
-        
+
         @media (max-width: 768px) {
             .stat-number {
                 font-size: 2rem;
             }
-            
+
             .stat-icon i {
                 font-size: 2rem !important;
             }

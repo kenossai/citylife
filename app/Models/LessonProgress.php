@@ -26,6 +26,16 @@ class LessonProgress extends Model
         'completed_at' => 'datetime',
     ];
 
+    protected static function booted()
+    {
+        // Update overall grade when quiz score is saved
+        static::saved(function ($lessonProgress) {
+            if ($lessonProgress->wasChanged('quiz_score') && $lessonProgress->quiz_score !== null) {
+                $lessonProgress->enrollment->updateOverallGrade();
+            }
+        });
+    }
+
     // Relationships
     public function enrollment()
     {
@@ -67,8 +77,8 @@ class LessonProgress extends Model
             'quiz_score' => $quizScore,
         ]);
 
-        // Update enrollment progress
-        $this->enrollment->updateProgress();
+        // Update enrollment progress based on attendance, not lesson completion
+        $this->enrollment->updateProgressFromAttendance();
     }
 
     public function addTimeSpent($minutes)

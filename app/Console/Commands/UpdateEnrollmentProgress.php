@@ -35,13 +35,13 @@ class UpdateEnrollmentProgress extends Command
                 $this->error("Enrollment with ID {$enrollmentId} not found.");
                 return 1;
             }
-            
+
             $enrollment->updateProgressFromAttendance();
             $this->info("Updated progress for enrollment ID: {$enrollmentId}");
         } else {
             // Update all enrollments
             $this->info('Updating progress for all enrollments...');
-            
+
             $enrollments = CourseEnrollment::with(['course', 'attendance'])->get();
             $bar = $this->output->createProgressBar($enrollments->count());
             $bar->start();
