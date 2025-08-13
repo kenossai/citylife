@@ -460,7 +460,7 @@ class CourseController extends Controller
         // Store email in session for future use
         session(['user_email' => $email]);
 
-        return view('pages.course.dashboard', compact('member', 'enrollments'));
+        return view('pages.course.new-face', compact('member', 'enrollments'));
     }
 
     /**
