@@ -29,6 +29,9 @@ Route::get('/courses/{courseSlug}/lessons/{lessonSlug}', [CourseController::clas
 Route::get('/courses/{courseSlug}/lessons/{lessonSlug}/quiz', [CourseController::class, 'showQuiz'])->name('courses.lesson.quiz');
 Route::post('/courses/{courseSlug}/lessons/{lessonSlug}/quiz', [CourseController::class, 'submitQuiz'])->name('courses.lesson.quiz.submit');
 
+// Certificate download route
+Route::get('/certificate/{enrollment_id}/download', [CourseController::class, 'downloadCertificate'])->name('certificate.download');
+
 // Course dashboard for users
 Route::get('/my-courses', [CourseController::class, 'dashboard'])->name('courses.dashboard');
 

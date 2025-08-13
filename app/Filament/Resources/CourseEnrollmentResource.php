@@ -73,12 +73,61 @@ class CourseEnrollmentResource extends Resource
                     ->label('Completion Date'),
                 Forms\Components\Toggle::make('certificate_issued')
                     ->label('Certificate Issued')
-                    ->default(false),
+                    ->default(false)
+                    ->live()
+                    ->afterStateUpdated(function ($state, $set) {
+                        if ($state) {
+                            $set('certificate_issued_at', now());
+                            $set('issued_by', \Illuminate\Support\Facades\Auth::user()->name ?? 'Admin');
+                        } else {
+                            $set('certificate_issued_at', null);
+                            $set('issued_by', null);
+                        }
+                    }),
                 Forms\Components\TextInput::make('certificate_number')
-                    ->maxLength(255),
+                    ->label('Certificate Number')
+                    ->maxLength(255)
+                    ->visible(fn ($get) => $get('certificate_issued')),
+                Forms\Components\FileUpload::make('certificate_file_path')
+                    ->label('Certificate File')
+                    ->disk('public')
+                    ->directory('certificates')
+                    ->acceptedFileTypes(['application/pdf', 'image/*'])
+                    ->maxSize(10240) // 10MB
+                    ->visible(fn ($get) => $get('certificate_issued'))
+                    ->helperText('Upload the certificate file (PDF or image, max 10MB)'),
+                Forms\Components\DateTimePicker::make('certificate_issued_at')
+                    ->label('Certificate Issued At')
+                    ->visible(fn ($get) => $get('certificate_issued'))
+                    ->disabled(),
+                Forms\Components\TextInput::make('issued_by')
+                    ->label('Issued By')
+                    ->maxLength(255)
+                    ->visible(fn ($get) => $get('certificate_issued'))
+                    ->disabled(),
+                Forms\Components\TextInput::make('payment_info'),
                 Forms\Components\Textarea::make('notes')
                     ->columnSpanFull(),
-                Forms\Components\TextInput::make('payment_info'),
+                
+                // Attendance Summary Section
+                Forms\Components\Section::make('Attendance Summary')
+                    ->schema([
+                        Forms\Components\Placeholder::make('attendance_stats')
+                            ->label('')
+                            ->content(function ($record) {
+                                if (!$record) return 'No attendance data yet.';
+                                
+                                $totalAttendance = $record->attendance()->count();
+                                $attendedCount = $record->attendance()->where('attended', true)->count();
+                                $attendanceRate = $totalAttendance > 0 ? round(($attendedCount / $totalAttendance) * 100, 1) : 0;
+                                
+                                return "Total Sessions: {$totalAttendance} | Attended: {$attendedCount} | Rate: {$attendanceRate}%";
+                            }),
+                    ])
+                    ->collapsible()
+                    ->collapsed()
+                    ->visible(fn ($record) => $record !== null)
+                    ->columnSpanFull(),
             ]);
     }
 
@@ -90,9 +139,12 @@ class CourseEnrollmentResource extends Resource
                     ->label('Course')
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('user.first_name')
+                Tables\Columns\TextColumn::make('user.full_name')
                     ->label('Member')
-                    ->formatStateUsing(fn ($record) => $record->user->first_name . ' ' . $record->user->last_name)
+                    ->getStateUsing(function ($record) {
+                        $user = $record->user;
+                        return $user ? $user->first_name . ' ' . $user->last_name : 'N/A';
+                    })
                     ->searchable(['first_name', 'last_name'])
                     ->sortable(),
                 Tables\Columns\TextColumn::make('user.email')
@@ -136,6 +188,26 @@ class CourseEnrollmentResource extends Resource
                     ->label('Cert. Number')
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('certificate_file_path')
+                    ->label('Certificate File')
+                    ->formatStateUsing(fn ($state) => $state ? 'Uploaded' : 'Not uploaded')
+                    ->badge()
+                    ->color(fn ($state) => $state ? 'success' : 'gray')
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('attendance_summary')
+                    ->label('Attendance')
+                    ->getStateUsing(function ($record) {
+                        $totalAttendance = $record->attendance()->count();
+                        $attendedCount = $record->attendance()->where('attended', true)->count();
+                        return $totalAttendance > 0 ? "{$attendedCount}/{$totalAttendance}" : 'Not tracked';
+                    })
+                    ->badge()
+                    ->color(function ($state) {
+                        if ($state === 'Not tracked') return 'gray';
+                        [$attended, $total] = explode('/', $state);
+                        $percentage = $total > 0 ? ($attended / $total) * 100 : 0;
+                        return $percentage >= 80 ? 'success' : ($percentage >= 60 ? 'warning' : 'danger');
+                    }),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -150,10 +222,44 @@ class CourseEnrollmentResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make('recalculate_progress')
+                    ->label('Recalc Progress')
+                    ->icon('heroicon-o-calculator')
+                    ->color('info')
+                    ->action(function ($record) {
+                        $record->updateProgressFromAttendance();
+                        \Filament\Notifications\Notification::make()
+                            ->title('Progress Updated')
+                            ->body('Enrollment progress has been recalculated based on attendance.')
+                            ->success()
+                            ->send();
+                    })
+                    ->requiresConfirmation()
+                    ->modalHeading('Recalculate Progress')
+                    ->modalDescription('This will update the progress percentage and completed lessons based on current attendance records.')
+                    ->modalSubmitActionLabel('Recalculate'),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\BulkAction::make('recalculate_progress_bulk')
+                        ->label('Recalculate Progress')
+                        ->icon('heroicon-o-calculator')
+                        ->color('info')
+                        ->action(function (\Illuminate\Database\Eloquent\Collection $records) {
+                            foreach ($records as $record) {
+                                $record->updateProgressFromAttendance();
+                            }
+                            \Filament\Notifications\Notification::make()
+                                ->title('Progress Updated')
+                                ->body("Progress recalculated for {$records->count()} enrollments.")
+                                ->success()
+                                ->send();
+                        })
+                        ->requiresConfirmation()
+                        ->modalHeading('Recalculate Progress for Selected')
+                        ->modalDescription('This will update progress for all selected enrollments based on their attendance records.')
+                        ->modalSubmitActionLabel('Recalculate All'),
                 ]),
             ]);
     }
@@ -161,7 +267,7 @@ class CourseEnrollmentResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\AttendanceRelationManager::class,
         ];
     }
 

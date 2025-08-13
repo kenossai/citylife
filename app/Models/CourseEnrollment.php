@@ -18,15 +18,24 @@ class CourseEnrollment extends Model
         'completed_lessons',
         'completion_date',
         'certificate_issued',
+        'certificate_number',
+        'certificate_file_path',
+        'certificate_issued_at',
+        'issued_by',
+        'overall_grade',
+        'attendance_record',
+        'payment_info',
         'notes',
     ];
 
     protected $casts = [
         'enrollment_date' => 'date',
         'completion_date' => 'date',
+        'certificate_issued_at' => 'datetime',
         'progress_percentage' => 'decimal:2',
         'overall_grade' => 'decimal:2',
         'certificate_issued' => 'boolean',
+        'attendance_record' => 'array',
     ];
 
     // Relationships
@@ -49,6 +58,11 @@ class CourseEnrollment extends Model
     public function progress()
     {
         return $this->hasMany(LessonProgress::class);
+    }
+
+    public function attendance()
+    {
+        return $this->hasMany(LessonAttendance::class);
     }
 
     // Scopes
@@ -85,6 +99,34 @@ class CourseEnrollment extends Model
         if ($this->course->has_certificate &&
             !$this->certificate_issued &&
             $completedLessons >= $this->course->min_attendance_for_certificate) {
+            $this->issueCertificate();
+        }
+    }
+
+    public function updateProgressFromAttendance()
+    {
+        // Get total lessons count from the course
+        $totalLessons = $this->course->lessons()->count();
+        
+        // Get attended lessons count
+        $attendedLessons = $this->attendance()->where('attended', true)->count();
+        
+        // Calculate progress percentage based on attendance
+        $progressPercentage = $totalLessons > 0 ? round(($attendedLessons / $totalLessons) * 100, 2) : 0;
+        
+        $this->update([
+            'progress_percentage' => $progressPercentage,
+            'completed_lessons' => $attendedLessons,
+        ]);
+
+        // Auto-complete course if student attended all or most lessons
+        if ($attendedLessons >= $totalLessons && $this->status !== 'completed') {
+            $this->markAsCompleted();
+        }
+
+        // Auto-issue certificate if student attended minimum required classes
+        $minimumAttendance = $this->course->min_attendance_for_certificate ?? ceil($totalLessons * 0.8); // Default 80%
+        if (!$this->certificate_issued && $attendedLessons >= $minimumAttendance) {
             $this->issueCertificate();
         }
     }    public function markAsCompleted()

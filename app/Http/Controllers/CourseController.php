@@ -484,5 +484,36 @@ class CourseController extends Controller
             ->where('user_id', $member->id)
             ->first();
     }
+
+    public function downloadCertificate($enrollment_id)
+    {
+        $enrollment = CourseEnrollment::findOrFail($enrollment_id);
+        
+        // Check if certificate is issued and file exists
+        if (!$enrollment->certificate_issued || !$enrollment->certificate_file_path) {
+            abort(404, 'Certificate not available');
+        }
+
+        // Check if the current session user is authorized to download this certificate
+        $email = session('user_email');
+        if (!$email) {
+            abort(403, 'Unauthorized');
+        }
+
+        $member = Member::where('email', $email)->first();
+        if (!$member || $member->id !== $enrollment->user_id) {
+            abort(403, 'Unauthorized');
+        }
+
+        $filePath = storage_path('app/public/' . $enrollment->certificate_file_path);
+        
+        if (!file_exists($filePath)) {
+            abort(404, 'Certificate file not found');
+        }
+
+        $fileName = 'Certificate_' . $enrollment->course->title . '_' . $member->first_name . '_' . $member->last_name . '.pdf';
+        
+        return response()->download($filePath, $fileName);
+    }
 }
 

@@ -189,9 +189,15 @@
                                                             </a>
                                                         @endif
                                                         @if($enrollment->certificate_issued)
-                                                            <button class="btn btn-outline-success btn-sm" onclick="alert('Certificate download feature coming soon!')">
-                                                                <i class="icon-download"></i> Certificate
-                                                            </button>
+                                                            @if($enrollment->certificate_file_path)
+                                                                <a href="{{ route('certificate.download', $enrollment->id) }}" class="btn btn-outline-success btn-sm" target="_blank">
+                                                                    <i class="icon-download"></i> Download Certificate
+                                                                </a>
+                                                            @else
+                                                                <button class="btn btn-outline-secondary btn-sm" disabled>
+                                                                    <i class="icon-certificate"></i> Certificate Pending
+                                                                </button>
+                                                            @endif
                                                         @endif
                                                     </div>
                                                 </div>
