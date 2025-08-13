@@ -15,187 +15,272 @@
     </div>
 </section>
 
-<section class="product-details section-space-top section-space-bottom">
+<section class="blog-page section-space">
     <div class="container">
         <div class="row gutter-y-60">
             <div class="col-lg-8">
-                <div class="product-details__content">
-                    <!-- Media Section -->
-                    @if($series->video_url || $series->audio_url)
-                        <div class="product-details__media mb-5">
-                            @if($series->video_url)
-                                <div class="video-wrapper mb-4">
-                                    <h4 class="mb-3">Watch Video</h4>
-                                    @if(str_contains($series->video_url, 'youtube.com') || str_contains($series->video_url, 'youtu.be'))
-                                        @php
-                                            $videoId = '';
-                                            if (str_contains($series->video_url, 'youtube.com/watch?v=')) {
-                                                parse_str(parse_url($series->video_url, PHP_URL_QUERY), $vars);
-                                                $videoId = $vars['v'] ?? '';
-                                            } elseif (str_contains($series->video_url, 'youtu.be/')) {
-                                                $videoId = basename(parse_url($series->video_url, PHP_URL_PATH));
-                                            }
-                                        @endphp
-                                        @if($videoId)
-                                            <div class="ratio ratio-16x9">
-                                                <iframe src="https://www.youtube.com/embed/{{ $videoId }}"
-                                                        title="{{ $series->title }}"
-                                                        allowfullscreen></iframe>
-                                            </div>
-                                        @else
-                                            <a href="{{ $series->video_url }}" target="_blank" class="btn btn-primary">
-                                                <i class="icon-play me-2"></i>Watch Video
-                                            </a>
-                                        @endif
+                <div class="blog-details">
+                    <div class="blog-card blog-card-four wow fadeInUp animated" data-wow-delay="100ms" data-wow-duration="1500ms">
+                        @if($series->video_url)
+                            <!-- Video Player in Card Header -->
+                            <div class="blog-card__image position-relative" style="z-index: 10;">
+                                <style>
+                                    .blog-card__image::before,
+                                    .blog-card__image::after {
+                                        display: none !important;
+                                    }
+                                </style>
+                                @if(str_contains($series->video_url, 'youtube.com') || str_contains($series->video_url, 'youtu.be'))
+                                    @php
+                                        $videoId = '';
+                                        if (str_contains($series->video_url, 'youtube.com/watch?v=')) {
+                                            parse_str(parse_url($series->video_url, PHP_URL_QUERY), $vars);
+                                            $videoId = $vars['v'] ?? '';
+                                        } elseif (str_contains($series->video_url, 'youtu.be/')) {
+                                            $videoId = basename(parse_url($series->video_url, PHP_URL_PATH));
+                                        }
+                                    @endphp
+                                    @if($videoId)
+                                        <div class="ratio ratio-16x9">
+                                            <iframe src="https://www.youtube.com/embed/{{ $videoId }}"
+                                                    title="{{ $series->title }}"
+                                                    allowfullscreen
+                                                    class="rounded"></iframe>
+                                        </div>
                                     @else
-                                        <a href="{{ $series->video_url }}" target="_blank" class="btn btn-primary">
-                                            <i class="icon-play me-2"></i>Watch Video
-                                        </a>
+                                        <div class="position-relative">
+                                            <img src="{{ $series->image_url }}" alt="{{ $series->title }}">
+                                            <div class="position-absolute top-50 start-50 translate-middle">
+                                                <a href="{{ $series->video_url }}" target="_blank" class="cleenhearts-btn cleenhearts-btn--base">
+                                                    <span class="cleenhearts-btn__icon-box">
+                                                        <span class="cleenhearts-btn__icon-box__inner"><span class="icon-play"></span></span>
+                                                    </span>
+                                                    <span class="cleenhearts-btn__text">Watch Video</span>
+                                                </a>
+                                            </div>
+                                        </div>
                                     @endif
-                                </div>
-                            @endif
+                                @else
+                                    <div class="position-relative">
+                                        <img src="{{ $series->image_url }}" alt="{{ $series->title }}">
+                                        <div class="position-absolute top-50 start-50 translate-middle">
+                                            <a href="{{ $series->video_url }}" target="_blank" class="cleenhearts-btn cleenhearts-btn--base">
+                                                <span class="cleenhearts-btn__icon-box">
+                                                    <span class="cleenhearts-btn__icon-box__inner"><span class="icon-play"></span></span>
+                                                </span>
+                                                <span class="cleenhearts-btn__text">Watch Video</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                @endif
 
-                            @if($series->audio_url)
-                                <div class="audio-wrapper">
-                                    <h4 class="mb-3">Listen to Audio</h4>
-                                    <a href="{{ $series->audio_url }}" target="_blank" class="btn btn-outline-primary">
-                                        <i class="icon-music me-2"></i>Listen to Audio
-                                    </a>
-                                </div>
-                            @endif
-                        </div>
-                    @endif
-
-                    <!-- Series Information -->
-                    <div class="product-details__info">
-                        <div class="row mb-4">
-                            <div class="col-md-6">
-                                <h3 class="product-details__title">{{ $series->title }}</h3>
                                 @if($series->pastor)
-                                    <p class="product-details__pastor mb-2">
-                                        <strong>Speaker:</strong> {{ $series->pastor }}
-                                    </p>
+                                    <div class="blog-details__hall">
+                                        <span>{{ $series->pastor }}</span>
+                                    </div>
                                 @endif
                                 @if($series->series_date)
-                                    <p class="product-details__date mb-2">
-                                        <strong>Date:</strong> {{ $series->series_date->format('F j, Y') }}
-                                    </p>
-                                @endif
-                                @if($series->formatted_duration)
-                                    <p class="product-details__duration mb-2">
-                                        <strong>Duration:</strong> {{ $series->formatted_duration }}
-                                    </p>
+                                    <div class="blog-card__date">
+                                        <span>{{ $series->series_date->format('d') }}</span>
+                                        {{ $series->series_date->format('M') }}
+                                    </div>
                                 @endif
                             </div>
-                            <div class="col-md-6">
-                                @if($series->category)
-                                    <p class="mb-2">
-                                        <strong>Category:</strong>
-                                        <span class="badge badge-primary">{{ $series->category }}</span>
-                                    </p>
+                        @else
+                            <!-- Fallback to Image if no video -->
+                            <div class="blog-card__image">
+                                <img src="{{ $series->image_url }}" alt="{{ $series->title }}">
+                                @if($series->pastor)
+                                    <div class="blog-details__hall">
+                                        <span>Pastor:</span>
+                                        <span>{{ $series->pastor }}</span>
+                                    </div>
                                 @endif
-                                @if($series->tags && count($series->tags) > 0)
-                                    <p class="mb-2">
-                                        <strong>Tags:</strong>
-                                        @foreach($series->tags as $tag)
-                                            <span class="badge badge-outline me-1">{{ $tag }}</span>
-                                        @endforeach
-                                    </p>
+                                @if($series->series_date)
+                                    <div class="blog-card__date">
+                                        <span>{{ $series->series_date->format('d') }}</span>
+                                        {{ $series->series_date->format('M') }}
+                                    </div>
                                 @endif
-                                <p class="mb-2">
-                                    <strong>Views:</strong> {{ number_format($series->views_count) }}
-                                </p>
-                            </div>
-                        </div>
-
-                        @if($series->scripture_references)
-                            <div class="scripture-references mb-4">
-                                <h5>Scripture References</h5>
-                                <p class="text-muted">{{ $series->scripture_references }}</p>
                             </div>
                         @endif
+                        <div class="blog-card-four__content">
+                            <ul class="list-unstyled blog-card-four__meta">
+                                @if($series->pastor)
+                                <li>
+                                    <a href="javascript:void(0);">
+                                        <span class="icon-user"></span>
+                                        {{ $series->pastor }}
+                                    </a>
+                                </li>
+                                @endif
+                                @if($series->sermon_notes)
+                                <li>
+                                    <a href="{{ $series->sermon_notes_url }}" target="_blank">
+                                        <i class="fa-solid fa-cloud-arrow-down"></i>
+                                        Download Sermon Notes
+                                    </a>
+                                </li>
+                                @endif
+                                @if ($series->audio_url)
+                                    <li>
+                                        <a href="{{ $series->audio_url }}" target="_blank">
+                                            <i class="fa-solid fa-headphones"></i>
+                                            Listen to Audio
+                                        </a>
+                                    </li>
+                                @endif
+                            </ul>
+                            <h3 class="blog-card__title">{{ $series->title }}</h3>
 
-                        @if($series->description)
-                            <div class="product-details__description">
-                                <h5>Description</h5>
-                                <div class="content">
+                            @if($series->summary)
+                                <p class="blog-card-four__text blog-card-four__text--one">{{ $series->summary }}</p>
+                            @endif
+
+                            @if($series->description)
+                                <div class="blog-card-four__text blog-card-four__text--two">
                                     {!! $series->description !!}
+                                </div>
+                            @endif
+
+                            @if($series->scripture_references)
+                                <div class="blog-details__inner">
+                                    <div class="blog-details__inner__content">
+                                        <h4>Scripture References</h4>
+                                        <p class="blog-details__inner__text">{{ $series->scripture_references }}</p>
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+
+                    <div class="blog-details__meta">
+                        @if($series->tags && count($series->tags) > 0)
+                            <div class="blog-details__tags">
+                                <h4 class="blog-details__meta__title">Tags:</h4>
+                                <div class="blog-details__tags__box">
+                                    @foreach($series->tags as $tag)
+                                        <a href="{{ route('teaching-series.index', ['search' => $tag]) }}">{{ $tag }}</a>
+                                    @endforeach
                                 </div>
                             </div>
                         @endif
+                        <div class="blog-details__social">
+                            <h4 class="blog-details__meta__title">Share:</h4>
+                            <div class="social-link">
+                                <a href="https://facebook.com/sharer/sharer.php?u={{ urlencode(request()->fullUrl()) }}" target="_blank">
+                                    <i class="fab fa-facebook-f" aria-hidden="true"></i>
+                                    <span class="sr-only">Facebook</span>
+                                </a>
+                                <a href="https://twitter.com/intent/tweet?url={{ urlencode(request()->fullUrl()) }}&text={{ urlencode($series->title) }}" target="_blank">
+                                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                                    <span class="sr-only">Twitter</span>
+                                </a>
+                                <a href="https://wa.me/?text={{ urlencode($series->title) }}%20{{ urlencode(request()->fullUrl()) }}" target="_blank">
+                                    <i class="fab fa-whatsapp"></i>
+                                    <span class="sr-only">WhatsApp</span>
+                                </a>
+                                <a href="mailto:?subject={{ urlencode($series->title) }}&body={{ urlencode(request()->fullUrl()) }}">
+                                    <i class="fab fa-envelope"></i>
+                                    <span class="sr-only">Email</span>
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <div class="col-lg-4">
-                <aside class="product__sidebar">
-                    <!-- Share Section -->
-                    <div class="product__sidebar__item">
-                        <h3 class="product__sidebar__title">Share This Series</h3>
-                        <div class="social-share">
-                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(request()->fullUrl()) }}"
-                               target="_blank" class="btn btn-outline-primary btn-sm me-2 mb-2">
-                                <i class="fab fa-facebook-f"></i> Facebook
-                            </a>
-                            <a href="https://twitter.com/intent/tweet?url={{ urlencode(request()->fullUrl()) }}&text={{ urlencode($series->title) }}"
-                               target="_blank" class="btn btn-outline-info btn-sm me-2 mb-2">
-                                <i class="fab fa-twitter"></i> Twitter
-                            </a>
-                            <a href="https://api.whatsapp.com/send?text={{ urlencode($series->title . ' - ' . request()->fullUrl()) }}"
-                               target="_blank" class="btn btn-outline-success btn-sm mb-2">
-                                <i class="fab fa-whatsapp"></i> WhatsApp
-                            </a>
+                <div class="sidebar">
+                    <aside class="widget-area">
+                        <div class="sidebar__form sidebar__single">
+                            <h4 class="sidebar__title sidebar__form__title">Search</h4>
+                            <form action="{{ route('teaching-series.index') }}" method="GET" class="sidebar__search">
+                                <input type="text" name="search" placeholder="Search Teaching Series...">
+                                <button type="submit" aria-label="search submit">
+                                    <span class="icon-search"></span>
+                                </button>
+                            </form>
                         </div>
-                    </div>
 
-                    <!-- Related Series -->
-                    @if($relatedSeries->isNotEmpty())
-                        <div class="product__sidebar__item">
-                            <h3 class="product__sidebar__title">Related Series</h3>
-                            @foreach($relatedSeries as $related)
-                                <div class="related-series-item mb-3 pb-3 border-bottom">
-                                    <a href="{{ route('teaching-series.show', $related->slug) }}" class="d-flex text-decoration-none">
-                                        <img src="{{ $related->image_url }}" alt="{{ $related->title }}"
-                                             class="me-3 rounded" style="width: 80px; height: 60px; object-fit: cover;">
-                                        <div class="flex-grow-1">
-                                            <h6 class="mb-1">{{ Str::limit($related->title, 50) }}</h6>
-                                            @if($related->pastor)
-                                                <small class="text-muted d-block">{{ $related->pastor }}</small>
-                                            @endif
-                                            @if($related->series_date)
-                                                <small class="text-muted">{{ $related->series_date->format('M j, Y') }}</small>
-                                            @endif
-                                        </div>
-                                    </a>
+                        @if($relatedSeries->isNotEmpty())
+                            <div class="sidebar__posts-wrapper sidebar__single">
+                                <h4 class="sidebar__title">Related Series</h4>
+                                <ul class="sidebar__posts list-unstyled">
+                                    @foreach($relatedSeries as $related)
+                                        <li class="sidebar__posts__item">
+                                            <div class="sidebar__posts__image">
+                                                <img src="{{ $related->image_url }}" width="90" height="60" alt="{{ $related->title }}">
+                                            </div>
+                                            <div class="sidebar__posts__content">
+                                                <p class="sidebar__posts__meta">
+                                                    <span class="icon-user"></span>
+                                                    {{ $related->pastor ?? 'By Admin' }}
+                                                </p>
+                                                <h4 class="sidebar__posts__title">
+                                                    <a href="{{ route('teaching-series.show', $related->slug) }}">
+                                                        {{ Str::limit($related->title, 50) }}
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
+                        <div class="sidebar__categories-wrapper sidebar__single">
+                            <h4 class="sidebar__title">Categories</h4>
+                            <ul class="sidebar__categories list-unstyled">
+                                @php
+                                    $categories = \App\Models\TeachingSeries::getCategories();
+                                    $categoryCounts = [];
+                                    foreach($categories as $category) {
+                                        $categoryCounts[$category] = \App\Models\TeachingSeries::published()->where('category', $category)->count();
+                                    }
+                                @endphp
+                                @foreach($categoryCounts as $category => $count)
+                                    <li>
+                                        <a href="{{ route('teaching-series.index', ['category' => $category]) }}">
+                                            <span>{{ $category }}</span>
+                                            <span>({{ $count }})</span>
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+
+                        @if($series->tags && count($series->tags) > 0)
+                            <div class="sidebar__tags-wrapper sidebar__single">
+                                <h4 class="sidebar__title">Tags</h4>
+                                <div class="sidebar__tags">
+                                    @foreach($series->tags as $tag)
+                                        <a href="{{ route('teaching-series.index', ['search' => $tag]) }}">{{ $tag }}</a>
+                                    @endforeach
                                 </div>
-                            @endforeach
-                        </div>
-                    @endif
+                            </div>
+                        @endif
 
-                    <!-- Quick Actions -->
-                    <div class="product__sidebar__item">
-                        <h3 class="product__sidebar__title">Quick Links</h3>
-                        <div class="d-grid gap-2">
-                            <a href="{{ route('teaching-series.index') }}" class="btn btn-outline-primary">
-                                <i class="icon-arrow-left me-2"></i>All Teaching Series
-                            </a>
-                            @if($series->category)
-                                <a href="{{ route('teaching-series.index', ['category' => $series->category]) }}"
-                                   class="btn btn-outline-secondary">
-                                    <i class="icon-grid me-2"></i>More {{ $series->category }}
-                                </a>
-                            @endif
-                            @if($series->pastor)
-                                <a href="{{ route('teaching-series.index', ['pastor' => $series->pastor]) }}"
-                                   class="btn btn-outline-info">
-                                    <i class="icon-user me-2"></i>More by {{ $series->pastor }}
-                                </a>
-                            @endif
+                        <div class="sidebar__single">
+                            <h4 class="sidebar__title">Series Information</h4>
+                            <div class="sidebar__info">
+                                @if($series->category)
+                                    <p><strong>Category:</strong> {{ $series->category }}</p>
+                                @endif
+                                @if($series->series_date)
+                                    <p><strong>Date:</strong> {{ $series->series_date->format('F j, Y') }}</p>
+                                @endif
+                                @if($series->formatted_duration)
+                                    <p><strong>Duration:</strong> {{ $series->formatted_duration }}</p>
+                                @endif
+                                <p><strong>Views:</strong> {{ $series->views_count }}</p>
+                            </div>
                         </div>
-                    </div>
-                </aside>
+                    </aside>
+                </div>
             </div>
         </div>
     </div>
 </section>
+
 </x-app-layout>

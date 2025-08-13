@@ -152,11 +152,46 @@
                                     @if($isEnrolled)
                                     {{-- User is already enrolled --}}
                                     <div class="donation-details__donation__button wow fadeInUp animated" data-wow-duration="1500ms" data-wow-delay="400ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 400ms; animation-name: fadeInUp;">
-                                        <div class="alert alert-success mb-0">
+                                        <div class="alert alert-success mb-3">
                                             <div class="d-flex align-items-center">
                                                 <i class="icon-check-circle me-2" style="font-size: 1.2rem;"></i>
-                                                <span><strong>You're enrolled!</strong> We'll contact you with course details.</span>
+                                                <span><strong>You're enrolled!</strong> Access your lessons and track your progress.</span>
                                             </div>
+                                        </div>
+                                        
+                                        {{-- Course Access Buttons --}}
+                                        <div class="enrolled-user-actions">
+                                            <div class="d-grid gap-2">
+                                                <a href="{{ route('courses.lessons', $course->slug) }}" class="cleenhearts-btn cleenhearts-btn--primary">
+                                                    <div class="cleenhearts-btn__icon-box">
+                                                        <div class="cleenhearts-btn__icon-box__inner"><span class="icon-play"></span></div>
+                                                    </div>
+                                                    <span class="cleenhearts-btn__text">Access Lessons</span>
+                                                </a>
+                                                
+                                                <a href="{{ route('courses.dashboard') }}?email={{ urlencode(session('user_email')) }}" class="btn btn-outline-primary">
+                                                    <i class="icon-dashboard me-2"></i>My Dashboard
+                                                </a>
+                                            </div>
+                                            
+                                            @if($userEnrollment)
+                                                <div class="enrollment-stats mt-3 p-3 bg-light rounded">
+                                                    <div class="row text-center">
+                                                        <div class="col-6">
+                                                            <div class="stat-item">
+                                                                <strong class="d-block">{{ round($userEnrollment->progress_percentage) }}%</strong>
+                                                                <small class="text-muted">Progress</small>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <div class="stat-item">
+                                                                <strong class="d-block">{{ $userEnrollment->completed_lessons }}/{{ $course->lessons->count() }}</strong>
+                                                                <small class="text-muted">Lessons</small>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endif
                                         </div>
                                     </div><!-- /.donation-details__donation__button -->
                                     @elseif($course->is_registration_open)

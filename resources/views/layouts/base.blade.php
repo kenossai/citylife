@@ -26,6 +26,8 @@
 
     <link rel="stylesheet" href="{{ asset('assets/vendors/bootstrap/css/bootstrap.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendors/bootstrap-select/bootstrap-select.min.css') }}" />
+    <script src="https://kit.fontawesome.com/56626a3766.js" crossorigin="anonymous"></script>
+
     <link rel="stylesheet" href="{{ asset('assets/vendors/animate/animate.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendors/fontawesome/css/all.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendors/jquery-ui/jquery-ui.css') }}" />
@@ -38,7 +40,6 @@
     <link rel="stylesheet" href="{{ asset('assets/vendors/swiper/css/swiper-bundle.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendors/owl-carousel/css/owl.carousel.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendors/owl-carousel/css/owl.theme.default.min.css') }}" />
-
 
     <!-- core styles -->
     <link rel="stylesheet" href="{{ asset('assets/css/citylife.css') }}" />

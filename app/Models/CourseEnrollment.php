@@ -45,6 +45,12 @@ class CourseEnrollment extends Model
         return $this->hasMany(LessonProgress::class);
     }
 
+    // Alias for lessonProgress for backward compatibility
+    public function progress()
+    {
+        return $this->hasMany(LessonProgress::class);
+    }
+
     // Scopes
     public function scopeActive($query)
     {
@@ -59,21 +65,23 @@ class CourseEnrollment extends Model
     // Methods
     public function updateProgress()
     {
-        // For 6-week courses, calculate progress automatically
-        $totalWeeks = 6; // Fixed 6-week courses
+        // Get actual lessons count from the course
+        $totalLessons = $this->course->lessons()->count();
         $completedLessons = $this->lessonProgress()->where('status', 'completed')->count();
+
+        $progressPercentage = $totalLessons > 0 ? ($completedLessons / $totalLessons) * 100 : 0;
 
         $this->update([
             'completed_lessons' => $completedLessons,
-            'progress_percentage' => $totalWeeks > 0 ? ($completedLessons / $totalWeeks) * 100 : 0,
+            'progress_percentage' => $progressPercentage,
         ]);
 
-        // Auto-complete course after 6 weeks or all lessons completed
-        if ($completedLessons >= $totalWeeks && $this->status !== 'completed') {
+        // Auto-complete course if all lessons are completed
+        if ($completedLessons >= $totalLessons && $this->status !== 'completed') {
             $this->markAsCompleted();
         }
 
-        // Auto-issue certificate if student attended minimum required classes (5 out of 6)
+        // Auto-issue certificate if student attended minimum required classes
         if ($this->course->has_certificate &&
             !$this->certificate_issued &&
             $completedLessons >= $this->course->min_attendance_for_certificate) {

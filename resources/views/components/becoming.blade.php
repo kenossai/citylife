@@ -14,12 +14,6 @@
                         <div class="cleenhearts-btn__icon-box">
                             <div class="cleenhearts-btn__icon-box__inner"><span class="icon-duble-arrow"></span></div>
                         </div>
-                        <span class="cleenhearts-btn__text">{{ $section->volunteer_title }}</span>
-                    </a><!-- /.contact-information__btn -->
-                    <a href="{{ route('about') }}" class="contact-information__btn cleenhearts-btn">
-                        <div class="cleenhearts-btn__icon-box">
-                            <div class="cleenhearts-btn__icon-box__inner"><span class="icon-duble-arrow"></span></div>
-                        </div>
                         <span class="cleenhearts-btn__text">{{ $section->new_member_title }}</span>
                     </a><!-- /.contact-information__btn -->
                 </div><!-- /.inspiring-one__inner -->

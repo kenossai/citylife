@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\AboutPage;
 use App\Models\CoreValue;
+use App\Models\TeamMember;
+use Illuminate\Http\Request;
 
 class AboutController extends Controller
 {
@@ -30,7 +31,11 @@ class AboutController extends Controller
         // Get core values separately for easier access in the view
         $coreValues = $aboutPage->coreValues;
 
-        return view('pages.about.index', compact('aboutPage', 'coreValues'));
+        $pastoralTeam = TeamMember::active()
+            ->pastoral()
+            ->ordered()
+            ->get();
+        return view('pages.about.index', compact('aboutPage', 'coreValues', 'pastoralTeam'));
     }
 
     /**

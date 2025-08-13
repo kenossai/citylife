@@ -10,6 +10,7 @@ use App\Http\Controllers\CourseController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\VolunteerController;
 use App\Http\Controllers\TeachingSeriesController;
+use App\Http\Controllers\CityLifeTalkTimeController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about-citylife', [AboutController::class, 'index'])->name('about');
@@ -21,6 +22,15 @@ Route::get('/courses', [CourseController::class, 'index'])->name('courses.index'
 Route::get('/courses/{slug}', [CourseController::class, 'show'])->name('courses.show');
 Route::get('/courses/{slug}/register', [CourseController::class, 'showRegistrationForm'])->name('courses.register.form');
 Route::post('/courses/{slug}/register', [CourseController::class, 'processRegistration'])->name('courses.register');
+
+// Course lesson and quiz routes
+Route::get('/courses/{slug}/lessons', [CourseController::class, 'lessons'])->name('courses.lessons');
+Route::get('/courses/{courseSlug}/lessons/{lessonSlug}', [CourseController::class, 'showLesson'])->name('courses.lesson.show');
+Route::get('/courses/{courseSlug}/lessons/{lessonSlug}/quiz', [CourseController::class, 'showQuiz'])->name('courses.lesson.quiz');
+Route::post('/courses/{courseSlug}/lessons/{lessonSlug}/quiz', [CourseController::class, 'submitQuiz'])->name('courses.lesson.quiz.submit');
+
+// Course dashboard for users
+Route::get('/my-courses', [CourseController::class, 'dashboard'])->name('courses.dashboard');
 
 // Route for the events controller
 Route::get('/events', [EventController::class, 'index'])->name('events.index');
@@ -43,4 +53,8 @@ Route::get('/media', [MediaController::class, 'index'])->name('media.index');
 // Teaching Series routes
 Route::get('/media/teaching-series', [TeachingSeriesController::class, 'index'])->name('teaching-series.index');
 Route::get('/media/teaching-series/{slug}', [TeachingSeriesController::class, 'show'])->name('teaching-series.show');
+
+// CityLife TalkTime routes
+Route::get('/media/citylife-talktime', [CityLifeTalkTimeController::class, 'index'])->name('citylife-talktime.index');
+Route::get('/media/citylife-talktime/{talkTime}', [CityLifeTalkTimeController::class, 'show'])->name('citylife-talktime.show');
 

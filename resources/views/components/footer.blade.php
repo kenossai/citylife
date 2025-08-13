@@ -2,14 +2,14 @@
     <div class="main-footer__top">
         <div class="container">
             <div class="row gutter-y-30">
-                <div class="col-md-12 col-xl-3 wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="00ms">
+                <div class="col-md-12 col-xl-4 wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="00ms">
                     <div class="footer-widget footer-widget--about">
-                        <a href="index.html" class="footer-widget__logo">
-                            <img src="assets/images/logo-dark.png" width="159" alt="Cleenhearts HTML Template">
+                        <a href="{{ route('home') }}" class="footer-widget__logo">
+                            <img src="{{ asset('assets/images/logo.png') }}" width="100" alt="City Life Church">
                         </a>
-                        <p class="footer-widget__about-text">Wimply dummy text of the priatype industry orem Ipsum has Maecenas quis eros at ante</p>
+                        <p class="footer-widget__about-text">Join us as we grow together in faith, love, and service to our community. Experience God's love and discover your purpose with us.</p>
                     </div><!-- /.footer-widget -->
-                    <a href="https://www.google.com/maps/@23.506657,90.3443647,7z?entry=ttu" class="footer-widget__map">
+                    <a href="https://maps.google.com" target="_blank" class="footer-widget__map">
                         <span class="footer-widget__map__text">View Map</span>
                         <span class="icon-paper-plane"></span>
                     </a>
@@ -19,10 +19,10 @@
                         <h2 class="footer-widget__title">Get in touch!</h2><!-- /.footer-widget__title -->
                         <ul class="list-unstyled footer-widget__info">
                             <li> <span class="icon-location"></span>
-                                <address>901 N Pitt Str., Suite 170 Alexandria, USA</address>
+                                <address>1 South Parade Sheffield S3 8SS</address>
                             </li>
-                            <li> <span class="icon-phone"></span><a href="tel:(406)555-0120">(406) 555-0120</a></li>
-                            <li> <span class="icon-envelope"></span><a href="mailto:needhelp@company.com">needhelp@company.com</a></li>
+                            <li> <span class="icon-phone"></span><a href="tel:(217)555-0123">(217) 555-0123</a></li>
+                            <li> <span class="icon-envelope"></span><a href="mailto:info@citylifechurch.org">info@citylifechurch.org</a></li>
                         </ul><!-- /.list-unstyled -->
                     </div><!-- /.footer-widget -->
                 </div><!-- /.col-xl-3 col-md-5 -->
@@ -30,45 +30,15 @@
                     <div class="footer-widget footer-widget--links">
                         <h2 class="footer-widget__title">Quick Links</h2><!-- /.footer-widget__title -->
                         <ul class="list-unstyled footer-widget__links">
-                            <li><a href="about.html">About Us</a></li>
-                            <li><a href="donate-right.html">Give Donation</a></li>
-                            <li><a href="donate-right.html">Education Support</a></li>
-                            <li><a href="events-list.html">Our Campaign</a></li>
-                            <li><a href="contact.html">Contact Us</a></li>
+                            <li><a href="{{ route('home') }}">Home</a></li>
+                            <li><a href="{{ route('about') }}">About Us</a></li>
+                            <li><a href="{{ route('media.index') }}">Media</a></li>
+                            <li><a href="{{ route('teaching-series.index') }}">Teaching Series</a></li>
+                            <li><a href="{{ route('events.index') }}">Events</a></li>
+                            <li><a href="{{ route('contact') }}">Contact Us</a></li>
                         </ul><!-- /.list-unstyled footer-widget__links -->
                     </div><!-- /.footer-widget -->
                 </div><!-- /.col-md-3 -->
-                <div class="col-md-4 col-xl-3 wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="600ms">
-                    <div class="footer-widget footer-widget--gallery">
-                        <h2 class="footer-widget__title">Our Gallery</h2><!-- /.footer-widget__title -->
-                        <div class="footer-widget__gallery">
-                            <a href="gallery.html" class="footer-widget__gallery__link">
-                                <img src="assets/images/gallery/footer-widget-gallery-img-1.jpg" alt="footer-widget-gallery">
-                                <span class="footer-widget__gallery__icon icon-plus"></span>
-                            </a><!-- /.footer-widget__gallery__link -->
-                            <a href="gallery.html" class="footer-widget__gallery__link">
-                                <img src="assets/images/gallery/footer-widget-gallery-img-2.jpg" alt="footer-widget-gallery">
-                                <span class="footer-widget__gallery__icon icon-plus"></span>
-                            </a><!-- /.footer-widget__gallery__link -->
-                            <a href="gallery.html" class="footer-widget__gallery__link">
-                                <img src="assets/images/gallery/footer-widget-gallery-img-3.jpg" alt="footer-widget-gallery">
-                                <span class="footer-widget__gallery__icon icon-plus"></span>
-                            </a><!-- /.footer-widget__gallery__link -->
-                            <a href="gallery.html" class="footer-widget__gallery__link">
-                                <img src="assets/images/gallery/footer-widget-gallery-img-4.jpg" alt="footer-widget-gallery">
-                                <span class="footer-widget__gallery__icon icon-plus"></span>
-                            </a><!-- /.footer-widget__gallery__link -->
-                            <a href="gallery.html" class="footer-widget__gallery__link">
-                                <img src="assets/images/gallery/footer-widget-gallery-img-5.jpg" alt="footer-widget-gallery">
-                                <span class="footer-widget__gallery__icon icon-plus"></span>
-                            </a><!-- /.footer-widget__gallery__link -->
-                            <a href="gallery.html" class="footer-widget__gallery__link">
-                                <img src="assets/images/gallery/footer-widget-gallery-img-6.jpg" alt="footer-widget-gallery">
-                                <span class="footer-widget__gallery__icon icon-plus"></span>
-                            </a><!-- /.footer-widget__gallery__link -->
-                        </div><!-- /.footer-widget__gallery -->
-                    </div><!-- /.footer-widget -->
-                </div><!-- /.col-md-4 col-xl-3 -->
             </div><!-- /.row -->
         </div><!-- /.container -->
         <div class="main-footer__top__shape-box">
@@ -81,7 +51,7 @@
         <div class="container">
             <div class="main-footer__bottom__inner">
                 <p class="main-footer__copyright">
-                    &copy; Copyright <span class="dynamic-year"></span> CleenHearts All Rights Reserved.
+                    &copy; Copyright <span class="dynamic-year"></span> City Life Church. All Rights Reserved.
                 </p>
             </div><!-- /.main-footer__inner -->
         </div><!-- /.container -->

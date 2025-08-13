@@ -40,11 +40,13 @@
             <p>No upcoming events at this time. Please check back later for updates.</p>
         </div>
         @endif
-        <a href="become-a-volunteer.html" class="cleenhearts-btn">
-            <div class="cleenhearts-btn__icon-box">
-                <div class="cleenhearts-btn__icon-box__inner"><span class="icon-duble-arrow"></span></div>
-            </div>
-            <span class="cleenhearts-btn__text">See All Events</span>
-        </a>
+        <div class="text-center mt-5">
+            <a href="{{ route('events.index') }}" class="cleenhearts-btn">
+                <div class="cleenhearts-btn__icon-box">
+                    <div class="cleenhearts-btn__icon-box__inner"><span class="icon-duble-arrow"></span></div>
+                </div>
+                <span class="cleenhearts-btn__text">See All Events</span>
+            </a>
+        </div>
     </div><!-- /.container -->
 </section>

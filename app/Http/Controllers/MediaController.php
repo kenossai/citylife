@@ -13,7 +13,7 @@ class MediaController extends Controller
         $featuredSeries = TeachingSeries::getFeaturedSeries(6);
         $latestSeries = TeachingSeries::getLatestSeries(8);
         $categories = TeachingSeries::getCategories();
-        
+
         return view('pages.media.index', compact('featuredSeries', 'latestSeries', 'categories'));
     }
 }

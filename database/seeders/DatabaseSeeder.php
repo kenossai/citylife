@@ -29,6 +29,8 @@ class DatabaseSeeder extends Seeder
             BannerSeeder::class,
             EventSeeder::class,
             BecomingSectionSeeder::class,
+            TeachingSeriesSeeder::class,
+            CityLifeTalkTimeSeeder::class,
         ]);
     }
 }

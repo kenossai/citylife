@@ -18,6 +18,7 @@ class TeachingSeries extends Model
         'image',
         'video_url',
         'audio_url',
+        'sermon_notes',
         'pastor',
         'category',
         'tags',
@@ -105,8 +106,17 @@ class TeachingSeries extends Model
         if ($this->image) {
             return asset('storage/' . $this->image);
         }
-        
+
         return asset('assets/images/defaults/teaching-series-default.jpg');
+    }
+
+    public function getSermonNotesUrlAttribute()
+    {
+        if ($this->sermon_notes) {
+            return asset('storage/' . $this->sermon_notes);
+        }
+
+        return null;
     }
 
     public function getExcerptAttribute()
@@ -114,7 +124,7 @@ class TeachingSeries extends Model
         if ($this->summary) {
             return Str::limit($this->summary, 150);
         }
-        
+
         return Str::limit($this->description, 150);
     }
 

@@ -16,6 +16,7 @@ class LessonProgress extends Model
         'started_at',
         'completed_at',
         'time_spent_minutes',
+        'quiz_score',
         'attempts',
         'notes',
     ];

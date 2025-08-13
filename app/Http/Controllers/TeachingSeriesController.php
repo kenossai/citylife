@@ -103,7 +103,7 @@ class TeachingSeriesController extends Controller
                 ->orderByDate()
                 ->limit(3 - $relatedSeries->count())
                 ->get();
-            
+
             $relatedSeries = $relatedSeries->merge($additionalSeries);
         }
 

@@ -17,6 +17,8 @@ use Filament\Forms\Components\Section;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Actions\ViewAction;
 use Illuminate\Support\Str;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
+use Filament\Forms\Get;
 
 class TeachingSeriesResource extends Resource
 {
@@ -48,16 +50,16 @@ class TeachingSeriesResource extends Resource
                                             ->required()
                                             ->maxLength(255)
                                             ->live(onBlur: true)
-                                            ->afterStateUpdated(fn (string $context, $state, callable $set) => 
+                                            ->afterStateUpdated(fn (string $context, $state, callable $set) =>
                                                 $context === 'create' ? $set('slug', Str::slug($state)) : null
                                             ),
-                                        
+
                                         Forms\Components\TextInput::make('slug')
                                             ->required()
                                             ->maxLength(255)
                                             ->unique(TeachingSeries::class, 'slug', ignoreRecord: true)
                                             ->rules(['alpha_dash']),
-                                        
+
                                         Forms\Components\Select::make('pastor')
                                             ->options([
                                                 'Pastor John Smith' => 'Pastor John Smith',
@@ -68,7 +70,7 @@ class TeachingSeriesResource extends Resource
                                             ->searchable()
                                             ->allowHtml(false)
                                             ->preload(),
-                                        
+
                                         Forms\Components\Select::make('category')
                                             ->options([
                                                 'Sermons' => 'Sermons',
@@ -93,11 +95,11 @@ class TeachingSeriesResource extends Resource
                                             ->maxLength(500)
                                             ->rows(3)
                                             ->columnSpanFull(),
-                                        
+
                                         Forms\Components\RichEditor::make('description')
                                             ->label('Full Description')
                                             ->columnSpanFull(),
-                                        
+
                                         Forms\Components\Textarea::make('scripture_references')
                                             ->label('Scripture References')
                                             ->placeholder('e.g., John 3:16, Romans 8:28, Philippians 4:13')
@@ -126,13 +128,25 @@ class TeachingSeriesResource extends Resource
                                             ->url()
                                             ->maxLength(255)
                                             ->placeholder('https://youtube.com/watch?v=...'),
-                                        
+
                                         Forms\Components\TextInput::make('audio_url')
                                             ->label('Audio URL')
                                             ->url()
                                             ->maxLength(255)
                                             ->placeholder('https://soundcloud.com/...'),
-                                        
+
+                                        Forms\Components\FileUpload::make('sermon_notes')
+                                            ->label('Sermon Notes (PDF)')
+                                            ->acceptedFileTypes(['application/pdf'])
+                                            ->directory('teaching-series/notes')
+                                            ->disk('public')
+                                            ->maxSize(10240) // 10MB
+                                            ->getUploadedFileNameForStorageUsing(
+                                                fn (TemporaryUploadedFile $file, Get $get): string =>
+                                                Str::slug($get('title') ?? 'sermon-notes') . '-notes.' . $file->getClientOriginalExtension()
+                                            )
+                                            ->columnSpanFull(),
+
                                         Forms\Components\TextInput::make('duration_minutes')
                                             ->label('Duration (minutes)')
                                             ->numeric()
@@ -151,12 +165,12 @@ class TeachingSeriesResource extends Resource
                                             ->label('Tags')
                                             ->placeholder('Add tags...')
                                             ->columnSpanFull(),
-                                        
+
                                         Forms\Components\DatePicker::make('series_date')
                                             ->label('Series Date')
                                             ->required()
                                             ->default(now()),
-                                        
+
                                         Forms\Components\TextInput::make('sort_order')
                                             ->label('Sort Order')
                                             ->numeric()
@@ -171,12 +185,12 @@ class TeachingSeriesResource extends Resource
                                             ->label('Published')
                                             ->default(true)
                                             ->helperText('Make this series visible to the public'),
-                                        
+
                                         Forms\Components\Toggle::make('is_featured')
                                             ->label('Featured')
                                             ->default(false)
                                             ->helperText('Show this series prominently on the homepage'),
-                                        
+
                                         Forms\Components\TextInput::make('views_count')
                                             ->label('Views Count')
                                             ->numeric()
@@ -199,46 +213,54 @@ class TeachingSeriesResource extends Resource
                     ->label('Image')
                     ->circular()
                     ->size(60),
-                
+
                 Tables\Columns\TextColumn::make('title')
                     ->searchable()
                     ->sortable()
                     ->limit(30),
-                
+
                 Tables\Columns\TextColumn::make('pastor')
                     ->searchable()
                     ->sortable()
                     ->badge()
                     ->color('info'),
-                
+
                 Tables\Columns\TextColumn::make('category')
                     ->searchable()
                     ->sortable()
                     ->badge(),
-                
+
                 Tables\Columns\TextColumn::make('series_date')
                     ->label('Date')
                     ->date()
                     ->sortable(),
-                
+
                 Tables\Columns\TextColumn::make('duration_minutes')
                     ->label('Duration')
                     ->formatStateUsing(fn ($state) => $state ? "{$state} min" : '-')
                     ->sortable(),
-                
+
                 Tables\Columns\TextColumn::make('views_count')
                     ->label('Views')
                     ->numeric()
                     ->sortable()
                     ->badge()
                     ->color('success'),
-                
+
+                Tables\Columns\IconColumn::make('sermon_notes')
+                    ->label('Notes')
+                    ->boolean()
+                    ->trueIcon('heroicon-o-document-text')
+                    ->falseIcon('heroicon-o-minus')
+                    ->trueColor('info')
+                    ->getStateUsing(fn ($record) => !empty($record->sermon_notes)),
+
                 Tables\Columns\IconColumn::make('is_featured')
                     ->label('Featured')
                     ->boolean()
                     ->trueIcon('heroicon-o-star')
                     ->falseIcon('heroicon-o-minus'),
-                
+
                 Tables\Columns\IconColumn::make('is_published')
                     ->label('Published')
                     ->boolean()
@@ -246,7 +268,7 @@ class TeachingSeriesResource extends Resource
                     ->falseIcon('heroicon-o-eye-slash')
                     ->trueColor('success')
                     ->falseColor('danger'),
-                
+
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Created')
                     ->dateTime()
@@ -267,7 +289,7 @@ class TeachingSeriesResource extends Resource
                         'Discipleship' => 'Discipleship',
                     ])
                     ->multiple(),
-                
+
                 SelectFilter::make('pastor')
                     ->options([
                         'Pastor John Smith' => 'Pastor John Smith',
@@ -276,10 +298,10 @@ class TeachingSeriesResource extends Resource
                         'Guest Speaker' => 'Guest Speaker',
                     ])
                     ->multiple(),
-                
+
                 Tables\Filters\TernaryFilter::make('is_published')
                     ->label('Published Status'),
-                
+
                 Tables\Filters\TernaryFilter::make('is_featured')
                     ->label('Featured Status'),
             ])

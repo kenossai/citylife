@@ -3,7 +3,7 @@
         <div class="main-header__inner">
             <div class="main-header__logo">
                 <a href="index.html">
-                    <img src="assets/images/logo-dark.png" alt="Cleenhearts HTML" width="159">
+                    <img src="{{ asset('assets/images/logo.png') }}" alt="CityLife HTML" width="100">
                 </a>
                 <button type="button" class="main-header__sidebar-btn sidebar-btn__toggler">
                     <span class="icon-grid"></span>
@@ -14,7 +14,7 @@
                     <ul class="main-menu__list">
 
 
-                        <li class="megamenu megamenu-clickable megamenu-clickable--toggler">
+                        <li class="">
                             <a href="/">Home</a>
                         </li>
 
@@ -51,7 +51,7 @@
                          <li class="dropdown">
                             <a href="index.html#">Media Centre</a>
                             <ul>
-                                <li><a href="gallery.html">Teaching Series</a></li>
+                                <li><a href="{{ route('teaching-series.index') }}">Teaching Series</a></li>
                                 <li><a href="gallery.html">CityLife TalkTimes</a></li>
                                 <li><a href="gallery-grid.html">CityLife Music</a></li>
                             </ul>

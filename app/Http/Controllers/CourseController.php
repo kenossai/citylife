@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Course;
 use App\Models\Member;
 use App\Models\CourseEnrollment;
+use App\Models\LessonProgress;
 use App\Notifications\CourseRegistrationConfirmation;
 use App\Services\SmsService;
 use Illuminate\Http\Request;
@@ -267,6 +268,221 @@ class CourseController extends Controller
                 ->withInput()
                 ->with('error', 'An error occurred during registration: ' . $e->getMessage());
         }
+    }
+
+    /**
+     * Display lessons for an enrolled user
+     */
+    public function lessons($slug)
+    {
+        $course = Course::where('slug', $slug)->firstOrFail();
+        
+        // Check if user is enrolled
+        $userEnrollment = $this->getUserEnrollment($course);
+        
+        if (!$userEnrollment) {
+            return redirect()->route('courses.show', $slug)
+                ->with('error', 'You must be enrolled in this course to access lessons.');
+        }
+
+        $lessons = $course->lessons()
+            ->published()
+            ->available()
+            ->orderBy('lesson_number')
+            ->get();
+
+        // Get progress for each lesson
+        $progress = [];
+        foreach ($lessons as $lesson) {
+            $progress[$lesson->id] = LessonProgress::where('course_enrollment_id', $userEnrollment->id)
+                ->where('course_lesson_id', $lesson->id)
+                ->first();
+        }
+
+        return view('pages.course.lessons', compact('course', 'lessons', 'userEnrollment', 'progress'));
+    }
+
+    /**
+     * Show a specific lesson
+     */
+    public function showLesson($courseSlug, $lessonSlug)
+    {
+        $course = Course::where('slug', $courseSlug)->firstOrFail();
+        $lesson = $course->lessons()->where('slug', $lessonSlug)->firstOrFail();
+        
+        // Check if user is enrolled
+        $userEnrollment = $this->getUserEnrollment($course);
+        
+        if (!$userEnrollment) {
+            return redirect()->route('courses.show', $courseSlug)
+                ->with('error', 'You must be enrolled in this course to access lessons.');
+        }
+
+        // Get or create lesson progress
+        $progress = LessonProgress::firstOrCreate([
+            'course_enrollment_id' => $userEnrollment->id,
+            'course_lesson_id' => $lesson->id,
+        ]);
+
+        // Mark as started if not already
+        if ($progress->status === 'not_started') {
+            $progress->markAsStarted();
+        }
+
+        return view('pages.course.lesson', compact('course', 'lesson', 'userEnrollment', 'progress'));
+    }
+
+    /**
+     * Show quiz for a lesson
+     */
+    public function showQuiz($courseSlug, $lessonSlug)
+    {
+        $course = Course::where('slug', $courseSlug)->firstOrFail();
+        $lesson = $course->lessons()->where('slug', $lessonSlug)->firstOrFail();
+        
+        // Check if user is enrolled
+        $userEnrollment = $this->getUserEnrollment($course);
+        
+        if (!$userEnrollment) {
+            return redirect()->route('courses.show', $courseSlug)
+                ->with('error', 'You must be enrolled in this course to access quizzes.');
+        }
+
+        // Check if lesson has quiz questions
+        if (!$lesson->quiz_questions) {
+            return redirect()->route('courses.lesson.show', [$courseSlug, $lessonSlug])
+                ->with('error', 'This lesson does not have a quiz.');
+        }
+
+        // Get or create lesson progress
+        $progress = LessonProgress::firstOrCreate([
+            'course_enrollment_id' => $userEnrollment->id,
+            'course_lesson_id' => $lesson->id,
+        ]);
+
+        // Mark as started if not already
+        if ($progress->status === 'not_started') {
+            $progress->markAsStarted();
+        }
+
+        $quizQuestions = json_decode($lesson->quiz_questions, true);
+
+        return view('pages.course.quiz', compact('course', 'lesson', 'userEnrollment', 'progress', 'quizQuestions'));
+    }
+
+    /**
+     * Submit quiz answers
+     */
+    public function submitQuiz(Request $request, $courseSlug, $lessonSlug)
+    {
+        $course = Course::where('slug', $courseSlug)->firstOrFail();
+        $lesson = $course->lessons()->where('slug', $lessonSlug)->firstOrFail();
+        
+        // Check if user is enrolled
+        $userEnrollment = $this->getUserEnrollment($course);
+        
+        if (!$userEnrollment) {
+            return response()->json(['error' => 'Not enrolled in course'], 403);
+        }
+
+        // Get lesson progress
+        $progress = LessonProgress::where('course_enrollment_id', $userEnrollment->id)
+            ->where('course_lesson_id', $lesson->id)
+            ->first();
+
+        if (!$progress) {
+            return response()->json(['error' => 'Lesson progress not found'], 404);
+        }
+
+        $quizQuestions = json_decode($lesson->quiz_questions, true);
+        $answers = $request->input('answers', []);
+        
+        // Calculate score
+        $totalQuestions = count($quizQuestions);
+        $correctAnswers = 0;
+
+        foreach ($quizQuestions as $index => $question) {
+            if ($question['type'] === 'multiple_choice' && isset($question['correct_answer'])) {
+                $userAnswer = $answers[$index] ?? '';
+                if ($userAnswer === $question['correct_answer']) {
+                    $correctAnswers++;
+                }
+            }
+        }
+
+        $score = $totalQuestions > 0 ? ($correctAnswers / $totalQuestions) * 100 : 0;
+
+        // Update progress
+        $progress->increment('attempts');
+        $progress->update([
+            'quiz_score' => $score,
+            'status' => 'completed',
+            'completed_at' => now(),
+        ]);
+
+        // Update enrollment progress
+        $userEnrollment->updateProgress();
+
+        return response()->json([
+            'success' => true,
+            'score' => $score,
+            'correct_answers' => $correctAnswers,
+            'total_questions' => $totalQuestions,
+            'passed' => $score >= 70, // Assuming 70% is passing
+            'redirect_url' => route('courses.lessons', $courseSlug)
+        ]);
+    }
+
+    /**
+     * User dashboard to view their courses
+     */
+    public function dashboard(Request $request)
+    {
+        $email = $request->input('email') ?: session('user_email');
+        
+        if (!$email) {
+            return redirect()->route('courses.index')
+                ->with('error', 'Please provide your email to access your courses.');
+        }
+
+        $member = Member::where('email', $email)->first();
+        
+        if (!$member) {
+            return redirect()->route('courses.index')
+                ->with('error', 'No member found with this email address.');
+        }
+
+        $enrollments = CourseEnrollment::where('user_id', $member->id)
+            ->with(['course.lessons', 'progress'])
+            ->orderBy('enrollment_date', 'desc')
+            ->get();
+
+        // Store email in session for future use
+        session(['user_email' => $email]);
+
+        return view('pages.course.dashboard', compact('member', 'enrollments'));
+    }
+
+    /**
+     * Helper method to get user enrollment
+     */
+    private function getUserEnrollment($course)
+    {
+        $email = session('user_email');
+        
+        if (!$email) {
+            return null;
+        }
+
+        $member = Member::where('email', $email)->first();
+        
+        if (!$member) {
+            return null;
+        }
+
+        return CourseEnrollment::where('course_id', $course->id)
+            ->where('user_id', $member->id)
+            ->first();
     }
 }
 
