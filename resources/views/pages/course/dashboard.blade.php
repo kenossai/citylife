@@ -118,40 +118,44 @@
                                                 </div>
                                             </div>
 
-                                            <!-- Course Stats -->
-                                            <div class="course-stats mb-3">
-                                                <div class="row text-center">
-                                                    <div class="col-4">
-                                                        <div class="stat-item">
-                                                            <div class="stat-value">{{ $enrollment->completed_lessons }}</div>
-                                                            <div class="stat-label text-muted small">Completed</div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-4">
-                                                        <div class="stat-item">
-                                                            <div class="stat-value">{{ $course->lessons->count() }}</div>
-                                                            <div class="stat-label text-muted small">Total Lessons</div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-4">
-                                                        <div class="stat-item">
-                                                            @if($enrollment->certificate_issued)
-                                                                <div class="stat-value text-success">
-                                                                    <i class="icon-check-circle"></i>
-                                                                </div>
-                                                                <div class="stat-label text-success small">Certified</div>
-                                                            @else
-                                                                <div class="stat-value text-muted">
-                                                                    <i class="icon-certificate"></i>
-                                                                </div>
-                                                                <div class="stat-label text-muted small">Certificate</div>
-                                                            @endif
-                                                        </div>
-                                                    </div>
+                            <!-- Course Stats -->
+                            <div class="course-stats mb-3">
+                                <div class="row text-center">
+                                    <div class="col-3">
+                                        <div class="stat-item">
+                                            <div class="stat-value">{{ $enrollment->completed_lessons }}</div>
+                                            <div class="stat-label text-muted small">Completed</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="stat-item">
+                                            <div class="stat-value">{{ $course->lessons->count() }}</div>
+                                            <div class="stat-label text-muted small">Total Lessons</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="stat-item">
+                                            <div class="stat-value text-info">{{ $course->lessons->whereNotNull('quiz_questions')->count() }}</div>
+                                            <div class="stat-label text-muted small">Quizzes</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="stat-item">
+                                            @if($enrollment->certificate_issued)
+                                                <div class="stat-value text-success">
+                                                    <i class="icon-check-circle"></i>
                                                 </div>
-                                            </div>
-
-                                            <!-- Enrollment Info -->
+                                                <div class="stat-label text-success small">Certified</div>
+                                            @else
+                                                <div class="stat-value text-muted">
+                                                    <i class="icon-certificate"></i>
+                                                </div>
+                                                <div class="stat-label text-muted small">Certificate</div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>                                            <!-- Enrollment Info -->
                                             <div class="enrollment-info mb-3">
                                                 <small class="text-muted">
                                                     <i class="icon-calendar me-1"></i>
@@ -179,6 +183,11 @@
                                                         <a href="{{ route('courses.show', $course->slug) }}" class="btn btn-outline-secondary btn-sm">
                                                             <i class="icon-info"></i> Details
                                                         </a>
+                                                        @if($course->lessons->whereNotNull('quiz_questions')->count() > 0)
+                                                            <a href="{{ route('courses.lessons', $course->slug) }}#quizzes" class="btn btn-outline-info btn-sm" title="Take Quizzes">
+                                                                <i class="icon-question"></i> Quizzes ({{ $course->lessons->whereNotNull('quiz_questions')->count() }})
+                                                            </a>
+                                                        @endif
                                                         @if($enrollment->certificate_issued)
                                                             <button class="btn btn-outline-success btn-sm" onclick="alert('Certificate download feature coming soon!')">
                                                                 <i class="icon-download"></i> Certificate

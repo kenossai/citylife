@@ -36,6 +36,59 @@
                         </div>
 
                         <div class="lessons-list">
+                            <!-- Quick Quiz Access Section -->
+                            <div id="quizzes" class="quiz-section mb-5">
+                                <h4 class="mb-3">
+                                    <i class="icon-question text-info me-2"></i>Available Quizzes
+                                </h4>
+                                <div class="row">
+                                    @foreach($lessons as $lesson)
+                                        @if($lesson->quiz_questions)
+                                            @php
+                                                $lessonProgress = $progress[$lesson->id] ?? null;
+                                                $quizScore = $lessonProgress ? $lessonProgress->quiz_score : null;
+                                            @endphp
+                                            <div class="col-md-6 mb-3">
+                                                <div class="quiz-card">
+                                                    <div class="card border-info">
+                                                        <div class="card-body">
+                                                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                                                <h6 class="card-title mb-0">{{ $lesson->title }}</h6>
+                                                                @if($quizScore !== null)
+                                                                    <span class="badge {{ $quizScore >= 70 ? 'bg-success' : 'bg-warning' }}">
+                                                                        {{ round($quizScore) }}%
+                                                                    </span>
+                                                                @endif
+                                                            </div>
+                                                            <p class="card-text small text-muted mb-3">{{ $lesson->description }}</p>
+                                                            <a href="{{ route('courses.lesson.quiz', [$course->slug, $lesson->slug]) }}" 
+                                                               class="btn btn-info btn-sm w-100">
+                                                                <i class="icon-question"></i>
+                                                                @if($quizScore !== null)
+                                                                    Retake Quiz
+                                                                @else
+                                                                    Take Quiz
+                                                                @endif
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endif
+                                    @endforeach
+                                </div>
+                                @if($lessons->whereNotNull('quiz_questions')->count() === 0)
+                                    <div class="alert alert-info">
+                                        <i class="icon-info-circle me-2"></i>
+                                        No quizzes are available for this course yet.
+                                    </div>
+                                @endif
+                            </div>
+
+                            <!-- All Lessons Section -->
+                            <h4 class="mb-3">
+                                <i class="icon-list text-primary me-2"></i>All Lessons
+                            </h4>
                             @foreach($lessons as $lesson)
                                 @php
                                     $lessonProgress = $progress[$lesson->id] ?? null;
@@ -202,6 +255,29 @@
         
         .lesson-actions .btn {
             font-size: 12px;
+        }
+        
+        .quiz-section {
+            background: linear-gradient(135deg, #f8f9ff 0%, #e3f2fd 100%);
+            border-radius: 10px;
+            padding: 20px;
+            border: 2px dashed #17a2b8;
+            margin-bottom: 2rem;
+        }
+        
+        .quiz-card .card {
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+        
+        .quiz-card .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(23, 162, 184, 0.15);
+        }
+        
+        .quiz-section h4 {
+            color: #17a2b8;
+            font-weight: 600;
         }
     </style>
 </x-app-layout>
