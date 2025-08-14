@@ -11,7 +11,6 @@ class MemberAnalyticsWidget extends ChartWidget
 {
     protected static ?string $heading = 'Member Registration Trends';
     protected static ?int $sort = 2;
-    protected int | string | array $columnSpan = 'full';
     
     protected function getData(): array
     {
@@ -62,6 +61,9 @@ class MemberAnalyticsWidget extends ChartWidget
     protected function getOptions(): array
     {
         return [
+            'responsive' => true,
+            'maintainAspectRatio' => false,
+            'aspectRatio' => 1.2,
             'scales' => [
                 'y' => [
                     'beginAtZero' => true,
@@ -70,6 +72,7 @@ class MemberAnalyticsWidget extends ChartWidget
             'plugins' => [
                 'legend' => [
                     'display' => true,
+                    'position' => 'top',
                 ],
             ],
         ];

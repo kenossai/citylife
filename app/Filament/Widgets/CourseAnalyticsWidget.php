@@ -9,9 +9,8 @@ use Filament\Widgets\ChartWidget;
 class CourseAnalyticsWidget extends ChartWidget
 {
     protected static ?string $heading = 'Course Performance Analytics';
-    protected static ?int $sort = 3;
-    protected int | string | array $columnSpan = 'full';
-    
+    protected static ?int $sort = 9;
+
     protected function getData(): array
     {
         // Get top 10 courses by enrollment
@@ -26,9 +25,9 @@ class CourseAnalyticsWidget extends ChartWidget
         $labels = $courses->pluck('title')->map(function ($title) {
             return strlen($title) > 20 ? substr($title, 0, 20) . '...' : $title;
         })->toArray();
-        
+
         $enrollmentData = $courses->pluck('enrollments_count')->toArray();
-        
+
         // Get completion rates for these courses
         $completionData = $courses->map(function ($course) {
             $totalEnrollments = $course->enrollments()->count();
@@ -42,7 +41,7 @@ class CourseAnalyticsWidget extends ChartWidget
                     'label' => 'Active Enrollments',
                     'data' => $enrollmentData,
                     'backgroundColor' => [
-                        '#EF4444', '#F97316', '#F59E0B', '#EAB308', 
+                        '#EF4444', '#F97316', '#F59E0B', '#EAB308',
                         '#84CC16', '#22C55E', '#10B981', '#14B8A6',
                         '#06B6D4', '#0EA5E9', '#3B82F6', '#6366F1'
                     ],
@@ -58,14 +57,17 @@ class CourseAnalyticsWidget extends ChartWidget
     {
         return 'doughnut';
     }
-    
+
     protected function getOptions(): array
     {
         return [
+            'responsive' => true,
+            'maintainAspectRatio' => false,
+            'aspectRatio' => 1.2,
             'plugins' => [
                 'legend' => [
                     'display' => true,
-                    'position' => 'bottom',
+                    'position' => 'top',
                 ],
                 'tooltip' => [
                     'callbacks' => [
@@ -75,8 +77,6 @@ class CourseAnalyticsWidget extends ChartWidget
                     ]
                 ]
             ],
-            'responsive' => true,
-            'maintainAspectRatio' => false,
         ];
     }
 }

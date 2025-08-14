@@ -15,7 +15,10 @@ class RecentActivityWidget extends BaseWidget
 {
     protected static ?string $heading = 'Recent Member Registrations';
     protected static ?int $sort = 6;
-    protected int | string | array $columnSpan = 'full';
+    protected int | string | array $columnSpan = [
+        'md' => 2,
+        'xl' => 2,
+    ];
 
     public function table(Table $table): Table
     {

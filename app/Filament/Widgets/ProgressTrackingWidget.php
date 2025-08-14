@@ -11,8 +11,7 @@ class ProgressTrackingWidget extends ChartWidget
 {
     protected static ?string $heading = 'Learning Progress Overview';
     protected static ?int $sort = 8;
-    protected int | string | array $columnSpan = 'full';
-    
+
     protected function getData(): array
     {
         // Get enrollment status distribution
@@ -20,18 +19,18 @@ class ProgressTrackingWidget extends ChartWidget
             ->groupBy('status')
             ->pluck('count', 'status')
             ->toArray();
-            
+
         // Ensure all statuses are represented
         $statuses = ['active', 'completed', 'withdrawn', 'suspended'];
         $statusData = [];
         $statusLabels = [];
-        
+
         foreach ($statuses as $status) {
             $count = $statusCounts[$status] ?? 0;
             $statusData[] = $count;
             $statusLabels[] = ucfirst($status);
         }
-        
+
         // Get progress distribution for active enrollments
         $progressRanges = [
             '0-25%' => CourseEnrollment::where('status', 'active')->whereBetween('progress_percentage', [0, 25])->count(),
@@ -64,7 +63,7 @@ class ProgressTrackingWidget extends ChartWidget
     {
         return 'pie';
     }
-    
+
     protected function getOptions(): array
     {
         return [
@@ -85,6 +84,7 @@ class ProgressTrackingWidget extends ChartWidget
             ],
             'responsive' => true,
             'maintainAspectRatio' => false,
+            'aspectRatio' => 1.2,
         ];
     }
 }

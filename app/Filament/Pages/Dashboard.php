@@ -23,10 +23,10 @@ class Dashboard extends BaseDashboard
         return [
             'default' => 1,
             'sm' => 2,
-            'md' => 3,
-            'lg' => 4,
-            'xl' => 6,
-            '2xl' => 8,
+            'md' => 4,
+            'lg' => 6,
+            'xl' => 12,
+            '2xl' => 12,
         ];
     }
 
