@@ -22139,7 +22139,7 @@ li:hover .sidebar__comments__icon::after {
     background-size: cover;
     border-radius: 20px;
     display: grid;
-    grid-template-columns: auto auto 177px;
+    /* grid-template-columns: auto auto 177px; */
     align-items: center;
     gap: 40px 65px;
 }

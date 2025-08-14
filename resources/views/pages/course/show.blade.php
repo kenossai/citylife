@@ -115,8 +115,7 @@
                                 </div><!-- /.course-details__inner__content -->
 
                                 <div class="donation-details__donation">
-                                    @if($isEnrolled)
-                                    {{-- User is enrolled - show enrollment status --}}
+                                    {{-- @if($isEnrolled)
                                     <div class="donation-details__donation__info wow fadeInUp animated" data-wow-duration="1500ms" data-wow-delay="00ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 0ms; animation-name: fadeInUp;">
                                         <div class="donation-details__donation__icon">
                                             <span class="icon-check-circle" style="color: #28a745;"></span>
@@ -127,7 +126,6 @@
                                         </div><!-- /.donation-details__donation__content -->
                                     </div><!-- /.donation-details__donation__info -->
                                     @else
-                                    {{-- User is not enrolled - show actual enrollment count --}}
                                     <div class="donation-details__donation__info wow fadeInUp animated" data-wow-duration="1500ms" data-wow-delay="00ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 0ms; animation-name: fadeInUp;">
                                         <div class="donation-details__donation__icon">
                                             <span class="icon-group"></span>
@@ -137,8 +135,8 @@
                                             <p class="donation-details__donation__text">{{ $actualEnrollmentCount }} {{ $actualEnrollmentCount == 1 ? 'student' : 'students' }}</p>
                                         </div><!-- /.donation-details__donation__content -->
                                     </div><!-- /.donation-details__donation__info -->
-                                    @endif
-                                    @if($course->duration_weeks)
+                                    @endif --}}
+                                    {{-- @if($course->duration_weeks)
                                     <div class="donation-details__donation__info wow fadeInUp animated" data-wow-duration="1500ms" data-wow-delay="200ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 200ms; animation-name: fadeInUp;">
                                         <div class="donation-details__donation__icon">
                                             <span class="icon-clock"></span>
@@ -148,12 +146,12 @@
                                             <p class="donation-details__donation__text">{{ $course->duration_weeks }} Weeks</p>
                                         </div><!-- /.donation-details__donation__content -->
                                     </div><!-- /.donation-details__donation__info -->
-                                    @endif
+                                    @endif --}}
                                     @if($isEnrolled)
                                     {{-- User is already enrolled --}}
                                     <div class="donation-details__donation__button wow fadeInUp animated" data-wow-duration="1500ms" data-wow-delay="400ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 400ms; animation-name: fadeInUp;">
                                         <div class="alert alert-success mb-3">
-                                            <div class="d-flex align-items-center">
+                                            <div class="align-items-center">
                                                 <i class="icon-check-circle me-2" style="font-size: 1.2rem;"></i>
                                                 <span><strong>You're enrolled!</strong> Access your lessons and track your progress.</span>
                                             </div>
@@ -161,17 +159,23 @@
 
                                         {{-- Course Access Buttons --}}
                                         <div class="enrolled-user-actions">
-                                            <div class="d-grid gap-2">
-                                                <a href="{{ route('courses.lessons', $course->slug) }}" class="cleenhearts-btn cleenhearts-btn--primary">
-                                                    <div class="cleenhearts-btn__icon-box">
-                                                        <div class="cleenhearts-btn__icon-box__inner"><span class="icon-play"></span></div>
-                                                    </div>
-                                                    <span class="cleenhearts-btn__text">Access Lessons</span>
-                                                </a>
-
-                                                <a href="{{ route('courses.dashboard') }}?email={{ urlencode(session('user_email')) }}" class="btn btn-outline-primary">
-                                                    <i class="icon-dashboard me-2"></i>My Dashboard
-                                                </a>
+                                            <div class="row justify-content-between">
+                                                <div class="col-md-4">
+                                                    <a href="{{ route('courses.lessons', $course->slug) }}" class="cleenhearts-btn cleenhearts-btn--primary">
+                                                        <div class="cleenhearts-btn__icon-box">
+                                                            <div class="cleenhearts-btn__icon-box__inner"></div>
+                                                        </div>
+                                                        <span class="cleenhearts-btn__text">See Lessons</span>
+                                                    </a>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <a href="{{ route('courses.dashboard') }}?email={{ urlencode(session('user_email')) }}" class="cleenhearts-btn cleenhearts-btn--primary">
+                                                        <div class="cleenhearts-btn__icon-box">
+                                                            <div class="cleenhearts-btn__icon-box__inner"></div>
+                                                        </div>
+                                                        <span class="cleenhearts-btn__text">Dashboard</span>
+                                                    </a>
+                                                </div>
                                             </div>
 
                                             @if($userEnrollment)
@@ -227,22 +231,7 @@
                         </div><!-- /.donation-card-three donation-card -->
                     </div><!-- /.donation-details__content -->
 
-                    <div class="donation-details__donors">
-                        <h3 class="donation-details__donors__title">Recent donors</h3><!-- /.donation-details__donors__title -->
-                        <div class="row gutter-y-40">
-                            <div class="col-xl-3 col-sm-6 wow fadeInUp animated" data-wow-delay="00ms" data-wow-duration="1500ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 0ms; animation-name: fadeInUp;">
-                                <div class="donation-details__donors__single">
-                                    <div class="donation-details__donors__image">
-                                        <img src="assets/images/donations/donor-d-1.png" alt="donor details">
-                                    </div><!-- /.donation-details__donors__image -->
-                                    <div class="donation-details__donors__content">
-                                        <h3 class="donation-details__donors__name"><a href="volunteer-details.html">Diego C. Rapoza</a></h3><!-- /.donation-details__donors__name -->
-                                        <h4 class="donation-details__donors__amount">$69</h4><!-- /.donation-details__donors__amount -->
-                                    </div><!-- /.donation-details__donors__content -->
-                                </div><!-- /.donation-details__donors__single -->
-                            </div><!-- /.col-xl-3 col-sm-6 -->
-                        </div><!-- /.row -->
-                    </div><!-- /.donation-details__recent -->
+
                 </div><!-- /.donation-details__details -->
             </div><!-- /.col-lg-8 -->
             <div class="col-lg-4">
