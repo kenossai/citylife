@@ -1,50 +1,83 @@
 <x-app-layout>
     @section('title', 'Quiz: ' . $lesson->title . ' - ' . $course->title)
 
-    <section class="page-header">
-        <div class="page-header__bg" style="background-image: url('{{ asset('assets/images/backgrounds/worship-banner-1.jpg') }}');"></div>
+    <!-- Modern Quiz Header -->
+    <div class="quiz-header">
         <div class="container">
-            <h3 class="text-white">Lesson {{ $lesson->lesson_number }} Quiz</h3>
-            <h2 class="page-header__title">{{ $lesson->title }}</h2>
-            <p class="section-header__text">{{ $course->title }}</p>
-            <ul class="cleenhearts-breadcrumb list-unstyled">
-                <li><i class="icon-home"></i> <a href="{{ route('home') }}">Home</a></li>
-                <li><i class="icon-book"></i> <a href="{{ route('courses.index') }}">Courses</a></li>
-                <li><i class="icon-graduation-cap"></i> <a href="{{ route('courses.show', $course->slug) }}">{{ $course->title }}</a></li>
-                <li><i class="icon-list"></i> <a href="{{ route('courses.lessons', $course->slug) }}">Lessons</a></li>
-                <li><i class="icon-file-text"></i> <a href="{{ route('courses.lesson.show', [$course->slug, $lesson->slug]) }}">{{ $lesson->title }}</a></li>
-                <li><span>Quiz</span></li>
-            </ul>
+            <div class="row align-items-center py-4">
+                <div class="col-md-8">
+                    <div class="quiz-info">
+                        <div class="breadcrumb-modern mb-2">
+                            <a href="{{ route('home') }}" class="breadcrumb-link">
+                                <i class="icon-home"></i> Home
+                            </a>
+                            <span class="breadcrumb-separator">></span>
+                            <a href="{{ route('courses.index') }}" class="breadcrumb-link">
+                                <i class="icon-book"></i> Courses
+                            </a>
+                            <span class="breadcrumb-separator">></span>
+                            <a href="{{ route('courses.show', $course->slug) }}" class="breadcrumb-link">
+                                <i class="icon-graduation-cap"></i> {{ $course->title }}
+                            </a>
+                            <span class="breadcrumb-separator">></span>
+                            <a href="{{ route('courses.lessons', $course->slug) }}" class="breadcrumb-link">
+                                <i class="icon-list"></i> Lessons
+                            </a>
+                            <span class="breadcrumb-separator">></span>
+                            <span class="breadcrumb-current">Quiz</span>
+                        </div>
+                        <h3 class="quiz-lesson-title mb-1">Lesson {{ $lesson->lesson_number }} Quiz</h3>
+                        <h2 class="quiz-main-title mb-2">{{ $lesson->title }}</h2>
+                        <p class="quiz-subtitle">{{ $course->title }}</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="quiz-stats">
+                        @if($progress->quiz_score)
+                            <div class="stat-item">
+                                <div class="stat-value {{ $progress->quiz_score >= 70 ? 'text-success' : 'text-warning' }}">
+                                    {{ round($progress->quiz_score) }}%
+                                </div>
+                                <div class="stat-label">Previous Score</div>
+                            </div>
+                        @endif
+                        <div class="stat-item">
+                            <div class="stat-value">{{ count($quizQuestions) }}</div>
+                            <div class="stat-label">Questions</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </section>
+    </div>
 
-    <section class="section-space">
+    <section class="quiz-content">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-10">
-                    <!-- Quiz Instructions -->
-                    <div class="quiz-instructions mb-5">
-                        <div class="alert alert-info">
+                    <!-- Quiz Instructions Card -->
+                    <div class="quiz-instructions-card mb-4">
+                        <div class="card-header">
+                            <h5><i class="icon-info-circle me-2"></i>Quiz Instructions</h5>
+                        </div>
+                        <div class="card-body">
                             <div class="row align-items-center">
                                 <div class="col-md-8">
-                                    <h5 class="alert-heading mb-2">
-                                        <i class="icon-info-circle me-2"></i>Quiz Instructions
-                                    </h5>
-                                    <ul class="mb-0">
+                                    <ul class="instructions-list">
                                         <li>This quiz has {{ count($quizQuestions) }} questions</li>
                                         <li>You need 70% or higher to pass</li>
                                         <li>You can retake the quiz if needed</li>
                                         <li>Take your time and read each question carefully</li>
                                     </ul>
                                 </div>
-                                <div class="col-md-4 text-end">
+                                <div class="col-md-4">
                                     @if($progress->quiz_score)
-                                        <div class="previous-score">
-                                            <h6>Previous Score:</h6>
-                                            <span class="badge {{ $progress->quiz_score >= 70 ? 'bg-success' : 'bg-warning' }} p-2" style="font-size: 16px;">
+                                        <div class="previous-score-card">
+                                            <div class="score-header">Previous Score</div>
+                                            <div class="score-value {{ $progress->quiz_score >= 70 ? 'success' : 'warning' }}">
                                                 {{ round($progress->quiz_score) }}%
-                                            </span>
-                                            <div class="text-muted small mt-1">
+                                            </div>
+                                            <div class="score-meta">
                                                 Attempts: {{ $progress->attempts }}
                                             </div>
                                         </div>
@@ -55,79 +88,74 @@
                     </div>
 
                     <!-- Quiz Form -->
-                    <div class="quiz-container">
+                    <div class="quiz-form-container">
                         <form id="quizForm" action="{{ route('courses.lesson.quiz.submit', [$course->slug, $lesson->slug]) }}" method="POST">
                             @csrf
 
                             @foreach($quizQuestions as $index => $question)
-                                <div class="question-card mb-4">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="question-header mb-3">
-                                                <h6 class="question-number mb-2">
-                                                    <span class="badge bg-primary me-2">{{ $index + 1 }}</span>
-                                                    Question {{ $index + 1 }} of {{ count($quizQuestions) }}
-                                                </h6>
-                                                <h5 class="question-text">{{ $question['question'] }}</h5>
-                                            </div>
-
-                                            <div class="question-content">
-                                                @if($question['type'] === 'multiple_choice')
-                                                    <div class="multiple-choice-options">
-                                                        @foreach($question['options'] as $optionIndex => $option)
-                                                            <div class="form-check mb-2">
-                                                                <input class="form-check-input" type="radio"
-                                                                       name="answers[{{ $index }}]"
-                                                                       value="{{ chr(65 + $optionIndex) }}"
-                                                                       id="question_{{ $index }}_option_{{ $optionIndex }}"
-                                                                       required>
-                                                                <label class="form-check-label" for="question_{{ $index }}_option_{{ $optionIndex }}">
-                                                                    {{ $option }}
-                                                                </label>
-                                                            </div>
-                                                        @endforeach
-                                                    </div>
-                                                @elseif($question['type'] === 'short_answer')
-                                                    <div class="short-answer">
-                                                        <textarea class="form-control"
-                                                                  name="answers[{{ $index }}]"
-                                                                  rows="3"
-                                                                  placeholder="Enter your answer here..."
-                                                                  required></textarea>
-                                                        <small class="form-text text-muted">Provide a brief answer (2-3 sentences).</small>
-                                                    </div>
-                                                @elseif($question['type'] === 'essay')
-                                                    <div class="essay-answer">
-                                                        <textarea class="form-control"
-                                                                  name="answers[{{ $index }}]"
-                                                                  rows="6"
-                                                                  placeholder="Write your detailed response here..."
-                                                                  required></textarea>
-                                                        <small class="form-text text-muted">Provide a detailed response explaining your thoughts and understanding.</small>
-                                                    </div>
-                                                @endif
-                                            </div>
+                                <div class="modern-question-card">
+                                    <div class="question-header">
+                                        <div class="question-number">
+                                            Question {{ $index + 1 }}
                                         </div>
+                                        <div class="question-progress">
+                                            {{ $index + 1 }} of {{ count($quizQuestions) }}
+                                        </div>
+                                    </div>
+                                    <div class="question-content">
+                                        <h6 class="question-text">{{ $question['question'] }}</h6>
+                                        @if($question['type'] === 'multiple_choice')
+                                            <div class="options-container">
+                                                @foreach($question['options'] as $optionIndex => $option)
+                                                    <label class="option-card" for="question_{{ $index }}_option_{{ $optionIndex }}">
+                                                        <input class="option-input" type="radio"
+                                                               name="answers[{{ $index }}]"
+                                                               value="{{ chr(65 + $optionIndex) }}"
+                                                               id="question_{{ $index }}_option_{{ $optionIndex }}"
+                                                               required>
+                                                        <div class="option-content">
+                                                            <div class="option-letter">{{ chr(65 + $optionIndex) }}</div>
+                                                            <div class="option-text">{{ $option }}</div>
+                                                        </div>
+                                                    </label>
+                                                @endforeach
+                                            </div>
+                                        @elseif($question['type'] === 'short_answer')
+                                            <div class="answer-input-container">
+                                                <textarea class="modern-textarea"
+                                                          name="answers[{{ $index }}]"
+                                                          rows="3"
+                                                          placeholder="Enter your answer here..."
+                                                          required></textarea>
+                                                <div class="input-help">Provide a brief answer (2-3 sentences).</div>
+                                            </div>
+                                        @elseif($question['type'] === 'essay')
+                                            <div class="answer-input-container">
+                                                <textarea class="modern-textarea"
+                                                          name="answers[{{ $index }}]"
+                                                          rows="6"
+                                                          placeholder="Write your detailed response here..."
+                                                          required></textarea>
+                                                <div class="input-help">Provide a detailed response explaining your thoughts and understanding.</div>
+                                            </div>
+                                        @endif
                                     </div>
                                 </div>
                             @endforeach
 
                             <!-- Submit Section -->
-                            <div class="quiz-submit mt-5">
-                                <div class="card border-success">
-                                    <div class="card-body text-center">
-                                        <h6 class="card-title">Ready to Submit?</h6>
-                                        <p class="text-muted mb-4">Please review your answers before submitting. You can retake the quiz if needed.</p>
-
-                                        <div class="submit-actions">
-                                            <button type="button" class="btn btn-outline-secondary me-3" onclick="window.history.back()">
-                                                <i class="icon-arrow-left"></i> Back to Lesson
-                                            </button>
-                                            <button type="submit" class="btn btn-success" id="submitQuizBtn">
-                                                <i class="icon-check"></i> Submit Quiz
-                                            </button>
-                                        </div>
-                                    </div>
+                            <div class="quiz-submit-card">
+                                <div class="submit-header">
+                                    <h6>Ready to Submit?</h6>
+                                    <p>Please review your answers before submitting. You can retake the quiz if needed.</p>
+                                </div>
+                                <div class="submit-actions">
+                                    <button type="button" class="btn-modern btn-outline" onclick="window.history.back()">
+                                        <i class="icon-arrow-left me-2"></i>Back to Lesson
+                                    </button>
+                                    <button type="submit" class="btn-modern btn-primary" id="submitQuizBtn">
+                                        <i class="icon-check me-2"></i>Submit Quiz
+                                    </button>
                                 </div>
                             </div>
                         </form>
@@ -136,7 +164,7 @@
                     <!-- Quiz Results Modal -->
                     <div class="modal fade" id="quizResultsModal" tabindex="-1" aria-labelledby="quizResultsModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-lg">
-                            <div class="modal-content">
+                            <div class="modal-content modern-modal">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="quizResultsModalLabel">Quiz Results</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -194,14 +222,14 @@
                     } else {
                         alert('Error submitting quiz: ' + (data.message || 'Unknown error'));
                         submitBtn.disabled = false;
-                        submitBtn.innerHTML = '<i class="icon-check"></i> Submit Quiz';
+                        submitBtn.innerHTML = '<i class="icon-check me-2"></i>Submit Quiz';
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
                     alert('An error occurred while submitting the quiz. Please try again.');
                     submitBtn.disabled = false;
-                    submitBtn.innerHTML = '<i class="icon-check"></i> Submit Quiz';
+                    submitBtn.innerHTML = '<i class="icon-check me-2"></i>Submit Quiz';
                 });
             });
 
@@ -215,8 +243,8 @@
                 resultContent.innerHTML = `
                     <div class="quiz-results">
                         <div class="score-display mb-4">
-                            <div class="score-circle ${passed ? 'success' : 'warning'} mx-auto mb-3" style="width: 120px; height: 120px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background-color: ${passed ? '#d4edda' : '#fff3cd'}; border: 4px solid ${passed ? '#28a745' : '#ffc107'};">
-                                <span style="font-size: 28px; font-weight: bold; color: ${passed ? '#155724' : '#856404'};">${score}%</span>
+                            <div class="score-circle ${passed ? 'success' : 'warning'} mx-auto mb-3">
+                                <span class="score-text">${score}%</span>
                             </div>
                             <h4 class="${passed ? 'text-success' : 'text-warning'}">
                                 ${passed ? 'Congratulations! You Passed!' : 'Keep Trying!'}
@@ -227,7 +255,7 @@
                             <p class="mb-2"><strong>Score:</strong> ${data.correct_answers} out of ${data.total_questions} correct</p>
                             <p class="mb-2"><strong>Percentage:</strong> ${score}%</p>
                             <p class="mb-0"><strong>Status:</strong>
-                                <span class="badge ${passed ? 'bg-success' : 'bg-warning'}">${passed ? 'Passed' : 'Not Passed'}</span>
+                                <span class="badge ${passed ? 'badge-success' : 'badge-warning'}">${passed ? 'Passed' : 'Not Passed'}</span>
                             </p>
                         </div>
 
@@ -251,56 +279,453 @@
     @endpush
 
     <style>
-        .question-card {
-            transition: all 0.3s ease;
-        }
-
-        .question-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-
-        .question-number .badge {
-            font-size: 14px;
-        }
-
-        .form-check-input:checked {
-            background-color: #007bff;
-            border-color: #007bff;
-        }
-
-        .form-check-label {
-            font-size: 15px;
-            line-height: 1.6;
-            cursor: pointer;
-        }
-
-        .form-check {
-            padding: 8px 12px;
-            border-radius: 6px;
-            transition: background-color 0.2s ease;
-        }
-
-        .form-check:hover {
+        /* Modern Quiz Page Styles */
+        body {
             background-color: #f8f9fa;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
-        .quiz-submit .card {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        /* Quiz Header */
+        .quiz-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            margin-bottom: 2rem;
         }
 
-        textarea.form-control {
-            resize: vertical;
-            min-height: 80px;
+        .breadcrumb-modern {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
         }
 
-        .previous-score {
+        .breadcrumb-link {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .breadcrumb-link:hover {
+            color: white;
+        }
+
+        .breadcrumb-separator {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .breadcrumb-current {
+            color: white;
+            font-weight: 500;
+        }
+
+        .quiz-lesson-title {
+            font-size: 1.125rem;
+            font-weight: 500;
+            opacity: 0.9;
+            margin: 0;
+        }
+
+        .quiz-main-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .quiz-subtitle {
+            opacity: 0.8;
+            margin: 0;
+        }
+
+        .quiz-stats {
+            display: flex;
+            gap: 2rem;
+            justify-content: flex-end;
+        }
+
+        .stat-item {
             text-align: center;
         }
 
-        .spinner-border-sm {
-            width: 1rem;
-            height: 1rem;
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            opacity: 0.8;
+        }
+
+        /* Instructions Card */
+        .quiz-instructions-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .quiz-instructions-card .card-header {
+            background: #f9fafb;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 1.5rem;
+        }
+
+        .quiz-instructions-card .card-header h5 {
+            font-weight: 600;
+            margin: 0;
+            color: #1f2937;
+        }
+
+        .quiz-instructions-card .card-body {
+            padding: 1.5rem;
+        }
+
+        .instructions-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .instructions-list li {
+            padding: 0.5rem 0;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        .instructions-list li:before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #22c55e;
+            font-weight: bold;
+        }
+
+        .previous-score-card {
+            background: #f9fafb;
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .score-header {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-bottom: 0.5rem;
+        }
+
+        .score-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .score-value.success {
+            color: #22c55e;
+        }
+
+        .score-value.warning {
+            color: #f59e0b;
+        }
+
+        .score-meta {
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
+
+        /* Question Cards */
+        .modern-question-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modern-question-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .question-header {
+            background: #f9fafb;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .question-number {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .question-progress {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        .question-content {
+            padding: 1.5rem;
+        }
+
+        .question-text {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Option Cards */
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .option-card {
+            background: #f9fafb;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            margin: 0;
+        }
+
+        .option-card:hover {
+            background: #f3f4f6;
+            border-color: #d1d5db;
+        }
+
+        .option-input {
+            display: none;
+        }
+
+        .option-input:checked + .option-content {
+            background: rgba(79, 172, 254, 0.1);
+        }
+
+        .option-input:checked + .option-content .option-letter {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+
+        .option-card:has(.option-input:checked) {
+            background: rgba(79, 172, 254, 0.05);
+            border-color: #4facfe;
+        }
+
+        .option-content {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            width: 100%;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .option-letter {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #e5e7eb;
+            color: #6b7280;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.875rem;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .option-text {
+            flex: 1;
+            font-size: 0.875rem;
+            color: #1f2937;
+        }
+
+        /* Text Input */
+        .answer-input-container {
+            margin-top: 1rem;
+        }
+
+        .modern-textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 0.875rem;
+            resize: vertical;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .modern-textarea:focus {
+            outline: none;
+            border-color: #4facfe;
+            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+        }
+
+        .input-help {
+            font-size: 0.75rem;
+            color: #6b7280;
+            margin-top: 0.5rem;
+        }
+
+        /* Submit Card */
+        .quiz-submit-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            text-align: center;
+            margin-top: 2rem;
+            border: 2px solid #22c55e;
+        }
+
+        .submit-header h6 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+        }
+
+        .submit-header p {
+            color: #6b7280;
+            margin-bottom: 2rem;
+        }
+
+        .submit-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        /* Modern Buttons */
+        .btn-modern {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-modern.btn-primary {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+
+        .btn-modern.btn-primary:hover {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        .btn-modern.btn-outline {
+            background: transparent;
+            border: 2px solid #e5e7eb;
+            color: #6b7280;
+        }
+
+        .btn-modern.btn-outline:hover {
+            background: #f9fafb;
+            border-color: #d1d5db;
+            color: #374151;
+        }
+
+        /* Modal */
+        .modern-modal .modal-content {
+            border-radius: 16px;
+            border: none;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            border: 4px solid;
+        }
+
+        .score-circle.success {
+            background: rgba(34, 197, 94, 0.1);
+            border-color: #22c55e;
+        }
+
+        .score-circle.warning {
+            background: rgba(245, 158, 11, 0.1);
+            border-color: #f59e0b;
+        }
+
+        .score-text {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .score-circle.success .score-text {
+            color: #22c55e;
+        }
+
+        .score-circle.warning .score-text {
+            color: #f59e0b;
+        }
+
+        .badge-success {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge-warning {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .quiz-stats {
+                justify-content: center;
+                margin-top: 1rem;
+            }
+
+            .submit-actions {
+                flex-direction: column;
+            }
+
+            .modern-question-card {
+                margin-bottom: 1.5rem;
+            }
+
+            .quiz-submit-card {
+                padding: 1.5rem;
+            }
         }
     </style>
 </x-app-layout>
