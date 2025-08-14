@@ -69,6 +69,41 @@
                     <span></span>
                     <span></span>
                 </div><!-- /.mobile-nav__toggler -->
+
+                <!-- Member Authentication Section -->
+                @auth('member')
+                    <div class="main-header__user me-3">
+                        <div class="dropdown">
+                            <button class="btn btn-outline-primary dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="icon-user me-2"></i>{{ Auth::guard('member')->user()->first_name }}
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                                <li><a class="dropdown-item" href="{{ route('courses.dashboard') }}">
+                                    <i class="icon-dashboard me-2"></i>My Dashboard
+                                </a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <form method="POST" action="{{ route('member.logout') }}" class="d-inline">
+                                        @csrf
+                                        <button type="submit" class="dropdown-item">
+                                            <i class="icon-logout me-2"></i>Logout
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                @else
+                    <div class="main-header__auth me-3">
+                        <a href="{{ route('member.login') }}" class="btn btn-outline-primary me-2">
+                            <i class="icon-user me-1"></i>Login
+                        </a>
+                        <a href="{{ route('member.register') }}" class="btn btn-primary">
+                            <i class="icon-user-plus me-1"></i>Register
+                        </a>
+                    </div>
+                @endauth
+
                 <div class="main-header__cart"></div><!-- /.main-header__cart -->
                 <a href="donate.html" class="cleenhearts-btn main-header__btn">
                     <div class="cleenhearts-btn__icon-box">

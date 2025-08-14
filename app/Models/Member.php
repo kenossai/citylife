@@ -3,11 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Carbon\Carbon;
 
-class Member extends Model
+class Member extends Authenticatable
 {
     use HasFactory, Notifiable;
 
@@ -24,6 +24,7 @@ class Member extends Model
         'spouse_is_member',
         'spouse_member_id',
         'email',
+        'password',
         'phone',
         'alternative_phone',
         'address',
@@ -52,6 +53,11 @@ class Member extends Model
         'is_active',
     ];
 
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
     protected $casts = [
         'date_of_birth' => 'date',
         'first_visit_date' => 'date',
@@ -62,6 +68,7 @@ class Member extends Model
         'receives_newsletter' => 'boolean',
         'receives_sms' => 'boolean',
         'is_active' => 'boolean',
+        'password' => 'hashed',
     ];
 
     // Auto-generate membership number when creating
@@ -81,6 +88,37 @@ class Member extends Model
     {
         // Normalize email: trim whitespace and convert to lowercase
         $this->attributes['email'] = !empty($value) ? strtolower(trim($value)) : null;
+    }
+
+    // Override the default username field for authentication
+    public function getAuthIdentifierName()
+    {
+        return 'email';
+    }
+
+    public function getAuthIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    public function getAuthPassword()
+    {
+        return $this->password;
+    }
+
+    public function getRememberToken()
+    {
+        return $this->remember_token;
+    }
+
+    public function setRememberToken($value)
+    {
+        $this->remember_token = $value;
+    }
+
+    public function getRememberTokenName()
+    {
+        return 'remember_token';
     }
 
     // Relationships

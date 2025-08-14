@@ -19,15 +19,25 @@
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="header-stats d-flex justify-content-end">
+                    <div class="header-stats d-flex justify-content-end align-items-center">
                         <div class="header-stat-item me-4">
                             <div class="stat-value text-primary">{{ number_format($enrollments->count() * 150, 0) }}</div>
                             <div class="stat-label">Learning Value</div>
                         </div>
-                        <div class="header-stat-item">
+                        <div class="header-stat-item me-4">
                             <div class="stat-value text-success">{{ number_format($enrollments->where('status', 'completed')->count() * 200, 0) }}</div>
                             <div class="stat-label">Achievements</div>
                         </div>
+                        @auth('member')
+                        <div class="header-stat-item">
+                            <form method="POST" action="{{ route('member.logout') }}" class="d-inline">
+                                @csrf
+                                <button type="submit" class="btn btn-outline-secondary btn-sm">
+                                    <i class="icon-logout me-1"></i>Logout
+                                </button>
+                            </form>
+                        </div>
+                        @endauth
                     </div>
                 </div>
             </div>

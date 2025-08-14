@@ -169,7 +169,7 @@
                                                     </a>
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <a href="{{ route('courses.dashboard') }}?email={{ urlencode(session('user_email')) }}" class="cleenhearts-btn cleenhearts-btn--primary">
+                                                    <a href="{{ route('courses.dashboard') }}" class="cleenhearts-btn cleenhearts-btn--primary">
                                                         <div class="cleenhearts-btn__icon-box">
                                                             <div class="cleenhearts-btn__icon-box__inner"></div>
                                                         </div>

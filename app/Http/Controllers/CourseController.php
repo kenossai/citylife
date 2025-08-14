@@ -11,6 +11,7 @@ use App\Services\SmsService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
 class CourseController extends Controller
@@ -40,18 +41,27 @@ class CourseController extends Controller
         // Logic to display a single course
         $course = Course::where('slug', $slug)->firstOrFail();
 
-        // Check if current session has enrollment for this course (for guests)
+        // Check if current user has enrollment for this course
         $userEnrollment = null;
         $isEnrolled = false;
 
-        // Try to find enrollment by session email (if available from recent registration)
-        if (session('user_email')) {
-            $member = Member::where('email', session('user_email'))->first();
-            if ($member) {
-                $userEnrollment = CourseEnrollment::where('course_id', $course->id)
-                    ->where('user_id', $member->id)
-                    ->first();
-                $isEnrolled = $userEnrollment !== null;
+        // Check if user is authenticated via member guard
+        if (Auth::guard('member')->check()) {
+            $member = Auth::guard('member')->user();
+            $userEnrollment = CourseEnrollment::where('course_id', $course->id)
+                ->where('user_id', $member->id)
+                ->first();
+            $isEnrolled = $userEnrollment !== null;
+        } else {
+            // Fallback: Try to find enrollment by session email (if available from recent registration)
+            if (session('user_email')) {
+                $member = Member::where('email', session('user_email'))->first();
+                if ($member) {
+                    $userEnrollment = CourseEnrollment::where('course_id', $course->id)
+                        ->where('user_id', $member->id)
+                        ->first();
+                    $isEnrolled = $userEnrollment !== null;
+                }
             }
         }
 
@@ -65,6 +75,13 @@ class CourseController extends Controller
 
     public function showRegistrationForm($slug)
     {
+        // Check if user is authenticated
+        if (!Auth::guard('member')->check()) {
+            return redirect()->route('member.login')
+                ->with('info', 'Please login or register to enroll in courses.')
+                ->with('intended_course', $slug);
+        }
+
         // Logic to show the course registration form
         $course = Course::where('slug', $slug)->firstOrFail();
 
@@ -438,27 +455,33 @@ class CourseController extends Controller
      */
     public function dashboard(Request $request)
     {
-        $email = $request->input('email') ?: session('user_email');
+        // Check if user is authenticated via member guard
+        if (Auth::guard('member')->check()) {
+            $member = Auth::guard('member')->user();
+        } else {
+            // Fallback to old email-based system for backward compatibility
+            $email = $request->input('email') ?: session('user_email');
 
-        if (!$email) {
-            return redirect()->route('courses.index')
-                ->with('error', 'Please provide your email to access your courses.');
-        }
+            if (!$email) {
+                return redirect()->route('member.login')
+                    ->with('info', 'Please login to access your course dashboard.');
+            }
 
-        $member = Member::where('email', $email)->first();
+            $member = Member::where('email', $email)->first();
 
-        if (!$member) {
-            return redirect()->route('courses.index')
-                ->with('error', 'No member found with this email address.');
+            if (!$member) {
+                return redirect()->route('member.login')
+                    ->with('error', 'Please login to access your courses.');
+            }
+
+            // Store email in session for backward compatibility
+            session(['user_email' => $email]);
         }
 
         $enrollments = CourseEnrollment::where('user_id', $member->id)
             ->with(['course.lessons', 'progress'])
             ->orderBy('enrollment_date', 'desc')
             ->get();
-
-        // Store email in session for future use
-        session(['user_email' => $email]);
 
         return view('pages.course.dashboard', compact('member', 'enrollments'));
     }
@@ -468,16 +491,22 @@ class CourseController extends Controller
      */
     private function getUserEnrollment($course)
     {
-        $email = session('user_email');
+        // First check if user is authenticated via member guard
+        if (Auth::guard('member')->check()) {
+            $member = Auth::guard('member')->user();
+        } else {
+            // Fallback to session-based system
+            $email = session('user_email');
 
-        if (!$email) {
-            return null;
-        }
+            if (!$email) {
+                return null;
+            }
 
-        $member = Member::where('email', $email)->first();
+            $member = Member::where('email', $email)->first();
 
-        if (!$member) {
-            return null;
+            if (!$member) {
+                return null;
+            }
         }
 
         return CourseEnrollment::where('course_id', $course->id)
@@ -494,14 +523,23 @@ class CourseController extends Controller
             abort(404, 'Certificate not available');
         }
 
-        // Check if the current session user is authorized to download this certificate
-        $email = session('user_email');
-        if (!$email) {
-            abort(403, 'Unauthorized');
+        // Check if the current user is authorized to download this certificate
+        if (Auth::guard('member')->check()) {
+            $member = Auth::guard('member')->user();
+        } else {
+            // Fallback to session-based system
+            $email = session('user_email');
+            if (!$email) {
+                abort(403, 'Unauthorized');
+            }
+
+            $member = Member::where('email', $email)->first();
+            if (!$member) {
+                abort(403, 'Unauthorized');
+            }
         }
 
-        $member = Member::where('email', $email)->first();
-        if (!$member || $member->id !== $enrollment->user_id) {
+        if ($member->id !== $enrollment->user_id) {
             abort(403, 'Unauthorized');
         }
 

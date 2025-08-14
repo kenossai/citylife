@@ -48,6 +48,30 @@ Route::get('/team/leadership', [TeamController::class, 'leadership'])->name('tea
 Route::get('/team', [TeamController::class, 'index'])->name('team.index');
 Route::get('/team/{slug}', [TeamController::class, 'show'])->name('team.member');
 
+// Fallback login route (redirects to member login)
+Route::get('/login', function() {
+    return redirect()->route('member.login');
+})->name('login');
+
+// Member Authentication Routes
+Route::prefix('member')->name('member.')->group(function () {
+    Route::get('login', [App\Http\Controllers\Auth\MemberAuthController::class, 'showLogin'])->name('login');
+    Route::post('login', [App\Http\Controllers\Auth\MemberAuthController::class, 'login'])->name('login.submit');
+    Route::get('register', [App\Http\Controllers\Auth\MemberAuthController::class, 'showRegister'])->name('register');
+    Route::post('register', [App\Http\Controllers\Auth\MemberAuthController::class, 'register'])->name('register.submit');
+    Route::post('logout', [App\Http\Controllers\Auth\MemberAuthController::class, 'logout'])->name('logout');
+});
+
+// Protected Member Routes
+Route::middleware('auth:member')->group(function () {
+    Route::get('/my-courses', [CourseController::class, 'dashboard'])->name('courses.dashboard');
+    Route::get('/courses/{slug}/lessons', [CourseController::class, 'lessons'])->name('courses.lessons');
+    Route::get('/courses/{courseSlug}/lessons/{lessonSlug}', [CourseController::class, 'showLesson'])->name('courses.lesson.show');
+    Route::post('/courses/{courseSlug}/lessons/{lessonSlug}/complete', [CourseController::class, 'completeLesson'])->name('courses.lesson.complete');
+    Route::post('/courses/{courseSlug}/lessons/{lessonSlug}/quiz', [CourseController::class, 'submitQuiz'])->name('courses.lesson.quiz.submit');
+    Route::get('/certificate/{enrollment_id}/download', [CourseController::class, 'downloadCertificate'])->name('certificate.download');
+});
+
 Route::get('/volunteer', [VolunteerController::class, 'index'])->name('volunteer.index');
 Route::post('/volunteer', [VolunteerController::class, 'store'])->name('volunteer.store');
 
