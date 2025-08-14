@@ -40,6 +40,15 @@ class AdminPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
                 Widgets\AccountWidget::class,
+                \App\Filament\Widgets\OverviewStatsWidget::class,
+                \App\Filament\Widgets\MemberAnalyticsWidget::class,
+                \App\Filament\Widgets\CourseStatsWidget::class,
+                \App\Filament\Widgets\CourseAnalyticsWidget::class,
+                \App\Filament\Widgets\EventAnalyticsWidget::class,
+                \App\Filament\Widgets\CommunicationStatsWidget::class,
+                \App\Filament\Widgets\MediaContentStatsWidget::class,
+                \App\Filament\Widgets\ProgressTrackingWidget::class,
+                \App\Filament\Widgets\RecentActivityWidget::class,
                 Widgets\FilamentInfoWidget::class,
             ])
             ->renderHook(
