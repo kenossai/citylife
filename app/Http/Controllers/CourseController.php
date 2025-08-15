@@ -454,19 +454,17 @@ class CourseController extends Controller
     /**
      * User dashboard to view their courses
      */
-    public function dashboard(Request $request)
+    /**
+     * Get authenticated member with fallback mechanism
+     */
+    private function getAuthenticatedMember()
     {
-        // Debug logging
-        Log::info('Dashboard accessed.');
-        Log::info('Session ID on dashboard: ' . $request->session()->getId());
-        Log::info('Member guard check: ' . (Auth::guard('member')->check() ? 'true' : 'false'));
-        
         $member = null;
         
         // First try the normal auth guard
         if (Auth::guard('member')->check()) {
             $member = Auth::guard('member')->user();
-            Log::info('Dashboard: Member authenticated via guard: ' . $member->email);
+            Log::info('Member authenticated via guard: ' . $member->email);
         } else {
             // Fallback: Check session data manually
             $sessionKey = 'login_member_59ba36addc2b2f9401580f014c7f58ea4e30989d';
@@ -477,14 +475,25 @@ class CourseController extends Controller
                 if ($member && $member->is_active) {
                     // Re-authenticate the user in the guard
                     Auth::guard('member')->login($member);
-                    Log::info('Dashboard: Member re-authenticated from session: ' . $member->email);
+                    Log::info('Member re-authenticated from session: ' . $member->email);
                 } else {
-                    Log::info('Dashboard: Member found in session but inactive or not found');
+                    Log::info('Member found in session but inactive or not found');
+                    $member = null;
                 }
-            } else {
-                Log::info('Dashboard: No member ID in session');
             }
         }
+        
+        return $member;
+    }
+
+    public function dashboard(Request $request)
+    {
+        // Debug logging
+        Log::info('Dashboard accessed.');
+        Log::info('Session ID on dashboard: ' . $request->session()->getId());
+        Log::info('Member guard check: ' . (Auth::guard('member')->check() ? 'true' : 'false'));
+        
+        $member = $this->getAuthenticatedMember();
         
         if (!$member) {
             Log::info('Dashboard: Member not authenticated, redirecting to login');

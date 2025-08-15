@@ -53,15 +53,13 @@ Route::prefix('member')->name('member.')->group(function () {
     Route::post('logout', [App\Http\Controllers\Auth\MemberAuthController::class, 'logout'])->name('logout');
 });
 
-// Protected Member Routes
-Route::middleware('auth:member')->group(function () {
-    Route::get('/my-courses', [CourseController::class, 'dashboard'])->name('courses.dashboard');
-    Route::get('/courses/{slug}/lessons', [CourseController::class, 'lessons'])->name('courses.lessons');
-    Route::get('/courses/{courseSlug}/lessons/{lessonSlug}', [CourseController::class, 'showLesson'])->name('courses.lesson.show');
-    Route::get('/courses/{courseSlug}/lessons/{lessonSlug}/quiz', [CourseController::class, 'showQuiz'])->name('courses.lesson.quiz');
-    Route::post('/courses/{courseSlug}/lessons/{lessonSlug}/complete', [CourseController::class, 'completeLesson'])->name('courses.lesson.complete');
-    Route::post('/courses/{courseSlug}/lessons/{lessonSlug}/quiz', [CourseController::class, 'submitQuiz'])->name('courses.lesson.quiz.submit');
-});
+// Protected Member Routes (using internal auth logic instead of middleware)
+Route::get('/my-courses', [CourseController::class, 'dashboard'])->name('courses.dashboard');
+Route::get('/courses/{slug}/lessons', [CourseController::class, 'lessons'])->name('courses.lessons');
+Route::get('/courses/{courseSlug}/lessons/{lessonSlug}', [CourseController::class, 'showLesson'])->name('courses.lesson.show');
+Route::get('/courses/{courseSlug}/lessons/{lessonSlug}/quiz', [CourseController::class, 'showQuiz'])->name('courses.lesson.quiz');
+Route::post('/courses/{courseSlug}/lessons/{lessonSlug}/complete', [CourseController::class, 'completeLesson'])->name('courses.lesson.complete');
+Route::post('/courses/{courseSlug}/lessons/{lessonSlug}/quiz', [CourseController::class, 'submitQuiz'])->name('courses.lesson.quiz.submit');
 
 // Debug route to check authentication
 Route::get('/auth-debug', function() {
