@@ -6,6 +6,7 @@ use App\Models\Course;
 use App\Models\Member;
 use App\Models\CourseEnrollment;
 use App\Models\LessonProgress;
+use App\Models\LessonAttendance;
 use App\Notifications\CourseRegistrationConfirmation;
 use App\Services\SmsService;
 use Illuminate\Http\Request;
@@ -455,28 +456,47 @@ class CourseController extends Controller
      */
     public function dashboard(Request $request)
     {
-        // Check if user is authenticated via member guard
+        // Debug logging with more details
+        Log::info('Dashboard accessed.');
+        Log::info('Member guard check: ' . (Auth::guard('member')->check() ? 'true' : 'false'));
+        Log::info('Session member_authenticated: ' . (session('member_authenticated') ? 'true' : 'false'));
+        Log::info('Session member_id: ' . session('member_id'));
+        Log::info('Session user_email: ' . session('user_email'));
+        
+        // Try multiple ways to get authenticated member
+        $member = null;
+        
+        // Method 1: Laravel guard
         if (Auth::guard('member')->check()) {
             $member = Auth::guard('member')->user();
-        } else {
-            // Fallback to old email-based system for backward compatibility
-            $email = $request->input('email') ?: session('user_email');
-
-            if (!$email) {
-                return redirect()->route('member.login')
-                    ->with('info', 'Please login to access your course dashboard.');
-            }
-
-            $member = Member::where('email', $email)->first();
-
-            if (!$member) {
-                return redirect()->route('member.login')
-                    ->with('error', 'Please login to access your courses.');
-            }
-
-            // Store email in session for backward compatibility
-            session(['user_email' => $email]);
+            Log::info('Method 1 - Member authenticated via guard: ' . $member->email);
         }
+        // Method 2: Session fallback
+        elseif (session('member_authenticated') && session('member_id')) {
+            $member = Member::find(session('member_id'));
+            if ($member) {
+                // Re-authenticate the user in the guard
+                Auth::guard('member')->login($member);
+                Log::info('Method 2 - Member re-authenticated from session: ' . $member->email);
+            }
+        }
+        // Method 3: Email fallback
+        elseif (session('user_email')) {
+            $member = Member::where('email', session('user_email'))->first();
+            if ($member) {
+                // Re-authenticate the user in the guard
+                Auth::guard('member')->login($member);
+                Log::info('Method 3 - Member re-authenticated from email: ' . $member->email);
+            }
+        }
+        
+        if (!$member) {
+            Log::info('Dashboard: No member found, redirecting to login');
+            return redirect()->route('member.login')
+                ->with('info', 'Please login to access your course dashboard.');
+        }
+
+        Log::info('Dashboard: Member authenticated: ' . $member->email);
 
         $enrollments = CourseEnrollment::where('user_id', $member->id)
             ->with(['course.lessons', 'progress'])
@@ -552,6 +572,81 @@ class CourseController extends Controller
         $fileName = 'Certificate_' . $enrollment->course->title . '_' . $member->first_name . '_' . $member->last_name . '.pdf';
 
         return response()->download($filePath, $fileName);
+    }
+
+    /**
+     * Complete a lesson and update progress
+     */
+    public function completeLesson(Request $request, $courseSlug, $lessonSlug)
+    {
+        $course = Course::where('slug', $courseSlug)->firstOrFail();
+        $lesson = $course->lessons()->where('slug', $lessonSlug)->firstOrFail();
+
+        // Check if user is enrolled
+        $userEnrollment = $this->getUserEnrollment($course);
+
+        if (!$userEnrollment) {
+            return response()->json(['error' => 'You must be enrolled in this course to complete lessons.'], 403);
+        }
+
+        // Get or create lesson progress
+        $progress = LessonProgress::firstOrCreate([
+            'course_enrollment_id' => $userEnrollment->id,
+            'course_lesson_id' => $lesson->id,
+        ]);
+
+        // Mark lesson as completed
+        $progress->markAsCompleted();
+
+        // Create attendance record
+        LessonAttendance::updateOrCreate([
+            'course_enrollment_id' => $userEnrollment->id,
+            'course_lesson_id' => $lesson->id,
+        ], [
+            'attended' => true,
+            'attendance_date' => now(),
+            'marked_by' => $userEnrollment->user_id,
+            'notes' => 'Auto-marked on lesson completion',
+        ]);
+
+        // Update enrollment progress
+        $userEnrollment->updateProgressFromAttendance();
+
+        // Check if course is completed and promote member if applicable
+        if ($userEnrollment->status === 'completed') {
+            $this->promoteToMemberIfEligible($userEnrollment->user);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Lesson completed successfully!',
+            'progress_percentage' => $userEnrollment->fresh()->progress_percentage,
+            'completed_lessons' => $userEnrollment->fresh()->completed_lessons,
+        ]);
+    }
+
+    /**
+     * Promote a regular attendee to member if they complete any course
+     */
+    private function promoteToMemberIfEligible($member)
+    {
+        // Only promote if they are currently a regular attendee
+        if ($member->membership_status === 'regular_attendee') {
+            // Check if they have completed any course
+            $completedCourses = $member->courseEnrollments()
+                ->where('status', 'completed')
+                ->count();
+
+            if ($completedCourses > 0) {
+                $member->update([
+                    'membership_status' => 'member',
+                    'membership_date' => now(),
+                ]);
+
+                // You could also trigger a notification here
+                session()->flash('membership_promotion', 'Congratulations! You have been promoted to full member status for completing a course!');
+            }
+        }
     }
 }
 

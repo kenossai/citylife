@@ -32,9 +32,6 @@ Route::post('/courses/{courseSlug}/lessons/{lessonSlug}/quiz', [CourseController
 // Certificate download route
 Route::get('/certificate/{enrollment_id}/download', [CourseController::class, 'downloadCertificate'])->name('certificate.download');
 
-// Course dashboard for users
-Route::get('/my-courses', [CourseController::class, 'dashboard'])->name('courses.dashboard');
-
 // Route for the events controller
 Route::get('/events', [EventController::class, 'index'])->name('events.index');
 Route::get('/events/{slug}', [EventController::class, 'show'])->name('events.show');
@@ -71,6 +68,19 @@ Route::middleware('auth:member')->group(function () {
     Route::post('/courses/{courseSlug}/lessons/{lessonSlug}/quiz', [CourseController::class, 'submitQuiz'])->name('courses.lesson.quiz.submit');
     Route::get('/certificate/{enrollment_id}/download', [CourseController::class, 'downloadCertificate'])->name('certificate.download');
 });
+
+// Debug route to check authentication
+Route::get('/auth-debug', function() {
+    return response()->json([
+        'member_guard_check' => \Illuminate\Support\Facades\Auth::guard('member')->check(),
+        'member_guard_user' => \Illuminate\Support\Facades\Auth::guard('member')->user()?->email,
+        'session_user_email' => session('user_email'),
+        'all_session_data' => session()->all(),
+    ]);
+});
+
+// Test route without middleware
+Route::get('/test-dashboard', [CourseController::class, 'dashboard'])->name('test.dashboard');
 
 Route::get('/volunteer', [VolunteerController::class, 'index'])->name('volunteer.index');
 Route::post('/volunteer', [VolunteerController::class, 'store'])->name('volunteer.store');

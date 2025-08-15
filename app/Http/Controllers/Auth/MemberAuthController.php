@@ -7,6 +7,7 @@ use App\Models\Member;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
@@ -38,24 +39,28 @@ class MemberAuthController extends Controller
         $credentials = $request->only('email', 'password');
         $remember = $request->boolean('remember');
 
+        // Debug logging
+        Log::info('Login attempt for: ' . $credentials['email']);
+
         if (Auth::guard('member')->attempt($credentials, $remember)) {
             $request->session()->regenerate();
-
-            // Store user email in session for backward compatibility
-            session(['user_email' => Auth::guard('member')->user()->email]);
+            
+            $user = Auth::guard('member')->user();
+            Log::info('Login successful for: ' . $user->email);
 
             // Check for intended course from session
             $intendedCourse = session('intended_course');
             if ($intendedCourse) {
                 session()->forget('intended_course');
                 return redirect()->route('courses.register.form', $intendedCourse)
-                    ->with('success', 'Welcome back, ' . Auth::guard('member')->user()->first_name . '! You can now register for the course.');
+                    ->with('success', 'Welcome back, ' . $user->first_name . '! You can now register for the course.');
             }
 
             return redirect()->intended(route('courses.dashboard'))
-                ->with('success', 'Welcome back, ' . Auth::guard('member')->user()->first_name . '!');
+                ->with('success', 'Welcome back, ' . $user->first_name . '!');
         }
 
+        Log::info('Login failed for: ' . $credentials['email']);
         throw ValidationException::withMessages([
             'email' => 'The provided credentials do not match our records.',
         ]);
@@ -99,7 +104,7 @@ class MemberAuthController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'phone' => $request->phone,
-            'membership_status' => 'member',
+            'membership_status' => 'regular_attendee',
             'is_active' => true,
             'receives_newsletter' => true,
             'receives_sms' => false,
@@ -107,11 +112,11 @@ class MemberAuthController extends Controller
 
         // Log the user in
         Auth::guard('member')->login($member);
+        
+        // Regenerate session for security
+        $request->session()->regenerate();
 
-        // Store user email in session for backward compatibility
-        session(['user_email' => $member->email]);
-
-        return redirect()->route('courses.dashboard')
+        return redirect()->intended(route('courses.dashboard'))
             ->with('success', 'Registration successful! Welcome to City Life Church.');
     }
 

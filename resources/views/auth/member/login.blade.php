@@ -43,6 +43,10 @@
                             </div>
                         @endif
 
+                        <div class="alert alert-info">
+                            <strong>Existing Members:</strong> If you're an existing member, your default password is <code>password123</code>. Please change it after logging in.
+                        </div>
+
                         <form class="login-page__form__box form-one" method="POST" action="{{ route('member.login.submit') }}">
                             @csrf
                             <div class="login-page__form__input-box form-one__control">

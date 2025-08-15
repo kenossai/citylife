@@ -18,11 +18,11 @@ class Authenticate extends Middleware
             if ($request->is('my-courses*') || $request->is('courses/*/lessons*')) {
                 return route('member.login');
             }
-            
+
             // Default fallback
             return route('login');
         }
-        
+
         return null;
     }
 }
