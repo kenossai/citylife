@@ -1,191 +1,100 @@
 <x-app-layout>
     @section('title', $ministry->name . ' - City Life Church')
 
-    <!-- Page Header -->
-    <section class="page-header">
-        <div class="page-header__bg" style="background-image: url('{{ asset('assets/images/backgrounds/page-header-bg-1-1.jpg') }}');"></div>
-        <div class="container">
-            <h2 class="page-header__title">{{ $ministry->name }}</h2>
-            <ul class="cleenhearts-breadcrumb list-unstyled">
-                <li><i class="icon-home"></i> <a href="{{ route('home') }}">Home</a></li>
-                <li><a href="{{ route('ministries.index') }}">Ministries</a></li>
-                <li><span>{{ $ministry->name }}</span></li>
-            </ul>
-        </div>
-    </section>
+ <section class="page-header @@extraClassName">
+    <div class="page-header__bg" style="background-image: url({{ asset('assets/images/backgrounds/worship-banner-1.jpg') }});"></div>
+    <!-- /.page-header__bg -->
+    <div class="container">
+        <h2 class="page-header__title">{{ $ministry->name }}</h2>
+        <ul class="cleenhearts-breadcrumb list-unstyled">
+            <li><i class="icon-home"></i> <a href="{{ route('home') }}">Home</a></li>
+            <li><i class="icon-home"></i> <a href="{{ route('ministries.index') }}">Ministries</a></li>
+            <li><span>{{ $ministry->name }}</span></li>
+        </ul><!-- /.thm-breadcrumb list-unstyled -->
+    </div><!-- /.container -->
+</section>
 
-    <!-- Ministry Details Start -->
-    <section class="causes-details section-space">
-        <div class="container">
-            <div class="row gutter-y-50">
-                <div class="col-lg-8">
-                    <div class="causes-details__content">
-                        <div class="causes-details__image">
-                            @if($ministry->featured_image)
-                                <img src="{{ Storage::url($ministry->featured_image) }}" alt="{{ $ministry->name }}">
-                            @else
-                                <img src="{{ asset('assets/images/ministry/default-ministry.jpg') }}" alt="{{ $ministry->name }}">
+<section class="event-details section-space">
+    <div class="container">
+        <div class="row gutter-y-60">
+            <div class="col-lg-8">
+                <div class="event-details__content">
+                    <div class="event-details__image wow fadeInUp animated" data-wow-duration="1500ms" data-wow-delay="00ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 0ms; animation-name: fadeInUp;">
+                        <img src="{{ asset('storage/' . $ministry->featured_image) }}" alt="{{ $ministry->name }}">
+                    </div><!-- /.event-details__image -->
+                    @if ($ministry->meeting_time)
+                        <div class="event-details__time">
+                            <i class="event-details__time__icon fa fa-clock"></i>
+                            <span class="event-details__time__text">{{ $ministry->meeting_time }}</span>
+                        </div><!-- /.event-details__time -->
+                    @endif
+                    <h3 class="event-details__title">{{ $ministry->name }}</h3><!-- /.event-details__title -->
+                    <div class="event-details__text">
+                        <p class="event-details__text__inner">{!! $ministry->description !!}</p>
+                    </div><!-- /.event-details__text -->
+                    <div class="event-details__inner">
+                        <div class="row gutter-y-30">
+                            <div class="col-md-6 wow fadeInUp animated" data-wow-delay="100ms" data-wow-duration="1500ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 100ms; animation-name: fadeInUp;">
+                                    <div class="event-details__inner__image">
+                                        <img src="{{ asset('storage/' . $ministry->leader_image) }}" alt="{{ $ministry->leader }}">
+                                    </div><!-- /.event-details__inner__image -->
+                            </div><!-- /.col-md-6 -->
+                            <div class="col-md-6 wow fadeInUp animated" data-wow-delay="300ms" data-wow-duration="1500ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 300ms; animation-name: fadeInUp;">
+                                <div class="event-details__inner__image">
+                                    <img src="{{ asset('storage/' . $ministry->assistant_leader_image) }}" alt="{{ $ministry->assistant_leader }}">
+                                </div><!-- /.event-details__inner__image -->
+                            </div><!-- /.col-md-6 -->
+                        </div><!-- /.row -->
+                        <div class="event-details__inner__content">
+                            <p class="event-details__inner__text">{!! $ministry->content !!}</p>
+                        </div>
+                    </div><!-- /.event-details__inner -->
+                </div><!-- /.event-details__content -->
+
+                <div class="event-details__contact contact-information">
+                    @if($ministry->contact_email)
+                    <a href="{{ route('ministries.contact', $ministry->slug) }}" class="contact-information__btn cleenhearts-btn">
+                        <div class="cleenhearts-btn__icon-box">
+                            <div class="cleenhearts-btn__icon-box__inner"><span class="icon-duble-arrow"></span></div>
+                        </div>
+                        <span class="cleenhearts-btn__text">join now</span>
+                    </a><!-- /.contact-information__btn -->
+                    @endif
+                </div><!-- /.contact-information -->
+            </div><!-- /.col-lg-8 -->
+            <div class="col-lg-4">
+                <aside class="sidebar-event">
+                    <div class="sidebar-event__contact contact-one sidebar-event__item wow fadeInUp animated" data-wow-duration="1500ms" data-wow-delay="00ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 0ms; animation-name: fadeInUp;">
+                        <div class="contact-one__info">
+                            <div class="contact-one__info__item">
+                                <div class="contact-one__info__icon">
+                                    <span class="icon-user"></span>
+                                </div><!-- /.contact-one__info__icon -->
+                                <div class="contact-one__info__content">
+                                    <h4 class="contact-one__info__title">Leaders:</h4>
+                                    <address class="contact-one__info__text">{{ $ministry->leader }}</address>
+                                    <address class="contact-one__info__text">{{ $ministry->assistant_leader }}</address>
+                                </div><!-- /.contact-one__info__content -->
+                            </div><!-- /.contact-one__info__item -->
+                             @if($ministry->contact_email)
+                            <div class="contact-one__info__item">
+                                <div class="contact-one__info__icon">
+                                    <span class="icon-envelope"></span>
+                                </div><!-- /.contact-one__info__icon -->
+                                <div class="contact-one__info__content">
+                                    <h4 class="contact-one__info__title">Email Us:</h4>
+                                    <a href="mailto:{{ $ministry->contact_email }}" class="contact-one__info__text contact-one__info__text--link">{{ $ministry->contact_email }}</a>
+                                </div><!-- /.contact-one__info__content -->
+                            </div><!-- /.contact-one__info__item -->
                             @endif
-                        </div>
-                        
-                        <h3 class="causes-details__title">{{ $ministry->name }}</h3>
-                        <p class="causes-details__text">{{ $ministry->description }}</p>
-                        
-                        <div class="causes-details__content-text">
-                            {!! $ministry->content !!}
-                        </div>
-
-                        @if($members->where('pivot.role', 'Leader')->count() > 0)
-                        <div class="causes-details__leadership">
-                            <h4>Leadership Team</h4>
-                            <div class="row gutter-y-20">
-                                @foreach($members->where('pivot.role', 'Leader') as $leader)
-                                <div class="col-md-6">
-                                    <div class="team-card-two">
-                                        @if($leader->photo)
-                                            <div class="team-card-two__image">
-                                                <img src="{{ Storage::url($leader->photo) }}" alt="{{ $leader->first_name }} {{ $leader->last_name }}">
-                                            </div>
-                                        @endif
-                                        <div class="team-card-two__content">
-                                            <h3 class="team-card-two__title">{{ $leader->first_name }} {{ $leader->last_name }}</h3>
-                                            <p class="team-card-two__designation">{{ $leader->pivot->role }}</p>
-                                            @if($leader->email)
-                                                <a href="mailto:{{ $leader->email }}" class="team-card-two__email">{{ $leader->email }}</a>
-                                            @endif
-                                        </div>
-                                    </div>
-                                </div>
-                                @endforeach
-                            </div>
-                        </div>
-                        @endif
-
-                        @if(session('success'))
-                            <div class="alert alert-success mt-4">
-                                {{ session('success') }}
-                            </div>
-                        @endif
-                    </div>
-                </div>
-                
-                <div class="col-lg-4">
-                    <div class="sidebar">
-                        <!-- Ministry Info -->
-                        <div class="sidebar__single sidebar__info">
-                            <h4 class="sidebar__title">Ministry Information</h4>
-                            <ul class="sidebar__info-list">
-                                @if($ministry->leader)
-                                <li>
-                                    <i class="icon-user"></i>
-                                    <span class="sidebar__info-label">Leader:</span>
-                                    <span class="sidebar__info-text">{{ $ministry->leader }}</span>
-                                </li>
-                                @endif
-                                
-                                @if($ministry->meeting_time)
-                                <li>
-                                    <i class="icon-clock"></i>
-                                    <span class="sidebar__info-label">Meeting Time:</span>
-                                    <span class="sidebar__info-text">{{ $ministry->meeting_time }}</span>
-                                </li>
-                                @endif
-                                
-                                @if($ministry->meeting_location)
-                                <li>
-                                    <i class="icon-location"></i>
-                                    <span class="sidebar__info-label">Location:</span>
-                                    <span class="sidebar__info-text">{{ $ministry->meeting_location }}</span>
-                                </li>
-                                @endif
-                                
-                                <li>
-                                    <i class="icon-users"></i>
-                                    <span class="sidebar__info-label">Active Members:</span>
-                                    <span class="sidebar__info-text">{{ $members->count() }}</span>
-                                </li>
-                            </ul>
-                        </div>
-
-                        <!-- Get Involved -->
-                        @if($ministry->contact_email)
-                        <div class="sidebar__single sidebar__cta">
-                            <div class="sidebar__cta-bg" style="background-image: url('{{ asset('assets/images/backgrounds/sidebar-cta-bg.jpg') }}');"></div>
-                            <h4 class="sidebar__cta-title">Get Involved</h4>
-                            <p class="sidebar__cta-text">Interested in joining this ministry? Contact us to learn more.</p>
-                            <a href="{{ route('ministries.contact', $ministry->slug) }}" class="cleenhearts-btn">
-                                <div class="cleenhearts-btn__icon-box">
-                                    <div class="cleenhearts-btn__icon-box__inner"><span class="icon-heart"></span></div>
-                                </div>
-                                <span class="cleenhearts-btn__text">Join Ministry</span>
-                            </a>
-                        </div>
-                        @endif
-
-                        <!-- Contact Info -->
-                        @if($ministry->contact_email)
-                        <div class="sidebar__single sidebar__contact">
-                            <h4 class="sidebar__title">Contact Information</h4>
-                            <div class="sidebar__contact-info">
-                                <a href="mailto:{{ $ministry->contact_email }}">
-                                    <i class="icon-email"></i>{{ $ministry->contact_email }}
-                                </a>
-                            </div>
-                        </div>
-                        @endif
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- Ministry Details End -->
-
-    <!-- Related Ministries -->
-    <section class="causes-one causes-one--page">
-        <div class="container">
-            <div class="section-title text-center">
-                <h6 class="section-title__tagline">Explore More</h6>
-                <h2 class="section-title__title">Other Ministries</h2>
-            </div>
-            
-            @php
-                $relatedMinistries = \App\Models\Ministry::active()
-                    ->where('id', '!=', $ministry->id)
-                    ->orderBy('sort_order')
-                    ->take(3)
-                    ->get();
-            @endphp
-
-            <div class="row gutter-y-30">
-                @foreach($relatedMinistries as $relatedMinistry)
-                <div class="col-xl-4 col-lg-4 col-md-6">
-                    <div class="causes-card">
-                        <div class="causes-card__image">
-                            @if($relatedMinistry->featured_image)
-                                <img src="{{ Storage::url($relatedMinistry->featured_image) }}" alt="{{ $relatedMinistry->name }}">
-                            @else
-                                <img src="{{ asset('assets/images/ministry/default-ministry.jpg') }}" alt="{{ $relatedMinistry->name }}">
-                            @endif
-                            <div class="causes-card__category">{{ $relatedMinistry->name }}</div>
-                        </div>
-                        <div class="causes-card__content">
-                            <h3 class="causes-card__title">
-                                <a href="{{ route('ministries.show', $relatedMinistry->slug) }}">{{ $relatedMinistry->name }}</a>
-                            </h3>
-                            <p class="causes-card__text">{{ Str::limit($relatedMinistry->description, 100) }}</p>
-                            <div class="causes-card__bottom">
-                                <a href="{{ route('ministries.show', $relatedMinistry->slug) }}" class="cleenhearts-btn">
-                                    <div class="cleenhearts-btn__icon-box">
-                                        <div class="cleenhearts-btn__icon-box__inner"><span class="icon-duble-arrow"></span></div>
-                                    </div>
-                                    <span class="cleenhearts-btn__text">Learn More</span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                @endforeach
-            </div>
-        </div>
+                        </div><!-- /.contact-one__info -->
+                        <div class="sidebar-event__contact__image">
+                            <img src="{{ $ministry->featured_image ? Storage::url($ministry->featured_image) : asset('assets/images/ministry/default-ministry.jpg') }}" alt="events">
+                        </div><!-- /.sidebar-event__contact__image -->
+                    </div><!-- /.sidebar-event__contact -->
+                </aside><!-- /.sidebar-event -->
+            </div><!-- /.col-lg-4 -->
+        </div><!-- /.row -->
+    </div><!-- /.container -->
     </section>
 </x-app-layout>

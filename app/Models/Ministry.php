@@ -16,16 +16,24 @@ class Ministry extends Model
         'description',
         'content',
         'leader',
+        'assistant_leader',
+        'leader_image',
+        'assistant_leader_image',
         'contact_email',
         'meeting_time',
         'meeting_location',
         'featured_image',
+        'ministry_type',
+        'is_featured',
+        'requirements',
+        'how_to_join',
         'sort_order',
         'is_active',
     ];
 
     protected $casts = [
         'is_active' => 'boolean',
+        'is_featured' => 'boolean',
     ];
 
     public function setNameAttribute($value)

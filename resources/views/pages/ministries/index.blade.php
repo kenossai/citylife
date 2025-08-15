@@ -3,9 +3,14 @@
 
     <!-- Page Header -->
     <section class="page-header">
-        <div class="page-header__bg" style="background-image: url('{{ asset('assets/images/backgrounds/page-header-bg-1-1.jpg') }}');"></div>
+        <div class="page-header__bg" style="background-image: url('{{ asset('assets/images/backgrounds/worship-banner-1.jpg') }}');"></div>
         <div class="container">
-            <h2 class="page-header__title">Our Ministries</h2>
+            <h4 class="text-white">Our Ministries</h4>
+            <h2 class="page-header__title">Connect Through Ministry</h2>
+            <p class="section-title__text text-white">
+                Discover your calling and make a difference in our community and beyond.
+                Join one of our vibrant ministries and grow in faith while serving others.
+            </p>
             <ul class="cleenhearts-breadcrumb list-unstyled">
                 <li><i class="icon-home"></i> <a href="{{ route('home') }}">Home</a></li>
                 <li><span>Ministries</span></li>
@@ -24,25 +29,31 @@
                             @else
                                 <img src="{{ asset('assets/images/events/event-2-1.jpg') }}" alt="{{ $ministry->name }}">
                             @endif
-                            <div class="event-card-four__date">
-                                <span>03</span>
-                                <span>Sep</span>
-                            </div><!-- /.event-card-four__date -->
                         </a><!-- /.event-card-four__image -->
                         <div class="event-card-four__content">
-                            <div class="event-card-four__time">
-                                <i class="event-card-four__time__icon fa fa-clock"></i>10:00 aM - 2.00 PM
-                            </div><!-- /.event-card-four__time -->
-                            <h4 class="event-card-four__title"><a href="event-details-right.html">{{ $ministry->name }}</a></h4><!-- /.event-card-four__title -->
+                            @if ($ministry->meeting_time)
+                                <div class="event-card-four__time">
+                                    <i class="event-card-four__time__icon fa fa-clock"></i>{{ $ministry->meeting_time }}
+                                </div>
+                            @endif
+                            <h4 class="event-card-four__title"><a href="{{ route('ministries.show', $ministry->slug) }}">{{ $ministry->name }}</a></h4><!-- /.event-card-four__title -->
                             <div class="event-card-four__text">{{ Str::limit($ministry->description, 100) }}</div><!-- /.event-card-four__text -->
                             <ul class="event-card-four__meta">
                                 <li>
-                                    <h5 class="event-card-four__meta__title">Leader</h5>
-                                    {{ $ministry->leader ?? 'Not specified' }}
+                                    @if ($ministry->leader)
+                                    <h5 class="event-card-four__meta__title">Led By</h5>
+                                        {{ $ministry->leader }}
+                                    @else
+                                        Not specified
+                                    @endif
                                 </li>
                                 <li>
+                                    @if ($ministry->venue)
                                     <h5 class="event-card-four__meta__title"><span class="icon-location"></span> Meeting Venue</h5>
-                                    {{ $ministry->venue ?? 'Not specified' }}
+                                        {{ $ministry->venue }}
+                                    @else
+                                        Not specified
+                                    @endif
                                 </li>
                             </ul><!-- /.event-card-four__meta -->
                         </div><!-- /.event-card-four__content -->
