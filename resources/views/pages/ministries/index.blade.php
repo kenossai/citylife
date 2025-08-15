@@ -12,105 +12,64 @@
             </ul>
         </div>
     </section>
-
-    <!-- Ministries Start -->
-    <section class="causes-page section-space">
-        <div class="container">
-            <div class="row">
-                <div class="col-xl-12">
-                    <div class="section-title text-center">
-                        <h6 class="section-title__tagline">Get Involved</h6>
-                        <h2 class="section-title__title">Connect Through Ministry</h2>
-                        <p class="section-title__text">
-                            Discover your calling and make a difference in our community and beyond. 
-                            Join one of our vibrant ministries and grow in faith while serving others.
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row gutter-y-30">
-                @forelse($ministries as $ministry)
-                <div class="col-xl-4 col-lg-4 col-md-6 wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="{{ $loop->index * 100 }}ms">
-                    <div class="causes-card">
-                        <div class="causes-card__image">
-                            @if($ministry->featured_image)
-                                <img src="{{ Storage::url($ministry->featured_image) }}" alt="{{ $ministry->name }}">
+<section class="events-list-page section-space">
+    <div class="container">
+        <div class="row gutter-y-30">
+            @forelse ($ministries as $ministry)
+                <div class="col-lg-12 wow fadeInUp animated" data-wow-duration="1500ms" data-wow-delay="00ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 0ms; animation-name: fadeInUp;">
+                    <div class="event-card-four">
+                        <a href="event-details-right.html" class="event-card-four__image">
+                            @if ($ministry->image)
+                                <img src="{{ asset('storage/' . $ministry->image) }}" alt="{{ $ministry->title }}">
                             @else
-                                <img src="{{ asset('assets/images/ministry/default-ministry.jpg') }}" alt="{{ $ministry->name }}">
+                                <img src="{{ asset('assets/images/events/event-2-1.jpg') }}" alt="{{ $ministry->name }}">
                             @endif
-                            <div class="causes-card__category">{{ $ministry->name }}</div>
-                        </div>
-                        <div class="causes-card__content">
-                            <h3 class="causes-card__title">
-                                <a href="{{ route('ministries.show', $ministry->slug) }}">{{ $ministry->name }}</a>
-                            </h3>
-                            <p class="causes-card__text">{{ Str::limit($ministry->description, 120) }}</p>
-                            
-                            <div class="causes-card__info">
-                                @if($ministry->leader)
-                                <div class="causes-card__info-item">
-                                    <i class="icon-user"></i>
-                                    <span>Led by {{ $ministry->leader }}</span>
-                                </div>
-                                @endif
-                                
-                                @if($ministry->meeting_time)
-                                <div class="causes-card__info-item">
-                                    <i class="icon-clock"></i>
-                                    <span>{{ $ministry->meeting_time }}</span>
-                                </div>
-                                @endif
-                                
-                                @if($ministry->meeting_location)
-                                <div class="causes-card__info-item">
-                                    <i class="icon-location"></i>
-                                    <span>{{ $ministry->meeting_location }}</span>
-                                </div>
-                                @endif
-                            </div>
-                            
-                            <div class="causes-card__bottom">
-                                <a href="{{ route('ministries.show', $ministry->slug) }}" class="cleenhearts-btn">
-                                    <div class="cleenhearts-btn__icon-box">
-                                        <div class="cleenhearts-btn__icon-box__inner"><span class="icon-duble-arrow"></span></div>
-                                    </div>
-                                    <span class="cleenhearts-btn__text">Learn More</span>
-                                </a>
-                                
-                                @if($ministry->contact_email)
-                                <a href="{{ route('ministries.contact', $ministry->slug) }}" class="causes-card__btn">
-                                    <i class="icon-heart"></i>Get Involved
-                                </a>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
+                            <div class="event-card-four__date">
+                                <span>03</span>
+                                <span>Sep</span>
+                            </div><!-- /.event-card-four__date -->
+                        </a><!-- /.event-card-four__image -->
+                        <div class="event-card-four__content">
+                            <div class="event-card-four__time">
+                                <i class="event-card-four__time__icon fa fa-clock"></i>10:00 aM - 2.00 PM
+                            </div><!-- /.event-card-four__time -->
+                            <h4 class="event-card-four__title"><a href="event-details-right.html">{{ $ministry->name }}</a></h4><!-- /.event-card-four__title -->
+                            <div class="event-card-four__text">{{ Str::limit($ministry->description, 100) }}</div><!-- /.event-card-four__text -->
+                            <ul class="event-card-four__meta">
+                                <li>
+                                    <h5 class="event-card-four__meta__title">Leader</h5>
+                                    {{ $ministry->leader ?? 'Not specified' }}
+                                </li>
+                                <li>
+                                    <h5 class="event-card-four__meta__title"><span class="icon-location"></span> Meeting Venue</h5>
+                                    {{ $ministry->venue ?? 'Not specified' }}
+                                </li>
+                            </ul><!-- /.event-card-four__meta -->
+                        </div><!-- /.event-card-four__content -->
+                    </div><!-- /.event-card-four -->
                 </div>
-                @empty
-                <div class="col-12">
+            @empty
+               <div class="col-12">
                     <div class="text-center">
                         <h3>No Ministries Available</h3>
                         <p>Please check back later for ministry opportunities.</p>
                     </div>
                 </div>
-                @endforelse
-            </div>
-        </div>
-    </section>
-    <!-- Ministries End -->
-
+            @endforelse
+        </div><!-- /.row -->
+    </div><!-- /.container -->
+</section>
     <!-- Call to Action -->
     <section class="cta-one cta-one--page">
-        <div class="container">
-            <div class="cta-one__inner">
+        <div class="container mb-5">
+            <div class="cta-one__inner text-center">
                 <h3 class="cta-one__title">Ready to Get Involved?</h3>
                 <p class="cta-one__text">Contact our ministry coordinator to find the perfect ministry for you.</p>
                 <a href="{{ route('contact') }}" class="cleenhearts-btn">
                     <div class="cleenhearts-btn__icon-box">
                         <div class="cleenhearts-btn__icon-box__inner"><span class="icon-duble-arrow"></span></div>
                     </div>
-                    <span class="cleenhearts-btn__text">Contact Us</span>
+                    <span class="cleenhearts-btn__text">Join Us</span>
                 </a>
             </div>
         </div>
