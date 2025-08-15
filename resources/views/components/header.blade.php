@@ -28,14 +28,20 @@
                         </li>
 
                         <li class="dropdown">
-                            <a href="index.html#">Ministries</a>
+                            <a href="{{ route('ministries.index') }}">Ministries</a>
                             <ul>
-                                <li><a href="volunteer.html">City Life Kids</a></li>
-                                <li><a href="volunteer-carousel.html">Youth & Young Adults Ministry</a></li>
-                                <li><a href="volunteer-details.html">Prayer Ministry</a></li>
-                                <li><a href="become-a-volunteer.html">Women's Ministry</a></li>
-                                <li><a href="pricing.html">Men's Ministry</a></li>
-                                <li><a href="pricing-carousel.html">Worship Ministry</a></li>
+                                @php
+                                    $headerMinistries = \App\Models\Ministry::active()
+                                        ->orderBy('sort_order')
+                                        ->orderBy('name')
+                                        ->take(6)
+                                        ->get();
+                                @endphp
+                                @foreach($headerMinistries as $ministry)
+                                    <li><a href="{{ route('ministries.show', $ministry->slug) }}">{{ $ministry->name }}</a></li>
+                                @endforeach
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a href="{{ route('ministries.index') }}">View All Ministries</a></li>
                             </ul>
                         </li>
                         <li class="dropdown">

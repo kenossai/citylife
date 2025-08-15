@@ -20,15 +20,13 @@ return new class extends Migration
             $table->longText('content')->nullable();
             $table->string('leader')->nullable();
             $table->string('assistant_leader')->nullable();
+            $table->string('leader_image')->nullable();
+            $table->string('assistant_leader_image')->nullable();
             $table->string('contact_email')->nullable();
-            $table->string('contact_phone')->nullable();
             $table->string('meeting_time')->nullable();
             $table->string('meeting_location')->nullable();
-            $table->text('target_audience')->nullable(); // Age group or demographic
-            $table->json('meeting_schedule')->nullable(); // Weekly schedule
             $table->string('featured_image')->nullable();
-            $table->json('gallery_images')->nullable();
-            $table->text('requirements')->nullable(); // Any special requirements
+            $table->text('requirements')->nullable();
             $table->text('how_to_join')->nullable();
             $table->integer('sort_order')->default(0);
             $table->boolean('is_active')->default(true);

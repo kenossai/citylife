@@ -11,6 +11,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\VolunteerController;
 use App\Http\Controllers\TeachingSeriesController;
 use App\Http\Controllers\CityLifeTalkTimeController;
+use App\Http\Controllers\MinistryController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about-citylife', [AboutController::class, 'index'])->name('about');
@@ -29,6 +30,12 @@ Route::get('/certificate/{enrollment_id}/download', [CourseController::class, 'd
 // Route for the events controller
 Route::get('/events', [EventController::class, 'index'])->name('events.index');
 Route::get('/events/{slug}', [EventController::class, 'show'])->name('events.show');
+
+// Route for ministries
+Route::get('/ministries', [MinistryController::class, 'index'])->name('ministries.index');
+Route::get('/ministries/{slug}', [MinistryController::class, 'show'])->name('ministries.show');
+Route::get('/ministries/{slug}/contact', [MinistryController::class, 'contact'])->name('ministries.contact');
+Route::post('/ministries/{slug}/contact', [MinistryController::class, 'submitContact'])->name('ministries.contact.submit');
 
 // Route for the contact controller
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
