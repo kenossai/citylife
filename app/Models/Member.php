@@ -132,6 +132,16 @@ class Member extends Authenticatable
         return $this->belongsToMany(Ministry::class, 'member_ministry')->withTimestamps();
     }
 
+    public function technicalDepartments()
+    {
+        return $this->hasMany(TechnicalDepartmentMember::class);
+    }
+
+    public function activeTechnicalDepartments()
+    {
+        return $this->hasMany(TechnicalDepartmentMember::class)->where('is_active', true);
+    }
+
     // Spouse relationship
     public function spouse()
     {
