@@ -62,6 +62,28 @@
                         <li>
                             <a href="{{ route('contact') }}">Contact Us</a>
                         </li>
+                        @auth('member')
+                        <li class="dropdown">
+                            <a href="javascript:void(0)">Learning</a>
+                            <ul>
+                                <li><a href="{{ route('courses.dashboard') }}">Dashboard</a></li>
+                                <li>
+                                    <form action="{{ route('member.logout') }}" method="POST" class="d-inline">
+                                        @csrf
+                                        <a href="#" onclick="event.preventDefault(); this.closest('form').submit();">Logout</a>
+                                    </form>
+                                </li>
+                            </ul>
+                        </li>
+                        @else
+                        <li class="dropdown">
+                            <a href="index.html#">Member</a>
+                            <ul>
+                                <li><a href="{{ route('member.login') }}">Login</a></li>
+                                <li><a href="{{ route('member.register') }}">Register</a></li>
+                            </ul>
+                        </li>
+                        @endauth
                     </ul>
                 </nav><!-- /.main-header__nav -->
                 <div class="mobile-nav__btn mobile-nav__toggler">
@@ -69,40 +91,6 @@
                     <span></span>
                     <span></span>
                 </div><!-- /.mobile-nav__toggler -->
-
-                <!-- Member Authentication Section -->
-                @auth('member')
-                    <div class="main-header__user me-3">
-                        <div class="dropdown">
-                            <button class="btn btn-outline-primary dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="icon-user me-2"></i>{{ Auth::guard('member')->user()->first_name }}
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="userDropdown">
-                                <li><a class="dropdown-item" href="{{ route('courses.dashboard') }}">
-                                    <i class="icon-dashboard me-2"></i>My Dashboard
-                                </a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li>
-                                    <form method="POST" action="{{ route('member.logout') }}" class="d-inline">
-                                        @csrf
-                                        <button type="submit" class="dropdown-item">
-                                            <i class="icon-logout me-2"></i>Logout
-                                        </button>
-                                    </form>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                @else
-                    <div class="main-header__auth me-3">
-                        <a href="{{ route('member.login') }}" class="btn btn-outline-primary me-2">
-                            <i class="icon-user me-1"></i>Login
-                        </a>
-                        <a href="{{ route('member.register') }}" class="btn btn-primary">
-                            <i class="icon-user-plus me-1"></i>Register
-                        </a>
-                    </div>
-                @endauth
 
                 <div class="main-header__cart"></div><!-- /.main-header__cart -->
                 <a href="donate.html" class="cleenhearts-btn main-header__btn">

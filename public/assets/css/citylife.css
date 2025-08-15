@@ -696,7 +696,7 @@ textarea {
     border: none;
     outline: none;
     background-color: var(--cleenhearts-secondary, #f6d469);
-    padding: 16px 22px 16px 19px;
+    padding: 16px 21px 13px 19px;
     transition: 500ms;
     border-radius: 100px;
 }
@@ -745,7 +745,7 @@ textarea {
 .cleenhearts-btn__text {
     position: relative;
     font-family: var(--cleenhearts-heading-font, "Quicksand", sans-serif);
-    font-size: 16px;
+    font-size: 13px;
     color: inherit;
     margin-left: 40px;
     font-weight: 700;
@@ -5142,11 +5142,11 @@ textarea {
         height: 32px;
     }
 }
-.main-header__btn {
+/* .main-header__btn {
     padding-top: 21px;
     padding-bottom: 21px;
     padding-right: 21px;
-}
+} */
 @media (max-width: 1350px) {
     .main-header__btn {
         display: none;
@@ -5161,7 +5161,7 @@ textarea {
     height: 52px;
 }
 .main-header__btn .cleenhearts-btn__text {
-    margin-left: 56px;
+    margin-left: 45px;
 }
 
 .main-header-two {
@@ -5851,8 +5851,8 @@ textarea {
 }
 .main-menu .main-menu__list > li,
 .main-menu-two .main-menu__list > li {
-    padding-top: 51px;
-    padding-bottom: 51px;
+    padding-top: 50px;
+    padding-bottom: 50px;
     position: relative;
 }
 .main-menu .main-menu__list > li.dropdown > a,
