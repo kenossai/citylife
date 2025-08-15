@@ -456,42 +456,38 @@ class CourseController extends Controller
      */
     public function dashboard(Request $request)
     {
-        // Debug logging with more details
+        // Debug logging
         Log::info('Dashboard accessed.');
+        Log::info('Session ID on dashboard: ' . $request->session()->getId());
         Log::info('Member guard check: ' . (Auth::guard('member')->check() ? 'true' : 'false'));
-        Log::info('Session member_authenticated: ' . (session('member_authenticated') ? 'true' : 'false'));
-        Log::info('Session member_id: ' . session('member_id'));
-        Log::info('Session user_email: ' . session('user_email'));
         
-        // Try multiple ways to get authenticated member
         $member = null;
         
-        // Method 1: Laravel guard
+        // First try the normal auth guard
         if (Auth::guard('member')->check()) {
             $member = Auth::guard('member')->user();
-            Log::info('Method 1 - Member authenticated via guard: ' . $member->email);
-        }
-        // Method 2: Session fallback
-        elseif (session('member_authenticated') && session('member_id')) {
-            $member = Member::find(session('member_id'));
-            if ($member) {
-                // Re-authenticate the user in the guard
-                Auth::guard('member')->login($member);
-                Log::info('Method 2 - Member re-authenticated from session: ' . $member->email);
-            }
-        }
-        // Method 3: Email fallback
-        elseif (session('user_email')) {
-            $member = Member::where('email', session('user_email'))->first();
-            if ($member) {
-                // Re-authenticate the user in the guard
-                Auth::guard('member')->login($member);
-                Log::info('Method 3 - Member re-authenticated from email: ' . $member->email);
+            Log::info('Dashboard: Member authenticated via guard: ' . $member->email);
+        } else {
+            // Fallback: Check session data manually
+            $sessionKey = 'login_member_59ba36addc2b2f9401580f014c7f58ea4e30989d';
+            $memberId = session($sessionKey);
+            
+            if ($memberId) {
+                $member = Member::find($memberId);
+                if ($member && $member->is_active) {
+                    // Re-authenticate the user in the guard
+                    Auth::guard('member')->login($member);
+                    Log::info('Dashboard: Member re-authenticated from session: ' . $member->email);
+                } else {
+                    Log::info('Dashboard: Member found in session but inactive or not found');
+                }
+            } else {
+                Log::info('Dashboard: No member ID in session');
             }
         }
         
         if (!$member) {
-            Log::info('Dashboard: No member found, redirecting to login');
+            Log::info('Dashboard: Member not authenticated, redirecting to login');
             return redirect()->route('member.login')
                 ->with('info', 'Please login to access your course dashboard.');
         }

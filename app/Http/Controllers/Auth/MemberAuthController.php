@@ -47,6 +47,8 @@ class MemberAuthController extends Controller
             
             $user = Auth::guard('member')->user();
             Log::info('Login successful for: ' . $user->email);
+            Log::info('Session ID after login: ' . $request->session()->getId());
+            Log::info('Auth check after login: ' . (Auth::guard('member')->check() ? 'true' : 'false'));
 
             // Check for intended course from session
             $intendedCourse = session('intended_course');

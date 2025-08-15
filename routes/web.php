@@ -23,13 +23,7 @@ Route::get('/courses/{slug}', [CourseController::class, 'show'])->name('courses.
 Route::get('/courses/{slug}/register', [CourseController::class, 'showRegistrationForm'])->name('courses.register.form');
 Route::post('/courses/{slug}/register', [CourseController::class, 'processRegistration'])->name('courses.register');
 
-// Course lesson and quiz routes
-Route::get('/courses/{slug}/lessons', [CourseController::class, 'lessons'])->name('courses.lessons');
-Route::get('/courses/{courseSlug}/lessons/{lessonSlug}', [CourseController::class, 'showLesson'])->name('courses.lesson.show');
-Route::get('/courses/{courseSlug}/lessons/{lessonSlug}/quiz', [CourseController::class, 'showQuiz'])->name('courses.lesson.quiz');
-Route::post('/courses/{courseSlug}/lessons/{lessonSlug}/quiz', [CourseController::class, 'submitQuiz'])->name('courses.lesson.quiz.submit');
-
-// Certificate download route
+// Certificate download route (public access)
 Route::get('/certificate/{enrollment_id}/download', [CourseController::class, 'downloadCertificate'])->name('certificate.download');
 
 // Route for the events controller
@@ -64,9 +58,9 @@ Route::middleware('auth:member')->group(function () {
     Route::get('/my-courses', [CourseController::class, 'dashboard'])->name('courses.dashboard');
     Route::get('/courses/{slug}/lessons', [CourseController::class, 'lessons'])->name('courses.lessons');
     Route::get('/courses/{courseSlug}/lessons/{lessonSlug}', [CourseController::class, 'showLesson'])->name('courses.lesson.show');
+    Route::get('/courses/{courseSlug}/lessons/{lessonSlug}/quiz', [CourseController::class, 'showQuiz'])->name('courses.lesson.quiz');
     Route::post('/courses/{courseSlug}/lessons/{lessonSlug}/complete', [CourseController::class, 'completeLesson'])->name('courses.lesson.complete');
     Route::post('/courses/{courseSlug}/lessons/{lessonSlug}/quiz', [CourseController::class, 'submitQuiz'])->name('courses.lesson.quiz.submit');
-    Route::get('/certificate/{enrollment_id}/download', [CourseController::class, 'downloadCertificate'])->name('certificate.download');
 });
 
 // Debug route to check authentication
@@ -81,6 +75,77 @@ Route::get('/auth-debug', function() {
 
 // Test route without middleware
 Route::get('/test-dashboard', [CourseController::class, 'dashboard'])->name('test.dashboard');
+
+// Simple auth test
+Route::get('/auth-test', function() {
+    $memberCheck = \Illuminate\Support\Facades\Auth::guard('member')->check();
+    $memberUser = \Illuminate\Support\Facades\Auth::guard('member')->user();
+    
+    return response()->json([
+        'status' => 'Auth Test',
+        'member_guard_check' => $memberCheck,
+        'member_guard_user' => $memberUser?->email ?? 'null',
+        'member_guard_id' => $memberUser?->id ?? 'null',
+        'session_data' => session()->all(),
+        'session_id' => session()->getId(),
+        'message' => $memberCheck ? 'Member is authenticated' : 'Member is NOT authenticated'
+    ]);
+});
+
+// Session inspection route
+Route::get('/session-debug', function() {
+    $sessionData = session()->all();
+    
+    return response()->json([
+        'session_id' => session()->getId(),
+        'all_session_data' => $sessionData,
+        'auth_session_keys' => array_filter(array_keys($sessionData), function($key) {
+            return strpos($key, 'login_') === 0 || strpos($key, 'password_') === 0;
+        })
+    ]);
+});
+
+// Manual auth test
+Route::get('/manual-auth-test', function() {
+    // Get the session key
+    $sessionKey = 'login_member_59ba36addc2b2f9401580f014c7f58ea4e30989d';
+    $memberId = session($sessionKey);
+    
+    // Try to retrieve the member manually
+    $member = null;
+    if ($memberId) {
+        $member = \App\Models\Member::find($memberId);
+    }
+    
+    return response()->json([
+        'session_key' => $sessionKey,
+        'member_id_from_session' => $memberId,
+        'member_retrieved' => $member ? [
+            'id' => $member->id,
+            'email' => $member->email,
+            'is_active' => $member->is_active
+        ] : null,
+        'auth_guard_check' => \Illuminate\Support\Facades\Auth::guard('member')->check(),
+        'auth_guard_user' => \Illuminate\Support\Facades\Auth::guard('member')->user()?->email,
+        'message' => $member ? 'Member found manually' : 'Member not found'
+    ]);
+});
+
+// Force login test
+Route::get('/force-login-test', function() {
+    $member = \App\Models\Member::find(44);
+    if ($member) {
+        \Illuminate\Support\Facades\Auth::guard('member')->login($member);
+        return response()->json([
+            'manual_login_attempted' => true,
+            'member_email' => $member->email,
+            'auth_check_after_manual_login' => \Illuminate\Support\Facades\Auth::guard('member')->check(),
+            'auth_user_after_manual_login' => \Illuminate\Support\Facades\Auth::guard('member')->user()?->email,
+            'session_after_manual_login' => session()->all()
+        ]);
+    }
+    return response()->json(['error' => 'Member not found']);
+});
 
 Route::get('/volunteer', [VolunteerController::class, 'index'])->name('volunteer.index');
 Route::post('/volunteer', [VolunteerController::class, 'store'])->name('volunteer.store');
