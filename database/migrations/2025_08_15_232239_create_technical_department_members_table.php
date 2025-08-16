@@ -16,8 +16,6 @@ return new class extends Migration
             $table->foreignId('technical_department_id')->constrained()->onDelete('cascade');
             $table->foreignId('member_id')->constrained()->onDelete('cascade');
             $table->string('role')->nullable(); // e.g., 'Sound Engineer', 'Camera Operator', 'Graphics Designer'
-            $table->text('skills')->nullable(); // JSON or text field for skills
-            $table->text('tech_bio')->nullable(); // Technical background/experience
             $table->date('joined_date')->nullable();
             $table->boolean('is_active')->default(true);
             $table->boolean('is_head')->default(false); // if this person is head of department
