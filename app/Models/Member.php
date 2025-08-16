@@ -142,6 +142,16 @@ class Member extends Authenticatable
         return $this->hasMany(TechnicalDepartmentMember::class)->where('is_active', true);
     }
 
+    public function worshipDepartments()
+    {
+        return $this->hasMany(WorshipDepartmentMember::class);
+    }
+
+    public function activeWorshipDepartments()
+    {
+        return $this->hasMany(WorshipDepartmentMember::class)->where('is_active', true);
+    }
+
     // Spouse relationship
     public function spouse()
     {

@@ -19,9 +19,9 @@ class TechnicalDepartmentResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-wrench-screwdriver';
 
-    protected static ?string $navigationGroup = 'Technical Ministry';
+    protected static ?string $navigationGroup = 'Unit Management';
 
-    protected static ?int $navigationSort = 1;
+    protected static ?int $navigationSort = 3;
 
     public static function form(Form $form): Form
     {

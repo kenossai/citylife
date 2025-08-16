@@ -19,9 +19,9 @@ class TechnicalDepartmentMemberResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-users';
 
-    protected static ?string $navigationGroup = 'Technical Ministry';
+    protected static ?string $navigationGroup = 'Unit Management';
 
-    protected static ?int $navigationSort = 2;
+    protected static ?int $navigationSort = 4;
 
     protected static ?string $navigationLabel = 'Technical Members';
 
@@ -51,11 +51,8 @@ class TechnicalDepartmentMemberResource extends Resource
                             ->helperText('e.g., Sound Engineer, Camera Operator, Graphics Designer'),
                     ])->columns(2),
 
-                Forms\Components\Section::make('Technical Skills & Experience')
+                Forms\Components\Section::make('Technical Experience')
                     ->schema([
-                        Forms\Components\TagsInput::make('skills')
-                            ->helperText('List the member\'s technical skills'),
-
                         Forms\Components\Textarea::make('tech_bio')
                             ->label('Technical Background')
                             ->rows(3)
@@ -122,12 +119,6 @@ class TechnicalDepartmentMemberResource extends Resource
                     ->label('Phone')
                     ->searchable()
                     ->placeholder('No phone provided'),
-
-                Tables\Columns\TextColumn::make('skills')
-                    ->badge()
-                    ->separator(',')
-                    ->limit(3)
-                    ->placeholder('No skills listed'),
 
                 Tables\Columns\IconColumn::make('is_head')
                     ->label('Head')

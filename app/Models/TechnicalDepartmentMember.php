@@ -13,7 +13,6 @@ class TechnicalDepartmentMember extends Model
         'technical_department_id',
         'member_id',
         'role',
-        'skills',
         'tech_bio',
         'joined_date',
         'is_active',

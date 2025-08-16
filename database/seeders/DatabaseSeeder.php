@@ -31,6 +31,8 @@ class DatabaseSeeder extends Seeder
             BecomingSectionSeeder::class,
             TeachingSeriesSeeder::class,
             CityLifeTalkTimeSeeder::class,
+            TechnicalDepartmentSeeder::class,
+            WorshipDepartmentSeeder::class,
         ]);
     }
 }
