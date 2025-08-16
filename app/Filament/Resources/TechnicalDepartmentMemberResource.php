@@ -46,9 +46,15 @@ class TechnicalDepartmentMemberResource extends Resource
                             ->required()
                             ->helperText('Select a church member to add to this technical department'),
 
-                        Forms\Components\TextInput::make('role')
-                            ->maxLength(255)
-                            ->helperText('e.g., Sound Engineer, Camera Operator, Graphics Designer'),
+                        Forms\Components\Select::make('role')
+                            ->options(function () {
+                                return \App\Models\DepRole::active()
+                                    ->forDepartment('technical')
+                                    ->pluck('name', 'name');
+                            })
+                            ->searchable()
+                            ->placeholder('Select a technical role')
+                            ->helperText('Choose a role for this technical team member'),
                     ])->columns(2),
 
                 Forms\Components\Section::make('Status & Settings')

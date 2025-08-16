@@ -25,9 +25,14 @@ class MembersRelationManager extends RelationManager
                     ->searchable()
                     ->preload(),
 
-                Forms\Components\TextInput::make('role')
-                    ->maxLength(255)
-                    ->placeholder('e.g., Lead Vocalist, Guitarist, Drummer'),
+                Forms\Components\Select::make('role')
+                    ->options(function () {
+                        return \App\Models\DepRole::active()
+                            ->forDepartment('worship')
+                            ->pluck('name', 'name');
+                    })
+                    ->searchable()
+                    ->placeholder('Select a worship role'),
 
                 Forms\Components\Textarea::make('skills')
                     ->label('Skills & Abilities')

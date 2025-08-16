@@ -42,9 +42,15 @@ class PreacherDepartmentMemberResource extends Resource
                     ->searchable()
                     ->preload(),
 
-                Forms\Components\TextInput::make('role')
-                    ->maxLength(255)
-                    ->placeholder('e.g., Lead Pastor, Youth Pastor, Bible Teacher'),
+                Forms\Components\Select::make('role')
+                    ->options(function () {
+                        return \App\Models\DepRole::active()
+                            ->forDepartment('preacher')
+                            ->pluck('name', 'name');
+                    })
+                    ->searchable()
+                    ->placeholder('Select a preaching role')
+                    ->helperText('Choose a role for this preaching team member'),
 
                 Forms\Components\DatePicker::make('joined_date'),
 

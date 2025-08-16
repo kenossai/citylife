@@ -44,9 +44,15 @@ class WorshipDepartmentMemberResource extends Resource
                     ->required()
                     ->helperText('Select a church member to add to this worship department'),
 
-                Forms\Components\TextInput::make('role')
-                    ->maxLength(255)
-                    ->placeholder('e.g., Lead Vocalist, Guitarist, Drummer'),
+                Forms\Components\Select::make('role')
+                    ->options(function () {
+                        return \App\Models\DepRole::active()
+                            ->forDepartment('worship')
+                            ->pluck('name', 'name');
+                    })
+                    ->searchable()
+                    ->placeholder('Select a worship role')
+                    ->helperText('Choose a role for this worship team member'),
 
                 Forms\Components\Textarea::make('skills')
                     ->label('Skills & Abilities')
@@ -85,13 +91,6 @@ class WorshipDepartmentMemberResource extends Resource
                 Tables\Columns\TextColumn::make('role')
                     ->searchable()
                     ->sortable(),
-
-                Tables\Columns\TextColumn::make('skills')
-                    ->limit(50)
-                    ->tooltip(function (WorshipDepartmentMember $record): ?string {
-                        return $record->skills;
-                    })
-                    ->placeholder('No skills listed'),
 
                 Tables\Columns\TextColumn::make('joined_date')
                     ->date()
