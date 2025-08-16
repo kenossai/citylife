@@ -31,10 +31,6 @@ class MembersRelationManager extends RelationManager
 
                 Forms\Components\DatePicker::make('joined_date'),
 
-                Forms\Components\TextInput::make('sort_order')
-                    ->numeric()
-                    ->default(0),
-
                 Forms\Components\Toggle::make('is_active')
                     ->default(true),
 
@@ -72,10 +68,6 @@ class MembersRelationManager extends RelationManager
                 Tables\Columns\IconColumn::make('is_active')
                     ->label('Active')
                     ->boolean(),
-
-                Tables\Columns\TextColumn::make('sort_order')
-                    ->numeric()
-                    ->sortable(),
             ])
             ->filters([
                 Tables\Filters\TernaryFilter::make('is_active')
@@ -96,7 +88,6 @@ class MembersRelationManager extends RelationManager
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ])
-            ->defaultSort('sort_order');
+            ]);
     }
 }

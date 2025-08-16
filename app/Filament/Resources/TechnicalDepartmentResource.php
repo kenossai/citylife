@@ -68,11 +68,6 @@ class TechnicalDepartmentResource extends Resource
                             ->rows(3)
                             ->helperText('Requirements to join this department'),
 
-                        Forms\Components\TextInput::make('sort_order')
-                            ->numeric()
-                            ->default(0)
-                            ->helperText('Order for display (lower numbers appear first)'),
-
                         Forms\Components\Toggle::make('is_active')
                             ->default(true)
                             ->helperText('Whether this department is active'),
@@ -120,10 +115,6 @@ class TechnicalDepartmentResource extends Resource
                     ->boolean()
                     ->sortable(),
 
-                Tables\Columns\TextColumn::make('sort_order')
-                    ->label('Order')
-                    ->sortable(),
-
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -145,8 +136,8 @@ class TechnicalDepartmentResource extends Resource
                     ->falseLabel('Inactive departments')
                     ->native(false),
             ])
-            ->defaultSort('sort_order')
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([

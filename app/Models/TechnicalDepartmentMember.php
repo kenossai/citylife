@@ -17,14 +17,12 @@ class TechnicalDepartmentMember extends Model
         'joined_date',
         'is_active',
         'is_head',
-        'sort_order',
     ];
 
     protected $casts = [
         'is_active' => 'boolean',
         'is_head' => 'boolean',
         'joined_date' => 'date',
-        'skills' => 'array',
     ];
 
     public function scopeActive($query)

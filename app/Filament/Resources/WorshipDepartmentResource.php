@@ -55,10 +55,6 @@ class WorshipDepartmentResource extends Resource
                 Forms\Components\Textarea::make('requirements')
                     ->columnSpanFull(),
 
-                Forms\Components\TextInput::make('sort_order')
-                    ->numeric()
-                    ->default(0),
-
                 Forms\Components\Toggle::make('is_active')
                     ->default(true),
             ]);
@@ -89,10 +85,6 @@ class WorshipDepartmentResource extends Resource
                     ->label('Members')
                     ->sortable(),
 
-                Tables\Columns\TextColumn::make('sort_order')
-                    ->numeric()
-                    ->sortable(),
-
                 Tables\Columns\IconColumn::make('is_active')
                     ->boolean(),
 
@@ -117,8 +109,7 @@ class WorshipDepartmentResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ])
-            ->defaultSort('sort_order');
+            ]);
     }
 
     public static function getRelations(): array

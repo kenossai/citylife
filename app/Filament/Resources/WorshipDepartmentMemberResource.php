@@ -48,16 +48,12 @@ class WorshipDepartmentMemberResource extends Resource
                     ->maxLength(255)
                     ->placeholder('e.g., Lead Vocalist, Guitarist, Drummer'),
 
-                Forms\Components\Textarea::make('worship_bio')
-                    ->label('Worship Background')
-                    ->placeholder('Worship experience and background')
-                    ->columnSpanFull(),
+                Forms\Components\Textarea::make('skills')
+                    ->label('Skills & Abilities')
+                    ->placeholder('List musical skills, instruments, or abilities')
+                    ->helperText('Describe specific skills, instruments played, or abilities this member brings'),
 
                 Forms\Components\DatePicker::make('joined_date'),
-
-                Forms\Components\TextInput::make('sort_order')
-                    ->numeric()
-                    ->default(0),
 
                 Forms\Components\Toggle::make('is_active')
                     ->default(true),
@@ -90,6 +86,13 @@ class WorshipDepartmentMemberResource extends Resource
                     ->searchable()
                     ->sortable(),
 
+                Tables\Columns\TextColumn::make('skills')
+                    ->limit(50)
+                    ->tooltip(function (WorshipDepartmentMember $record): ?string {
+                        return $record->skills;
+                    })
+                    ->placeholder('No skills listed'),
+
                 Tables\Columns\TextColumn::make('joined_date')
                     ->date()
                     ->sortable(),
@@ -101,10 +104,6 @@ class WorshipDepartmentMemberResource extends Resource
                 Tables\Columns\IconColumn::make('is_active')
                     ->label('Active')
                     ->boolean(),
-
-                Tables\Columns\TextColumn::make('sort_order')
-                    ->numeric()
-                    ->sortable(),
 
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -138,8 +137,7 @@ class WorshipDepartmentMemberResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ])
-            ->defaultSort('sort_order');
+            ]);
     }
 
     public static function getRelations(): array

@@ -14,14 +14,12 @@ class PreacherDepartmentMember extends Model
         'joined_date',
         'is_active',
         'is_head',
-        'sort_order',
     ];
 
     protected $casts = [
         'joined_date' => 'date',
         'is_active' => 'boolean',
         'is_head' => 'boolean',
-        'sort_order' => 'integer',
     ];
 
     public function preacherDepartment(): BelongsTo

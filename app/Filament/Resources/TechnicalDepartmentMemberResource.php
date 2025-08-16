@@ -51,14 +51,6 @@ class TechnicalDepartmentMemberResource extends Resource
                             ->helperText('e.g., Sound Engineer, Camera Operator, Graphics Designer'),
                     ])->columns(2),
 
-                Forms\Components\Section::make('Technical Experience')
-                    ->schema([
-                        Forms\Components\Textarea::make('tech_bio')
-                            ->label('Technical Background')
-                            ->rows(3)
-                            ->helperText('Technical experience and background specific to this department'),
-                    ]),
-
                 Forms\Components\Section::make('Status & Settings')
                     ->schema([
                         Forms\Components\DatePicker::make('joined_date')
@@ -71,11 +63,6 @@ class TechnicalDepartmentMemberResource extends Resource
                         Forms\Components\Toggle::make('is_head')
                             ->label('Department Head')
                             ->helperText('Is this member the head of the department?'),
-
-                        Forms\Components\TextInput::make('sort_order')
-                            ->numeric()
-                            ->default(0)
-                            ->helperText('Order for display (lower numbers appear first)'),
                     ])->columns(2),
             ]);
     }
@@ -110,15 +97,6 @@ class TechnicalDepartmentMemberResource extends Resource
                     ->searchable()
                     ->placeholder('No role specified'),
 
-                Tables\Columns\TextColumn::make('member.email')
-                    ->label('Email')
-                    ->searchable()
-                    ->placeholder('No email provided'),
-
-                Tables\Columns\TextColumn::make('member.phone')
-                    ->label('Phone')
-                    ->searchable()
-                    ->placeholder('No phone provided'),
 
                 Tables\Columns\IconColumn::make('is_head')
                     ->label('Head')
@@ -158,8 +136,8 @@ class TechnicalDepartmentMemberResource extends Resource
                     ->falseLabel('Regular members')
                     ->native(false),
             ])
-            ->defaultSort('sort_order')
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([

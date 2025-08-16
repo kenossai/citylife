@@ -29,11 +29,12 @@ class MembersRelationManager extends RelationManager
                     ->maxLength(255)
                     ->placeholder('e.g., Lead Vocalist, Guitarist, Drummer'),
 
-                Forms\Components\DatePicker::make('joined_date'),
+                Forms\Components\Textarea::make('skills')
+                    ->label('Skills & Abilities')
+                    ->placeholder('List musical skills, instruments, or abilities')
+                    ->columnSpanFull(),
 
-                Forms\Components\TextInput::make('sort_order')
-                    ->numeric()
-                    ->default(0),
+                Forms\Components\DatePicker::make('joined_date'),
 
                 Forms\Components\Toggle::make('is_active')
                     ->default(true),
@@ -61,6 +62,10 @@ class MembersRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('role')
                     ->searchable(),
 
+                Tables\Columns\TextColumn::make('skills')
+                    ->limit(40)
+                    ->placeholder('No skills listed'),
+
                 Tables\Columns\TextColumn::make('joined_date')
                     ->date()
                     ->sortable(),
@@ -72,10 +77,6 @@ class MembersRelationManager extends RelationManager
                 Tables\Columns\IconColumn::make('is_active')
                     ->label('Active')
                     ->boolean(),
-
-                Tables\Columns\TextColumn::make('sort_order')
-                    ->numeric()
-                    ->sortable(),
             ])
             ->filters([
                 Tables\Filters\TernaryFilter::make('is_active')
@@ -96,7 +97,6 @@ class MembersRelationManager extends RelationManager
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ])
-            ->defaultSort('sort_order');
+            ]);
     }
 }

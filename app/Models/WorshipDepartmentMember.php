@@ -11,18 +11,17 @@ class WorshipDepartmentMember extends Model
         'worship_department_id',
         'member_id',
         'role',
+        'skills',
         'worship_bio',
         'joined_date',
         'is_active',
         'is_head',
-        'sort_order',
     ];
 
     protected $casts = [
         'joined_date' => 'date',
         'is_active' => 'boolean',
         'is_head' => 'boolean',
-        'sort_order' => 'integer',
     ];
 
     public function worshipDepartment(): BelongsTo

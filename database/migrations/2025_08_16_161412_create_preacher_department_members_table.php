@@ -19,7 +19,6 @@ return new class extends Migration
             $table->date('joined_date')->nullable();
             $table->boolean('is_active')->default(true);
             $table->boolean('is_head')->default(false); // if this person is head of department
-            $table->integer('sort_order')->default(0);
             $table->timestamps();
 
             // Ensure a member can only be in each preaching department once

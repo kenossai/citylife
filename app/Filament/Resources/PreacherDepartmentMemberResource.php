@@ -48,10 +48,6 @@ class PreacherDepartmentMemberResource extends Resource
 
                 Forms\Components\DatePicker::make('joined_date'),
 
-                Forms\Components\TextInput::make('sort_order')
-                    ->numeric()
-                    ->default(0),
-
                 Forms\Components\Toggle::make('is_active')
                     ->default(true),
 
@@ -95,10 +91,6 @@ class PreacherDepartmentMemberResource extends Resource
                     ->label('Active')
                     ->boolean(),
 
-                Tables\Columns\TextColumn::make('sort_order')
-                    ->numeric()
-                    ->sortable(),
-
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -131,8 +123,7 @@ class PreacherDepartmentMemberResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ])
-            ->defaultSort('sort_order');
+            ]);
     }
 
     public static function getRelations(): array
