@@ -357,11 +357,37 @@ class CourseController extends Controller
      */
     public function showQuiz($courseSlug, $lessonSlug)
     {
+        // Force authentication restoration FIRST
+        $authenticatedMember = $this->getAuthenticatedMember();
+        
+        // Add debugging
+        Log::info('showQuiz called', [
+            'courseSlug' => $courseSlug,
+            'lessonSlug' => $lessonSlug,
+            'member_guard_check_before' => Auth::guard('member')->check(),
+            'member_guard_check_after_restore' => Auth::guard('member')->check(),
+            'authenticated_member' => $authenticatedMember ? $authenticatedMember->email : null,
+            'session_id' => session()->getId(),
+            'user_email_session' => session('user_email'),
+        ]);
+
+        if (!$authenticatedMember) {
+            Log::info('Authentication failed in showQuiz, redirecting to login');
+            return redirect()->route('member.login')
+                ->with('error', 'Please log in to access quizzes.')
+                ->with('intended', request()->url());
+        }
+
         $course = Course::where('slug', $courseSlug)->firstOrFail();
         $lesson = $course->lessons()->where('slug', $lessonSlug)->firstOrFail();
 
         // Check if user is enrolled
         $userEnrollment = $this->getUserEnrollment($course);
+
+        Log::info('getUserEnrollment result', [
+            'userEnrollment' => $userEnrollment ? $userEnrollment->id : null,
+            'member_guard_after_check' => Auth::guard('member')->check(),
+        ]);
 
         if (!$userEnrollment) {
             return redirect()->route('courses.show', $courseSlug)
@@ -395,6 +421,20 @@ class CourseController extends Controller
      */
     public function submitQuiz(Request $request, $courseSlug, $lessonSlug)
     {
+        // Force authentication restoration FIRST
+        $authenticatedMember = $this->getAuthenticatedMember();
+        
+        Log::info('submitQuiz called', [
+            'courseSlug' => $courseSlug,
+            'lessonSlug' => $lessonSlug,
+            'member_guard_check' => Auth::guard('member')->check(),
+            'authenticated_member' => $authenticatedMember ? $authenticatedMember->email : null,
+        ]);
+
+        if (!$authenticatedMember) {
+            return response()->json(['error' => 'Authentication required', 'redirect' => route('member.login')], 401);
+        }
+
         $course = Course::where('slug', $courseSlug)->firstOrFail();
         $lesson = $course->lessons()->where('slug', $lessonSlug)->firstOrFail();
 
@@ -521,24 +561,43 @@ class CourseController extends Controller
         // First check if user is authenticated via member guard
         if (Auth::guard('member')->check()) {
             $member = Auth::guard('member')->user();
+            Log::info('Found member via guard: ' . $member->email);
         } else {
-            // Fallback to session-based system
-            $email = session('user_email');
-
-            if (!$email) {
-                return null;
-            }
-
-            $member = Member::where('email', $email)->first();
-
+            // Try to restore authentication from session
+            $member = $this->getAuthenticatedMember();
+            
             if (!$member) {
-                return null;
+                // Fallback to old session-based system
+                $email = session('user_email');
+                Log::info('Trying fallback with session user_email: ' . $email);
+
+                if (!$email) {
+                    Log::info('No user_email in session, authentication failed');
+                    return null;
+                }
+
+                $member = Member::where('email', $email)->first();
+
+                if (!$member) {
+                    Log::info('Member not found for email: ' . $email);
+                    return null;
+                }
+                
+                Log::info('Found member via session email: ' . $member->email);
             }
         }
 
-        return CourseEnrollment::where('course_id', $course->id)
+        $enrollment = CourseEnrollment::where('course_id', $course->id)
             ->where('user_id', $member->id)
             ->first();
+            
+        Log::info('Enrollment check', [
+            'member_id' => $member->id,
+            'course_id' => $course->id,
+            'enrollment_found' => $enrollment ? $enrollment->id : null
+        ]);
+
+        return $enrollment;
     }
 
     public function downloadCertificate($enrollment_id)

@@ -1,6 +1,91 @@
 <x-app-layout>
     @section('title', 'Quiz: ' . $lesson->title . ' - ' . $course->title)
 
+    <!-- Critical JavaScript - Must be available immediately -->
+    <script>
+        function submitQuizNow() {
+            console.log('Submit quiz function called');
+
+            // Get elements
+            const form = document.getElementById('quizForm');
+            const button = document.getElementById('submitQuizBtn');
+
+            if (!form || !button) {
+                alert('Quiz elements not found. Please refresh the page.');
+                return false;
+            }
+
+            // Confirm submission
+            if (!confirm('Are you sure you want to submit your quiz? You can retake it later if needed.')) {
+                return false;
+            }
+
+            // Disable button and show loading
+            button.disabled = true;
+            button.innerHTML = '<i class="spinner-border spinner-border-sm me-2"></i>Submitting...';
+
+            // Submit via AJAX for JSON response
+            const formData = new FormData(form);
+            
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(`Quiz submitted successfully!\n\nScore: ${Math.round(data.score)}%\nCorrect: ${data.correct_answers}/${data.total_questions}\n${data.passed ? '✅ Passed!' : '❌ Needs improvement'}`);
+                    window.location.href = data.redirect_url;
+                } else {
+                    alert('Error: ' + (data.error || 'Unknown error'));
+                    button.disabled = false;
+                    button.innerHTML = '<i class="icon-check me-2"></i>Submit Quiz';
+                }
+            })
+            .catch(error => {
+                console.error('Submission error:', error);
+                alert('An error occurred while submitting the quiz. Please try again.');
+                button.disabled = false;
+                button.innerHTML = '<i class="icon-check me-2"></i>Submit Quiz';
+            });
+
+            return false;
+        }
+
+        // Make it globally available immediately
+        window.submitQuizNow = submitQuizNow;
+
+        // Add immediate event binding when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Head script: DOM loaded, looking for submit button');
+            const btn = document.getElementById('submitQuizBtn');
+            if (btn) {
+                console.log('Head script: Found submit button, adding onclick');
+                btn.onclick = function(e) {
+                    console.log('Head script: Button clicked!');
+                    e.preventDefault();
+                    
+                    // Try to use the enhanced modal version if available
+                    if (typeof processQuizSubmission === 'function') {
+                        console.log('Using enhanced modal submission');
+                        processQuizSubmission();
+                    } else {
+                        console.log('Enhanced submission not available, using basic version');
+                        submitQuizNow();
+                    }
+                    return false;
+                };
+            } else {
+                console.log('Head script: Submit button not found yet');
+            }
+        });
+    </script>
+
     <!-- Modern Quiz Header -->
     <div class="quiz-header">
         <div class="container">
@@ -153,7 +238,7 @@
                                     <button type="button" class="btn-modern btn-outline" onclick="window.history.back()">
                                         <i class="icon-arrow-left me-2"></i>Back to Lesson
                                     </button>
-                                    <button type="submit" class="btn-modern btn-primary" id="submitQuizBtn">
+                                    <button type="button" class="btn-modern btn-primary" id="submitQuizBtn">
                                         <i class="icon-check me-2"></i>Submit Quiz
                                     </button>
                                 </div>
@@ -161,20 +246,32 @@
                         </form>
                     </div>
 
-                    <!-- Quiz Results Modal -->
+                    <!-- Beautiful Quiz Results Modal -->
                     <div class="modal fade" id="quizResultsModal" tabindex="-1" aria-labelledby="quizResultsModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-lg">
+                        <div class="modal-dialog modal-lg modal-dialog-centered">
                             <div class="modal-content modern-modal">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="quizResultsModalLabel">Quiz Results</h5>
+                                    <h5 class="modal-title" id="quizResultsModalLabel">
+                                        <i class="icon-award me-2"></i>Quiz Results
+                                    </h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
-                                <div class="modal-body text-center" id="quizResultsContent">
-                                    <!-- Results will be loaded here -->
+                                <div class="modal-body" id="quizResultsContent">
+                                    <!-- Beautiful results will be loaded here -->
+                                    <div class="loading-results text-center py-5">
+                                        <div class="spinner-border text-primary mb-3" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                        <p class="text-muted">Calculating your results...</p>
+                                    </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-primary" id="continueBtn">Continue</button>
+                                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                        <i class="icon-x me-2"></i>Close
+                                    </button>
+                                    <button type="button" class="btn btn-primary btn-lg" id="continueBtn">
+                                        <i class="icon-arrow-right me-2"></i>Continue
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -186,95 +283,425 @@
 
     @push('scripts')
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const quizForm = document.getElementById('quizForm');
-            const submitBtn = document.getElementById('submitQuizBtn');
-            const resultsModal = new bootstrap.Modal(document.getElementById('quizResultsModal'));
 
-            quizForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-
-                // Confirm submission
-                if (!confirm('Are you sure you want to submit your quiz? You can retake it later if needed.')) {
-                    return;
+        // Now do authentication check
+        console.log('Quiz page loaded');
+        console.log('Auth check URL: /auth-debug');
+        
+        // Fetch auth status for debugging
+        fetch('/auth-debug')
+            .then(response => response.json())
+            .then(data => {
+                console.log('Authentication status:', data);
+                if (!data.member_guard_check && !data.session_user_email && !data.session_member_id) {
+                    console.warn('⚠️ User appears to be logged out!');
                 }
+            })
+            .catch(error => console.error('Auth check failed:', error));
 
-                // Disable submit button
-                submitBtn.disabled = true;
-                submitBtn.innerHTML = '<i class="spinner-border spinner-border-sm me-2"></i>Submitting...';
+        // Global variables
+        let quizForm, submitBtn, resultsModalElement, resultsModal;
 
-                // Get form data
-                const formData = new FormData(quizForm);
+        function initializeQuizForm() {
+            console.log('Initializing quiz form...');
 
-                // Submit via AJAX
-                fetch(quizForm.action, {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        showResults(data);
-                    } else {
-                        alert('Error submitting quiz: ' + (data.message || 'Unknown error'));
-                        submitBtn.disabled = false;
-                        submitBtn.innerHTML = '<i class="icon-check me-2"></i>Submit Quiz';
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('An error occurred while submitting the quiz. Please try again.');
-                    submitBtn.disabled = false;
-                    submitBtn.innerHTML = '<i class="icon-check me-2"></i>Submit Quiz';
-                });
+            quizForm = document.getElementById('quizForm');
+            submitBtn = document.getElementById('submitQuizBtn');
+            resultsModalElement = document.getElementById('quizResultsModal');
+
+            console.log('Elements found:', {
+                quizForm: !!quizForm,
+                submitBtn: !!submitBtn,
+                resultsModalElement: !!resultsModalElement
             });
 
+            if (!quizForm || !submitBtn || !resultsModalElement) {
+                console.error('Required elements not found');
+                return false;
+            }
+
+            // Initialize Bootstrap modal
+            if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+                resultsModal = new bootstrap.Modal(resultsModalElement);
+                console.log('Bootstrap modal initialized');
+            } else {
+                console.log('Using fallback modal - Bootstrap not available');
+                resultsModal = {
+                    show: function() {
+                        console.log('Showing fallback modal');
+                        resultsModalElement.style.display = 'block';
+                        resultsModalElement.classList.add('show');
+                        resultsModalElement.style.zIndex = '1055';
+                        document.body.classList.add('modal-open');
+
+                        // Create backdrop
+                        const existingBackdrop = document.getElementById('modal-backdrop');
+                        if (existingBackdrop) existingBackdrop.remove();
+                        
+                        const backdrop = document.createElement('div');
+                        backdrop.className = 'modal-backdrop fade show';
+                        backdrop.id = 'modal-backdrop';
+                        backdrop.style.zIndex = '1050';
+                        document.body.appendChild(backdrop);
+                        
+                        // Ensure modal is properly positioned
+                        setTimeout(function() {
+                            resultsModalElement.style.paddingLeft = '0px';
+                            resultsModalElement.style.paddingRight = '0px';
+                        }, 100);
+                    },
+                    hide: function() {
+                        console.log('Hiding fallback modal');
+                        resultsModalElement.style.display = 'none';
+                        resultsModalElement.classList.remove('show');
+                        document.body.classList.remove('modal-open');
+
+                        const backdrop = document.getElementById('modal-backdrop');
+                        if (backdrop) backdrop.remove();
+                    }
+                };
+            }
+
+            // Only prevent form default submission, don't add conflicting click handlers
+            quizForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('Form submit event prevented');
+                return false;
+            });
+
+            console.log('Quiz form initialized successfully');
+            return true;
+        }
+
+        function handleQuizSubmission(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            console.log('Submit button clicked');
+            return processQuizSubmission();
+        }
+
+        // Global function that can be called directly
+        window.handleQuizSubmissionDirect = function(e) {
+            console.log('Direct submission handler called');
+            if (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            return processQuizSubmission();
+        };
+
+        function processQuizSubmission() {
+            console.log('Processing quiz submission...');
+
+            // Make sure we have the elements
+            if (!quizForm) quizForm = document.getElementById('quizForm');
+            if (!submitBtn) submitBtn = document.getElementById('submitQuizBtn');
+            if (!resultsModalElement) resultsModalElement = document.getElementById('quizResultsModal');
+
+            if (!quizForm || !submitBtn || !resultsModalElement) {
+                alert('Quiz form elements not found. Please refresh the page.');
+                return false;
+            }
+
+            // Initialize modal if not done
+            if (!resultsModal) {
+                if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+                    resultsModal = new bootstrap.Modal(resultsModalElement);
+                } else {
+                    resultsModal = {
+                        show: function() {
+                            resultsModalElement.style.display = 'block';
+                            resultsModalElement.classList.add('show');
+                            document.body.classList.add('modal-open');
+                        },
+                        hide: function() {
+                            resultsModalElement.style.display = 'none';
+                            resultsModalElement.classList.remove('show');
+                            document.body.classList.remove('modal-open');
+                        }
+                    };
+                }
+            }
+
+            // Confirm submission
+            if (!confirm('Are you sure you want to submit your quiz? You can retake it later if needed.')) {
+                return false;
+            }
+
+            console.log('User confirmed submission');
+
+            // Disable submit button and show loading
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="spinner-border spinner-border-sm me-2"></i>Submitting...';
+
+            // Get form data
+            const formData = new FormData(quizForm);
+
+            // Debug form data
+            console.log('Form data entries:');
+            for (let [key, value] of formData.entries()) {
+                console.log(key, value);
+            }
+
+            // Show modal with loading state immediately
+            resultsModal.show();
+
+            // Submit via AJAX
+            fetch(quizForm.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => {
+                console.log('Response received:', response.status, response.statusText);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Quiz response data:', data);
+
+                if (data.success) {
+                    setTimeout(() => {
+                        showResults(data);
+                    }, 1200);
+                } else {
+                    resultsModal.hide();
+                    alert('Error submitting quiz: ' + (data.error || data.message || 'Unknown error'));
+                    resetSubmitButton();
+                }
+            })
+            .catch(error => {
+                console.error('Quiz submission error:', error);
+                resultsModal.hide();
+                alert('An error occurred while submitting the quiz. Please try again.');
+                resetSubmitButton();
+            });
+
+            return true;
+        }
+
+        function resetSubmitButton() {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="icon-check me-2"></i>Submit Quiz';
+        }
+
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, initializing quiz...');
+            initializeQuizForm();
+
+            // Add click event listener to submit button for modal functionality
+            const submitBtn = document.getElementById('submitQuizBtn');
+            if (submitBtn) {
+                console.log('Adding click event listener to submit button');
+                submitBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('Submit button clicked - processing with modal');
+                    
+                    // Check if we have the enhanced modal functionality available
+                    if (typeof processQuizSubmission === 'function') {
+                        processQuizSubmission();
+                    } else {
+                        // Fallback to basic submission
+                        console.log('Using fallback submission');
+                        submitQuizNow();
+                    }
+                });
+            } else {
+                console.error('Submit button not found during initialization');
+            }
+        });
+
+        // Additional immediate event listener setup
+        setTimeout(function() {
+            const submitBtn = document.getElementById('submitQuizBtn');
+            if (submitBtn && !submitBtn.hasAttribute('data-listener-added')) {
+                console.log('Adding backup click listener');
+                submitBtn.setAttribute('data-listener-added', 'true');
+                submitBtn.onclick = function(e) {
+                    e.preventDefault();
+                    console.log('Backup onclick handler triggered');
+                    if (typeof processQuizSubmission === 'function') {
+                        processQuizSubmission();
+                    } else {
+                        submitQuizNow();
+                    }
+                    return false;
+                };
+            }
+        }, 500);
+
+        // Backup initialization in case DOMContentLoaded already fired
+        if (document.readyState === 'loading') {
+            console.log('Document still loading...');
+        } else {
+            console.log('Document already loaded, initializing immediately...');
+            setTimeout(initializeQuizForm, 100);
+        }
+
+        // Additional fallback - try to initialize every second for up to 10 seconds
+        let initAttempts = 0;
+        const maxAttempts = 10;
+        const initInterval = setInterval(function() {
+            initAttempts++;
+            console.log(`Initialization attempt ${initAttempts}`);
+
+            if (initializeQuizForm() || initAttempts >= maxAttempts) {
+                clearInterval(initInterval);
+                if (initAttempts >= maxAttempts) {
+                    console.error('Failed to initialize quiz form after maximum attempts');
+                }
+            }
+        }, 1000);
+
             function showResults(data) {
+                console.log('showResults called with data:', data);
                 const resultContent = document.getElementById('quizResultsContent');
                 const continueBtn = document.getElementById('continueBtn');
+                
+                console.log('Result elements:', {
+                    resultContent: !!resultContent,
+                    continueBtn: !!continueBtn
+                });
 
                 const passed = data.passed;
                 const score = Math.round(data.score);
 
                 resultContent.innerHTML = `
-                    <div class="quiz-results">
-                        <div class="score-display mb-4">
-                            <div class="score-circle ${passed ? 'success' : 'warning'} mx-auto mb-3">
-                                <span class="score-text">${score}%</span>
+                    <div class="beautiful-quiz-results">
+                        <!-- Animated Result Header -->
+                        <div class="result-header mb-4">
+                            <div class="result-animation">
+                                ${passed
+                                    ? '<div class="success-animation"><i class="icon-check-circle result-icon success-icon"></i></div>'
+                                    : '<div class="retry-animation"><i class="icon-info-circle result-icon retry-icon"></i></div>'
+                                }
                             </div>
-                            <h4 class="${passed ? 'text-success' : 'text-warning'}">
-                                ${passed ? 'Congratulations! You Passed!' : 'Keep Trying!'}
-                            </h4>
-                        </div>
-
-                        <div class="score-details mb-4">
-                            <p class="mb-2"><strong>Score:</strong> ${data.correct_answers} out of ${data.total_questions} correct</p>
-                            <p class="mb-2"><strong>Percentage:</strong> ${score}%</p>
-                            <p class="mb-0"><strong>Status:</strong>
-                                <span class="badge ${passed ? 'badge-success' : 'badge-warning'}">${passed ? 'Passed' : 'Not Passed'}</span>
+                            <h3 class="result-title ${passed ? 'text-success' : 'text-warning'} mb-2">
+                                ${passed ? '🎉 Excellent Work!' : '📚 Keep Learning!'}
+                            </h3>
+                            <p class="result-subtitle mb-0">
+                                ${passed
+                                    ? 'You\'ve successfully completed this quiz!'
+                                    : 'Learning is a journey. You\'re making progress!'
+                                }
                             </p>
                         </div>
 
-                        <div class="next-steps">
-                            ${passed
-                                ? '<p class="text-success">Great job! You can now proceed to the next lesson.</p>'
-                                : '<p class="text-warning">You need 70% or higher to pass. You can retake the quiz anytime.</p>'
-                            }
+                        <!-- Beautiful Score Display -->
+                        <div class="score-showcase mb-4">
+                            <div class="score-circle-container">
+                                <div class="score-circle ${passed ? 'success' : 'warning'}">
+                                    <div class="score-inner">
+                                        <span class="score-percentage">${score}%</span>
+                                        <div class="score-ring">
+                                            <svg class="progress-ring" width="120" height="120">
+                                                <circle class="progress-ring-bg" cx="60" cy="60" r="50"></circle>
+                                                <circle class="progress-ring-fill ${passed ? 'success-ring' : 'warning-ring'}"
+                                                        cx="60" cy="60" r="50"
+                                                        style="stroke-dasharray: ${2 * Math.PI * 50}; stroke-dashoffset: ${2 * Math.PI * 50 * (1 - score/100)}">
+                                                </circle>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Detailed Results -->
+                        <div class="results-details mb-4">
+                            <div class="row">
+                                <div class="col-4">
+                                    <div class="detail-card">
+                                        <div class="detail-icon">
+                                            <i class="icon-check-square"></i>
+                                        </div>
+                                        <div class="detail-value">${data.correct_answers}</div>
+                                        <div class="detail-label">Correct</div>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="detail-card">
+                                        <div class="detail-icon">
+                                            <i class="icon-x-square"></i>
+                                        </div>
+                                        <div class="detail-value">${data.total_questions - data.correct_answers}</div>
+                                        <div class="detail-label">Incorrect</div>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="detail-card">
+                                        <div class="detail-icon">
+                                            <i class="icon-list"></i>
+                                        </div>
+                                        <div class="detail-value">${data.total_questions}</div>
+                                        <div class="detail-label">Total</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Status Badge -->
+                        <div class="status-section mb-4">
+                            <div class="status-badge ${passed ? 'status-passed' : 'status-retry'}">
+                                <i class="${passed ? 'icon-award' : 'icon-refresh-ccw'} me-2"></i>
+                                ${passed ? 'Quiz Passed!' : 'Needs Improvement'}
+                            </div>
+                        </div>
+
+                        <!-- Next Steps -->
+                        <div class="next-steps-card">
+                            <div class="next-steps-header">
+                                <i class="${passed ? 'icon-arrow-right' : 'icon-book-open'} me-2"></i>
+                                What's Next?
+                            </div>
+                            <div class="next-steps-content">
+                                ${passed
+                                    ? '<p class="mb-0">🚀 Great job! You can now continue to the next lesson and keep building your knowledge.</p>'
+                                    : '<p class="mb-0">💪 Don\'t worry! Review the lesson material and try again. You need 70% or higher to pass.</p>'
+                                }
+                            </div>
                         </div>
                     </div>
                 `;
+
+                continueBtn.innerHTML = passed
+                    ? '<i class="icon-arrow-right me-2"></i>Continue to Next Lesson'
+                    : '<i class="icon-refresh-ccw me-2"></i>Review & Retry';
+
+                continueBtn.className = passed
+                    ? 'btn btn-success btn-lg'
+                    : 'btn btn-primary btn-lg';
 
                 continueBtn.onclick = function() {
                     window.location.href = data.redirect_url;
                 };
 
+                // Add close button functionality
+                const closeButtons = document.querySelectorAll('#quizResultsModal [data-bs-dismiss="modal"], #quizResultsModal .btn-close');
+                closeButtons.forEach(button => {
+                    button.onclick = function() {
+                        resultsModal.hide();
+                    };
+                });
+
                 resultsModal.show();
+
+                // Trigger animations
+                setTimeout(() => {
+                    document.querySelector('.result-animation').classList.add('animate');
+                    document.querySelector('.score-circle').classList.add('animate');
+                }, 100);
             }
-        });
     </script>
     @endpush
 
@@ -708,6 +1135,347 @@
             font-weight: 600;
         }
 
+        /* Beautiful Quiz Results Styles */
+        .beautiful-quiz-results {
+            padding: 2rem 1rem;
+            text-align: center;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border-radius: 20px;
+            margin: -1rem;
+        }
+
+        .result-header {
+            position: relative;
+        }
+
+        .result-animation {
+            margin-bottom: 1rem;
+            opacity: 0;
+            transform: scale(0.5);
+            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .result-animation.animate {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .result-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        .success-icon {
+            color: #22c55e;
+            filter: drop-shadow(0 4px 8px rgba(34, 197, 94, 0.3));
+            animation: successPulse 2s infinite;
+        }
+
+        .retry-icon {
+            color: #f59e0b;
+            filter: drop-shadow(0 4px 8px rgba(245, 158, 11, 0.3));
+            animation: retryBounce 2s infinite;
+        }
+
+        @keyframes successPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        @keyframes retryBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .result-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .result-subtitle {
+            font-size: 1.1rem;
+            color: #6b7280;
+            margin-bottom: 0;
+        }
+
+        /* Beautiful Score Circle */
+        .score-showcase {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            margin: 2rem 0;
+        }
+
+        .score-circle-container {
+            position: relative;
+        }
+
+        .score-circle {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: white;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            transform: scale(0.8);
+            opacity: 0;
+            transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .score-circle.animate {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .score-circle.success {
+            border: 4px solid #22c55e;
+            background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+        }
+
+        .score-circle.warning {
+            border: 4px solid #f59e0b;
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+        }
+
+        .score-inner {
+            text-align: center;
+            z-index: 2;
+            position: relative;
+        }
+
+        .score-percentage {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #1f2937;
+            display: block;
+        }
+
+        .score-ring {
+            position: absolute;
+            top: -6px;
+            left: -6px;
+            width: 172px;
+            height: 172px;
+        }
+
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+
+        .progress-ring-bg {
+            fill: none;
+            stroke: #e5e7eb;
+            stroke-width: 6;
+        }
+
+        .progress-ring-fill {
+            fill: none;
+            stroke-width: 6;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 1.5s ease-in-out;
+        }
+
+        .success-ring {
+            stroke: #22c55e;
+        }
+
+        .warning-ring {
+            stroke: #f59e0b;
+        }
+
+        /* Detail Cards */
+        .results-details {
+            margin: 2rem 0;
+        }
+
+        .detail-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem 1rem;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+            border: 1px solid #f3f4f6;
+        }
+
+        .detail-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        .detail-icon {
+            font-size: 1.5rem;
+            color: #6b7280;
+            margin-bottom: 0.5rem;
+        }
+
+        .detail-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 0.25rem;
+        }
+
+        .detail-label {
+            font-size: 0.875rem;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        /* Status Badge */
+        .status-section {
+            display: flex;
+            justify-content: center;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .status-passed {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: white;
+        }
+
+        .status-retry {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+        }
+
+        /* Next Steps Card */
+        .next-steps-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border: 1px solid #f3f4f6;
+        }
+
+        .next-steps-header {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .next-steps-content {
+            color: #6b7280;
+            line-height: 1.6;
+        }
+
+        /* Modal Enhancements */
+        .modal-lg .modal-content.modern-modal {
+            border: none;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Fallback modal styles */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1055;
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+            overflow-y: auto;
+            outline: 0;
+        }
+
+        .modal.show {
+            display: block !important;
+        }
+
+        .modal-dialog-centered {
+            display: flex;
+            align-items: center;
+            min-height: calc(100% - 1rem);
+            justify-content: center;
+        }
+        
+        .modal-dialog {
+            position: relative;
+            width: auto;
+            margin: 0.5rem;
+            pointer-events: none;
+        }
+        
+        .modal-content {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            pointer-events: auto;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            border-radius: 0.3rem;
+            outline: 0;
+        }
+
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1050;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        
+        .modal-backdrop.fade {
+            opacity: 0;
+        }
+        
+        .modal-backdrop.show {
+            opacity: 0.5;
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 1.5rem 2rem;
+        }
+
+        .modal-title {
+            font-weight: 600;
+            font-size: 1.25rem;
+        }
+
+        .btn-close {
+            filter: brightness(0) invert(1);
+            opacity: 0.8;
+        }
+
+        .btn-close:hover {
+            opacity: 1;
+        }
+
+        .modal-footer {
+            background: #f8fafc;
+            border: none;
+            padding: 1.5rem 2rem;
+            justify-content: center;
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .quiz-stats {
@@ -725,6 +1493,34 @@
 
             .quiz-submit-card {
                 padding: 1.5rem;
+            }
+
+            .beautiful-quiz-results {
+                padding: 1.5rem 1rem;
+            }
+
+            .result-title {
+                font-size: 1.5rem;
+            }
+
+            .score-circle {
+                width: 120px;
+                height: 120px;
+            }
+
+            .score-percentage {
+                font-size: 2rem;
+            }
+
+            .score-ring {
+                width: 132px;
+                height: 132px;
+                top: -6px;
+                left: -6px;
+            }
+
+            .results-details .row > .col-4 {
+                margin-bottom: 1rem;
             }
         }
     </style>
