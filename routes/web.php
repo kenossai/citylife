@@ -88,7 +88,7 @@ Route::get('/test-dashboard', [CourseController::class, 'dashboard'])->name('tes
 Route::get('/auth-test', function() {
     $memberCheck = \Illuminate\Support\Facades\Auth::guard('member')->check();
     $memberUser = \Illuminate\Support\Facades\Auth::guard('member')->user();
-    
+
     return response()->json([
         'status' => 'Auth Test',
         'member_guard_check' => $memberCheck,
@@ -103,7 +103,7 @@ Route::get('/auth-test', function() {
 // Session inspection route
 Route::get('/session-debug', function() {
     $sessionData = session()->all();
-    
+
     return response()->json([
         'session_id' => session()->getId(),
         'all_session_data' => $sessionData,
@@ -118,13 +118,13 @@ Route::get('/manual-auth-test', function() {
     // Get the session key
     $sessionKey = 'login_member_59ba36addc2b2f9401580f014c7f58ea4e30989d';
     $memberId = session($sessionKey);
-    
+
     // Try to retrieve the member manually
     $member = null;
     if ($memberId) {
         $member = \App\Models\Member::find($memberId);
     }
-    
+
     return response()->json([
         'session_key' => $sessionKey,
         'member_id_from_session' => $memberId,

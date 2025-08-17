@@ -359,7 +359,7 @@ class CourseController extends Controller
     {
         // Force authentication restoration FIRST
         $authenticatedMember = $this->getAuthenticatedMember();
-        
+
         // Add debugging
         Log::info('showQuiz called', [
             'courseSlug' => $courseSlug,
@@ -423,7 +423,7 @@ class CourseController extends Controller
     {
         // Force authentication restoration FIRST
         $authenticatedMember = $this->getAuthenticatedMember();
-        
+
         Log::info('submitQuiz called', [
             'courseSlug' => $courseSlug,
             'lessonSlug' => $lessonSlug,
@@ -565,7 +565,7 @@ class CourseController extends Controller
         } else {
             // Try to restore authentication from session
             $member = $this->getAuthenticatedMember();
-            
+
             if (!$member) {
                 // Fallback to old session-based system
                 $email = session('user_email');
@@ -582,7 +582,7 @@ class CourseController extends Controller
                     Log::info('Member not found for email: ' . $email);
                     return null;
                 }
-                
+
                 Log::info('Found member via session email: ' . $member->email);
             }
         }
@@ -590,7 +590,7 @@ class CourseController extends Controller
         $enrollment = CourseEnrollment::where('course_id', $course->id)
             ->where('user_id', $member->id)
             ->first();
-            
+
         Log::info('Enrollment check', [
             'member_id' => $member->id,
             'course_id' => $course->id,

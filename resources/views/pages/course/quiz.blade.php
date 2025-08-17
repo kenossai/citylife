@@ -26,7 +26,7 @@
 
             // Submit via AJAX for JSON response
             const formData = new FormData(form);
-            
+
             fetch(form.action, {
                 method: 'POST',
                 body: formData,
@@ -69,7 +69,7 @@
                 btn.onclick = function(e) {
                     console.log('Head script: Button clicked!');
                     e.preventDefault();
-                    
+
                     // Try to use the enhanced modal version if available
                     if (typeof processQuizSubmission === 'function') {
                         console.log('Using enhanced modal submission');
@@ -287,7 +287,7 @@
         // Now do authentication check
         console.log('Quiz page loaded');
         console.log('Auth check URL: /auth-debug');
-        
+
         // Fetch auth status for debugging
         fetch('/auth-debug')
             .then(response => response.json())
@@ -337,13 +337,13 @@
                         // Create backdrop
                         const existingBackdrop = document.getElementById('modal-backdrop');
                         if (existingBackdrop) existingBackdrop.remove();
-                        
+
                         const backdrop = document.createElement('div');
                         backdrop.className = 'modal-backdrop fade show';
                         backdrop.id = 'modal-backdrop';
                         backdrop.style.zIndex = '1050';
                         document.body.appendChild(backdrop);
-                        
+
                         // Ensure modal is properly positioned
                         setTimeout(function() {
                             resultsModalElement.style.paddingLeft = '0px';
@@ -506,7 +506,7 @@
                     e.preventDefault();
                     e.stopPropagation();
                     console.log('Submit button clicked - processing with modal');
-                    
+
                     // Check if we have the enhanced modal functionality available
                     if (typeof processQuizSubmission === 'function') {
                         processQuizSubmission();
@@ -567,7 +567,7 @@
                 console.log('showResults called with data:', data);
                 const resultContent = document.getElementById('quizResultsContent');
                 const continueBtn = document.getElementById('continueBtn');
-                
+
                 console.log('Result elements:', {
                     resultContent: !!resultContent,
                     continueBtn: !!continueBtn
@@ -1409,14 +1409,14 @@
             min-height: calc(100% - 1rem);
             justify-content: center;
         }
-        
+
         .modal-dialog {
             position: relative;
             width: auto;
             margin: 0.5rem;
             pointer-events: none;
         }
-        
+
         .modal-content {
             position: relative;
             display: flex;
@@ -1439,11 +1439,11 @@
             height: 100vh;
             background-color: rgba(0, 0, 0, 0.5);
         }
-        
+
         .modal-backdrop.fade {
             opacity: 0;
         }
-        
+
         .modal-backdrop.show {
             opacity: 0.5;
         }
