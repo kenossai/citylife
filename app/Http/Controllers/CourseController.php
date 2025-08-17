@@ -76,8 +76,10 @@ class CourseController extends Controller
 
     public function showRegistrationForm($slug)
     {
-        // Check if user is authenticated
-        if (!Auth::guard('member')->check()) {
+        // Check if user is authenticated using the same logic as dashboard
+        $member = $this->getAuthenticatedMember();
+
+        if (!$member) {
             return redirect()->route('member.login')
                 ->with('info', 'Please login or register to enroll in courses.')
                 ->with('intended_course', $slug);
@@ -460,7 +462,7 @@ class CourseController extends Controller
     private function getAuthenticatedMember()
     {
         $member = null;
-        
+
         // First try the normal auth guard
         if (Auth::guard('member')->check()) {
             $member = Auth::guard('member')->user();
@@ -469,7 +471,7 @@ class CourseController extends Controller
             // Fallback: Check session data manually
             $sessionKey = 'login_member_59ba36addc2b2f9401580f014c7f58ea4e30989d';
             $memberId = session($sessionKey);
-            
+
             if ($memberId) {
                 $member = Member::find($memberId);
                 if ($member && $member->is_active) {
@@ -482,7 +484,7 @@ class CourseController extends Controller
                 }
             }
         }
-        
+
         return $member;
     }
 
@@ -492,9 +494,9 @@ class CourseController extends Controller
         Log::info('Dashboard accessed.');
         Log::info('Session ID on dashboard: ' . $request->session()->getId());
         Log::info('Member guard check: ' . (Auth::guard('member')->check() ? 'true' : 'false'));
-        
+
         $member = $this->getAuthenticatedMember();
-        
+
         if (!$member) {
             Log::info('Dashboard: Member not authenticated, redirecting to login');
             return redirect()->route('member.login')
