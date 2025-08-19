@@ -80,6 +80,9 @@
     <script src="{{ asset('assets/vendors/jquery-lettering/jquery.lettering.min.js') }}"></script>
     <!-- core js -->
     <script src="{{ asset('assets/js/citylife.js') }}"></script>
+
+    <!-- Additional scripts stack -->
+    @stack('scripts')
 </body>
 
 </html>

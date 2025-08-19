@@ -1,5 +1,14 @@
-<x-app-layout>
-    @section('title', 'Quiz: ' . $lesson->title . ' - ' . $course->title)
+<?php if (isset($component)) { $__componentOriginal9ac128a9029c0e4701924bd2d73d7f54 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal9ac128a9029c0e4701924bd2d73d7f54 = $attributes; } ?>
+<?php $component = App\View\Components\AppLayout::resolve([] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('app-layout'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\App\View\Components\AppLayout::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+    <?php $__env->startSection('title', 'Quiz: ' . $lesson->title . ' - ' . $course->title); ?>
 
     <!-- Critical JavaScript - Must be available immediately -->
     <script>
@@ -319,41 +328,42 @@
                 <div class="col-md-8">
                     <div class="quiz-info">
                         <div class="breadcrumb-modern mb-2">
-                            <a href="{{ route('home') }}" class="breadcrumb-link">
+                            <a href="<?php echo e(route('home')); ?>" class="breadcrumb-link">
                                 <i class="icon-home"></i> Home
                             </a>
                             <span class="breadcrumb-separator">></span>
-                            <a href="{{ route('courses.index') }}" class="breadcrumb-link">
+                            <a href="<?php echo e(route('courses.index')); ?>" class="breadcrumb-link">
                                 <i class="icon-book"></i> Courses
                             </a>
                             <span class="breadcrumb-separator">></span>
-                            <a href="{{ route('courses.show', $course->slug) }}" class="breadcrumb-link">
-                                <i class="icon-graduation-cap"></i> {{ $course->title }}
+                            <a href="<?php echo e(route('courses.show', $course->slug)); ?>" class="breadcrumb-link">
+                                <i class="icon-graduation-cap"></i> <?php echo e($course->title); ?>
+
                             </a>
                             <span class="breadcrumb-separator">></span>
-                            <a href="{{ route('courses.lessons', $course->slug) }}" class="breadcrumb-link">
+                            <a href="<?php echo e(route('courses.lessons', $course->slug)); ?>" class="breadcrumb-link">
                                 <i class="icon-list"></i> Lessons
                             </a>
                             <span class="breadcrumb-separator">></span>
                             <span class="breadcrumb-current">Quiz</span>
                         </div>
-                        <h3 class="quiz-lesson-title mb-1">Lesson {{ $lesson->lesson_number }} Quiz</h3>
-                        <h2 class="quiz-main-title mb-2">{{ $lesson->title }}</h2>
-                        <p class="quiz-subtitle">{{ $course->title }}</p>
+                        <h3 class="quiz-lesson-title mb-1">Lesson <?php echo e($lesson->lesson_number); ?> Quiz</h3>
+                        <h2 class="quiz-main-title mb-2"><?php echo e($lesson->title); ?></h2>
+                        <p class="quiz-subtitle"><?php echo e($course->title); ?></p>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="quiz-stats">
-                        @if($progress->quiz_score)
+                        <?php if($progress->quiz_score): ?>
                             <div class="stat-item">
-                                <div class="stat-value {{ $progress->quiz_score >= 70 ? 'text-success' : 'text-warning' }}">
-                                    {{ round($progress->quiz_score) }}%
+                                <div class="stat-value <?php echo e($progress->quiz_score >= 70 ? 'text-success' : 'text-warning'); ?>">
+                                    <?php echo e(round($progress->quiz_score)); ?>%
                                 </div>
                                 <div class="stat-label">Previous Score</div>
                             </div>
-                        @endif
+                        <?php endif; ?>
                         <div class="stat-item">
-                            <div class="stat-value">{{ count($quizQuestions) }}</div>
+                            <div class="stat-value"><?php echo e(count($quizQuestions)); ?></div>
                             <div class="stat-label">Questions</div>
                         </div>
                     </div>
@@ -375,24 +385,25 @@
                             <div class="row align-items-center">
                                 <div class="col-md-8">
                                     <ul class="instructions-list">
-                                        <li>This quiz has {{ count($quizQuestions) }} questions</li>
+                                        <li>This quiz has <?php echo e(count($quizQuestions)); ?> questions</li>
                                         <li>You need 70% or higher to pass</li>
                                         <li>You can retake the quiz if needed</li>
                                         <li>Take your time and read each question carefully</li>
                                     </ul>
                                 </div>
                                 <div class="col-md-4">
-                                    @if($progress->quiz_score)
+                                    <?php if($progress->quiz_score): ?>
                                         <div class="previous-score-card">
                                             <div class="score-header">Previous Score</div>
-                                            <div class="score-value {{ $progress->quiz_score >= 70 ? 'success' : 'warning' }}">
-                                                {{ round($progress->quiz_score) }}%
+                                            <div class="score-value <?php echo e($progress->quiz_score >= 70 ? 'success' : 'warning'); ?>">
+                                                <?php echo e(round($progress->quiz_score)); ?>%
                                             </div>
                                             <div class="score-meta">
-                                                Attempts: {{ $progress->attempts }}
+                                                Attempts: <?php echo e($progress->attempts); ?>
+
                                             </div>
                                         </div>
-                                    @endif
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>
@@ -400,59 +411,61 @@
 
                     <!-- Quiz Form -->
                     <div class="quiz-form-container">
-                        <form id="quizForm" action="{{ route('courses.lesson.quiz.submit', [$course->slug, $lesson->slug]) }}" method="POST">
-                            @csrf
+                        <form id="quizForm" action="<?php echo e(route('courses.lesson.quiz.submit', [$course->slug, $lesson->slug])); ?>" method="POST">
+                            <?php echo csrf_field(); ?>
 
-                            @foreach($quizQuestions as $index => $question)
+                            <?php $__currentLoopData = $quizQuestions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $question): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <div class="modern-question-card">
                                     <div class="question-header">
                                         <div class="question-number">
-                                            Question {{ $index + 1 }}
+                                            Question <?php echo e($index + 1); ?>
+
                                         </div>
                                         <div class="question-progress">
-                                            {{ $index + 1 }} of {{ count($quizQuestions) }}
+                                            <?php echo e($index + 1); ?> of <?php echo e(count($quizQuestions)); ?>
+
                                         </div>
                                     </div>
                                     <div class="question-content">
-                                        <h6 class="question-text">{{ $question['question'] }}</h6>
-                                        @if($question['type'] === 'multiple_choice')
+                                        <h6 class="question-text"><?php echo e($question['question']); ?></h6>
+                                        <?php if($question['type'] === 'multiple_choice'): ?>
                                             <div class="options-container">
-                                                @foreach($question['options'] as $optionIndex => $option)
-                                                    <label class="option-card" for="question_{{ $index }}_option_{{ $optionIndex }}">
+                                                <?php $__currentLoopData = $question['options']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $optionIndex => $option): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                    <label class="option-card" for="question_<?php echo e($index); ?>_option_<?php echo e($optionIndex); ?>">
                                                         <input class="option-input" type="radio"
-                                                               name="answers[{{ $index }}]"
-                                                               value="{{ chr(65 + $optionIndex) }}"
-                                                               id="question_{{ $index }}_option_{{ $optionIndex }}"
+                                                               name="answers[<?php echo e($index); ?>]"
+                                                               value="<?php echo e(chr(65 + $optionIndex)); ?>"
+                                                               id="question_<?php echo e($index); ?>_option_<?php echo e($optionIndex); ?>"
                                                                required>
                                                         <div class="option-content">
-                                                            <div class="option-letter">{{ chr(65 + $optionIndex) }}</div>
-                                                            <div class="option-text">{{ $option }}</div>
+                                                            <div class="option-letter"><?php echo e(chr(65 + $optionIndex)); ?></div>
+                                                            <div class="option-text"><?php echo e($option); ?></div>
                                                         </div>
                                                     </label>
-                                                @endforeach
+                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                             </div>
-                                        @elseif($question['type'] === 'short_answer')
+                                        <?php elseif($question['type'] === 'short_answer'): ?>
                                             <div class="answer-input-container">
                                                 <textarea class="modern-textarea"
-                                                          name="answers[{{ $index }}]"
+                                                          name="answers[<?php echo e($index); ?>]"
                                                           rows="3"
                                                           placeholder="Enter your answer here..."
                                                           required></textarea>
                                                 <div class="input-help">Provide a brief answer (2-3 sentences).</div>
                                             </div>
-                                        @elseif($question['type'] === 'essay')
+                                        <?php elseif($question['type'] === 'essay'): ?>
                                             <div class="answer-input-container">
                                                 <textarea class="modern-textarea"
-                                                          name="answers[{{ $index }}]"
+                                                          name="answers[<?php echo e($index); ?>]"
                                                           rows="6"
                                                           placeholder="Write your detailed response here..."
                                                           required></textarea>
                                                 <div class="input-help">Provide a detailed response explaining your thoughts and understanding.</div>
                                             </div>
-                                        @endif
+                                        <?php endif; ?>
                                     </div>
                                 </div>
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
                             <!-- Submit Section -->
                             <div class="quiz-submit-card">
@@ -1357,7 +1370,7 @@
                 max-width: 500px;
                 margin: 1rem;
             }
-
+            
             .modal-lg {
                 max-width: 500px;
             }
@@ -1368,7 +1381,7 @@
                 max-width: 90%;
                 margin: 0.5rem auto;
             }
-
+            
             .modal-lg {
                 max-width: 90%;
             }
@@ -1438,11 +1451,21 @@
                 max-width: 95%;
                 margin: 0.25rem auto;
             }
-
+            
             .modal-dialog-centered {
                 min-height: calc(100vh - 0.5rem);
                 margin: 0.25rem auto;
             }
         }
     </style>
-</x-app-layout>
+ <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal9ac128a9029c0e4701924bd2d73d7f54)): ?>
+<?php $attributes = $__attributesOriginal9ac128a9029c0e4701924bd2d73d7f54; ?>
+<?php unset($__attributesOriginal9ac128a9029c0e4701924bd2d73d7f54); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal9ac128a9029c0e4701924bd2d73d7f54)): ?>
+<?php $component = $__componentOriginal9ac128a9029c0e4701924bd2d73d7f54; ?>
+<?php unset($__componentOriginal9ac128a9029c0e4701924bd2d73d7f54); ?>
+<?php endif; ?>
+<?php /**PATH C:\Users\kenos\Documents\Github\citylife\resources\views/pages/course/quiz.blade.php ENDPATH**/ ?>
