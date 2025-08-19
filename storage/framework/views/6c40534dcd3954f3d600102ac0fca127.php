@@ -893,7 +893,7 @@
 
         /* Simple Quiz Results Styles */
         .simple-quiz-results {
-            padding: 2rem 1.5rem;
+            padding: 1.5rem 1rem;
             text-align: center;
             background: #ffffff;
             border-radius: 16px;
@@ -902,39 +902,39 @@
 
         /* Simple Header */
         .simple-header {
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
         }
 
         .result-title {
-            font-size: 1.5rem;
+            font-size: 1.25rem;
             font-weight: 600;
             color: #1f2937;
             margin-bottom: 0.5rem;
         }
 
         .result-subtitle {
-            font-size: 0.875rem;
+            font-size: 0.8rem;
             color: #6b7280;
             margin: 0;
         }
 
         /* Simple Score Display */
         .score-display {
-            margin: 2rem 0;
+            margin: 1.5rem 0;
             display: flex;
             justify-content: center;
         }
 
         .score-circle {
-            width: 120px;
-            height: 120px;
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
             background: #f8fafc;
-            border: 8px solid #e5e7eb;
+            border: 6px solid #e5e7eb;
             transition: all 0.3s ease;
         }
 
@@ -949,22 +949,22 @@
         }
 
         .score-text {
-            font-size: 2rem;
+            font-size: 1.75rem;
             font-weight: 700;
             color: #1f2937;
         }
 
         /* Simple Quiz Stats */
         .quiz-stats-simple {
-            margin-top: 2rem;
+            margin-top: 1.5rem;
         }
 
         .stat-group {
             display: flex;
             justify-content: space-between;
             background: #f8fafc;
-            border-radius: 12px;
-            padding: 1.5rem;
+            border-radius: 10px;
+            padding: 1rem;
         }
 
         .stat-item {
@@ -974,15 +974,15 @@
 
         .stat-label {
             display: block;
-            font-size: 0.875rem;
+            font-size: 0.8rem;
             color: #6b7280;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.25rem;
             font-weight: 500;
         }
 
         .stat-value {
             display: block;
-            font-size: 1.25rem;
+            font-size: 1.1rem;
             font-weight: 700;
             color: #1f2937;
         }
@@ -1025,13 +1025,13 @@
         .modal-dialog {
             position: relative;
             width: auto;
-            max-width: 600px;
+            max-width: 450px;
             margin: 1rem auto;
             pointer-events: none;
         }
 
         .modal-lg {
-            max-width: 600px;
+            max-width: 450px;
         }
 
         .modal-content {
@@ -1121,41 +1121,64 @@
 
         .btn-warning {
             background: linear-gradient(135deg, #f59e0b, #d97706);
-            border-color: #f59e0b;
+            border: none;
             color: white;
             font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
         }
 
         .btn-warning:hover {
             background: linear-gradient(135deg, #d97706, #b45309);
-            border-color: #d97706;
             color: white;
             transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
         }
 
         .btn-success {
             background: linear-gradient(135deg, #22c55e, #16a34a);
-            border-color: #22c55e;
+            border: none;
             color: white;
             font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
         }
 
         .btn-success:hover {
             background: linear-gradient(135deg, #16a34a, #15803d);
-            border-color: #16a34a;
             color: white;
             transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+        }
+
+        .btn-secondary {
+            background: #6b7280;
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+        }
+
+        .btn-secondary:hover {
+            background: #4b5563;
+            color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(107, 114, 128, 0.3);
         }
 
         /* Responsive Design */
         @media (max-width: 992px) {
             .modal-dialog {
-                max-width: 500px;
+                max-width: 400px;
                 margin: 1rem;
             }
 
             .modal-lg {
-                max-width: 500px;
+                max-width: 400px;
             }
         }
 
@@ -1200,12 +1223,12 @@
             }
 
             .score-circle {
-                width: 100px;
-                height: 100px;
+                width: 80px;
+                height: 80px;
             }
 
             .score-text {
-                font-size: 1.5rem;
+                font-size: 1.25rem;
             }
 
             .stat-group {
