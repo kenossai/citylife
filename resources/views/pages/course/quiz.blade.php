@@ -180,98 +180,35 @@
             const score = Math.round(data.score);
 
             resultContent.innerHTML = `
-                <div class="beautiful-quiz-results">
-                    <!-- Animated Result Header -->
-                    <div class="result-header mb-4">
-                        <div class="result-animation">
-                            ${passed
-                                ? '<div class="success-animation"><i class="icon-check-circle result-icon success-icon"></i></div>'
-                                : '<div class="retry-animation"><i class="icon-info-circle result-icon retry-icon"></i></div>'
-                            }
-                        </div>
-                        <h3 class="result-title ${passed ? 'text-success' : 'text-warning'} mb-2">
-                            ${passed ? '🎉 Excellent Work!' : '📚 Keep Learning!'}
-                        </h3>
-                        <p class="result-subtitle mb-0">
-                            ${passed
-                                ? 'You\'ve successfully completed this quiz!'
-                                : 'Learning is a journey. You\'re making progress!'
-                            }
-                        </p>
+                <div class="simple-quiz-results">
+                    <!-- Clean Header -->
+                    <div class="simple-header">
+                        <h4 class="result-title">${passed ? 'Well done!' : 'Keep Learning!'}</h4>
+                        <p class="result-subtitle">Duration: ${data.duration || '5 min'}</p>
                     </div>
 
-                    <!-- Beautiful Score Display -->
-                    <div class="score-showcase mb-4">
-                        <div class="score-circle-container">
-                            <div class="score-circle ${passed ? 'success' : 'warning'}">
-                                <div class="score-inner">
-                                    <span class="score-percentage">${score}%</span>
-                                    <div class="score-ring">
-                                        <svg class="progress-ring" width="140" height="140">
-                                            <circle class="progress-ring-bg" cx="70" cy="70" r="60"></circle>
-                                            <circle class="progress-ring-fill ${passed ? 'success-ring' : 'warning-ring'}"
-                                                    cx="70" cy="70" r="60"
-                                                    style="stroke-dasharray: ${2 * Math.PI * 60}; stroke-dashoffset: ${2 * Math.PI * 60 * (1 - score/100)}">
-                                            </circle>
-                                        </svg>
-                                    </div>
-                                </div>
-                            </div>
+                    <!-- Score Circle -->
+                    <div class="score-display">
+                        <div class="score-circle ${passed ? 'success' : 'warning'}">
+                            <span class="score-text">${score}%</span>
                         </div>
                     </div>
 
-                    <!-- Detailed Results -->
-                    <div class="results-details mb-4">
-                        <div class="row">
-                            <div class="col-4">
-                                <div class="detail-card">
-                                    <div class="detail-icon">
-                                        <i class="icon-check-square"></i>
-                                    </div>
-                                    <div class="detail-value">${data.correct_answers}</div>
-                                    <div class="detail-label">Correct</div>
-                                </div>
+                    <!-- Simple Stats -->
+                    <div class="quiz-stats-simple">
+                        <div class="stat-group">
+                            <div class="stat-item">
+                                <span class="stat-label">Correct</span>
+                                <span class="stat-value">${data.correct_answers}</span>
                             </div>
-                            <div class="col-4">
-                                <div class="detail-card">
-                                    <div class="detail-icon">
-                                        <i class="icon-x-square"></i>
-                                    </div>
-                                    <div class="detail-value">${data.total_questions - data.correct_answers}</div>
-                                    <div class="detail-label">Incorrect</div>
-                                </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Partially correct</span>
+                                <span class="stat-value">0</span>
                             </div>
-                            <div class="col-4">
-                                <div class="detail-card">
-                                    <div class="detail-icon">
-                                        <i class="icon-list"></i>
-                                    </div>
-                                    <div class="detail-value">${data.total_questions}</div>
-                                    <div class="detail-label">Total</div>
-                                </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Incorrect</span>
+                                <span class="stat-value">${data.total_questions - data.correct_answers}</span>
                             </div>
-                        </div>
-                    </div>
-
-                    <!-- Status Badge -->
-                    <div class="status-section mb-4">
-                        <div class="status-badge ${passed ? 'status-passed' : 'status-retry'}">
-                            <i class="${passed ? 'icon-award' : 'icon-refresh-ccw'} me-2"></i>
-                            ${passed ? 'Quiz Passed!' : 'Needs Improvement'}
-                        </div>
-                    </div>
-
-                    <!-- Next Steps -->
-                    <div class="next-steps-card">
-                        <div class="next-steps-header">
-                            <i class="${passed ? 'icon-arrow-right' : 'icon-book-open'} me-2"></i>
-                            What's Next?
-                        </div>
-                        <div class="next-steps-content">
-                            ${passed
-                                ? '<p class="mb-0">🚀 Great job! You can now continue to the next lesson and keep building your knowledge.</p>'
-                                : '<p class="mb-0">💪 Don\'t worry! Review the lesson material and try again. You need 70% or higher to pass.</p>'
-                            }
                         </div>
                     </div>
                 </div>
@@ -941,257 +878,103 @@
             font-weight: 600;
         }
 
-        /* Beautiful Quiz Results Styles */
-        .beautiful-quiz-results {
-            padding: 1.5rem 1rem;
+        /* Simple Quiz Results Styles */
+        .simple-quiz-results {
+            padding: 2rem 1.5rem;
             text-align: center;
-            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-            border-radius: 20px;
+            background: #ffffff;
+            border-radius: 16px;
             margin: -1rem;
         }
 
-        .result-header {
-            position: relative;
-        }
-
-        .result-animation {
-            margin-bottom: 1rem;
-            opacity: 0;
-            transform: scale(0.5);
-            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        }
-
-        .result-animation.animate {
-            opacity: 1;
-            transform: scale(1);
-        }
-
-        .result-icon {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-            display: inline-block;
-        }
-
-        .success-icon {
-            color: #22c55e;
-            filter: drop-shadow(0 4px 8px rgba(34, 197, 94, 0.3));
-            animation: successPulse 2s infinite;
-        }
-
-        .retry-icon {
-            color: #f59e0b;
-            filter: drop-shadow(0 4px 8px rgba(245, 158, 11, 0.3));
-            animation: retryBounce 2s infinite;
-        }
-
-        @keyframes successPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-
-        @keyframes retryBounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+        /* Simple Header */
+        .simple-header {
+            margin-bottom: 2rem;
         }
 
         .result-title {
-            font-size: 2rem;
-            font-weight: 700;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1f2937;
             margin-bottom: 0.5rem;
         }
 
         .result-subtitle {
-            font-size: 1.1rem;
+            font-size: 0.875rem;
             color: #6b7280;
-            margin-bottom: 0;
+            margin: 0;
         }
 
-        /* Beautiful Score Circle */
-        .score-showcase {
-            position: relative;
+        /* Simple Score Display */
+        .score-display {
+            margin: 2rem 0;
             display: flex;
             justify-content: center;
-            align-items: center;
-            margin: 1.5rem 0;
-        }
-
-        .score-circle-container {
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
         }
 
         .score-circle {
-            width: 140px;
-            height: 140px;
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
-            background: white;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-            transform: scale(0.8);
-            opacity: 0;
-            transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        }
-
-        .score-circle.animate {
-            transform: scale(1);
-            opacity: 1;
+            background: #f8fafc;
+            border: 8px solid #e5e7eb;
+            transition: all 0.3s ease;
         }
 
         .score-circle.success {
-            border: 4px solid #22c55e;
-            background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+            border-color: #22c55e;
+            background: #f0fdf4;
         }
 
         .score-circle.warning {
-            border: 4px solid #f59e0b;
-            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-color: #f59e0b;
+            background: #fffbeb;
         }
 
-        .score-inner {
-            text-align: center;
-            z-index: 2;
-            position: relative;
-        }
-
-        .score-percentage {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: #1f2937;
-            display: block;
-        }
-
-        .score-ring {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 152px;
-            height: 152px;
-            transform: translate(-50%, -50%);
-        }
-
-        .progress-ring {
-            transform: rotate(-90deg);
-        }
-
-        .progress-ring-bg {
-            fill: none;
-            stroke: #e5e7eb;
-            stroke-width: 6;
-        }
-
-        .progress-ring-fill {
-            fill: none;
-            stroke-width: 6;
-            stroke-linecap: round;
-            transition: stroke-dashoffset 1.5s ease-in-out;
-        }
-
-        .success-ring {
-            stroke: #22c55e;
-        }
-
-        .warning-ring {
-            stroke: #f59e0b;
-        }
-
-        /* Detail Cards */
-        .results-details {
-            margin: 1.5rem 0;
-        }
-
-        .detail-card {
-            background: white;
-            border-radius: 10px;
-            padding: 1rem 0.75rem;
-            text-align: center;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s ease;
-            border: 1px solid #f3f4f6;
-            height: auto;
-        }
-
-        .detail-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-        }
-
-        .detail-icon {
-            font-size: 1.25rem;
-            color: #6b7280;
-            margin-bottom: 0.25rem;
-        }
-
-        .detail-value {
-            font-size: 1.5rem;
+        .score-text {
+            font-size: 2rem;
             font-weight: 700;
             color: #1f2937;
-            margin-bottom: 0.25rem;
-            line-height: 1;
         }
 
-        .detail-label {
-            font-size: 0.8rem;
-            color: #6b7280;
-            font-weight: 500;
-            margin-bottom: 0;
+        /* Simple Quiz Stats */
+        .quiz-stats-simple {
+            margin-top: 2rem;
         }
 
-        /* Status Badge */
-        .status-section {
+        .stat-group {
             display: flex;
-            justify-content: center;
-        }
-
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            padding: 0.75rem 1.5rem;
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 1rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        .status-passed {
-            background: linear-gradient(135deg, #22c55e, #16a34a);
-            color: white;
-        }
-
-        .status-retry {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-            color: white;
-        }
-
-        /* Next Steps Card */
-        .next-steps-card {
-            background: white;
+            justify-content: space-between;
+            background: #f8fafc;
             border-radius: 12px;
-            padding: 1rem;
-            margin-top: 1.5rem;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            border: 1px solid #f3f4f6;
+            padding: 1.5rem;
         }
 
-        .next-steps-header {
-            font-size: 1rem;
-            font-weight: 600;
-            color: #1f2937;
-            margin-bottom: 0.75rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .stat-item {
+            text-align: center;
+            flex: 1;
         }
 
-        .next-steps-content {
+        .stat-label {
+            display: block;
+            font-size: 0.875rem;
             color: #6b7280;
-            line-height: 1.5;
-            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
         }
+
+        .stat-value {
+            display: block;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+
 
         /* Modal Enhancements */
         .modal-lg .modal-content.modern-modal {
@@ -1395,41 +1178,38 @@
                 padding: 1.5rem;
             }
 
-            .beautiful-quiz-results {
+            .simple-quiz-results {
                 padding: 1.5rem 1rem;
             }
 
             .result-title {
-                font-size: 1.5rem;
+                font-size: 1.25rem;
             }
 
             .score-circle {
-                width: 120px;
-                height: 120px;
+                width: 100px;
+                height: 100px;
             }
 
-            .score-percentage {
-                font-size: 2rem;
+            .score-text {
+                font-size: 1.5rem;
             }
 
-            .score-ring {
-                width: 132px;
-                height: 132px;
+            .stat-group {
+                flex-direction: column;
+                gap: 1rem;
             }
 
-            .score-ring svg {
-                width: 120px;
-                height: 120px;
+            .stat-item {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 0.5rem 0;
+                border-bottom: 1px solid #e5e7eb;
             }
 
-            .score-ring circle {
-                cx: 60;
-                cy: 60;
-                r: 50;
-            }
-
-            .results-details .row > .col-4 {
-                margin-bottom: 1rem;
+            .stat-item:last-child {
+                border-bottom: none;
             }
         }
 
