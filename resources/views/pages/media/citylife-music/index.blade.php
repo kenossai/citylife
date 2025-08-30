@@ -138,7 +138,7 @@
                         </form>
                     </div>
 
-                    @if($artists->isNotEmpty())
+                    @if(count($artists) > 0)
                         <div class="product__categories product__sidebar__item">
                             <h3 class="product__sidebar__title">Artists</h3>
                             <ul class="list-unstyled">
@@ -162,7 +162,7 @@
                         </div>
                     @endif
 
-                    @if($genres->isNotEmpty())
+                    @if(count($genres) > 0)
                         <div class="product__categories product__sidebar__item">
                             <h3 class="product__sidebar__title">Genres</h3>
                             <ul class="list-unstyled">
