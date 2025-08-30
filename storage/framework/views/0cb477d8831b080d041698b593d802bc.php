@@ -46,20 +46,13 @@
                         </li>
                         <li class="dropdown">
                             <a href="<?php echo e(route('courses.index')); ?>">Courses</a>
-                            <ul>
-                                <li><a href="gallery.html">Bible School Int'l</a></li>
-                                <li><a href="gallery.html">Christian Development</a></li>
-                                <li><a href="gallery-grid.html">Living with Significance</a></li>
-                                <li><a href="gallery-filter.html">Dating without mating</a></li>
-                                <li><a href="gallery-carousel.html">Theological teachings</a></li>
-                            </ul>
                         </li>
                          <li class="dropdown">
                             <a href="index.html#">Media Centre</a>
                             <ul>
                                 <li><a href="<?php echo e(route('teaching-series.index')); ?>">Teaching Series</a></li>
-                                <li><a href="gallery.html">CityLife TalkTimes</a></li>
-                                <li><a href="gallery-grid.html">CityLife Music</a></li>
+                                <li><a href="<?php echo e(route('citylife-talktime.index')); ?>">CityLife TalkTimes</a></li>
+                                <li><a href="<?php echo e(route('citylife-music.index')); ?>">CityLife Music</a></li>
                             </ul>
                         </li>
                         <li>

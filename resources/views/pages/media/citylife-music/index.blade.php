@@ -46,7 +46,7 @@
                         <div class="col-sm-6 col-lg-4">
                             <div class="product-item wow fadeInUp animated" data-wow-duration="1500ms" data-wow-delay="000ms">
                                 <a href="{{ route('citylife-music.show', $song->slug) }}" class="product-item__img">
-                                    <img src="{{ $song->image_url }}" alt="{{ $song->title }}">
+                                    {{-- <img src="{{ $song->image_url }}" alt="{{ $song->title }}"> --}}
                                     @if($song->is_featured)
                                         <div class="product-item__featured-badge">
                                             <span class="badge bg-primary">Featured</span>
@@ -71,9 +71,9 @@
                                             <span class="d-block text-muted">{{ $song->genre }}</span>
                                         @endif
                                     </div>
-                                    @if($song->description)
+                                    {{-- @if($song->description)
                                         <p class="product-item__excerpt">{{ Str::limit($song->description, 100) }}</p>
-                                    @endif
+                                    @endif --}}
 
                                     <div class="product-item__actions">
                                         <a href="{{ route('citylife-music.show', $song->slug) }}" class="cleenhearts-btn cleenhearts-btn--border product-item__link">
