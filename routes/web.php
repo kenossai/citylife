@@ -8,6 +8,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\GivingController;
 use App\Http\Controllers\VolunteerController;
 use App\Http\Controllers\TeachingSeriesController;
 use App\Http\Controllers\CityLifeTalkTimeController;
@@ -40,6 +41,10 @@ Route::post('/ministries/{slug}/contact', [MinistryController::class, 'submitCon
 // Route for the contact controller
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::post('/contact', [ContactController::class, 'submit'])->name('contact.submit');
+
+// Route for giving
+Route::get('/giving', [GivingController::class, 'index'])->name('giving.index');
+Route::post('/giving/gift-aid', [GivingController::class, 'submitGiftAid'])->name('giving.gift-aid');
 
 Route::get('/team/pastoral', [TeamController::class, 'pastoral'])->name('team.pastoral');
 Route::get('/team/leadership', [TeamController::class, 'leadership'])->name('team.leadership');

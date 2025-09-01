@@ -2,8 +2,8 @@
     <div class="container-fluid">
         <div class="main-header__inner">
             <div class="main-header__logo">
-                <a href="index.html">
-                    <img src="{{ asset('assets/images/logo.png') }}" alt="CityLife HTML" width="100">
+                <a href="{{ route('home') }}">
+                    <img src="{{ asset('assets/images/logo.png') }}" alt="CityLife Church" width="100">
                 </a>
                 <button type="button" class="main-header__sidebar-btn sidebar-btn__toggler">
                     <span class="icon-grid"></span>
@@ -92,7 +92,7 @@
                 </div><!-- /.mobile-nav__toggler -->
 
                 <div class="main-header__cart"></div><!-- /.main-header__cart -->
-                <a href="donate.html" class="cleenhearts-btn main-header__btn">
+                <a href="{{ route('giving.index') }}" class="cleenhearts-btn main-header__btn">
                     <div class="cleenhearts-btn__icon-box">
                         <div class="cleenhearts-btn__icon-box__inner"><span class="icon-donate"></span></div>
                     </div>
