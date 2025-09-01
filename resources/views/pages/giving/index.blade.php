@@ -186,7 +186,6 @@
 
             <div class="col-lg-6">
                 <div class="contact-one__form">
-                    <div class="contact-one__form__bg" style="background-image: url('{{ asset('assets/images/backgrounds/become-volunteer-bg-1-1.png') }}');"></div>
                     <h3 class="contact-one__title">Gift Aid Declaration</h3>
 
                     @if(session('success'))
@@ -394,5 +393,137 @@
     margin: 0;
     padding-left: 20px;
 }
+
+/* Ensure form fields are properly styled and not disabled */
+.contact-one__form {
+    background: #fff !important;
+    padding: 30px !important;
+    border-radius: 10px !important;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1) !important;
+}
+
+.form-one__control__input {
+    background-color: #fff !important;
+    border: 2px solid #e1e1e1 !important;
+    color: #333 !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    cursor: text !important;
+    padding: 12px 15px !important;
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+    border-radius: 5px !important;
+    transition: all 0.3s ease !important;
+    position: relative !important;
+    z-index: 10 !important;
+}
+
+.form-one__control__input:focus {
+    border-color: var(--cleenhearts-primary) !important;
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(var(--cleenhearts-primary), 0.1) !important;
+    background-color: #fff !important;
+}
+
+.form-one__control__input:hover {
+    border-color: #ccc !important;
+}
+
+.form-one__control__input:disabled {
+    background-color: #f5f5f5 !important;
+    color: #999 !important;
+    cursor: not-allowed !important;
+}
+
+.form-one__control {
+    position: relative !important;
+    z-index: 5 !important;
+}
+
+.form-check-input {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    position: relative !important;
+    z-index: 10 !important;
+}
+
+.cleenhearts-btn {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    position: relative !important;
+    z-index: 10 !important;
+}
+
+.cleenhearts-btn:disabled {
+    opacity: 0.6 !important;
+    cursor: not-allowed !important;
+}
+
+/* Remove any potential overlays or pseudo-elements that might block interaction */
+.contact-one__form::before,
+.contact-one__form::after,
+.contact-one__form__bg::before,
+.contact-one__form__bg::after {
+    display: none !important;
+}
+
+/* Ensure form container doesn't have positioning issues */
+.contact-one__form__box {
+    position: relative !important;
+    z-index: 20 !important;
+    background: transparent !important;
+}
+
+/* Fix any potential issues with form rows */
+.row.gutter-y-20 {
+    position: relative !important;
+    z-index: 15 !important;
+}
+
+/* Ensure labels and text elements don't interfere */
+.form-text, .form-check-label {
+    position: relative !important;
+    z-index: 10 !important;
+    pointer-events: auto !important;
+}
 </style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Test form functionality
+    const form = document.querySelector('form');
+    const inputs = document.querySelectorAll('.form-one__control__input');
+    const submitBtn = document.querySelector('.cleenhearts-btn');
+
+    console.log('Form found:', form);
+    console.log('Number of inputs:', inputs.length);
+    console.log('Submit button found:', submitBtn);
+
+    // Add event listeners to verify form is interactive
+    inputs.forEach((input, index) => {
+        input.addEventListener('focus', function() {
+            console.log(`Input ${index + 1} focused:`, this.name);
+        });
+
+        input.addEventListener('input', function() {
+            console.log(`Input ${index + 1} changed:`, this.name, 'Value:', this.value);
+        });
+    });
+
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            console.log('Form submission attempted');
+            // Don't prevent default - let it submit normally
+        });
+    }
+
+    if (submitBtn) {
+        submitBtn.addEventListener('click', function() {
+            console.log('Submit button clicked');
+        });
+    }
+});
+</script>
 </x-app-layout>

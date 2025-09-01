@@ -58,6 +58,7 @@
 
 
     <script src="{{ asset('assets/vendors/jquery/jquery-3.7.0.min.js') }}"></script>
+    <script src="https://www.paypalobjects.com/donate/sdk/donate-sdk.js" charset="UTF-8"></script>
     <script src="{{ asset('assets/vendors/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/vendors/bootstrap-select/bootstrap-select.min.js') }}"></script>
     <script src="{{ asset('assets/vendors/jarallax/jarallax.min.js') }}"></script>
