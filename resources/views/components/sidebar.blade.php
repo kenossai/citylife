@@ -3,7 +3,7 @@
         <div class="sidebar-one__content">
             <span class="sidebar-one__close sidebar-btn__toggler"><i class="fa fa-times"></i></span>
             <div class="sidebar-one__logo sidebar-one__item">
-                <a href="{{ route('home') }}" aria-label="logo image"><img src="{{ asset('assets/images/logo-light.png') }}" width="155" alt="CityLife Church Logo" /></a>
+                <a href="{{ route('home') }}" aria-label="logo image"><img src="{{ asset('assets/images/logo.png') }}" width="155" alt="CityLife Church Logo" /></a>
             </div><!-- /.sidebar-one__logo -->
             <div class="sidebar-one__about sidebar-one__item">
                 <p class="sidebar-one__about__text">A vibrant spirit-filled multi-cultural church affiliated with the Assemblies of God, located in the heart of Kelham Island, Sheffield.</p>

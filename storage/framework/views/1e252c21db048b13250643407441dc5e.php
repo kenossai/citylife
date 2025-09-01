@@ -42,12 +42,12 @@
             </div><!-- /.row -->
         </div><!-- /.container -->
         <div class="main-footer__top__shape-box">
-            <img src="assets/images/shapes/footer-shape-hand-1-1.png" alt="hand" class="main-footer__top__shape-one">
-            <img src="assets/images/shapes/footer-shape-hand-1-2.png" alt="hand" class="main-footer__top__shape-two">
+            <img src="<?php echo e(asset('assets/images/shapes/footer-shape-hand-1-1.png')); ?>" alt="hand" class="main-footer__top__shape-one">
+            <img src="<?php echo e(asset('assets/images/shapes/footer-shape-hand-1-2.png')); ?>" alt="hand" class="main-footer__top__shape-two">
         </div><!-- /.main-footer__top__shape-box -->
     </div><!-- /.main-footer__top -->
     <div class="main-footer__bottom">
-        <div class="main-footer__bottom__bg" style="background: url('assets/images/backgrounds/footer-bottom-bg-1-2.png');"></div><!-- /.main-footer__bottom-bg -->
+        <div class="main-footer__bottom__bg" style="background: url('<?php echo e(asset('assets/images/backgrounds/footer-bottom-bg-1-2.png')); ?>');"></div><!-- /.main-footer__bottom-bg -->
         <div class="container">
             <div class="main-footer__bottom__inner">
                 <p class="main-footer__copyright">
