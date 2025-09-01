@@ -7,7 +7,7 @@
         <h3 class="text-white">Church Events</h3>
         <h2 class="page-header__title">Upcoming Events & Activities</h2>
         <p class="section-header__text">Join us for upcoming events, services, and activities designed to strengthen our faith community and grow in fellowship together.</p>
-        <ul class="cleenhearts-breadcrumb list-unstyled">
+        <ul class="citylife-breadcrumb list-unstyled">
             <li><i class="icon-home"></i> <a href="{{ route('home') }}">Home</a></li>
             <li><span>Events</span></li>
         </ul><!-- /.thm-breadcrumb list-unstyled -->

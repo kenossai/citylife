@@ -7,7 +7,7 @@
         <h3 class="text-white">Our Courses</h3>
         <h2 class="page-header__title">{{ $course->title }}</h2>
         <p class="section-header__text">{{ $course->description }}</p>
-        <ul class="cleenhearts-breadcrumb list-unstyled">
+        <ul class="citylife-breadcrumb list-unstyled">
             <li><i class="icon-home"></i> <a href="{{ route('home') }}">Home</a></li>
             <li><i class="icon-book"></i> <a href="{{ route('courses.index') }}">Courses List</a></li>
             <li><span>{{ $course->title }}</span></li>
@@ -161,19 +161,19 @@
                                         <div class="enrolled-user-actions">
                                             <div class="row justify-content-between">
                                                 <div class="col-md-4">
-                                                    <a href="{{ route('courses.lessons', $course->slug) }}" class="cleenhearts-btn cleenhearts-btn--primary">
-                                                        <div class="cleenhearts-btn__icon-box">
-                                                            <div class="cleenhearts-btn__icon-box__inner"></div>
+                                                    <a href="{{ route('courses.lessons', $course->slug) }}" class="citylife-btn citylife-btn--primary">
+                                                        <div class="citylife-btn__icon-box">
+                                                            <div class="citylife-btn__icon-box__inner"></div>
                                                         </div>
-                                                        <span class="cleenhearts-btn__text">See Lessons</span>
+                                                        <span class="citylife-btn__text">See Lessons</span>
                                                     </a>
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <a href="{{ route('courses.dashboard') }}" class="cleenhearts-btn cleenhearts-btn--primary">
-                                                        <div class="cleenhearts-btn__icon-box">
-                                                            <div class="cleenhearts-btn__icon-box__inner"></div>
+                                                    <a href="{{ route('courses.dashboard') }}" class="citylife-btn citylife-btn--primary">
+                                                        <div class="citylife-btn__icon-box">
+                                                            <div class="citylife-btn__icon-box__inner"></div>
                                                         </div>
-                                                        <span class="cleenhearts-btn__text">Dashboard</span>
+                                                        <span class="citylife-btn__text">Dashboard</span>
                                                     </a>
                                                 </div>
                                             </div>
@@ -201,11 +201,11 @@
                                     @elseif($course->is_registration_open)
                                     {{-- Registration is open and user not enrolled --}}
                                     <div class="donation-details__donation__button wow fadeInUp animated" data-wow-duration="1500ms" data-wow-delay="400ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 400ms; animation-name: fadeInUp;">
-                                        <a href="{{ route('courses.register.form', $course->slug) }}" class="cleenhearts-btn donation-details__donation__btn">
-                                            <div class="cleenhearts-btn__icon-box">
-                                                <div class="cleenhearts-btn__icon-box__inner"><span class="icon-duble-arrow"></span></div>
+                                        <a href="{{ route('courses.register.form', $course->slug) }}" class="citylife-btn donation-details__donation__btn">
+                                            <div class="citylife-btn__icon-box">
+                                                <div class="citylife-btn__icon-box__inner"><span class="icon-duble-arrow"></span></div>
                                             </div>
-                                            <span class="cleenhearts-btn__text">Register</span>
+                                            <span class="citylife-btn__text">Register</span>
                                         </a>
                                     </div><!-- /.donation-details__donation__button -->
                                     @else

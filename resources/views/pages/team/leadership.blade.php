@@ -5,7 +5,7 @@
     <!-- /.page-header__bg -->
     <div class="container">
         <h2 class="page-header__title">Leadership Team</h2>
-        <ul class="cleenhearts-breadcrumb list-unstyled">
+        <ul class="citylife-breadcrumb list-unstyled">
             <li><i class="icon-home"></i> <a href="{{ route('home') }}">Home</a></li>
             <li><span>Leadership Team</span></li>
         </ul><!-- /.thm-breadcrumb list-unstyled -->

@@ -1,6 +1,6 @@
 <section class="main-slider-one">
     <div class="main-slider-one__wrapper">
-        <div class="main-slider-one__carousel cleenhearts-owl__carousel owl-carousel" data-owl-options='{
+        <div class="main-slider-one__carousel citylife-owl__carousel owl-carousel" data-owl-options='{
     "loop": true,
     "animateOut": "fadeOut",
     "animateIn": "fadeIn",
@@ -30,11 +30,11 @@
                             @endif
                         </h2>
                         <div class="main-slider-one__btn">
-                            <a href="become-a-volunteer.html" class="cleenhearts-btn">
-                                <div class="cleenhearts-btn__icon-box">
-                                    <div class="cleenhearts-btn__icon-box__inner"><span class="icon-duble-arrow"></span></div>
+                            <a href="become-a-volunteer.html" class="citylife-btn">
+                                <div class="citylife-btn__icon-box">
+                                    <div class="citylife-btn__icon-box__inner"><span class="icon-duble-arrow"></span></div>
                                 </div>
-                                <span class="cleenhearts-btn__text">join with us</span>
+                                <span class="citylife-btn__text">join with us</span>
                             </a>
                         </div>
                     </div>

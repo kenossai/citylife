@@ -59,11 +59,11 @@
                 </div>
 
                 <div class="course-card__actions">
-                    <a href="{{ route('courses.show', $course->slug) }}" class="donation-card__btn cleenhearts-btn cleenhearts-btn--border-base">
-                        <div class="cleenhearts-btn__icon-box">
-                            <div class="cleenhearts-btn__icon-box__inner"><span class="icon-duble-arrow"></span></div>
+                    <a href="{{ route('courses.show', $course->slug) }}" class="donation-card__btn citylife-btn citylife-btn--border-base">
+                        <div class="citylife-btn__icon-box">
+                            <div class="citylife-btn__icon-box__inner"><span class="icon-duble-arrow"></span></div>
                         </div>
-                        <span class="cleenhearts-btn__text">View Course</span>
+                        <span class="citylife-btn__text">View Course</span>
                     </a>
 
                     @if($course->is_registration_open)

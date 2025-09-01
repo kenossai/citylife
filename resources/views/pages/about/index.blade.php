@@ -8,7 +8,7 @@
         <!-- /.page-header__bg -->
         <div class="container">
             <h2 class="page-header__title">{{ $aboutPage->title }}</h2>
-            <ul class="cleenhearts-breadcrumb list-unstyled">
+            <ul class="citylife-breadcrumb list-unstyled">
                 <li><i class="icon-home"></i> <a href="{{ route('home') }}">Home</a></li>
                 <li><span>{{ $aboutPage->title }}</span></li>
             </ul><!-- /.thm-breadcrumb list-unstyled -->
@@ -76,11 +76,11 @@
                         @endif --}}
 
                         <div class="contact-information mt-4">
-                            <a href="{{ route('courses.index') }}" class="contact-information__btn cleenhearts-btn">
-                                <div class="cleenhearts-btn__icon-box">
-                                    <div class="cleenhearts-btn__icon-box__inner"><span class="icon-duble-arrow"></span></div>
+                            <a href="{{ route('courses.index') }}" class="contact-information__btn citylife-btn">
+                                <div class="citylife-btn__icon-box">
+                                    <div class="citylife-btn__icon-box__inner"><span class="icon-duble-arrow"></span></div>
                                 </div>
-                                <span class="cleenhearts-btn__text">more about us</span>
+                                <span class="citylife-btn__text">more about us</span>
                             </a><!-- /.contact-information__btn -->
 
                         </div><!-- /.contact-information -->
@@ -99,7 +99,7 @@
                     <h6 class="sec-title__tagline">our values</h6>
                     <h3 class="sec-title__title">Core Values That Guide Us</h3>
                 </div>
-                <div class="events-list-page__carousel cleenhearts-owl__carousel cleenhearts-owl__carousel--basic-nav owl-theme owl-carousel owl-loaded owl-drag" data-owl-options="{
+                <div class="events-list-page__carousel citylife-owl__carousel citylife-owl__carousel--basic-nav owl-theme owl-carousel owl-loaded owl-drag" data-owl-options="{
             &quot;items&quot;: 2,
             &quot;margin&quot;: 30,
             &quot;smartSpeed&quot;: 700,
@@ -186,7 +186,7 @@
                     </div><!-- /.col-xxl-4 col-lg-5 -->
                 </div><!-- /.row gutter-y-40 -->
             </div><!-- /.team-one__top -->
-            <div class="team-one__carousel cleenhearts-owl__carousel cleenhearts-owl__carousel--with-shadow cleenhearts-owl__carousel--basic-nav owl-theme owl-carousel" data-owl-options='{
+            <div class="team-one__carousel citylife-owl__carousel citylife-owl__carousel--with-shadow citylife-owl__carousel--basic-nav owl-theme owl-carousel" data-owl-options='{
         "items": 3,
         "margin": 30,
         "smartSpeed": 700,

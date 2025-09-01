@@ -6,7 +6,7 @@
         <div class="page-header__bg" style="background-image: url('{{ asset('assets/images/backgrounds/page-header-bg-1-1.jpg') }}');"></div>
         <div class="container">
             <h2 class="page-header__title">Contact {{ $ministry->name }}</h2>
-            <ul class="cleenhearts-breadcrumb list-unstyled">
+            <ul class="citylife-breadcrumb list-unstyled">
                 <li><i class="icon-home"></i> <a href="{{ route('home') }}">Home</a></li>
                 <li><a href="{{ route('ministries.index') }}">Ministries</a></li>
                 <li><a href="{{ route('ministries.show', $ministry->slug) }}">{{ $ministry->name }}</a></li>
@@ -104,11 +104,11 @@
                                 
                                 <div class="col-md-12">
                                     <div class="form-one__control">
-                                        <button type="submit" class="cleenhearts-btn">
-                                            <div class="cleenhearts-btn__icon-box">
-                                                <div class="cleenhearts-btn__icon-box__inner"><span class="icon-duble-arrow"></span></div>
+                                        <button type="submit" class="citylife-btn">
+                                            <div class="citylife-btn__icon-box">
+                                                <div class="citylife-btn__icon-box__inner"><span class="icon-duble-arrow"></span></div>
                                             </div>
-                                            <span class="cleenhearts-btn__text">Send Message</span>
+                                            <span class="citylife-btn__text">Send Message</span>
                                         </button>
                                     </div>
                                 </div>
@@ -168,11 +168,11 @@
 
                         <!-- Back to Ministry -->
                         <div class="sidebar__single">
-                            <a href="{{ route('ministries.show', $ministry->slug) }}" class="cleenhearts-btn">
-                                <div class="cleenhearts-btn__icon-box">
-                                    <div class="cleenhearts-btn__icon-box__inner"><span class="icon-left-arrow"></span></div>
+                            <a href="{{ route('ministries.show', $ministry->slug) }}" class="citylife-btn">
+                                <div class="citylife-btn__icon-box">
+                                    <div class="citylife-btn__icon-box__inner"><span class="icon-left-arrow"></span></div>
                                 </div>
-                                <span class="cleenhearts-btn__text">Back to Ministry</span>
+                                <span class="citylife-btn__text">Back to Ministry</span>
                             </a>
                         </div>
                     </div>

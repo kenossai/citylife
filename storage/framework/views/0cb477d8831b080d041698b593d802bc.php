@@ -20,9 +20,12 @@
 
 
                         <li>
-                            <a href="about-citylife">About Us</a>
+                            <a href="<?php echo e(route('about')); ?>">About Us</a>
                         </li>
 
+                        <li class="dropdown">
+                            <a href="<?php echo e(route('team.index')); ?>">Leadership</a>
+                        </li>
                         <li class="dropdown">
                             <a href="index.html#">Missions</a>
                         </li>
@@ -48,7 +51,7 @@
                             <a href="<?php echo e(route('courses.index')); ?>">Courses</a>
                         </li>
                          <li class="dropdown">
-                            <a href="index.html#">Media Centre</a>
+                            <a href="index.html#">Media</a>
                             <ul>
                                 <li><a href="<?php echo e(route('teaching-series.index')); ?>">Teaching Series</a></li>
                                 <li><a href="<?php echo e(route('citylife-talktime.index')); ?>">CityLife TalkTimes</a></li>
@@ -92,11 +95,11 @@
                 </div><!-- /.mobile-nav__toggler -->
 
                 <div class="main-header__cart"></div><!-- /.main-header__cart -->
-                <a href="<?php echo e(route('giving.index')); ?>" class="cleenhearts-btn main-header__btn">
-                    <div class="cleenhearts-btn__icon-box">
-                        <div class="cleenhearts-btn__icon-box__inner"><span class="icon-donate"></span></div>
+                <a href="<?php echo e(route('giving.index')); ?>" class="citylife-btn main-header__btn">
+                    <div class="citylife-btn__icon-box">
+                        <div class="citylife-btn__icon-box__inner"><span class="icon-donate"></span></div>
                     </div>
-                    <span class="cleenhearts-btn__text">Your Giving</span>
+                    <span class="citylife-btn__text">Your Giving</span>
                 </a><!-- /.thm-btn main-header__btn -->
             </div><!-- /.main-header__right -->
         </div><!-- /.main-header__inner -->

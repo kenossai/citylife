@@ -5,7 +5,7 @@
     <!-- /.page-header__bg -->
     <div class="container">
         <h2 class="page-header__title">Contact Us</h2>
-        <ul class="cleenhearts-breadcrumb list-unstyled">
+        <ul class="citylife-breadcrumb list-unstyled">
             <li><i class="icon-home"></i> <a href="{{ route('home') }}">Home</a></li>
             <li><span>Contact Us</span></li>
         </ul><!-- /.thm-breadcrumb list-unstyled -->
@@ -151,11 +151,11 @@
                             </div><!-- /.col-12 -->
                             <div class="col-12">
                                 <div class="contact-one__btn-box form-one__control">
-                                    <button type="submit" class="cleenhearts-btn">
-                                        <span class="cleenhearts-btn__icon-box">
-                                            <span class="cleenhearts-btn__icon-box__inner"><span class="icon-duble-arrow"></span></span>
+                                    <button type="submit" class="citylife-btn">
+                                        <span class="citylife-btn__icon-box">
+                                            <span class="citylife-btn__icon-box__inner"><span class="icon-duble-arrow"></span></span>
                                         </span>
-                                        <span class="cleenhearts-btn__text">Send Message</span>
+                                        <span class="citylife-btn__text">Send Message</span>
                                     </button>
                                 </div><!-- /.form-one__control -->
                             </div><!-- /.col-12 -->

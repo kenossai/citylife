@@ -6,7 +6,7 @@
     <!-- /.page-header__bg -->
     <div class="container">
         <h2 class="page-header__title">{{ $ministry->name }}</h2>
-        <ul class="cleenhearts-breadcrumb list-unstyled">
+        <ul class="citylife-breadcrumb list-unstyled">
             <li><i class="icon-home"></i> <a href="{{ route('home') }}">Home</a></li>
             <li><i class="icon-home"></i> <a href="{{ route('ministries.index') }}">Ministries</a></li>
             <li><span>{{ $ministry->name }}</span></li>
@@ -53,11 +53,11 @@
 
                 <div class="event-details__contact contact-information">
                     @if($ministry->contact_email)
-                    <a href="{{ route('ministries.contact', $ministry->slug) }}" class="contact-information__btn cleenhearts-btn">
-                        <div class="cleenhearts-btn__icon-box">
-                            <div class="cleenhearts-btn__icon-box__inner"><span class="icon-duble-arrow"></span></div>
+                    <a href="{{ route('ministries.contact', $ministry->slug) }}" class="contact-information__btn citylife-btn">
+                        <div class="citylife-btn__icon-box">
+                            <div class="citylife-btn__icon-box__inner"><span class="icon-duble-arrow"></span></div>
                         </div>
-                        <span class="cleenhearts-btn__text">join now</span>
+                        <span class="citylife-btn__text">join now</span>
                     </a><!-- /.contact-information__btn -->
                     @endif
                 </div><!-- /.contact-information -->

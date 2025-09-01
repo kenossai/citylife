@@ -6,7 +6,7 @@
         <div class="page-header__bg" style="background-image: url('{{ asset('assets/images/backgrounds/page-header-bg-1-1.jpg') }}');"></div>
         <div class="container">
             <h2 class="page-header__title">Member Login</h2>
-            <ul class="cleenhearts-breadcrumb list-unstyled">
+            <ul class="citylife-breadcrumb list-unstyled">
                 <li><i class="icon-home"></i> <a href="{{ route('home') }}">Home</a></li>
                 <li><span>Login</span></li>
             </ul>
@@ -81,11 +81,11 @@
                             </div>
 
                             <div class="login-page__form__input-box">
-                                <button type="submit" class="cleenhearts-btn">
-                                    <span class="cleenhearts-btn__icon-box">
-                                        <span class="cleenhearts-btn__icon-box__inner"><span class="icon-duble-arrow"></span></span>
+                                <button type="submit" class="citylife-btn">
+                                    <span class="citylife-btn__icon-box">
+                                        <span class="citylife-btn__icon-box__inner"><span class="icon-duble-arrow"></span></span>
                                     </span>
-                                    <span class="cleenhearts-btn__text">Log In</span>
+                                    <span class="citylife-btn__text">Log In</span>
                                 </button>
                             </div>
 

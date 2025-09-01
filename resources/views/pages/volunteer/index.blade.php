@@ -125,7 +125,7 @@
         <h3 class="text-white">Our Volunteer Opportunities</h3>
         <h2 class="page-header__title">Make a Difference in Your Community</h2>
         <p class="section-header__text">Join our volunteer team and explore opportunities to serve and connect with others.</p>
-        <ul class="cleenhearts-breadcrumb list-unstyled">
+        <ul class="citylife-breadcrumb list-unstyled">
             <li><i class="icon-home"></i> <a href="{{ route('home') }}">Home</a></li>
             <li><span>Volunteer</span></li>
         </ul><!-- /.thm-breadcrumb list-unstyled -->
@@ -349,11 +349,11 @@
                         </div>
 
                         <div class="become-volunteer__form__bottom form-one__control">
-                            <button type="submit" class="cleenhearts-btn cleenhearts-btn--border-base">
-                                <span class="cleenhearts-btn__icon-box">
-                                    <span class="cleenhearts-btn__icon-box__inner"><span class="icon-duble-arrow"></span></span>
+                            <button type="submit" class="citylife-btn citylife-btn--border-base">
+                                <span class="citylife-btn__icon-box">
+                                    <span class="citylife-btn__icon-box__inner"><span class="icon-duble-arrow"></span></span>
                                 </span>
-                                <span class="cleenhearts-btn__text">Submit</span>
+                                <span class="citylife-btn__text">Submit</span>
                             </button>
                         </div><!-- /.become-volunteer__form__bottom -->
                     </div><!-- /.become-volunteer__form__inner -->

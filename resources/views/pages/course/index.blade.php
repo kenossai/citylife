@@ -7,7 +7,7 @@
         <h3 class="text-white">Our Courses</h3>
         <h2 class="page-header__title">Learn and Grow in Faith</h2>
         <p class="section-header__text">Join our comprehensive courses designed to strengthen your faith, develop leadership skills, and grow in your walk with Christ.</p>
-        <ul class="cleenhearts-breadcrumb list-unstyled">
+        <ul class="citylife-breadcrumb list-unstyled">
             <li><i class="icon-home"></i> <a href="{{ route('home') }}">Home</a></li>
             <li><span>Courses</span></li>
         </ul><!-- /.thm-breadcrumb list-unstyled -->

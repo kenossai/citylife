@@ -7,7 +7,7 @@
     <div class="container">
         <h2 class="text-white">{{ $music->title }}</h2>
         <h2 class="page-header__title">CityLife Music</h2>
-        <ul class="cleenhearts-breadcrumb list-unstyled">
+        <ul class="citylife-breadcrumb list-unstyled">
             <li><i class="icon-home"></i> <a href="{{ route('home') }}">Home</a></li>
             <li><a href="{{ route('citylife-music.index') }}">CityLife Music</a></li>
             <li><span>{{ $music->title }}</span></li>
@@ -90,20 +90,20 @@
                     <div class="product-details__actions mt-4">
                         <div class="row">
                             <div class="col-sm-6">
-                                <a href="{{ route('citylife-music.index') }}" class="cleenhearts-btn cleenhearts-btn--border w-100">
-                                    <div class="cleenhearts-btn__icon-box">
-                                        <div class="cleenhearts-btn__icon-box__inner"><span class="icon-arrow-left"></span></div>
+                                <a href="{{ route('citylife-music.index') }}" class="citylife-btn citylife-btn--border w-100">
+                                    <div class="citylife-btn__icon-box">
+                                        <div class="citylife-btn__icon-box__inner"><span class="icon-arrow-left"></span></div>
                                     </div>
-                                    <span class="cleenhearts-btn__text">Back to Music</span>
+                                    <span class="citylife-btn__text">Back to Music</span>
                                 </a>
                             </div>
                             <div class="col-sm-6">
                                 @if($music->artist)
-                                    <a href="{{ route('citylife-music.index', ['artist' => $music->artist]) }}" class="cleenhearts-btn w-100">
-                                        <div class="cleenhearts-btn__icon-box">
-                                            <div class="cleenhearts-btn__icon-box__inner"><span class="icon-user"></span></div>
+                                    <a href="{{ route('citylife-music.index', ['artist' => $music->artist]) }}" class="citylife-btn w-100">
+                                        <div class="citylife-btn__icon-box">
+                                            <div class="citylife-btn__icon-box__inner"><span class="icon-user"></span></div>
                                         </div>
-                                        <span class="cleenhearts-btn__text">More by {{ $music->artist }}</span>
+                                        <span class="citylife-btn__text">More by {{ $music->artist }}</span>
                                     </a>
                                 @endif
                             </div>
@@ -165,11 +165,11 @@
                                     @if($related->artist)
                                         <p class="product-item__artist">{{ $related->artist }}</p>
                                     @endif
-                                    <a href="{{ route('citylife-music.show', $related->slug) }}" class="cleenhearts-btn cleenhearts-btn--border">
-                                        <div class="cleenhearts-btn__icon-box">
-                                            <div class="cleenhearts-btn__icon-box__inner"><span class="icon-play"></span></div>
+                                    <a href="{{ route('citylife-music.show', $related->slug) }}" class="citylife-btn citylife-btn--border">
+                                        <div class="citylife-btn__icon-box">
+                                            <div class="citylife-btn__icon-box__inner"><span class="icon-play"></span></div>
                                         </div>
-                                        <span class="cleenhearts-btn__text">Listen</span>
+                                        <span class="citylife-btn__text">Listen</span>
                                     </a>
                                 </div>
                             </div>

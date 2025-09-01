@@ -7,7 +7,7 @@
     <div class="container">
         <h2 class="text-white">{{ $series->title }}</h2>
         <h2 class="page-header__title">Teaching Series</h2>
-        <ul class="cleenhearts-breadcrumb list-unstyled">
+        <ul class="citylife-breadcrumb list-unstyled">
             <li><i class="icon-home"></i> <a href="{{ route('home') }}">Home</a></li>
             <li><a href="{{ route('teaching-series.index') }}">Teaching Series</a></li>
             <li><span>{{ $series->title }}</span></li>
@@ -51,11 +51,11 @@
                                         <div class="position-relative">
                                             <img src="{{ $series->image_url }}" alt="{{ $series->title }}">
                                             <div class="position-absolute top-50 start-50 translate-middle">
-                                                <a href="{{ $series->video_url }}" target="_blank" class="cleenhearts-btn cleenhearts-btn--base">
-                                                    <span class="cleenhearts-btn__icon-box">
-                                                        <span class="cleenhearts-btn__icon-box__inner"><span class="icon-play"></span></span>
+                                                <a href="{{ $series->video_url }}" target="_blank" class="citylife-btn citylife-btn--base">
+                                                    <span class="citylife-btn__icon-box">
+                                                        <span class="citylife-btn__icon-box__inner"><span class="icon-play"></span></span>
                                                     </span>
-                                                    <span class="cleenhearts-btn__text">Watch Video</span>
+                                                    <span class="citylife-btn__text">Watch Video</span>
                                                 </a>
                                             </div>
                                         </div>
@@ -64,11 +64,11 @@
                                     <div class="position-relative">
                                         <img src="{{ $series->image_url }}" alt="{{ $series->title }}">
                                         <div class="position-absolute top-50 start-50 translate-middle">
-                                            <a href="{{ $series->video_url }}" target="_blank" class="cleenhearts-btn cleenhearts-btn--base">
-                                                <span class="cleenhearts-btn__icon-box">
-                                                    <span class="cleenhearts-btn__icon-box__inner"><span class="icon-play"></span></span>
+                                            <a href="{{ $series->video_url }}" target="_blank" class="citylife-btn citylife-btn--base">
+                                                <span class="citylife-btn__icon-box">
+                                                    <span class="citylife-btn__icon-box__inner"><span class="icon-play"></span></span>
                                                 </span>
-                                                <span class="cleenhearts-btn__text">Watch Video</span>
+                                                <span class="citylife-btn__text">Watch Video</span>
                                             </a>
                                         </div>
                                     </div>

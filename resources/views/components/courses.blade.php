@@ -1,5 +1,5 @@
  <section class="help-donate-one section-space-top">
-            <div class="help-donate-one__bg cleenhearts-jarallax" data-jarallax data-speed="0.3" data-imgPosition="50% -100%" style="background-image: url(assets/images/backgrounds/help-donate-bg-1-1.jpg);"></div>
+            <div class="help-donate-one__bg citylife-jarallax" data-jarallax data-speed="0.3" data-imgPosition="50% -100%" style="background-image: url(assets/images/backgrounds/help-donate-bg-1-1.jpg);"></div>
             <div class="container">
                 <div class="sec-title">
                     <h6 class="sec-title__tagline sec-title__tagline--center">MISSION & VISION</h6><!-- /.sec-title__tagline -->
@@ -19,11 +19,11 @@
                             <div class="donation-information__content">
                                 <h3 class="donation-information__title">Make the Most Out of Tax Time</h3><!-- /.donation-information__title -->
                                 <p class="donation-information__text">We help companies develop powerful corporate social responsibility, grantmaking, and employee engagement strategies.</p><!-- /.donation-information__text -->
-                                <a href="contact.html" class="cleenhearts-btn cleenhearts-btn--border">
-                                    <div class="cleenhearts-btn__icon-box">
-                                        <div class="cleenhearts-btn__icon-box__inner"><span class="icon-duble-arrow"></span></div>
+                                <a href="contact.html" class="citylife-btn citylife-btn--border">
+                                    <div class="citylife-btn__icon-box">
+                                        <div class="citylife-btn__icon-box__inner"><span class="icon-duble-arrow"></span></div>
                                     </div>
-                                    <span class="cleenhearts-btn__text">read more</span>
+                                    <span class="citylife-btn__text">read more</span>
                                 </a>
                             </div><!-- /.donation-information__content -->
                         </div><!-- /.donation-information -->
@@ -43,11 +43,11 @@
                                     <button type="button" class="gift-card__btn">$<span class="gift-card__btn__text">50</span></button><!-- /.gift-card__btn -->
                                     <button type="button" class="gift-card__btn">$<span class="gift-card__btn__text">99</span></button><!-- /.gift-card__btn -->
                                 </div><!-- /.gift-card__amount -->
-                                <a href="donate.html" class="cleenhearts-btn cleenhearts-btn--border">
-                                    <div class="cleenhearts-btn__icon-box">
-                                        <div class="cleenhearts-btn__icon-box__inner"><span class="icon-duble-arrow"></span></div>
+                                <a href="donate.html" class="citylife-btn citylife-btn--border">
+                                    <div class="citylife-btn__icon-box">
+                                        <div class="citylife-btn__icon-box__inner"><span class="icon-duble-arrow"></span></div>
                                     </div>
-                                    <span class="cleenhearts-btn__text">donate now</span>
+                                    <span class="citylife-btn__text">donate now</span>
                                 </a>
                             </div><!-- /.gift-card__content -->
                         </div><!-- /.gift-card -->

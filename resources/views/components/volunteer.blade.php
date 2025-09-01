@@ -18,12 +18,12 @@
                     </div><!-- /.sec-title -->
                     <p class="help-people__text">Dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernaturaut odit aut fugit, sed quia consequuntur. Dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas.</p><!-- /.help-people__text -->
                     <div class="help-people__content__bottom">
-                        <a href="{{ route('volunteer.index') }}" class="cleenhearts-btn">
-                            <div class="cleenhearts-btn__icon-box">
-                                <div class="cleenhearts-btn__icon-box__inner"><span class="icon-duble-arrow"></span></div>
+                        <a href="{{ route('volunteer.index') }}" class="citylife-btn">
+                            <div class="citylife-btn__icon-box">
+                                <div class="citylife-btn__icon-box__inner"><span class="icon-duble-arrow"></span></div>
                             </div>
-                            <span class="cleenhearts-btn__text">Become A Volunteer</span>
-                        </a><!-- /.cleenhearts-btn -->
+                            <span class="citylife-btn__text">Become A Volunteer</span>
+                        </a><!-- /.citylife-btn -->
                     </div><!-- /.help-people__content__bottom -->
                 </div><!-- /.help-people__content__inner -->
             </div><!-- /.col-xl-6 -->

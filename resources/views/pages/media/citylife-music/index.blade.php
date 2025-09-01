@@ -8,7 +8,7 @@
         <h2 class="text-white">CityLife Music</h2>
         <h2 class="page-header__title">Worship Songs & Music</h2>
         <p class="section-header__text">Experience the heart of worship through our collection of inspiring songs and music that lift your spirit and draw you closer to God.</p>
-        <ul class="cleenhearts-breadcrumb list-unstyled">
+        <ul class="citylife-breadcrumb list-unstyled">
             <li><i class="icon-home"></i> <a href="{{ route('home') }}">Home</a></li>
             <li><span>CityLife Music</span></li>
         </ul>
@@ -76,11 +76,11 @@
                                     @endif --}}
 
                                     <div class="product-item__actions">
-                                        <a href="{{ route('citylife-music.show', $song->slug) }}" class="cleenhearts-btn cleenhearts-btn--border product-item__link">
-                                            <div class="cleenhearts-btn__icon-box">
-                                                <div class="cleenhearts-btn__icon-box__inner"><span class="icon-play"></span></div>
+                                        <a href="{{ route('citylife-music.show', $song->slug) }}" class="citylife-btn citylife-btn--border product-item__link">
+                                            <div class="citylife-btn__icon-box">
+                                                <div class="citylife-btn__icon-box__inner"><span class="icon-play"></span></div>
                                             </div>
-                                            <span class="cleenhearts-btn__text">Listen</span>
+                                            <span class="citylife-btn__text">Listen</span>
                                         </a>
 
                                         <!-- Quick Links -->

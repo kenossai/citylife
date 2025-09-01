@@ -5,7 +5,7 @@
     <!-- /.page-header__bg -->
     <div class="container">
         <h2 class="page-header__title">{{ $teamMember->full_name }}</h2>
-        <ul class="cleenhearts-breadcrumb list-unstyled">
+        <ul class="citylife-breadcrumb list-unstyled">
             <li><i class="icon-home"></i> <a href="{{ route('home') }}">Home</a></li>
             <li><a href="{{ route('team.index') }}">Team</a></li>
             <li><span>{{ $teamMember->display_name }}</span></li>

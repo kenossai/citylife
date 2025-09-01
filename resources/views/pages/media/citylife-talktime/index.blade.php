@@ -8,7 +8,7 @@
         <h2 class="text-white">CityLife TalkTime</h2>
         <h2 class="page-header__title">Inspiring Conversations and Discussions</h2>
         <p class="section-header__text">Join us for engaging conversations that inspire, encourage, and build community through meaningful dialogue.</p>
-        <ul class="cleenhearts-breadcrumb list-unstyled">
+        <ul class="citylife-breadcrumb list-unstyled">
             <li><i class="icon-home"></i> <a href="{{ route('home') }}">Home</a></li>
             <li><span>CityLife TalkTime</span></li>
         </ul>
@@ -77,11 +77,11 @@
                                     @if($talkTime->description)
                                         <p class="product-item__excerpt">{{ Str::limit($talkTime->description, 100) }}</p>
                                     @endif
-                                    <a href="{{ route('citylife-talktime.show', $talkTime->slug) }}" class="cleenhearts-btn cleenhearts-btn--border product-item__link">
-                                        <div class="cleenhearts-btn__icon-box">
-                                            <div class="cleenhearts-btn__icon-box__inner"><span class="icon-play"></span></div>
+                                    <a href="{{ route('citylife-talktime.show', $talkTime->slug) }}" class="citylife-btn citylife-btn--border product-item__link">
+                                        <div class="citylife-btn__icon-box">
+                                            <div class="citylife-btn__icon-box__inner"><span class="icon-play"></span></div>
                                         </div>
-                                        <span class="cleenhearts-btn__text">Watch/Listen</span>
+                                        <span class="citylife-btn__text">Watch/Listen</span>
                                     </a>
                                 </div>
                             </div>

@@ -7,7 +7,7 @@
     <div class="container">
         <h2 class="page-header__title">Giving</h2>
         <p class="page-header__text">Honor the LORD with your possessions and support His work</p>
-        <ul class="cleenhearts-breadcrumb list-unstyled">
+        <ul class="citylife-breadcrumb list-unstyled">
             <li><i class="icon-home"></i> <a href="{{ route('home') }}">Home</a></li>
             <li><span>Giving</span></li>
         </ul>
@@ -116,11 +116,11 @@
                     <h3 class="donate-card__title">Online Giving</h3>
                     <p class="donate-card__text">Give securely online using our SumUp payment system. Scan the QR code or click the link below.</p>
                     <div class="donate-card__actions">
-                        <a href="https://pay.sumup.com/b2c/Q5WMU9IP" target="_blank" class="cleenhearts-btn">
-                            <div class="cleenhearts-btn__icon-box">
-                                <div class="cleenhearts-btn__icon-box__inner"><span class="icon-donate"></span></div>
+                        <a href="https://pay.sumup.com/b2c/Q5WMU9IP" target="_blank" class="citylife-btn">
+                            <div class="citylife-btn__icon-box">
+                                <div class="citylife-btn__icon-box__inner"><span class="icon-donate"></span></div>
                             </div>
-                            <span class="cleenhearts-btn__text">Give via SumUp</span>
+                            <span class="citylife-btn__text">Give via SumUp</span>
                         </a>
                     </div>
                 </div>
@@ -135,11 +135,11 @@
                     <h3 class="donate-card__title">PayPal Donation</h3>
                     <p class="donate-card__text">Give through PayPal for a quick and secure donation experience.</p>
                     <div class="donate-card__actions">
-                        <a href="https://www.paypal.com/donate/?hosted_button_id=4KEE89F86PPQG" target="_blank" class="cleenhearts-btn">
-                            <div class="cleenhearts-btn__icon-box">
-                                <div class="cleenhearts-btn__icon-box__inner"><span class="fab fa-paypal"></span></div>
+                        <a href="https://www.paypal.com/donate/?hosted_button_id=4KEE89F86PPQG" target="_blank" class="citylife-btn">
+                            <div class="citylife-btn__icon-box">
+                                <div class="citylife-btn__icon-box__inner"><span class="fab fa-paypal"></span></div>
                             </div>
-                            <span class="cleenhearts-btn__text">Donate via PayPal</span>
+                            <span class="citylife-btn__text">Donate via PayPal</span>
                         </a>
                     </div>
                 </div>
@@ -272,11 +272,11 @@
                             </div>
                             <div class="col-12">
                                 <div class="form-one__control">
-                                    <button type="submit" class="cleenhearts-btn">
-                                        <div class="cleenhearts-btn__icon-box">
-                                            <div class="cleenhearts-btn__icon-box__inner"><span class="icon-duble-arrow"></span></div>
+                                    <button type="submit" class="citylife-btn">
+                                        <div class="citylife-btn__icon-box">
+                                            <div class="citylife-btn__icon-box__inner"><span class="icon-duble-arrow"></span></div>
                                         </div>
-                                        <span class="cleenhearts-btn__text">Submit Declaration</span>
+                                        <span class="citylife-btn__text">Submit Declaration</span>
                                     </button>
                                 </div>
                             </div>
@@ -323,7 +323,7 @@
 
 .donate-card__icon {
     font-size: 3rem;
-    color: var(--cleenhearts-primary);
+    color: var(--citylife-base);
     margin-bottom: 20px;
 }
 
@@ -331,7 +331,7 @@
     font-size: 1.5rem;
     font-weight: 600;
     margin-bottom: 15px;
-    color: var(--cleenhearts-black);
+    color: var(--citylife-black);
 }
 
 .donate-card__text {
@@ -345,7 +345,7 @@
     padding: 20px;
     border-radius: 8px;
     margin: 20px 0;
-    border-left: 4px solid var(--cleenhearts-primary);
+    border-left: 4px solid var(--citylife-base);
 }
 
 .bank-details p {
@@ -419,9 +419,9 @@
 }
 
 .form-one__control__input:focus {
-    border-color: var(--cleenhearts-primary) !important;
+    border-color: var(--citylife-base) !important;
     outline: none !important;
-    box-shadow: 0 0 0 3px rgba(var(--cleenhearts-primary), 0.1) !important;
+    box-shadow: 0 0 0 3px rgba(var(--citylife-base-rgb), 0.1) !important;
     background-color: #fff !important;
 }
 
@@ -448,7 +448,7 @@
     z-index: 10 !important;
 }
 
-.cleenhearts-btn {
+.citylife-btn {
     opacity: 1 !important;
     pointer-events: auto !important;
     cursor: pointer !important;
@@ -456,7 +456,7 @@
     z-index: 10 !important;
 }
 
-.cleenhearts-btn:disabled {
+.citylife-btn:disabled {
     opacity: 0.6 !important;
     cursor: not-allowed !important;
 }
@@ -495,7 +495,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Test form functionality
     const form = document.querySelector('form');
     const inputs = document.querySelectorAll('.form-one__control__input');
-    const submitBtn = document.querySelector('.cleenhearts-btn');
+    const submitBtn = document.querySelector('.citylife-btn');
 
     console.log('Form found:', form);
     console.log('Number of inputs:', inputs.length);

@@ -41,11 +41,11 @@
         </div>
         @endif
         <div class="text-center mt-5">
-            <a href="{{ route('events.index') }}" class="cleenhearts-btn">
-                <div class="cleenhearts-btn__icon-box">
-                    <div class="cleenhearts-btn__icon-box__inner"><span class="icon-duble-arrow"></span></div>
+            <a href="{{ route('events.index') }}" class="citylife-btn">
+                <div class="citylife-btn__icon-box">
+                    <div class="citylife-btn__icon-box__inner"><span class="icon-duble-arrow"></span></div>
                 </div>
-                <span class="cleenhearts-btn__text">See All Events</span>
+                <span class="citylife-btn__text">See All Events</span>
             </a>
         </div>
     </div><!-- /.container -->

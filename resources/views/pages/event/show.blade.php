@@ -6,7 +6,7 @@
     <div class="container">
         <h2 class="page-header__title">{{ $event->title }}</h2>
         <p class="section-header__text">{{ $event->description }}</p>
-        <ul class="cleenhearts-breadcrumb list-unstyled">
+        <ul class="citylife-breadcrumb list-unstyled">
             <li><i class="icon-home"></i> <a href="{{ route('home') }}">Home</a></li>
             <li><span>Events</span></li>
         </ul><!-- /.thm-breadcrumb list-unstyled -->
@@ -42,11 +42,11 @@
 
                 <div class="event-details__contact contact-information">
                     @if($event->requires_registration)
-                        <a href="#" class="contact-information__btn cleenhearts-btn">
-                            <div class="cleenhearts-btn__icon-box">
-                                <div class="cleenhearts-btn__icon-box__inner"><span class="icon-duble-arrow"></span></div>
+                        <a href="#" class="contact-information__btn citylife-btn">
+                            <div class="citylife-btn__icon-box">
+                                <div class="citylife-btn__icon-box__inner"><span class="icon-duble-arrow"></span></div>
                             </div>
-                            <span class="cleenhearts-btn__text">register </span>
+                            <span class="citylife-btn__text">register </span>
                         </a><!-- /.contact-information__btn -->
                         @if($event->registration_details)
                             <div class="event-details__registration">

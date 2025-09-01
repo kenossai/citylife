@@ -124,11 +124,11 @@ In the course lesson and course enrollment what is course id and user id, I need
                                     @endif
                                     @if($course->is_registration_open)
                                     <div class="donation-details__donation__button wow fadeInUp animated" data-wow-duration="1500ms" data-wow-delay="400ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 400ms; animation-name: fadeInUp;">
-                                        <a href="#" class="cleenhearts-btn donation-details__donation__btn">
-                                            <div class="cleenhearts-btn__icon-box">
-                                                <div class="cleenhearts-btn__icon-box__inner"><span class="icon-duble-arrow"></span></div>
+                                        <a href="#" class="citylife-btn donation-details__donation__btn">
+                                            <div class="citylife-btn__icon-box">
+                                                <div class="citylife-btn__icon-box__inner"><span class="icon-duble-arrow"></span></div>
                                             </div>
-                                            <span class="cleenhearts-btn__text">Enroll Now</span>
+                                            <span class="citylife-btn__text">Enroll Now</span>
                                         </a>
                                     </div><!-- /.donation-details__donation__button -->
                                     @else
@@ -215,11 +215,11 @@ In the course lesson and course enrollment what is course id and user id, I need
                                 </div><!-- /.col-12-->
                                 <div class="col-12">
                                     <div class="form-one__control">
-                                        <button type="submit" class="cleenhearts-btn">
-                                            <span class="cleenhearts-btn__icon-box">
-                                                <span class="cleenhearts-btn__icon-box__inner"><span class="icon-duble-arrow"></span></span>
+                                        <button type="submit" class="citylife-btn">
+                                            <span class="citylife-btn__icon-box">
+                                                <span class="citylife-btn__icon-box__inner"><span class="icon-duble-arrow"></span></span>
                                             </span>
-                                            <span class="cleenhearts-btn__text">Post Comment</span>
+                                            <span class="citylife-btn__text">Post Comment</span>
                                         </button>
                                     </div><!-- /.form-one__control -->
                                 </div><!-- /.col-12 -->

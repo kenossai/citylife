@@ -11,7 +11,7 @@
                 Discover your calling and make a difference in our community and beyond.
                 Join one of our vibrant ministries and grow in faith while serving others.
             </p>
-            <ul class="cleenhearts-breadcrumb list-unstyled">
+            <ul class="citylife-breadcrumb list-unstyled">
                 <li><i class="icon-home"></i> <a href="{{ route('home') }}">Home</a></li>
                 <li><span>Ministries</span></li>
             </ul>
@@ -76,11 +76,11 @@
             <div class="cta-one__inner text-center">
                 <h3 class="cta-one__title">Ready to Get Involved?</h3>
                 <p class="cta-one__text">Contact our ministry coordinator to find the perfect ministry for you.</p>
-                <a href="{{ route('contact') }}" class="cleenhearts-btn">
-                    <div class="cleenhearts-btn__icon-box">
-                        <div class="cleenhearts-btn__icon-box__inner"><span class="icon-duble-arrow"></span></div>
+                <a href="{{ route('contact') }}" class="citylife-btn">
+                    <div class="citylife-btn__icon-box">
+                        <div class="citylife-btn__icon-box__inner"><span class="icon-duble-arrow"></span></div>
                     </div>
-                    <span class="cleenhearts-btn__text">Join Us</span>
+                    <span class="citylife-btn__text">Join Us</span>
                 </a>
             </div>
         </div>

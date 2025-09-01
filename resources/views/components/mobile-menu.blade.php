@@ -14,7 +14,7 @@
             <ul class="mobile-nav__contact list-unstyled">
                 <li>
                     <i class="fa fa-envelope"></i>
-                    <a href="mailto:needhelp@cleenhearts.com">needhelp@cleenhearts.com</a>
+                    <a href="mailto:needhelp@citylife.com">needhelp@citylife.com</a>
                 </li>
                 <li>
                     <i class="fa fa-phone-alt"></i>

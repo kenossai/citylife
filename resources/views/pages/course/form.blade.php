@@ -9,7 +9,7 @@
             <h3 class="text-white">Our Courses</h3>
             <h2 class="page-header__title">{{ $course->title }}</h2>
             <p class="section-header__text">{{ $course->description }}</p>
-            <ul class="cleenhearts-breadcrumb list-unstyled">
+            <ul class="citylife-breadcrumb list-unstyled">
                 <li><i class="icon-home"></i> <a href="{{ route('home') }}">Home</a></li>
                 <li><i class="icon-book"></i> <a href="{{ route('courses.index') }}">Courses List</a></li>
                 <li><span>{{ $course->title }}</span></li>
@@ -168,11 +168,11 @@
                                 </div><!-- /.form-one__control -->
 
                                 <div class="become-volunteer__form__bottom form-one__control">
-                                    <button type="submit" class="cleenhearts-btn cleenhearts-btn--border-base">
-                                        <span class="cleenhearts-btn__icon-box">
-                                            <span class="cleenhearts-btn__icon-box__inner"><span class="icon-duble-arrow"></span></span>
+                                    <button type="submit" class="citylife-btn citylife-btn--border-base">
+                                        <span class="citylife-btn__icon-box">
+                                            <span class="citylife-btn__icon-box__inner"><span class="icon-duble-arrow"></span></span>
                                         </span>
-                                        <span class="cleenhearts-btn__text">Register for Course</span>
+                                        <span class="citylife-btn__text">Register for Course</span>
                                     </button>
 
                                     <!-- Course Stats -->

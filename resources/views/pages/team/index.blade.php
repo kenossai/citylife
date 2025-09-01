@@ -5,7 +5,7 @@
     <!-- /.page-header__bg -->
     <div class="container">
         <h2 class="page-header__title">Our Team</h2>
-        <ul class="cleenhearts-breadcrumb list-unstyled">
+        <ul class="citylife-breadcrumb list-unstyled">
             <li><i class="icon-home"></i> <a href="{{ route('home') }}">Home</a></li>
             <li><span>Our Team</span></li>
         </ul><!-- /.thm-breadcrumb list-unstyled -->
@@ -69,19 +69,19 @@
             <div class="text-center mt-5">
                 <div class="row justify-content-center">
                     <div class="col-auto">
-                        <a href="{{ route('team.pastoral') }}" class="cleenhearts-btn me-3">
-                            <div class="cleenhearts-btn__icon-box">
-                                <div class="cleenhearts-btn__icon-box__inner"><span class="icon-users"></span></div>
+                        <a href="{{ route('team.pastoral') }}" class="citylife-btn me-3">
+                            <div class="citylife-btn__icon-box">
+                                <div class="citylife-btn__icon-box__inner"><span class="icon-users"></span></div>
                             </div>
-                            <span class="cleenhearts-btn__text">Pastoral Team</span>
+                            <span class="citylife-btn__text">Pastoral Team</span>
                         </a>
                     </div>
                     <div class="col-auto">
-                        <a href="{{ route('team.leadership') }}" class="cleenhearts-btn cleenhearts-btn--base2">
-                            <div class="cleenhearts-btn__icon-box">
-                                <div class="cleenhearts-btn__icon-box__inner"><span class="icon-users"></span></div>
+                        <a href="{{ route('team.leadership') }}" class="citylife-btn citylife-btn--base2">
+                            <div class="citylife-btn__icon-box">
+                                <div class="citylife-btn__icon-box__inner"><span class="icon-users"></span></div>
                             </div>
-                            <span class="cleenhearts-btn__text">Leadership Team</span>
+                            <span class="citylife-btn__text">Leadership Team</span>
                         </a>
                     </div>
                 </div>

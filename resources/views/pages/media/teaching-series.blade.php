@@ -8,7 +8,7 @@
         <h2 class="text-white">Teaching Series</h2>
         <h2 class="page-header__title">Deepen Your Faith Through Our Teaching Series</h2>
         <p class="section-header__text">Explore our collection of teaching series designed to help you grow in your faith and understanding of God's Word.</p>
-        <ul class="cleenhearts-breadcrumb list-unstyled">
+        <ul class="citylife-breadcrumb list-unstyled">
             <li><i class="icon-home"></i> <a href="{{ route('home') }}">Home</a></li>
             <li><span>Teaching Series</span></li>
         </ul>
@@ -56,11 +56,11 @@
                                             <span class="d-block">{{ $series->pastor }}</span>
                                         @endif
                                     </div>
-                                    <a href="{{ route('teaching-series.show', $series->slug) }}" class="cleenhearts-btn cleenhearts-btn--border product-item__link">
-                                        <div class="cleenhearts-btn__icon-box">
-                                            <div class="cleenhearts-btn__icon-box__inner"><span class="icon-play"></span></div>
+                                    <a href="{{ route('teaching-series.show', $series->slug) }}" class="citylife-btn citylife-btn--border product-item__link">
+                                        <div class="citylife-btn__icon-box">
+                                            <div class="citylife-btn__icon-box__inner"><span class="icon-play"></span></div>
                                         </div>
-                                        <span class="cleenhearts-btn__text">Watch/Listen</span>
+                                        <span class="citylife-btn__text">Watch/Listen</span>
                                     </a>
                                 </div>
                             </div>

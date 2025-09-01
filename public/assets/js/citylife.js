@@ -65,14 +65,14 @@
     }
 
     // Date Picker
-    if ($(".cleenhearts-datepicker").length) {
-        $(".cleenhearts-datepicker").each(function () {
+    if ($(".citylife-datepicker").length) {
+        $(".citylife-datepicker").each(function () {
             $(this).datepicker();
         });
     }
 
     // jarallax
-    $(".cleenhearts-jarallax").jarallax({});
+    $(".citylife-jarallax").jarallax({});
 
     // Popular Causes Progress Bar
     if ($(".count-bar").length) {
@@ -461,8 +461,8 @@
     }
 
     //accordion
-    if ($(".cleenhearts-accordion").length) {
-        var accordionGrp = $(".cleenhearts-accordion");
+    if ($(".citylife-accordion").length) {
+        var accordionGrp = $(".citylife-accordion");
         accordionGrp.each(function () {
             var accordionName = $(this).data("grp-name");
             var Self = $(this);
@@ -475,10 +475,10 @@
                     .find(".accordion-title")
                     .on("click", function () {
                         if ($(this).parent().hasClass("active") === false) {
-                            $(".cleenhearts-accordion." + accordionName)
+                            $(".citylife-accordion." + accordionName)
                                 .find(".accordion")
                                 .removeClass("active");
-                            $(".cleenhearts-accordion." + accordionName)
+                            $(".citylife-accordion." + accordionName)
                                 .find(".accordion")
                                 .find(".accordion-content")
                                 .slideUp();
@@ -564,9 +564,9 @@
 
     function thmOwlInit() {
         // owl slider
-        let cleenheartsowlCarousel = $(".cleenhearts-owl__carousel");
-        if (cleenheartsowlCarousel.length) {
-            cleenheartsowlCarousel.each(function () {
+        let citylifeowlCarousel = $(".citylife-owl__carousel");
+        if (citylifeowlCarousel.length) {
+            citylifeowlCarousel.each(function () {
                 let elm = $(this);
                 let options = elm.data("owl-options");
                 let thmOwlCarousel = elm.owlCarousel(
@@ -577,11 +577,11 @@
                 });
             });
         }
-        let cleenheartsowlCarouselNav = $(
-            ".cleenhearts-owl__carousel--custom-nav"
+        let citylifeowlCarouselNav = $(
+            ".citylife-owl__carousel--custom-nav"
         );
-        if (cleenheartsowlCarouselNav.length) {
-            cleenheartsowlCarouselNav.each(function () {
+        if (citylifeowlCarouselNav.length) {
+            citylifeowlCarouselNav.each(function () {
                 let elm = $(this);
                 let owlNavPrev = elm.data("owl-nav-prev");
                 let owlNavNext = elm.data("owl-nav-next");
@@ -759,9 +759,9 @@
     stickyMenuUpScroll($(".sticky-header--normal"), "active");
 
     //Strech Column
-    function cleenhearts_stretch() {
+    function citylife_stretch() {
         var i = $(window).width();
-        $(".row .cleenhearts-stretch-element-inside-column").each(function () {
+        $(".row .citylife-stretch-element-inside-column").each(function () {
             var $this = $(this),
                 row = $this.closest(".row"),
                 cols = $this.closest('[class^="col-"]'),
@@ -790,9 +790,9 @@
             $this.css(styles);
         });
     }
-    cleenhearts_stretch();
+    citylife_stretch();
 
-    function cleenhearts_cuved_circle() {
+    function citylife_cuved_circle() {
         let circleTypeElm = $(".curved-circle__item");
         if (circleTypeElm.length) {
             circleTypeElm.each(function () {
@@ -910,7 +910,7 @@
             });
         }
 
-        cleenhearts_cuved_circle();
+        citylife_cuved_circle();
     });
 
     $(window).on("scroll", function () {
@@ -937,6 +937,6 @@
     });
 
     $(window).on("resize", function () {
-        cleenhearts_stretch();
+        citylife_stretch();
     });
 })(jQuery);
