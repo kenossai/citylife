@@ -51,7 +51,7 @@
                             <a href="{{ route('courses.index') }}">Courses</a>
                         </li>
                          <li class="dropdown">
-                            <a href="index.html#">Media</a>
+                            <a href="#">Media</a>
                             <ul>
                                 <li><a href="{{ route('teaching-series.index') }}">Teaching Series</a></li>
                                 <li><a href="{{ route('citylife-talktime.index') }}">CityLife TalkTimes</a></li>
