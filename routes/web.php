@@ -13,6 +13,7 @@ use App\Http\Controllers\VolunteerController;
 use App\Http\Controllers\TeachingSeriesController;
 use App\Http\Controllers\CityLifeTalkTimeController;
 use App\Http\Controllers\MinistryController;
+use App\Http\Controllers\MissionController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about-citylife', [AboutController::class, 'index'])->name('about');
@@ -37,6 +38,12 @@ Route::get('/ministries', [MinistryController::class, 'index'])->name('ministrie
 Route::get('/ministries/{slug}', [MinistryController::class, 'show'])->name('ministries.show');
 Route::get('/ministries/{slug}/contact', [MinistryController::class, 'contact'])->name('ministries.contact');
 Route::post('/ministries/{slug}/contact', [MinistryController::class, 'submitContact'])->name('ministries.contact.submit');
+
+// Route for missions
+Route::get('/missions', [MissionController::class, 'index'])->name('missions.index');
+Route::get('/missions/home', [MissionController::class, 'home'])->name('missions.home');
+Route::get('/missions/abroad', [MissionController::class, 'abroad'])->name('missions.abroad');
+Route::get('/missions/{mission}', [MissionController::class, 'show'])->name('missions.show');
 
 // Route for the contact controller
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');

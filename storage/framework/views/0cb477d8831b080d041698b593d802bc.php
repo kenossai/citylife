@@ -27,7 +27,7 @@
                             <a href="<?php echo e(route('team.index')); ?>">Leadership</a>
                         </li>
                         <li class="dropdown">
-                            <a href="index.html#">Missions</a>
+                            <a href="<?php echo e(route('missions.index')); ?>">Missions</a>
                         </li>
 
                         <li class="dropdown">
