@@ -4,7 +4,7 @@
     <x-hero-banner :banners="$banners" />
     <x-about :aboutPage="$aboutPage" />
     <x-becoming :section="$section" />
-    {{-- <x-courses /> --}}
+    <x-courses />
     <x-events :events="$events" />
     {{-- <x-support /> --}}
     <x-volunteer />

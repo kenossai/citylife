@@ -55,4 +55,14 @@ class Mission extends Model
     {
         return $query->where('mission_type', $type);
     }
+
+    /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
 }
