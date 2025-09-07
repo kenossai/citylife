@@ -122,7 +122,18 @@
                                     <label for="newsletter">Subscribe to newsletter</label>
                                 </div>
                             </div>
-
+                            <div class="col-12">
+                                <div class="form-one__control">
+                                    <div class="gdpr-consent" style="margin-bottom: 20px;">
+                                        <label style="display: flex; align-items: flex-start; font-size: 14px; line-height: 1.4; color: #666;">
+                                            <input type="checkbox" name="gdpr_consent" value="1" style="margin-right: 10px; margin-top: 2px;" required {{ old('gdpr_consent') ? 'checked' : '' }}>
+                                            <span>I consent to CityLife Church collecting and processing my personal data in accordance with the
+                                            <a href="#" style="color: #007bff; text-decoration: underline;" onclick="showGdprModal(); return false;">General Data Protection Regulation (GDPR)</a>.
+                                            Your data will only be used to respond to your inquiry and will not be shared with third parties without your explicit consent.</span>
+                                        </label>
+                                    </div>
+                                </div><!-- /.form-one__control -->
+                            </div><!-- /.col-12 -->
                             <div class="login-page__form__input-box">
                                 <button type="submit" class="citylife-btn">
                                     <span class="citylife-btn__icon-box">
