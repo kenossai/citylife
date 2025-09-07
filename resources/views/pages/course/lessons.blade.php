@@ -241,7 +241,7 @@
 
         /* Course Header */
         .course-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #351c42;
             color: white;
             margin-bottom: 2rem;
         }
@@ -278,11 +278,13 @@
             font-size: 2rem;
             font-weight: 700;
             margin: 0;
+            color: white;
         }
 
         .course-subtitle {
             opacity: 0.9;
             margin: 0;
+            color: white;
         }
 
         .course-stats {

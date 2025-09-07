@@ -12,8 +12,8 @@
                                 <i class="icon-user"></i>
                             </div>
                             <div>
-                                <h4 class="mb-1">Welcome back {{ $member->first_name }} {{ $member->last_name }}!</h4>
-                                <p class="text-muted mb-0">Here's what's happening with your learning today.</p>
+                                <h4 class="mb-1 text-white">Welcome back {{ $member->first_name }} {{ $member->last_name }}!</h4>
+                                <p class="text-white mb-0">Here's what's happening with your learning today.</p>
                             </div>
                         </div>
                     </div>
@@ -32,7 +32,7 @@
                         <div class="header-stat-item">
                             <form method="POST" action="{{ route('member.logout') }}" class="d-inline">
                                 @csrf
-                                <button type="submit" class="btn btn-outline-secondary btn-sm">
+                                <button type="submit" class="btn btn-outline-warning btn-sm">
                                     <i class="icon-logout me-1"></i>Logout
                                 </button>
                             </form>
@@ -207,7 +207,7 @@
         }
 
         .dashboard-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #513170 0%, #351c42 100%);
             color: white;
             margin-bottom: 2rem;
         }
