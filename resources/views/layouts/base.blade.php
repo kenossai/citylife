@@ -79,6 +79,8 @@
     <script src="{{ asset('assets/vendors/countdown/countdown.min.js') }}"></script>
     <script src="{{ asset('assets/vendors/jquery-circleType/jquery.circleType.js') }}"></script>
     <script src="{{ asset('assets/vendors/jquery-lettering/jquery.lettering.min.js') }}"></script>
+    <!-- Session Manager -->
+    <script src="{{ asset('js/session-manager.js') }}"></script>
     <!-- core js -->
     <script src="{{ asset('assets/js/citylife.js') }}"></script>
 

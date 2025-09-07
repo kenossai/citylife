@@ -82,12 +82,25 @@ Route::post('/courses/{courseSlug}/lessons/{lessonSlug}/quiz', [CourseController
 
 // Debug route to check authentication
 Route::get('/auth-debug', function() {
-    $sessionKey = 'login_member_59ba36addc2b2f9401580f014c7f58ea4e30989d';
+    // Find member session key dynamically
+    $sessionData = session()->all();
+    $memberSessionKey = null;
+    $memberId = null;
+
+    foreach($sessionData as $key => $value) {
+        if (str_starts_with($key, 'login_member_')) {
+            $memberSessionKey = $key;
+            $memberId = $value;
+            break;
+        }
+    }
+
     return response()->json([
         'member_guard_check' => \Illuminate\Support\Facades\Auth::guard('member')->check(),
         'member_guard_user' => \Illuminate\Support\Facades\Auth::guard('member')->user()?->email,
         'session_user_email' => session('user_email'),
-        'session_member_id' => session($sessionKey),
+        'session_member_id' => $memberId,
+        'session_key_found' => $memberSessionKey,
         'session_id' => session()->getId(),
         'all_session_data' => session()->all(),
     ]);
@@ -127,9 +140,18 @@ Route::get('/session-debug', function() {
 
 // Manual auth test
 Route::get('/manual-auth-test', function() {
-    // Get the session key
-    $sessionKey = 'login_member_59ba36addc2b2f9401580f014c7f58ea4e30989d';
-    $memberId = session($sessionKey);
+    // Find member session key dynamically
+    $sessionData = session()->all();
+    $memberSessionKey = null;
+    $memberId = null;
+
+    foreach($sessionData as $key => $value) {
+        if (str_starts_with($key, 'login_member_')) {
+            $memberSessionKey = $key;
+            $memberId = $value;
+            break;
+        }
+    }
 
     // Try to retrieve the member manually
     $member = null;
@@ -138,7 +160,7 @@ Route::get('/manual-auth-test', function() {
     }
 
     return response()->json([
-        'session_key' => $sessionKey,
+        'session_key_found' => $memberSessionKey,
         'member_id_from_session' => $memberId,
         'member_retrieved' => $member ? [
             'id' => $member->id,

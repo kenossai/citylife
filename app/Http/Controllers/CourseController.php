@@ -508,20 +508,41 @@ class CourseController extends Controller
             $member = Auth::guard('member')->user();
             Log::info('Member authenticated via guard: ' . $member->email);
         } else {
-            // Fallback: Check session data manually
-            $sessionKey = 'login_member_59ba36addc2b2f9401580f014c7f58ea4e30989d';
-            $memberId = session($sessionKey);
+            // Fallback: Check session data manually for any login_member key
+            $sessionData = session()->all();
+            $memberId = null;
+            $sessionKey = null;
 
-            if ($memberId) {
+            // Find any session key that starts with 'login_member_'
+            foreach ($sessionData as $key => $value) {
+                if (str_starts_with($key, 'login_member_')) {
+                    $memberId = $value;
+                    $sessionKey = $key;
+                    break;
+                }
+            }
+
+            if ($memberId && $sessionKey) {
                 $member = Member::find($memberId);
                 if ($member && $member->is_active) {
                     // Re-authenticate the user in the guard
-                    Auth::guard('member')->login($member);
-                    Log::info('Member re-authenticated from session: ' . $member->email);
+                    Auth::guard('member')->login($member, true);
+                    Log::info('Member re-authenticated from session', [
+                        'email' => $member->email,
+                        'session_key' => $sessionKey,
+                        'member_id' => $memberId
+                    ]);
                 } else {
-                    Log::info('Member found in session but inactive or not found');
+                    Log::info('Member found in session but inactive or not found', [
+                        'member_id' => $memberId,
+                        'session_key' => $sessionKey
+                    ]);
                     $member = null;
                 }
+            } else {
+                Log::info('No member session data found', [
+                    'session_keys' => array_keys($sessionData)
+                ]);
             }
         }
 
