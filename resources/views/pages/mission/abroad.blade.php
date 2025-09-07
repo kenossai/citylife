@@ -32,7 +32,7 @@
             </div>
             <div class="col-lg-6">
                 <div class="about-one__image">
-                    <img src="{{ asset('assets/images/backgrounds/world-missions.jpg') }}" alt="World Missions" class="img-fluid">
+                    <img src="{{ asset('assets/images/backgrounds/mission1.jpeg') }}" alt="World Missions" class="img-fluid">
                 </div>
             </div>
         </div>
@@ -41,11 +41,11 @@
 
 <!-- Mission Statement -->
 <section class="about-two section-space-two">
-    <div class="container">
+    <div class="container p-5">
         <div class="row justify-content-center">
             <div class="col-lg-8">
                 <div class="section-title text-center">
-                    <h3 class="section-title__title">City Life is affiliated with projects in India and the Democratic Republic of the Congo.</h3>
+                    <h3 class="section-title__title text-white">City Life is affiliated with projects in India and the Democratic Republic of the Congo.</h3>
                 </div>
             </div>
         </div>
@@ -89,7 +89,7 @@
             </div>
             <div class="col-lg-6">
                 <div class="about-one__image">
-                    <img src="{{ asset('assets/images/missions/john-project.jpg') }}" alt="The John Project" class="img-fluid">
+                    <img src="{{ asset('assets/images/backgrounds/Girls-Home.jpg') }}" alt="The John Project" class="img-fluid">
                 </div>
             </div>
         </div>
@@ -98,7 +98,7 @@
         <div class="row gutter-y-50">
             <div class="col-lg-6">
                 <div class="about-one__image">
-                    <img src="{{ asset('assets/images/missions/shalom-project.jpg') }}" alt="Shalom Project" class="img-fluid">
+                    <img src="{{ asset('assets/images/backgrounds/shalom.jpg') }}" alt="Shalom Project" class="img-fluid">
                 </div>
             </div>
             <div class="col-lg-6">
@@ -150,7 +150,7 @@
             </div>
             <div class="col-lg-6">
                 <div class="about-one__image">
-                    <img src="{{ asset('assets/images/missions/drc-project.jpg') }}" alt="DRC Mission" class="img-fluid">
+                    <img src="{{ asset('assets/images/backgrounds/congo.jpg') }}" alt="DRC Mission" class="img-fluid">
                 </div>
             </div>
         </div>
@@ -158,31 +158,31 @@
 </section>
 
 <!-- India Mission 2024 -->
-<section class="testimonials-one section-space" style="background-image: url('{{ asset('assets/images/backgrounds/testimonial-bg-1-1.jpg') }}');">
+<section class="testimonials-one section-space" style="background-image: url('{{ asset('assets/images/backgrounds/mission.jpeg') }}'); opacity: 5.1;">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-10">
                 <div class="section-title text-center">
-                    <h6 class="section-title__tagline">Recent Mission Trip</h6>
-                    <h3 class="section-title__title">India Mission 2024</h3>
-                    <p class="section-title__text">
+                    <h6 class="section-title__tagline text-white">Recent Mission Trip</h6>
+                    <h3 class="section-title__title text-white">India Mission 2024</h3>
+                    <p class="section-title__text text-white">
                         Our recent mission to India was an unforgettable experience, filled with opportunities to minister and equip individuals in crucial roles.
                     </p>
                 </div>
 
                 <div class="testimonials-one__content">
-                    <p class="testimonials-one__content__text">
+                    <p class="testimonials-one__content__text text-white">
                         Throughout our journey, we engaged in a variety of enriching activities. From leadership training sessions and vibrant music workshops
                         to inspiring preaching engagements, we felt a deep connection with the communities we served.
                         It was particularly touching to reconnect with friends and colleagues we met nearly 18 years ago!
                     </p>
 
-                    <p class="testimonials-one__content__text">
+                    <p class="testimonials-one__content__text text-white">
                         One of the highlights was visiting the third campus of the John Foundation, complete with residential facilities, schools,
                         an auditorium, and even a supermarket! The vision and dedication that has gone into developing this space were nothing short of jaw-dropping.
                     </p>
 
-                    <p class="testimonials-one__content__text">
+                    <p class="testimonials-one__content__text text-white">
                         Your generous gifts and prayers have had a profound impact, enabling us to uplift thousands of children and help them escape life on the streets.
                     </p>
                 </div>
