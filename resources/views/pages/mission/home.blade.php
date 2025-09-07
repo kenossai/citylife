@@ -32,7 +32,7 @@
             </div>
             <div class="col-lg-6">
                 <div class="about-one__image">
-                    <img src="{{ asset('assets/images/backgrounds/community-help.jpg') }}" alt="Helping Community" class="img-fluid">
+                    <img src="{{ asset('assets/images/backgrounds/mission.jpg') }}" alt="Helping Community" class="img-fluid">
                 </div>
             </div>
         </div>
@@ -44,9 +44,9 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-8">
-                <div class="section-title text-center">
-                    <h3 class="section-title__title">At City Life, we believe we have a mandate from Jesus to help those in need.</h3>
-                    <p class="section-title__text">
+                <div class="section-title text-center p-5">
+                    <h3 class="section-title__title text-white">At City Life, we believe we have a mandate from Jesus to help those in need.</h3>
+                    <p class="section-title__text text-white">
                         Our Home Missions are focused on providing assistance to people in our local community with food, clothing etc.
                         The Home Missions project is managed by Pastor Terence and Vivienne Williams.
                     </p>
@@ -64,7 +64,7 @@
             <div class="col-lg-4 col-md-6">
                 <div class="donate-card text-center h-100">
                     <div class="donate-card__icon">
-                        <span class="icon-donation"></span>
+                        <span class="icon-donation" style="font-size: 40px;"></span>
                     </div>
                     <h3 class="donate-card__title">Food/Toiletries Packages</h3>
                     <p class="donate-card__text">
@@ -86,7 +86,7 @@
             <div class="col-lg-4 col-md-6">
                 <div class="donate-card text-center h-100">
                     <div class="donate-card__icon">
-                        <span class="icon-heart"></span>
+                        <span class="icon-heart" style="font-size: 40px;"></span>
                     </div>
                     <h3 class="donate-card__title">City Life Kids And Families Foundation</h3>
                     <p class="donate-card__text">
@@ -108,7 +108,7 @@
             <div class="col-lg-4 col-md-6">
                 <div class="donate-card text-center h-100">
                     <div class="donate-card__icon">
-                        <span class="icon-user"></span>
+                        <span class="icon-user" style="font-size: 40px;"></span>
                     </div>
                     <h3 class="donate-card__title">Pre-Loved School Uniform</h3>
                     <p class="donate-card__text">
@@ -130,13 +130,13 @@
 </section>
 
 <!-- Call to Action -->
-<section class="contact-one__bottom-cta section-space-two" style="background-image: url('{{ asset('assets/images/backgrounds/help-donate-bg-1-1.jpg') }}');">
+<section class="contact-one__bottom-cta section-space-two" style="background-image: url('{{ asset('assets/images/backgrounds/worship-banner-1.jpg') }}');">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-8">
-                <div class="contact-one__bottom-cta__content text-center">
-                    <h3 class="contact-one__bottom-cta__title">Ready to Make a Difference?</h3>
-                    <p class="contact-one__bottom-cta__text">
+                <div class="contact-one__bottom-cta__content text-center p-5">
+                    <h3 class="contact-one__bottom-cta__title text-white">Ready to Make a Difference?</h3>
+                    <p class="contact-one__bottom-cta__text text-white">
                         Join us in serving our local community. Whether through donations, volunteering, or prayer support,
                         your contribution makes a real difference in people's lives.
                     </p>

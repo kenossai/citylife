@@ -25,24 +25,41 @@ class MissionResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('title')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->live(onBlur: true)
+                    ->afterStateUpdated(fn (string $operation, $state, Forms\Set $set) =>
+                        $operation === 'create' ? $set('slug', \Illuminate\Support\Str::slug($state)) : null
+                    ),
                 Forms\Components\TextInput::make('slug')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->unique(Mission::class, 'slug', ignoreRecord: true),
                 Forms\Components\Textarea::make('description')
                     ->required()
+                    ->maxLength(500)
                     ->columnSpanFull(),
-                Forms\Components\Textarea::make('content')
+                Forms\Components\RichEditor::make('content')
                     ->columnSpanFull(),
                 Forms\Components\TextInput::make('location')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('target_group')
                     ->maxLength(255),
-                Forms\Components\TextInput::make('mission_type')
-                    ->maxLength(255),
+                Forms\Components\Select::make('mission_type')
+                    ->required()
+                    ->options([
+                        'home' => 'Home',
+                        'abroad' => 'Abroad',
+                    ]),
                 Forms\Components\FileUpload::make('featured_image')
-                    ->image(),
-                Forms\Components\TextInput::make('gallery_images'),
+                    ->image()
+                    ->directory('missions/featured'),
+                Forms\Components\FileUpload::make('gallery_images')
+                    ->image()
+                    ->multiple()
+                    ->directory('missions/gallery')
+                    ->maxFiles(10)
+                    ->reorderable()
+                    ->columnSpanFull(),
                 Forms\Components\TextInput::make('contact_person')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('contact_email')
