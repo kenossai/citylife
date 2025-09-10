@@ -19,6 +19,11 @@ use Filament\Tables\Actions\ViewAction;
 use Illuminate\Support\Str;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Filament\Forms\Get;
+use Filament\Notifications\Notification;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Auth;
+use App\Mail\SermonNoteMail;
+use App\Models\Member;
 
 class TeachingSeriesResource extends Resource
 {
@@ -306,6 +311,134 @@ class TeachingSeriesResource extends Resource
                     ->label('Featured Status'),
             ])
             ->actions([
+                Tables\Actions\Action::make('sendNote')
+                    ->label('Send Note')
+                    ->icon('heroicon-o-paper-airplane')
+                    ->color('info')
+                    ->tooltip('Send sermon notes to individuals or church members')
+                    ->form([
+                        Forms\Components\Select::make('send_type')
+                            ->label('Send To')
+                            ->options([
+                                'individual' => 'Specific Email Address',
+                                'all_members' => 'All Church Members',
+                                'active_members' => 'Active Members Only',
+                                'full_members' => 'Full Members Only',
+                                'regular_attendees' => 'Regular Attendees',
+                                'visitors' => 'Visitors',
+                            ])
+                            ->required()
+                            ->default('individual')
+                            ->live()
+                            ->reactive(),
+
+                        Forms\Components\TextInput::make('recipient_email')
+                            ->label('Recipient Email')
+                            ->email()
+                            ->required()
+                            ->placeholder('Enter email address')
+                            ->visible(fn (Forms\Get $get): bool => $get('send_type') === 'individual'),
+
+                        Forms\Components\TextInput::make('recipient_name')
+                            ->label('Recipient Name (Optional)')
+                            ->placeholder('Enter recipient name')
+                            ->visible(fn (Forms\Get $get): bool => $get('send_type') === 'individual'),
+
+                        Forms\Components\Placeholder::make('member_count')
+                            ->label('Recipients')
+                            ->content(function (Forms\Get $get): string {
+                                $sendType = $get('send_type');
+                                if (!$sendType || $sendType === 'individual') {
+                                    return 'Enter email address above';
+                                }
+
+                                $count = match($sendType) {
+                                    'all_members' => Member::active()->count(),
+                                    'active_members' => Member::active()->count(),
+                                    'full_members' => Member::active()->members()->count(),
+                                    'regular_attendees' => Member::active()->regularAttendees()->count(),
+                                    'visitors' => Member::active()->visitors()->count(),
+                                    default => 0
+                                };
+
+                                return "This will send to {$count} recipients";
+                            })
+                            ->visible(fn (Forms\Get $get): bool => $get('send_type') !== 'individual'),
+                    ])
+                    ->action(function (array $data, TeachingSeries $record): void {
+                        if (!$record->sermon_notes) {
+                            Notification::make()
+                                ->title('No sermon notes available')
+                                ->body('This teaching series does not have sermon notes attached.')
+                                ->warning()
+                                ->send();
+                            return;
+                        }
+
+                        try {
+                            $successCount = 0;
+                            $errorCount = 0;
+
+                            if ($data['send_type'] === 'individual') {
+                                // Send to single email
+                                Mail::send(new SermonNoteMail(
+                                    $record,
+                                    $data['recipient_email'],
+                                    $data['recipient_name'] ?? ''
+                                ));
+                                $successCount = 1;
+
+                                Notification::make()
+                                    ->title('Sermon notes sent successfully!')
+                                    ->body('The sermon notes have been sent to ' . $data['recipient_email'])
+                                    ->success()
+                                    ->send();
+                            } else {
+                                // Send to multiple members based on type
+                                $members = match($data['send_type']) {
+                                    'all_members' => Member::active()->get(),
+                                    'active_members' => Member::active()->get(),
+                                    'full_members' => Member::active()->members()->get(),
+                                    'regular_attendees' => Member::active()->regularAttendees()->get(),
+                                    'visitors' => Member::active()->visitors()->get(),
+                                    default => collect()
+                                };
+
+                                foreach ($members as $member) {
+                                    if ($member->email) {
+                                        try {
+                                            Mail::send(new SermonNoteMail(
+                                                $record,
+                                                $member->email,
+                                                $member->full_name ?? $member->first_name ?? ''
+                                            ));
+                                            $successCount++;
+                                        } catch (\Exception $e) {
+                                            $errorCount++;
+                                        }
+                                    }
+                                }
+
+                                $message = "Sent sermon notes to {$successCount} recipients successfully.";
+                                if ($errorCount > 0) {
+                                    $message .= " {$errorCount} failed to send.";
+                                }
+
+                                Notification::make()
+                                    ->title('Bulk sending completed')
+                                    ->body($message)
+                                    ->success()
+                                    ->send();
+                            }
+                        } catch (\Exception $e) {
+                            Notification::make()
+                                ->title('Failed to send sermon notes')
+                                ->body('There was an error sending the email: ' . $e->getMessage())
+                                ->danger()
+                                ->send();
+                        }
+                    })
+                    ->visible(fn (TeachingSeries $record): bool => !empty($record->sermon_notes)),
                 ViewAction::make(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
@@ -313,6 +446,168 @@ class TeachingSeriesResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\BulkAction::make('sendNotesToMembers')
+                        ->label('Send Notes to Church Members')
+                        ->icon('heroicon-o-paper-airplane')
+                        ->color('info')
+                        ->form([
+                            Forms\Components\Select::make('member_type')
+                                ->label('Send To')
+                                ->options([
+                                    'all_members' => 'All Church Members',
+                                    'active_members' => 'Active Members Only',
+                                    'full_members' => 'Full Members Only',
+                                    'regular_attendees' => 'Regular Attendees',
+                                    'visitors' => 'Visitors',
+                                ])
+                                ->required()
+                                ->default('all_members')
+                                ->live(),
+
+                            Forms\Components\Placeholder::make('member_count')
+                                ->label('Recipients')
+                                ->content(function (Forms\Get $get): string {
+                                    $memberType = $get('member_type');
+                                    if (!$memberType) {
+                                        return 'Select member type above';
+                                    }
+
+                                    $count = match($memberType) {
+                                        'all_members' => Member::active()->count(),
+                                        'active_members' => Member::active()->count(),
+                                        'full_members' => Member::active()->members()->count(),
+                                        'regular_attendees' => Member::active()->regularAttendees()->count(),
+                                        'visitors' => Member::active()->visitors()->count(),
+                                        default => 0
+                                    };
+
+                                    return "This will send to {$count} recipients";
+                                }),
+                        ])
+                        ->action(function (array $data, $records): void {
+                            // Get members based on type
+                            $members = match($data['member_type']) {
+                                'all_members' => Member::active()->get(),
+                                'active_members' => Member::active()->get(),
+                                'full_members' => Member::active()->members()->get(),
+                                'regular_attendees' => Member::active()->regularAttendees()->get(),
+                                'visitors' => Member::active()->visitors()->get(),
+                                default => collect()
+                            };
+
+                            $successCount = 0;
+                            $errorCount = 0;
+                            $noNotesCount = 0;
+
+                            foreach ($records as $record) {
+                                if (!$record->sermon_notes) {
+                                    $noNotesCount++;
+                                    continue;
+                                }
+
+                                foreach ($members as $member) {
+                                    if ($member->email) {
+                                        try {
+                                            Mail::send(new SermonNoteMail(
+                                                $record,
+                                                $member->email,
+                                                $member->full_name ?? $member->first_name ?? ''
+                                            ));
+                                            $successCount++;
+                                        } catch (\Exception $e) {
+                                            $errorCount++;
+                                        }
+                                    }
+                                }
+                            }
+
+                            $message = "Sent {$successCount} emails successfully.";
+                            if ($errorCount > 0) {
+                                $message .= " {$errorCount} failed to send.";
+                            }
+                            if ($noNotesCount > 0) {
+                                $message .= " {$noNotesCount} series had no notes to send.";
+                            }
+
+                            Notification::make()
+                                ->title('Bulk email sending completed')
+                                ->body($message)
+                                ->success()
+                                ->send();
+                        })
+                        ->deselectRecordsAfterCompletion(),
+                    Tables\Actions\BulkAction::make('sendNotesToCustomEmails')
+                        ->label('Send Notes to Custom Emails')
+                        ->icon('heroicon-o-envelope')
+                        ->color('warning')
+                        ->form([
+                            Forms\Components\Textarea::make('recipient_emails')
+                                ->label('Recipient Emails')
+                                ->placeholder('Enter email addresses separated by commas or new lines')
+                                ->rows(4)
+                                ->required()
+                                ->helperText('Enter multiple email addresses separated by commas or new lines'),
+                            Forms\Components\TextInput::make('sender_name')
+                                ->label('Your Name (Optional)')
+                                ->placeholder('Your name for personalization'),
+                        ])
+                        ->action(function (array $data, $records): void {
+                            $emailString = $data['recipient_emails'];
+                            // Split by comma or newline and clean up
+                            $emails = preg_split('/[,\n\r]+/', $emailString);
+                            $emails = array_map('trim', $emails);
+                            $emails = array_filter($emails, function($email) {
+                                return filter_var($email, FILTER_VALIDATE_EMAIL);
+                            });
+
+                            if (empty($emails)) {
+                                Notification::make()
+                                    ->title('No valid email addresses')
+                                    ->body('Please enter valid email addresses.')
+                                    ->warning()
+                                    ->send();
+                                return;
+                            }
+
+                            $successCount = 0;
+                            $errorCount = 0;
+                            $noNotesCount = 0;
+
+                            foreach ($records as $record) {
+                                if (!$record->sermon_notes) {
+                                    $noNotesCount++;
+                                    continue;
+                                }
+
+                                foreach ($emails as $email) {
+                                    try {
+                                        Mail::send(new SermonNoteMail(
+                                            $record,
+                                            $email,
+                                            $data['sender_name'] ?? ''
+                                        ));
+                                        $successCount++;
+                                    } catch (\Exception $e) {
+                                        $errorCount++;
+                                    }
+                                }
+                            }
+
+                            $message = "Sent {$successCount} emails successfully.";
+                            if ($errorCount > 0) {
+                                $message .= " {$errorCount} failed to send.";
+                            }
+                            if ($noNotesCount > 0) {
+                                $message .= " {$noNotesCount} series had no notes to send.";
+                            }
+
+                            Notification::make()
+                                ->title('Bulk email sending completed')
+                                ->body($message)
+                                ->success()
+                                ->send();
+                        })
+                        ->deselectRecordsAfterCompletion(),
                     Tables\Actions\BulkAction::make('publish')
                         ->label('Publish Selected')
                         ->icon('heroicon-o-eye')
