@@ -23,6 +23,7 @@ use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
 use App\Mail\SermonNoteMail;
+use App\Mail\CustomSermonNoteMail;
 use App\Models\Member;
 
 class TeachingSeriesResource extends Resource
@@ -317,6 +318,17 @@ class TeachingSeriesResource extends Resource
                     ->color('info')
                     ->tooltip('Send sermon notes to individuals or church members')
                     ->form([
+                        Forms\Components\Select::make('email_type')
+                            ->label('Email Type')
+                            ->options([
+                                'template' => 'Use Default Template',
+                                'custom' => 'Compose Custom Email',
+                            ])
+                            ->required()
+                            ->default('template')
+                            ->live()
+                            ->reactive(),
+
                         Forms\Components\Select::make('send_type')
                             ->label('Send To')
                             ->options([
@@ -364,6 +376,48 @@ class TeachingSeriesResource extends Resource
                                 return "This will send to {$count} recipients";
                             })
                             ->visible(fn (Forms\Get $get): bool => $get('send_type') !== 'individual'),
+
+                        // Custom email composition fields
+                        Forms\Components\TextInput::make('custom_subject')
+                            ->label('Email Subject')
+                            ->required()
+                            ->placeholder('Enter email subject')
+                            ->default(fn ($record) => 'Sermon Notes: ' . $record->title)
+                            ->visible(fn (Forms\Get $get): bool => $get('email_type') === 'custom'),
+
+                        Forms\Components\RichEditor::make('custom_message')
+                            ->label('Email Message')
+                            ->required()
+                            ->placeholder('Compose your email message here...')
+                            ->default(function ($record) {
+                                $defaultMessage = "Hello church family,\n\n";
+                                $defaultMessage .= "I hope this message finds you well. I'm delighted to share the sermon notes from our recent teaching series with you.\n\n";
+                                $defaultMessage .= "**Series:** " . $record->title . "\n";
+                                if ($record->pastor) {
+                                    $defaultMessage .= "**Speaker:** " . $record->pastor . "\n";
+                                }
+                                if ($record->series_date) {
+                                    $defaultMessage .= "**Date:** " . $record->series_date->format('F j, Y') . "\n";
+                                }
+                                if ($record->scripture_references) {
+                                    $defaultMessage .= "**Scripture References:** " . $record->scripture_references . "\n";
+                                }
+                                $defaultMessage .= "\nPlease find the complete sermon notes attached to this email. These notes include key points, scripture references, and practical applications from the message.\n\n";
+                                if ($record->video_url) {
+                                    $defaultMessage .= "You can also watch the full message online at: " . $record->video_url . "\n\n";
+                                }
+                                $defaultMessage .= "May God bless you as you continue to grow in your faith journey.\n\n";
+                                $defaultMessage .= "Blessings,\n[Your Name]";
+                                
+                                return $defaultMessage;
+                            })
+                            ->visible(fn (Forms\Get $get): bool => $get('email_type') === 'custom'),
+
+                        Forms\Components\Toggle::make('attach_sermon_notes')
+                            ->label('Attach Sermon Notes PDF')
+                            ->default(true)
+                            ->helperText('Include the sermon notes PDF as an attachment')
+                            ->visible(fn (Forms\Get $get): bool => $get('email_type') === 'custom'),
                     ])
                     ->action(function (array $data, TeachingSeries $record): void {
                         if (!$record->sermon_notes) {
@@ -381,11 +435,24 @@ class TeachingSeriesResource extends Resource
 
                             if ($data['send_type'] === 'individual') {
                                 // Send to single email
-                                Mail::send(new SermonNoteMail(
-                                    $record,
-                                    $data['recipient_email'],
-                                    $data['recipient_name'] ?? ''
-                                ));
+                                if ($data['email_type'] === 'custom') {
+                                    // Use custom email
+                                    Mail::send(new CustomSermonNoteMail(
+                                        $record,
+                                        $data['recipient_email'],
+                                        $data['recipient_name'] ?? '',
+                                        $data['custom_subject'],
+                                        $data['custom_message'],
+                                        $data['attach_sermon_notes'] ?? true
+                                    ));
+                                } else {
+                                    // Use template email
+                                    Mail::send(new SermonNoteMail(
+                                        $record,
+                                        $data['recipient_email'],
+                                        $data['recipient_name'] ?? ''
+                                    ));
+                                }
                                 $successCount = 1;
 
                                 Notification::make()
@@ -407,11 +474,24 @@ class TeachingSeriesResource extends Resource
                                 foreach ($members as $member) {
                                     if ($member->email) {
                                         try {
-                                            Mail::send(new SermonNoteMail(
-                                                $record,
-                                                $member->email,
-                                                $member->full_name ?? $member->first_name ?? ''
-                                            ));
+                                            if ($data['email_type'] === 'custom') {
+                                                // Use custom email
+                                                Mail::send(new CustomSermonNoteMail(
+                                                    $record,
+                                                    $member->email,
+                                                    $member->full_name ?? $member->first_name ?? '',
+                                                    $data['custom_subject'],
+                                                    $data['custom_message'],
+                                                    $data['attach_sermon_notes'] ?? true
+                                                ));
+                                            } else {
+                                                // Use template email
+                                                Mail::send(new SermonNoteMail(
+                                                    $record,
+                                                    $member->email,
+                                                    $member->full_name ?? $member->first_name ?? ''
+                                                ));
+                                            }
                                             $successCount++;
                                         } catch (\Exception $e) {
                                             $errorCount++;
@@ -483,6 +563,37 @@ class TeachingSeriesResource extends Resource
 
                                     return "This will send to {$count} recipients";
                                 }),
+
+                            Forms\Components\Select::make('email_type')
+                                ->label('Email Type')
+                                ->options([
+                                    'template' => 'Use Standard Template',
+                                    'custom' => 'Compose Custom Message'
+                                ])
+                                ->required()
+                                ->default('template')
+                                ->live()
+                                ->afterStateUpdated(fn ($state, Forms\Set $set) => $state === 'template' ? 
+                                    $set('custom_subject', null) : null),
+
+                            Forms\Components\TextInput::make('custom_subject')
+                                ->label('Subject')
+                                ->required()
+                                ->placeholder('Enter email subject')
+                                ->visible(fn (Forms\Get $get): bool => $get('email_type') === 'custom'),
+
+                            Forms\Components\Textarea::make('custom_message')
+                                ->label('Message')
+                                ->rows(10)
+                                ->required()
+                                ->placeholder('Compose your email message here...')
+                                ->visible(fn (Forms\Get $get): bool => $get('email_type') === 'custom'),
+
+                            Forms\Components\Toggle::make('attach_sermon_notes')
+                                ->label('Attach Sermon Notes PDF')
+                                ->default(true)
+                                ->helperText('Include the sermon notes PDF as an attachment')
+                                ->visible(fn (Forms\Get $get): bool => $get('email_type') === 'custom'),
                         ])
                         ->action(function (array $data, $records): void {
                             // Get members based on type
@@ -508,11 +619,24 @@ class TeachingSeriesResource extends Resource
                                 foreach ($members as $member) {
                                     if ($member->email) {
                                         try {
-                                            Mail::send(new SermonNoteMail(
-                                                $record,
-                                                $member->email,
-                                                $member->full_name ?? $member->first_name ?? ''
-                                            ));
+                                            if ($data['email_type'] === 'custom') {
+                                                // Use custom email
+                                                Mail::send(new CustomSermonNoteMail(
+                                                    $record,
+                                                    $member->email,
+                                                    $member->full_name ?? $member->first_name ?? '',
+                                                    $data['custom_subject'],
+                                                    $data['custom_message'],
+                                                    $data['attach_sermon_notes'] ?? true
+                                                ));
+                                            } else {
+                                                // Use template email
+                                                Mail::send(new SermonNoteMail(
+                                                    $record,
+                                                    $member->email,
+                                                    $member->full_name ?? $member->first_name ?? ''
+                                                ));
+                                            }
                                             $successCount++;
                                         } catch (\Exception $e) {
                                             $errorCount++;
@@ -547,9 +671,40 @@ class TeachingSeriesResource extends Resource
                                 ->rows(4)
                                 ->required()
                                 ->helperText('Enter multiple email addresses separated by commas or new lines'),
+
+                            Forms\Components\Select::make('email_type')
+                                ->label('Email Type')
+                                ->options([
+                                    'template' => 'Use Standard Template',
+                                    'custom' => 'Compose Custom Message'
+                                ])
+                                ->required()
+                                ->default('template')
+                                ->live(),
+
                             Forms\Components\TextInput::make('sender_name')
                                 ->label('Your Name (Optional)')
-                                ->placeholder('Your name for personalization'),
+                                ->placeholder('Your name for personalization')
+                                ->visible(fn (Forms\Get $get): bool => $get('email_type') === 'template'),
+
+                            Forms\Components\TextInput::make('custom_subject')
+                                ->label('Subject')
+                                ->required()
+                                ->placeholder('Enter email subject')
+                                ->visible(fn (Forms\Get $get): bool => $get('email_type') === 'custom'),
+
+                            Forms\Components\Textarea::make('custom_message')
+                                ->label('Message')
+                                ->rows(8)
+                                ->required()
+                                ->placeholder('Compose your email message here...')
+                                ->visible(fn (Forms\Get $get): bool => $get('email_type') === 'custom'),
+
+                            Forms\Components\Toggle::make('attach_sermon_notes')
+                                ->label('Attach Sermon Notes PDF')
+                                ->default(true)
+                                ->helperText('Include the sermon notes PDF as an attachment')
+                                ->visible(fn (Forms\Get $get): bool => $get('email_type') === 'custom'),
                         ])
                         ->action(function (array $data, $records): void {
                             $emailString = $data['recipient_emails'];
@@ -581,11 +736,24 @@ class TeachingSeriesResource extends Resource
 
                                 foreach ($emails as $email) {
                                     try {
-                                        Mail::send(new SermonNoteMail(
-                                            $record,
-                                            $email,
-                                            $data['sender_name'] ?? ''
-                                        ));
+                                        if ($data['email_type'] === 'custom') {
+                                            // Use custom email
+                                            Mail::send(new CustomSermonNoteMail(
+                                                $record,
+                                                $email,
+                                                '', // No name for custom emails
+                                                $data['custom_subject'],
+                                                $data['custom_message'],
+                                                $data['attach_sermon_notes'] ?? true
+                                            ));
+                                        } else {
+                                            // Use template email
+                                            Mail::send(new SermonNoteMail(
+                                                $record,
+                                                $email,
+                                                $data['sender_name'] ?? ''
+                                            ));
+                                        }
                                         $successCount++;
                                     } catch (\Exception $e) {
                                         $errorCount++;
