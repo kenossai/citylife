@@ -69,7 +69,7 @@
             <div class="church-logo">
                 <strong>CityLife Church</strong>
             </div>
-            
+
             <div class="contact-info">
                 <p><strong>City Life International Church</strong></p>
                 <p>1 South Parade, Spaldesmoor, Sheffield S3 8ZZ</p>

@@ -26,10 +26,10 @@ class CustomSermonNoteMail extends Mailable
      * Create a new message instance.
      */
     public function __construct(
-        TeachingSeries $series, 
-        string $recipientEmail, 
-        string $recipientName, 
-        string $customSubject, 
+        TeachingSeries $series,
+        string $recipientEmail,
+        string $recipientName,
+        string $customSubject,
         string $customMessage,
         bool $attachNotes = true
     ) {
@@ -75,13 +75,13 @@ class CustomSermonNoteMail extends Mailable
     public function attachments(): array
     {
         $attachments = [];
-        
+
         if ($this->attachNotes && $this->series->sermon_notes) {
             $attachments[] = Attachment::fromStorageDisk('public', $this->series->sermon_notes)
                 ->as($this->series->title . ' - Sermon Notes.pdf')
                 ->withMime('application/pdf');
         }
-        
+
         return $attachments;
     }
 }

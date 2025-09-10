@@ -408,7 +408,7 @@ class TeachingSeriesResource extends Resource
                                 }
                                 $defaultMessage .= "May God bless you as you continue to grow in your faith journey.\n\n";
                                 $defaultMessage .= "Blessings,\n[Your Name]";
-                                
+
                                 return $defaultMessage;
                             })
                             ->visible(fn (Forms\Get $get): bool => $get('email_type') === 'custom'),
@@ -573,7 +573,7 @@ class TeachingSeriesResource extends Resource
                                 ->required()
                                 ->default('template')
                                 ->live()
-                                ->afterStateUpdated(fn ($state, Forms\Set $set) => $state === 'template' ? 
+                                ->afterStateUpdated(fn ($state, Forms\Set $set) => $state === 'template' ?
                                     $set('custom_subject', null) : null),
 
                             Forms\Components\TextInput::make('custom_subject')
