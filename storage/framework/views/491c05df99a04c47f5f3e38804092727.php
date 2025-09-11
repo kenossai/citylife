@@ -49,7 +49,9 @@
 <div class=""></div>
     <div class=""></div>
 
-    
+    <div class="preloader">
+        <div class="preloader__image" style="background-image: url(<?php echo e(asset('assets/images/loader.png')); ?>);"></div>
+    </div>
 
     <?php echo e($slot); ?>
 

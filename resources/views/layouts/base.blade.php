@@ -49,9 +49,9 @@
 <div class=""></div>
     <div class=""></div>
 
-    {{-- <div class="preloader">
-        <div class="preloader__image" style="background-image: url(asset('assets/images/loader.png'));"></div>
-    </div> --}}
+    <div class="preloader">
+        <div class="preloader__image" style="background-image: url({{ asset('assets/images/loader.png') }});"></div>
+    </div>
 
     {{ $slot }}
 
