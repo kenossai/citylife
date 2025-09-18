@@ -148,7 +148,7 @@
                     <h3 class="donation-card__title">
                        <a href="{{ route('missions.show', $mission->slug) }}">{{ $mission->title }}</a>
                     </h3>
-                    <p class="donation-card__text">{{ Str::limit($mission->description, 100) }}</p>
+                    {{-- <p class="donation-card__text">{{ Str::limit($mission->description, 100) }}</p> --}}
                     <a href="{{ route('missions.show', $mission->slug) }}" class="donation-card__btn citylife-btn citylife-btn--border-base">
                        <div class="citylife-btn__icon-box">
                           <div class="citylife-btn__icon-box__inner"><span class="icon-duble-arrow"></span></div>

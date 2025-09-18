@@ -10,38 +10,30 @@ class Giving extends Model
     use HasFactory;
 
     protected $fillable = [
-        'title',
+        'member_id',
+        'donor_name',
+        'donor_email',
+        'donor_phone',
+        'amount',
         'giving_type',
-        'description',
-        'content',
-        'payment_methods',
-        'bank_name',
-        'account_name',
-        'account_number',
-        'sort_code',
-        'online_giving_url',
-        'instructions',
-        'suggested_amount',
-        'featured_image',
-        'is_active',
-        'is_featured',
-        'sort_order',
+        'payment_method',
+        'given_date',
+        'reference_number',
+        'notes',
+        'is_anonymous',
+        'gift_aid_eligible',
     ];
 
     protected $casts = [
-        'suggested_amount' => 'decimal:2',
-        'is_active' => 'boolean',
-        'is_featured' => 'boolean',
+        'amount' => 'decimal:2',
+        'given_date' => 'date',
+        'is_anonymous' => 'boolean',
+        'gift_aid_eligible' => 'boolean',
     ];
 
-    public function scopeActive($query)
+    public function member()
     {
-        return $query->where('is_active', true);
-    }
-
-    public function scopeFeatured($query)
-    {
-        return $query->where('is_featured', true);
+        return $this->belongsTo(Member::class);
     }
 
     public function scopeByType($query, $type)
@@ -49,8 +41,38 @@ class Giving extends Model
         return $query->where('giving_type', $type);
     }
 
-    public function getPaymentMethodsArrayAttribute()
+    public function scopeByDateRange($query, $startDate, $endDate)
     {
-        return explode(',', $this->payment_methods);
+        return $query->whereBetween('given_date', [$startDate, $endDate]);
+    }
+
+    public function scopeThisMonth($query)
+    {
+        return $query->whereMonth('given_date', now()->month)
+                    ->whereYear('given_date', now()->year);
+    }
+
+    public function scopeThisYear($query)
+    {
+        return $query->whereYear('given_date', now()->year);
+    }
+
+    public function scopeGiftAidEligible($query)
+    {
+        return $query->where('gift_aid_eligible', true);
+    }
+
+    public function getFormattedAmountAttribute()
+    {
+        return '£' . number_format($this->amount, 2);
+    }
+
+    public function getDonorDisplayNameAttribute()
+    {
+        if ($this->is_anonymous) {
+            return 'Anonymous';
+        }
+
+        return $this->member ? $this->member->full_name : $this->donor_name;
     }
 }
