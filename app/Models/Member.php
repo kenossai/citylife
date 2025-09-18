@@ -48,6 +48,11 @@ class Member extends Authenticatable
         'special_needs',
         'receives_newsletter',
         'receives_sms',
+        'gdpr_consent',
+        'gdpr_consent_date',
+        'gdpr_consent_ip',
+        'newsletter_consent',
+        'newsletter_consent_date',
         'photo',
         'notes',
         'is_active',
@@ -69,6 +74,10 @@ class Member extends Authenticatable
         'receives_sms' => 'boolean',
         'is_active' => 'boolean',
         'password' => 'hashed',
+        'gdpr_consent' => 'boolean',
+        'gdpr_consent_date' => 'datetime',
+        'newsletter_consent' => 'boolean',
+        'newsletter_consent_date' => 'datetime',
     ];
 
     // Auto-generate membership number when creating

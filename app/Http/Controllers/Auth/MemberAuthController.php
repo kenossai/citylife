@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\Member;
+use App\Models\NewsletterSubscriber;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -44,7 +45,7 @@ class MemberAuthController extends Controller
 
         if (Auth::guard('member')->attempt($credentials, $remember)) {
             $request->session()->regenerate();
-            
+
             $user = Auth::guard('member')->user();
             Log::info('Login successful for: ' . $user->email);
             Log::info('Session ID after login: ' . $request->session()->getId());
@@ -92,6 +93,8 @@ class MemberAuthController extends Controller
             'email' => 'required|string|email|max:255|unique:members',
             'password' => 'required|string|min:6|confirmed',
             'phone' => 'nullable|string|max:20',
+            'gdpr_consent' => 'required|accepted',
+            'newsletter' => 'nullable|boolean',
         ]);
 
         if ($validator->fails()) {
@@ -99,6 +102,8 @@ class MemberAuthController extends Controller
                 ->withErrors($validator)
                 ->withInput();
         }
+
+        $consentGiven = $request->has('newsletter') && $request->newsletter;
 
         $member = Member::create([
             'first_name' => $request->first_name,
@@ -108,18 +113,40 @@ class MemberAuthController extends Controller
             'phone' => $request->phone,
             'membership_status' => 'regular_attendee',
             'is_active' => true,
-            'receives_newsletter' => true,
+            'receives_newsletter' => $consentGiven,
             'receives_sms' => false,
+            'gdpr_consent' => true, // Required for registration
+            'gdpr_consent_date' => now(),
+            'gdpr_consent_ip' => $request->ip(),
+            'newsletter_consent' => $consentGiven,
+            'newsletter_consent_date' => $consentGiven ? now() : null,
         ]);
+
+        // Add to newsletter subscribers if they consented
+        if ($consentGiven) {
+            NewsletterSubscriber::subscribe($request->email, [
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+                'source' => 'member_registration',
+                'gdpr_consent' => true,
+                'gdpr_consent_date' => now(),
+                'gdpr_consent_ip' => $request->ip(),
+            ]);
+        }
 
         // Log the user in
         Auth::guard('member')->login($member);
-        
+
         // Regenerate session for security
         $request->session()->regenerate();
 
+        $successMessage = 'Registration successful! Welcome to City Life Church.';
+        if ($consentGiven) {
+            $successMessage .= ' You have been subscribed to our newsletter.';
+        }
+
         return redirect()->intended(route('courses.dashboard'))
-            ->with('success', 'Registration successful! Welcome to City Life Church.');
+            ->with('success', $successMessage);
     }
 
     /**

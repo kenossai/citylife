@@ -74,7 +74,7 @@
                                 </div>
                             </div>
 
-                            <div class="login-page__form__input-box form-one__control">
+                            <div class="login-page__form__input-box form-one__control mt-3">
                                 <input type="email"
                                        name="email"
                                        placeholder="Email address"
@@ -118,11 +118,11 @@
 
                             <div class="login-page__form__input-box login-page__form__checkbox-forgot">
                                 <div class="login-page__form__checkbox">
-                                    <input type="checkbox" id="newsletter" name="newsletter" checked>
+                                    <input type="checkbox" id="newsletter" name="newsletter" value="1" {{ old('newsletter') ? 'checked' : '' }}>
                                     <label for="newsletter">Subscribe to newsletter</label>
                                 </div>
                             </div>
-                            <div class="col-12">
+                            <div class="col-12 mt-4">
                                 <div class="form-one__control">
                                     <div class="gdpr-consent" style="margin-bottom: 20px;">
                                         <label style="display: flex; align-items: flex-start; font-size: 14px; line-height: 1.4; color: #666;">
