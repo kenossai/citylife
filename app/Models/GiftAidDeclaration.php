@@ -43,4 +43,46 @@ class GiftAidDeclaration extends Model
     {
         return $query->where('is_active', true);
     }
+
+    /**
+     * Scope for confirmed declarations
+     */
+    public function scopeConfirmed($query)
+    {
+        return $query->where('confirm_declaration', true);
+    }
+
+    /**
+     * Scope for this year's declarations
+     */
+    public function scopeThisYear($query)
+    {
+        return $query->whereYear('created_at', now()->year);
+    }
+
+    /**
+     * Scope for this month's declarations
+     */
+    public function scopeThisMonth($query)
+    {
+        return $query->whereMonth('created_at', now()->month)
+                    ->whereYear('created_at', now()->year);
+    }
+
+    /**
+     * Get the donor's givings that are gift aid eligible
+     */
+    public function eligibleGivings()
+    {
+        return $this->hasMany(\App\Models\Giving::class, 'donor_email', 'email')
+            ->where('gift_aid_eligible', true);
+    }
+
+    /**
+     * Get formatted address
+     */
+    public function getFormattedAddressAttribute(): string
+    {
+        return $this->address . ', ' . $this->postcode;
+    }
 }

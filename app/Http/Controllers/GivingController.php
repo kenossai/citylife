@@ -32,8 +32,18 @@ class GivingController extends Controller
             'confirm_declaration' => 'required|accepted',
         ]);
 
+        // Check for existing declaration with same email
+        $existingDeclaration = GiftAidDeclaration::where('email', $request->email)
+            ->where('is_active', true)
+            ->first();
+
+        if ($existingDeclaration) {
+            return redirect()->route('giving.index')
+                ->with('error', 'A Gift Aid declaration already exists for this email address. If you need to update your details, please contact us.');
+        }
+
         // Create the Gift Aid declaration
-        GiftAidDeclaration::create([
+        $declaration = GiftAidDeclaration::create([
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
             'address' => $request->address,
@@ -46,7 +56,17 @@ class GivingController extends Controller
             'is_active' => true,
         ]);
 
+        // Check if there are any existing givings that can now be marked as gift aid eligible
+        $matchedGivings = \App\Models\Giving::where('donor_email', $request->email)
+            ->where('gift_aid_eligible', false)
+            ->update(['gift_aid_eligible' => true]);
+
+        $successMessage = 'Thank you for your Gift Aid declaration. We have received your information successfully.';
+        if ($matchedGivings > 0) {
+            $successMessage .= " We've also found {$matchedGivings} previous donations that are now eligible for Gift Aid.";
+        }
+
         return redirect()->route('giving.index')
-            ->with('success', 'Thank you for your Gift Aid declaration. We have received your information successfully.');
+            ->with('success', $successMessage);
     }
 }

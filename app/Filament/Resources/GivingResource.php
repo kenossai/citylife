@@ -202,7 +202,8 @@ class GivingResource extends Resource
                     ->boolean()
                     ->trueIcon('heroicon-o-check-circle')
                     ->falseIcon('heroicon-o-x-circle')
-                    ->toggleable(),
+                    ->toggleable()
+                    ->tooltip(fn ($record) => $record->gift_aid_eligible ? 'Eligible for Gift Aid (25% reclaimable)' : 'Not eligible for Gift Aid'),
 
                 Tables\Columns\IconColumn::make('is_anonymous')
                     ->label('Anonymous')
@@ -273,6 +274,23 @@ class GivingResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\BulkAction::make('calculate_gift_aid')
+                        ->label('Calculate Gift Aid')
+                        ->icon('heroicon-o-calculator')
+                        ->color('info')
+                        ->action(function ($records) {
+                            $eligibleRecords = $records->filter(fn ($record) => $record->gift_aid_eligible);
+                            $totalAmount = $eligibleRecords->sum('amount');
+                            $giftAidAmount = $totalAmount * 0.25; // 25% Gift Aid
+
+                            \Filament\Notifications\Notification::make()
+                                ->title('Gift Aid Calculation')
+                                ->body("Eligible donations: £" . number_format($totalAmount, 2) . " | Gift Aid reclaimable: £" . number_format($giftAidAmount, 2))
+                                ->success()
+                                ->persistent()
+                                ->send();
+                        })
+                        ->deselectRecordsAfterCompletion(),
                     Tables\Actions\BulkAction::make('export')
                         ->label('Export to CSV')
                         ->icon('heroicon-o-arrow-down-tray')

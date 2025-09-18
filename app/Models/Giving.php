@@ -36,6 +36,15 @@ class Giving extends Model
         return $this->belongsTo(Member::class);
     }
 
+    /**
+     * Get the gift aid declaration for this giving (if eligible)
+     */
+    public function giftAidDeclaration()
+    {
+        return $this->hasOne(GiftAidDeclaration::class, 'email', 'donor_email')
+                    ->where('is_active', true);
+    }
+
     public function scopeByType($query, $type)
     {
         return $query->where('giving_type', $type);
