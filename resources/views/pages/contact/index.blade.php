@@ -123,12 +123,13 @@
                                         <option value="">Select a subject</option>
                                         <option value="General Inquiry" {{ old('subject') == 'General Inquiry' ? 'selected' : '' }}>General Inquiry</option>
                                         <option value="Prayer Request" {{ old('subject') == 'Prayer Request' ? 'selected' : '' }}>Prayer Request</option>
-                                        <option value="Volunteer Opportunities" {{ old('subject') == 'Volunteer Opportunities' ? 'selected' : '' }}>Volunteer Opportunities</option>
+                                        <option value="Baby Dedication" {{ old('subject') == 'Baby Dedication' ? 'selected' : '' }}>Baby Dedication</option>
                                         <option value="Event Information" {{ old('subject') == 'Event Information' ? 'selected' : '' }}>Event Information</option>
                                         <option value="Pastoral Care" {{ old('subject') == 'Pastoral Care' ? 'selected' : '' }}>Pastoral Care</option>
                                         <option value="Membership" {{ old('subject') == 'Membership' ? 'selected' : '' }}>Membership</option>
                                         <option value="Donations" {{ old('subject') == 'Donations' ? 'selected' : '' }}>Donations</option>
                                         <option value="Technical Support" {{ old('subject') == 'Technical Support' ? 'selected' : '' }}>Technical Support</option>
+                                        <option value="Other" {{ old('subject') == 'Other' ? 'selected' : '' }}>Other</option>
                                     </select>
                                 </div><!-- /.form-one__control -->
                             </div><!-- /.col-12 -->
