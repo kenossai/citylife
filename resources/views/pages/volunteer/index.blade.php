@@ -1,5 +1,5 @@
 <x-app-layout>
-@section('title', 'Volunteer') 
+@section('title', 'Volunteer')
 @section('meta_description', 'Join our volunteer team and make a difference in the community. Explore opportunities to serve and connect with others.')
 
 <style>
@@ -101,16 +101,16 @@
     .form-section__title {
         font-size: 1.1rem;
     }
-    
+
     .form-one__radio-group {
         gap: 0.75rem;
     }
-    
+
     .form-grid {
         grid-template-columns: 1fr;
         gap: 1rem;
     }
-    
+
     .form-grid-2 {
         grid-template-columns: 1fr;
         gap: 1rem;
@@ -139,7 +139,7 @@
                 <form action="{{ route('volunteer.store') }}" method="POST" class="become-volunteer__form form-one">
                     @csrf
                     <h3 class="become-volunteer__form__title">Volunteer Application Form</h3>
-                    
+
                     @if(session('success'))
                         <div class="alert alert-success mb-4" style="background-color: #d4edda; color: #155724; padding: 1rem; border-radius: 4px; margin-bottom: 1rem;">
                             {{ session('success') }}
@@ -160,7 +160,7 @@
                         <div class="form-section">
                             <h4 class="form-section__title">Your Application</h4>
                             <p class="form-section__text">This application is to volunteer...</p>
-                            
+
                             <div class="form-one__control">
                                 <label class="form-one__label">Application Type *</label>
                                 <div class="form-one__radio-group">
@@ -185,8 +185,8 @@
                                     <option value="children">Children's Ministry</option>
                                     <option value="hospitality">Hospitality Team</option>
                                     <option value="prayer">Prayer Team</option>
-                                    <option value="media">Media Team</option>
-                                    <option value="facilities">Facilities Team</option>
+                                    <option value="technical">Technical Team</option>
+                                    <option value="facilities">Facilities Team (DIY)</option>
                                 </select>
                             </div><!-- /.form-one__control -->
                         </div>
@@ -194,7 +194,7 @@
                         <!-- Personal Details Section -->
                         <div class="form-section">
                             <h4 class="form-section__title">Personal Details</h4>
-                            
+
                             <div class="form-grid">
                                 <div class="form-one__control">
                                     <label class="form-one__label">First & Last Name *</label>
@@ -236,7 +236,7 @@
                         <!-- Medical & First Aid Section -->
                         <div class="form-section">
                             <h4 class="form-section__title">Medical & First Aid</h4>
-                            
+
                             <div class="form-one__control">
                                 <label class="form-one__label">Are you a qualified medical professional (e.g., doctor, nurse, paramedic) who could be identified in the event of a medical emergency? *</label>
                                 <div class="form-one__radio-group">
@@ -269,7 +269,7 @@
                         <!-- Background Information Section -->
                         <div class="form-section">
                             <h4 class="form-section__title">Background Information</h4>
-                            
+
                             <div class="form-one__control">
                                 <label class="form-one__label">Which church do you attend? How long have you been there and what ministry are you involved in, in that church? *</label>
                                 <textarea name="church_background" rows="4" placeholder="Please provide details about your church involvement..." class="form-one__control__input form-one__control__message" required></textarea>
@@ -289,7 +289,7 @@
                         <!-- Emergency Contact Section -->
                         <div class="form-section">
                             <h4 class="form-section__title">Next of kin in case of emergency</h4>
-                            
+
                             <div class="form-grid">
                                 <div class="form-one__control">
                                     <label class="form-one__label">Name</label>
@@ -312,7 +312,7 @@
                         <div class="form-section">
                             <h4 class="form-section__title">Declaration</h4>
                             <p class="form-section__text">City Life is committed to ensuring that all volunteers are safe to work with and around children and young people.</p>
-                            
+
                             <div class="form-one__control">
                                 <label class="form-one__label">Are you eligible to work in the UK? *</label>
                                 <div class="form-one__radio-group">
@@ -332,7 +332,7 @@
                         <div class="form-section">
                             <h4 class="form-section__title">Data Protection and Processing</h4>
                             <p class="form-section__text">I give express permission for the personal data on this form to be held and processed by City Life. Where I have provided a current DBS Certificate Number, I agree for City Life to use it and my personally identifiable information in order to carry out the required checks. I confirm that the information given on this form is correct and any misleading or falsification of information may be proper cause for rejection.</p>
-                            
+
                             <div class="form-one__control">
                                 <label class="form-one__checkbox">
                                     <input type="checkbox" name="data_processing_consent" value="yes" required>
