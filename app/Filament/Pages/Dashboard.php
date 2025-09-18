@@ -8,9 +8,9 @@ use App\Filament\Widgets\CourseStatsWidget;
 use App\Filament\Widgets\CourseAnalyticsWidget;
 use App\Filament\Widgets\EventAnalyticsWidget;
 use App\Filament\Widgets\CommunicationStatsWidget;
-use App\Filament\Widgets\MediaContentStatsWidget;
 use App\Filament\Widgets\ProgressTrackingWidget;
 use App\Filament\Widgets\RecentActivityWidget;
+use App\Filament\Widgets\GiftAidStatsWidget;
 use Filament\Pages\Dashboard as BaseDashboard;
 
 class Dashboard extends BaseDashboard
@@ -37,7 +37,7 @@ class Dashboard extends BaseDashboard
             OverviewStatsWidget::class,
             CourseStatsWidget::class,
             CommunicationStatsWidget::class,
-            MediaContentStatsWidget::class,
+            GiftAidStatsWidget::class,
             MemberAnalyticsWidget::class,
             CourseAnalyticsWidget::class,
             EventAnalyticsWidget::class,

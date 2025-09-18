@@ -46,7 +46,7 @@ class AdminPanelProvider extends PanelProvider
                 \App\Filament\Widgets\CourseAnalyticsWidget::class,
                 \App\Filament\Widgets\EventAnalyticsWidget::class,
                 \App\Filament\Widgets\CommunicationStatsWidget::class,
-                \App\Filament\Widgets\MediaContentStatsWidget::class,
+                \App\Filament\Widgets\GiftAidStatsWidget::class,
                 \App\Filament\Widgets\ProgressTrackingWidget::class,
                 \App\Filament\Widgets\RecentActivityWidget::class,
                 Widgets\FilamentInfoWidget::class,
