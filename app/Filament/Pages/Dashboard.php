@@ -12,6 +12,7 @@ use App\Filament\Widgets\ProgressTrackingWidget;
 use App\Filament\Widgets\RecentActivityWidget;
 use App\Filament\Widgets\GiftAidStatsWidget;
 use App\Filament\Widgets\NewsletterStatsWidget;
+use App\Filament\Widgets\UpcomingPastoralRemindersWidget;
 use Filament\Pages\Dashboard as BaseDashboard;
 
 class Dashboard extends BaseDashboard
@@ -40,6 +41,7 @@ class Dashboard extends BaseDashboard
             CommunicationStatsWidget::class,
             GiftAidStatsWidget::class,
             NewsletterStatsWidget::class,
+            UpcomingPastoralRemindersWidget::class,
             MemberAnalyticsWidget::class,
             CourseAnalyticsWidget::class,
             EventAnalyticsWidget::class,

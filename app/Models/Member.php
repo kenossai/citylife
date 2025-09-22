@@ -141,6 +141,16 @@ class Member extends Authenticatable
         return $this->belongsToMany(Ministry::class, 'member_ministry')->withTimestamps();
     }
 
+    public function pastoralReminders()
+    {
+        return $this->hasMany(PastoralReminder::class);
+    }
+
+    public function pastoralNotifications()
+    {
+        return $this->hasMany(PastoralNotification::class);
+    }
+
     public function technicalDepartments()
     {
         return $this->hasMany(TechnicalDepartmentMember::class);
