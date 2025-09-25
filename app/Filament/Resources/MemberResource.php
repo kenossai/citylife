@@ -5,6 +5,8 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\MemberResource\Pages;
 use App\Filament\Resources\MemberResource\RelationManagers;
 use App\Models\Member;
+use App\Exports\MembersExport;
+use App\Exports\MembersContactExport;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -13,6 +15,8 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Database\Eloquent\Model;
+use Maatwebsite\Excel\Facades\Excel;
+use Filament\Notifications\Notification;
 
 class MemberResource extends Resource
 {
@@ -267,8 +271,148 @@ class MemberResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])
+            ->headerActions([
+                Tables\Actions\Action::make('exportAll')
+                    ->label('Export All Members')
+                    ->icon('heroicon-o-arrow-down-tray')
+                    ->color('success')
+                    ->action(function () {
+                        $fileName = 'church-members-' . now()->format('Y-m-d-H-i-s') . '.xlsx';
+
+                        return Excel::download(new MembersExport(), $fileName);
+                    })
+                    ->tooltip('Export all members to Excel'),
+
+                Tables\Actions\Action::make('exportFiltered')
+                    ->label('Export with Filters')
+                    ->icon('heroicon-o-funnel')
+                    ->color('primary')
+                    ->form([
+                        Forms\Components\Select::make('membership_status')
+                            ->label('Membership Status')
+                            ->options([
+                                'visitor' => 'Visitor',
+                                'regular_attendee' => 'Regular Attendee',
+                                'member' => 'Member',
+                                'inactive' => 'Inactive',
+                            ])
+                            ->placeholder('All statuses')
+                            ->multiple(),
+
+                        Forms\Components\Select::make('baptism_status')
+                            ->label('Baptism Status')
+                            ->options([
+                                'Not Baptized' => 'Not Baptized',
+                                'Baptized' => 'Baptized',
+                                'Baptized Elsewhere' => 'Baptized Elsewhere',
+                            ])
+                            ->placeholder('All baptism statuses')
+                            ->multiple(),
+
+                        Forms\Components\Toggle::make('active_only')
+                            ->label('Active Members Only')
+                            ->default(false),
+
+                        Forms\Components\DatePicker::make('joined_after')
+                            ->label('Joined After')
+                            ->placeholder('Select date'),
+
+                        Forms\Components\DatePicker::make('joined_before')
+                            ->label('Joined Before')
+                            ->placeholder('Select date'),
+                    ])
+                    ->action(function (array $data) {
+                        $query = Member::with(['spouse']);
+
+                        // Apply filters
+                        if (!empty($data['membership_status'])) {
+                            $query->whereIn('membership_status', $data['membership_status']);
+                        }
+
+                        if (!empty($data['baptism_status'])) {
+                            $query->whereIn('baptism_status', $data['baptism_status']);
+                        }
+
+                        if ($data['active_only']) {
+                            $query->where('is_active', true);
+                        }
+
+                        if ($data['joined_after']) {
+                            $query->where('first_visit_date', '>=', $data['joined_after']);
+                        }
+
+                        if ($data['joined_before']) {
+                            $query->where('first_visit_date', '<=', $data['joined_before']);
+                        }
+
+                        $members = $query->orderBy('membership_status')
+                                        ->orderBy('last_name')
+                                        ->orderBy('first_name')
+                                        ->get();
+
+                        if ($members->isEmpty()) {
+                            Notification::make()
+                                ->title('No members found')
+                                ->body('No members match the selected filters.')
+                                ->warning()
+                                ->send();
+                            return;
+                        }
+
+                        $fileName = 'filtered-members-' . now()->format('Y-m-d-H-i-s') . '.xlsx';
+
+                        Notification::make()
+                            ->title('Export completed')
+                            ->body("Exported {$members->count()} members to Excel.")
+                            ->success()
+                            ->send();
+
+                        return Excel::download(new MembersExport($members), $fileName);
+                    })
+                    ->modalHeading('Export Members with Filters')
+                    ->modalDescription('Select filters to customize your member export')
+                    ->modalSubmitActionLabel('Export to Excel'),
+
+                Tables\Actions\Action::make('exportContactList')
+                    ->label('Export Contact Directory')
+                    ->icon('heroicon-o-phone')
+                    ->color('warning')
+                    ->action(function () {
+                        $fileName = 'church-contact-directory-' . now()->format('Y-m-d-H-i-s') . '.xlsx';
+
+                        Notification::make()
+                            ->title('Contact directory exported')
+                            ->body('Exported active members with contact information.')
+                            ->success()
+                            ->send();
+
+                        return Excel::download(new MembersContactExport(), $fileName);
+                    })
+                    ->tooltip('Export condensed contact list with birthdays and anniversaries'),
+            ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\BulkAction::make('exportSelected')
+                        ->label('Export Selected (Full)')
+                        ->icon('heroicon-o-arrow-down-tray')
+                        ->color('info')
+                        ->action(function ($records) {
+                            $fileName = 'selected-members-full-' . now()->format('Y-m-d-H-i-s') . '.xlsx';
+
+                            return Excel::download(new MembersExport($records), $fileName);
+                        })
+                        ->deselectRecordsAfterCompletion(),
+
+                    Tables\Actions\BulkAction::make('exportSelectedContact')
+                        ->label('Export Selected (Contact)')
+                        ->icon('heroicon-o-phone')
+                        ->color('warning')
+                        ->action(function ($records) {
+                            $fileName = 'selected-contacts-' . now()->format('Y-m-d-H-i-s') . '.xlsx';
+
+                            return Excel::download(new MembersContactExport($records), $fileName);
+                        })
+                        ->deselectRecordsAfterCompletion(),
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
