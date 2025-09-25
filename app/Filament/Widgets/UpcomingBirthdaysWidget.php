@@ -120,28 +120,65 @@ class UpcomingBirthdaysWidget extends BaseWidget
                     ->color('success')
                     ->size('sm')
                     ->action(function (Member $record) {
-                        // Create a birthday pastoral reminder
-                        $reminder = \App\Models\PastoralReminder::create([
-                            'member_id' => $record->id,
-                            'reminder_type' => 'birthday',
-                            'reminder_date' => $this->getNextBirthdayDate($record->date_of_birth),
-                            'days_before_reminder' => 0, // Send today
-                            'is_annual' => true,
-                            'is_active' => true,
-                            'send_to_member' => true,
-                            'member_notification_type' => 'email',
-                            'notification_recipients' => [
-                                'admin@citylifecc.com',
-                                'pastor@citylifecc.com'
-                            ],
-                            'member_message_template' => [
-                                'message' => '🎉 Happy Birthday, {first_name}! Wishing you a wonderful day filled with God\'s blessings. From all of us at City Life Christian Centre! 🎂'
-                            ]
-                        ]);
+                        $nextBirthday = $this->getNextBirthdayDate($record->date_of_birth);
+
+                        // Check if a birthday reminder already exists for this member and date
+                        $existingReminder = \App\Models\PastoralReminder::where('member_id', $record->id)
+                            ->where('reminder_type', 'birthday')
+                            ->where('reminder_date', $nextBirthday->format('Y-m-d'))
+                            ->where('is_active', true)
+                            ->first();
+
+                        if ($existingReminder) {
+                            // If reminder exists, just update the last sent time and resend
+                            $reminder = $existingReminder;
+                            $reminder->update(['last_sent_at' => now()]);
+                        } else {
+                            // Create a new birthday pastoral reminder
+                            $reminder = \App\Models\PastoralReminder::create([
+                                'member_id' => $record->id,
+                                'reminder_type' => 'birthday',
+                                'reminder_date' => $nextBirthday,
+                                'days_before_reminder' => 0, // Send today
+                                'is_annual' => true,
+                                'is_active' => true,
+                                'send_to_member' => true,
+                                'member_notification_type' => 'email',
+                                'notification_recipients' => [
+                                    'admin@citylifecc.com',
+                                    'pastor@citylifecc.com'
+                                ],
+                                'member_message_template' => [
+                                    'message' => '🎉 Happy Birthday, {first_name}! Wishing you a wonderful day filled with God\'s blessings. From all of us at City Life Christian Centre! 🎂'
+                                ]
+                            ]);
+                        }
 
                         // Send the notification immediately
-                        \App\Models\PastoralNotification::createForReminder($reminder, 'email');
+                        $notifications = \App\Models\PastoralNotification::createForReminder($reminder, 'email');
                         $reminder->update(['last_sent_at' => now()]);
+
+                        // Send the emails immediately
+                        $pendingNotifications = \App\Models\PastoralNotification::where('pastoral_reminder_id', $reminder->id)
+                            ->where('status', 'pending')
+                            ->get();
+
+                        foreach ($pendingNotifications as $notification) {
+                            try {
+                                \Illuminate\Support\Facades\Mail::to($notification->recipient_email)
+                                    ->send(new \App\Mail\PastoralReminderMail($notification));
+
+                                $notification->update([
+                                    'status' => 'sent',
+                                    'sent_at' => now()
+                                ]);
+                            } catch (\Exception $e) {
+                                $notification->update([
+                                    'status' => 'failed',
+                                    'error_message' => $e->getMessage()
+                                ]);
+                            }
+                        }
 
                         \Filament\Notifications\Notification::make()
                             ->title('Birthday wish sent! 🎉')
