@@ -11,21 +11,21 @@ class MemberAnalyticsWidget extends ChartWidget
 {
     protected static ?string $heading = 'Member Registration Trends';
     protected static ?int $sort = 2;
-    
+
     protected function getData(): array
     {
         // Get member registrations for the last 12 months
         $memberData = collect();
         $enrollmentData = collect();
-        
+
         for ($i = 11; $i >= 0; $i--) {
             $month = now()->subMonths($i);
             $startOfMonth = $month->copy()->startOfMonth();
             $endOfMonth = $month->copy()->endOfMonth();
-            
+
             $memberCount = Member::whereBetween('created_at', [$startOfMonth, $endOfMonth])->count();
             $enrollmentCount = CourseEnrollment::whereBetween('enrollment_date', [$startOfMonth, $endOfMonth])->count();
-            
+
             $memberData->push($memberCount);
             $enrollmentData->push($enrollmentCount);
         }
@@ -57,7 +57,7 @@ class MemberAnalyticsWidget extends ChartWidget
     {
         return 'line';
     }
-    
+
     protected function getOptions(): array
     {
         return [
