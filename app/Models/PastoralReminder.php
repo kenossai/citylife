@@ -96,15 +96,15 @@ class PastoralReminder extends Model
         if ($this->is_annual && in_array($this->reminder_type, ['birthday', 'wedding_anniversary', 'baptism_anniversary', 'membership_anniversary', 'salvation_anniversary'])) {
             $currentYear = now()->year;
             $reminderThisYear = $this->reminder_date->copy()->year($currentYear);
-            
+
             // If the reminder date has already passed this year, use next year
             if ($reminderThisYear->isPast()) {
                 $reminderThisYear->addYear();
             }
-            
+
             return $reminderThisYear->subDays($this->days_before_reminder);
         }
-        
+
         // For one-time reminders, use the original date
         return $this->reminder_date->copy()->subDays($this->days_before_reminder);
     }
@@ -183,15 +183,15 @@ class PastoralReminder extends Model
         if ($this->is_annual && in_array($this->reminder_type, ['birthday', 'wedding_anniversary', 'baptism_anniversary', 'membership_anniversary', 'salvation_anniversary'])) {
             $currentYear = now()->year;
             $reminderThisYear = $this->reminder_date->copy()->year($currentYear);
-            
+
             // If the reminder date has already passed this year, use next year
             if ($reminderThisYear->isPast()) {
                 $reminderThisYear->addYear();
             }
-            
+
             return $reminderThisYear->subDays($this->days_before_member_notification ?? 0);
         }
-        
+
         // For one-time reminders, use the original date
         return $this->reminder_date->copy()->subDays($this->days_before_member_notification ?? 0);
     }
