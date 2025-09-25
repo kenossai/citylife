@@ -120,78 +120,68 @@ class UpcomingBirthdaysWidget extends BaseWidget
                     ->color('success')
                     ->size('sm')
                     ->action(function (Member $record) {
-                        $nextBirthday = $this->getNextBirthdayDate($record->date_of_birth);
+                        // Send birthday wish directly to member (no pastoral reminder needed)
+                        $sent = [];
+                        $failed = [];
 
-                        // Check if a birthday reminder already exists for this member and date
-                        $existingReminder = \App\Models\PastoralReminder::where('member_id', $record->id)
-                            ->where('reminder_type', 'birthday')
-                            ->where('reminder_date', $nextBirthday->format('Y-m-d'))
-                            ->where('is_active', true)
-                            ->first();
-
-                        if ($existingReminder) {
-                            // If reminder exists, just update the last sent time and resend
-                            $reminder = $existingReminder;
-                            $reminder->update(['last_sent_at' => now()]);
-                        } else {
-                            // Create a new birthday pastoral reminder
-                            $reminder = \App\Models\PastoralReminder::create([
-                                'member_id' => $record->id,
-                                'reminder_type' => 'birthday',
-                                'reminder_date' => $nextBirthday,
-                                'days_before_reminder' => 0, // Send today
-                                'is_annual' => true,
-                                'is_active' => true,
-                                'send_to_member' => true,
-                                'member_notification_type' => 'email',
-                                'notification_recipients' => [
-                                    'admin@citylifecc.com',
-                                    'pastor@citylifecc.com'
-                                ],
-                                'member_message_template' => [
-                                    'message' => '🎉 Happy Birthday, {first_name}! Wishing you a wonderful day filled with God\'s blessings. From all of us at City Life Christian Centre! 🎂'
-                                ]
-                            ]);
-                        }
-
-                        // Send the notification immediately
-                        $notifications = \App\Models\PastoralNotification::createForReminder($reminder, 'email');
-                        $reminder->update(['last_sent_at' => now()]);
-
-                        // Send the emails immediately
-                        $pendingNotifications = \App\Models\PastoralNotification::where('pastoral_reminder_id', $reminder->id)
-                            ->where('status', 'pending')
-                            ->get();
-
-                        foreach ($pendingNotifications as $notification) {
+                        // Send email if member has email
+                        if ($record->email) {
                             try {
-                                \Illuminate\Support\Facades\Mail::to($notification->recipient_email)
-                                    ->send(new \App\Mail\PastoralReminderMail($notification));
-
-                                $notification->update([
-                                    'status' => 'sent',
-                                    'sent_at' => now()
-                                ]);
+                                \Illuminate\Support\Facades\Mail::raw(
+                                    "🎉 Happy Birthday, {$record->first_name}!\n\nWishing you a wonderful day filled with God's blessings and joy. May this new year of life bring you countless moments of happiness, love, and spiritual growth.\n\nFrom all of us at City Life Christian Centre! 🎂\n\nGod bless you on your special day!",
+                                    function($message) use ($record) {
+                                        $message->to($record->email)
+                                                ->subject('🎉 Happy Birthday from City Life Christian Centre!')
+                                                ->from('noreply@citylifecc.com', 'City Life Christian Centre');
+                                    }
+                                );
+                                $sent[] = 'email';
                             } catch (\Exception $e) {
-                                $notification->update([
-                                    'status' => 'failed',
-                                    'error_message' => $e->getMessage()
-                                ]);
+                                $failed[] = "email ({$e->getMessage()})";
                             }
                         }
 
-                        \Filament\Notifications\Notification::make()
-                            ->title('Birthday wish sent! 🎉')
-                            ->body("Birthday wishes sent to {$record->first_name} {$record->last_name}")
-                            ->success()
-                            ->send();
+                        // TODO: Add SMS sending if member has phone (when SMS service is configured)
+                        // if ($record->phone) {
+                        //     try {
+                        //         // SMS sending logic here
+                        //         $sent[] = 'SMS';
+                        //     } catch (\Exception $e) {
+                        //         $failed[] = "SMS ({$e->getMessage()})";
+                        //     }
+                        // }
+
+                        // Show notification based on results
+                        if (!empty($sent)) {
+                            $methods = implode(' and ', $sent);
+                            \Filament\Notifications\Notification::make()
+                                ->title('Birthday wish sent! 🎉')
+                                ->body("Birthday wishes sent to {$record->first_name} {$record->last_name} via {$methods}")
+                                ->success()
+                                ->send();
+                        } else {
+                            \Filament\Notifications\Notification::make()
+                                ->title('Unable to send birthday wish')
+                                ->body("No valid contact method found for {$record->first_name} {$record->last_name}")
+                                ->warning()
+                                ->send();
+                        }
+
+                        if (!empty($failed)) {
+                            $failures = implode(', ', $failed);
+                            \Filament\Notifications\Notification::make()
+                                ->title('Some messages failed')
+                                ->body("Failed to send via: {$failures}")
+                                ->warning()
+                                ->send();
+                        }
                     })
                     ->requiresConfirmation()
                     ->modalHeading('Send Birthday Wishes')
                     ->modalDescription(fn ($record) => "Send birthday wishes to {$record->first_name} {$record->last_name}?")
                     ->visible(function ($record) {
-                        // Only show if birthday is today or within 3 days
-                        return $this->getDaysUntilBirthday($record->date_of_birth) <= 3;
+                        // Only show if birthday is today or within 1 day
+                        return $this->getDaysUntilBirthday($record->date_of_birth) <= 1;
                     }),
 
                 Action::make('call')
