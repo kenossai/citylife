@@ -151,6 +151,22 @@ class Member extends Authenticatable
         return $this->hasMany(PastoralNotification::class);
     }
 
+    // GDPR Relationships
+    public function gdprConsents()
+    {
+        return $this->hasMany(GdprConsent::class);
+    }
+
+    public function gdprDataRequests()
+    {
+        return $this->hasMany(GdprDataRequest::class);
+    }
+
+    public function gdprAuditLogs()
+    {
+        return $this->hasMany(GdprAuditLog::class);
+    }
+
     public function technicalDepartments()
     {
         return $this->hasMany(TechnicalDepartmentMember::class);
