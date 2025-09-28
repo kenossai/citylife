@@ -71,11 +71,4 @@ class Permission extends Model
     {
         return static::all()->groupBy('category');
     }
-}space App\Models;
-
-use Illuminate\Database\Eloquent\Model;
-
-class Permission extends Model
-{
-    //
 }
