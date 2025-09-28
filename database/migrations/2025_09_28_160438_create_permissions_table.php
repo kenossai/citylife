@@ -13,7 +13,15 @@ return new class extends Migration
     {
         Schema::create('permissions', function (Blueprint $table) {
             $table->id();
+            $table->string('name')->unique(); // e.g., 'view_members', 'edit_courses', 'manage_finances'
+            $table->string('display_name'); // e.g., 'View Members', 'Edit Courses', 'Manage Finances'
+            $table->string('category'); // e.g., 'members', 'courses', 'finance', 'system'
+            $table->text('description')->nullable();
+            $table->boolean('is_system_permission')->default(false); // System permissions that can't be deleted
+            $table->json('metadata')->nullable(); // Additional permission metadata
             $table->timestamps();
+
+            $table->index(['category', 'name']);
         });
     }
 
