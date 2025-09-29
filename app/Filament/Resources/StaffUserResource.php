@@ -126,6 +126,22 @@ class StaffUserResource extends Resource
                             ->directory('avatars')
                             ->columnSpanFull(),
                     ]),
+
+                Forms\Components\Section::make('Login Information')
+                    ->schema([
+                        Forms\Components\Placeholder::make('last_login_at')
+                            ->label('Last Login')
+                            ->content(fn ($record) => $record?->last_login_at ? 
+                                $record->last_login_at->format('M j, Y \a\t g:i A') . ' (' . $record->last_login_at->diffForHumans() . ')' : 
+                                'Never logged in'
+                            ),
+
+                        Forms\Components\Placeholder::make('last_login_ip')
+                            ->label('Last Login IP')
+                            ->content(fn ($record) => $record?->last_login_ip ?? 'Unknown'),
+                    ])
+                    ->columns(2)
+                    ->hiddenOn('create'),
             ]);
     }
 
@@ -181,8 +197,11 @@ class StaffUserResource extends Resource
                     ->label('Last Login')
                     ->dateTime()
                     ->sortable()
-                    ->placeholder('Never')
-                    ->since(),
+                    ->placeholder('Never logged in')
+                    ->since()
+                    ->description(fn ($record) => $record->last_login_at ? 
+                        'IP: ' . ($record->last_login_ip ?? 'Unknown') : null
+                    ),
 
                 Tables\Columns\TextColumn::make('hire_date')
                     ->date()
