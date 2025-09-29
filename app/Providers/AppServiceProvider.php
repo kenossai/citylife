@@ -24,7 +24,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Livewire::component('filament.notification-icon', NotificationIcon::class);
-        
+
         // Track user login timestamps
         Event::listen(Login::class, function (Login $event) {
             $event->user->update([
