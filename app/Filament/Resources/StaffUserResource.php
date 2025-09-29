@@ -131,8 +131,8 @@ class StaffUserResource extends Resource
                     ->schema([
                         Forms\Components\Placeholder::make('last_login_at')
                             ->label('Last Login')
-                            ->content(fn ($record) => $record?->last_login_at ? 
-                                $record->last_login_at->format('M j, Y \a\t g:i A') . ' (' . $record->last_login_at->diffForHumans() . ')' : 
+                            ->content(fn ($record) => $record?->last_login_at ?
+                                $record->last_login_at->format('M j, Y \a\t g:i A') . ' (' . $record->last_login_at->diffForHumans() . ')' :
                                 'Never logged in'
                             ),
 
@@ -199,7 +199,7 @@ class StaffUserResource extends Resource
                     ->sortable()
                     ->placeholder('Never logged in')
                     ->since()
-                    ->description(fn ($record) => $record->last_login_at ? 
+                    ->description(fn ($record) => $record->last_login_at ?
                         'IP: ' . ($record->last_login_ip ?? 'Unknown') : null
                     ),
 

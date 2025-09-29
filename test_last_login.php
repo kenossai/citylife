@@ -33,7 +33,7 @@ try {
     // Check other users
     $usersWithoutLogin = User::whereNull('last_login_at')->count();
     $usersWithLogin = User::whereNotNull('last_login_at')->count();
-    
+
     echo "Users without last_login_at: {$usersWithoutLogin}\n";
     echo "Users with last_login_at: {$usersWithLogin}\n\n";
 

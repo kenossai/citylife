@@ -53,7 +53,7 @@ class TestLastLogin extends Command
         // Check other users
         $usersWithoutLogin = User::whereNull('last_login_at')->count();
         $usersWithLogin = User::whereNotNull('last_login_at')->count();
-        
+
         $this->info("Users without last_login_at: {$usersWithoutLogin}");
         $this->info("Users with last_login_at: {$usersWithLogin}");
 
