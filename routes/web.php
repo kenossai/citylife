@@ -13,6 +13,7 @@ use App\Http\Controllers\VolunteerController;
 use App\Http\Controllers\TeachingSeriesController;
 use App\Http\Controllers\CityLifeTalkTimeController;
 use App\Http\Controllers\MinistryController;
+use App\Http\Controllers\LiveStreamController;
 use App\Http\Controllers\MissionController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -205,4 +206,10 @@ Route::get('/media/citylife-talktime/{talkTime}', [CityLifeTalkTimeController::c
 // CityLife Music routes
 Route::get('/media/citylife-music', [App\Http\Controllers\CityLifeMusicController::class, 'index'])->name('citylife-music.index');
 Route::get('/media/citylife-music/{music}', [App\Http\Controllers\CityLifeMusicController::class, 'show'])->name('citylife-music.show');
+
+// Live Stream routes
+Route::get('/live', [LiveStreamController::class, 'index'])->name('live-streams.index');
+Route::get('/live/{liveStream:slug}', [LiveStreamController::class, 'show'])->name('live-streams.show');
+Route::get('/live/{liveStream:slug}/embed', [LiveStreamController::class, 'embed'])->name('live-streams.embed');
+Route::post('/live/{liveStream:slug}/viewers', [LiveStreamController::class, 'updateViewers'])->name('live-streams.update-viewers');
 
