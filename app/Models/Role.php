@@ -104,7 +104,7 @@ class Role extends Model
     {
         return [
             'super_admin' => 'Super Administrator',
-            'admin' => 'Administrator', 
+            'admin' => 'Administrator',
             'pastor' => 'Pastor',
             'finance_manager' => 'Finance Manager',
             'volunteer_coordinator' => 'Volunteer Coordinator',

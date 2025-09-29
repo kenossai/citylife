@@ -22,7 +22,7 @@ class UserRoleSeeder extends Seeder
             }
         }
 
-        // Assign staff role to test@example.com  
+        // Assign staff role to test@example.com
         $testUser = \App\Models\User::where('email', 'test@example.com')->first();
         if ($testUser) {
             $staffRole = \App\Models\Role::where('name', 'staff')->first();
