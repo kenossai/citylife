@@ -31,6 +31,9 @@ class AppServiceProvider extends ServiceProvider
                 'last_login_at' => now(),
                 'last_login_ip' => request()->ip(),
             ]);
+
+            // Log authentication event
+            \App\Services\AuditLogger::logAuthentication('login', $event->user);
         });
     }
 }
