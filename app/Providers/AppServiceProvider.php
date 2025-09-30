@@ -25,6 +25,10 @@ class AppServiceProvider extends ServiceProvider
     {
         Livewire::component('filament.notification-icon', NotificationIcon::class);
 
+        // Register model observers for social media auto-posting
+        \App\Models\Event::observe(\App\Observers\EventObserver::class);
+        \App\Models\News::observe(\App\Observers\NewsObserver::class);
+
         // Track user login timestamps
         Event::listen(Login::class, function (Login $event) {
             $event->user->update([

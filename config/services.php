@@ -49,4 +49,44 @@ return [
         ],
     ],
 
+    // Social Media Integration
+    'social_media' => [
+        'auto_post_enabled' => env('SOCIAL_MEDIA_AUTO_POST_ENABLED', false),
+        'auto_post_events' => env('SOCIAL_MEDIA_AUTO_POST_EVENTS', false),
+        'auto_post_announcements' => env('SOCIAL_MEDIA_AUTO_POST_ANNOUNCEMENTS', false),
+    ],
+
+    'facebook' => [
+        'enabled' => env('FACEBOOK_ENABLED', false),
+        'app_id' => env('FACEBOOK_APP_ID'),
+        'app_secret' => env('FACEBOOK_APP_SECRET'),
+        'access_token' => env('FACEBOOK_ACCESS_TOKEN'),
+        'page_id' => env('FACEBOOK_PAGE_ID'),
+    ],
+
+    'twitter' => [
+        'enabled' => env('TWITTER_ENABLED', false),
+        'api_key' => env('TWITTER_API_KEY'),
+        'api_secret' => env('TWITTER_API_SECRET'),
+        'bearer_token' => env('TWITTER_BEARER_TOKEN'),
+        'access_token' => env('TWITTER_ACCESS_TOKEN'),
+        'access_token_secret' => env('TWITTER_ACCESS_TOKEN_SECRET'),
+    ],
+
+    'instagram' => [
+        'enabled' => env('INSTAGRAM_ENABLED', false),
+        'app_id' => env('INSTAGRAM_APP_ID'),
+        'app_secret' => env('INSTAGRAM_APP_SECRET'),
+        'access_token' => env('INSTAGRAM_ACCESS_TOKEN'),
+        'user_id' => env('INSTAGRAM_USER_ID'),
+    ],
+
+    'linkedin' => [
+        'enabled' => env('LINKEDIN_ENABLED', false),
+        'client_id' => env('LINKEDIN_CLIENT_ID'),
+        'client_secret' => env('LINKEDIN_CLIENT_SECRET'),
+        'access_token' => env('LINKEDIN_ACCESS_TOKEN'),
+        'organization_id' => env('LINKEDIN_ORGANIZATION_ID'),
+    ],
+
 ];

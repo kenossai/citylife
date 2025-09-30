@@ -198,6 +198,47 @@ class EventResource extends Resource
                     ->query(fn (Builder $query): Builder => $query->where('start_date', '>=', now())),
             ])
             ->actions([
+                Tables\Actions\Action::make('social_media_post')
+                    ->label('Post to Social Media')
+                    ->icon('heroicon-o-share')
+                    ->color('info')
+                    ->form([
+                        Forms\Components\CheckboxList::make('platforms')
+                            ->label('Select Platforms')
+                            ->options([
+                                'facebook' => 'Facebook',
+                                'twitter' => 'Twitter/X',
+                                'instagram' => 'Instagram',
+                                'linkedin' => 'LinkedIn',
+                            ])
+                            ->required()
+                            ->columns(2),
+                    ])
+                    ->action(function (array $data, Event $record): void {
+                        $service = new \App\Services\SocialMediaService();
+                        $results = $service->postEvent($record, $data['platforms']);
+
+                        $successful = array_filter($results, fn($r) => $r['success']);
+                        $failed = array_filter($results, fn($r) => !$r['success']);
+
+                        if (count($successful) > 0) {
+                            \Filament\Notifications\Notification::make()
+                                ->title('Posted successfully to ' . implode(', ', array_keys($successful)))
+                                ->success()
+                                ->send();
+                        }
+
+                        if (count($failed) > 0) {
+                            $errors = array_map(fn($r) => $r['error'], $failed);
+                            \Filament\Notifications\Notification::make()
+                                ->title('Failed to post to ' . implode(', ', array_keys($failed)))
+                                ->body(implode('; ', $errors))
+                                ->danger()
+                                ->send();
+                        }
+                    })
+                    ->visible(fn (Event $record): bool => $record->is_published),
+
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),

@@ -33,6 +33,10 @@ Route::get('/certificate/{enrollment_id}/download', [CourseController::class, 'd
 Route::get('/events', [EventController::class, 'index'])->name('events.index');
 Route::get('/events/{slug}', [EventController::class, 'show'])->name('events.show');
 
+// Route for news/announcements
+Route::get('/news', [App\Http\Controllers\NewsController::class, 'index'])->name('news.index');
+Route::get('/news/{slug}', [App\Http\Controllers\NewsController::class, 'show'])->name('news.show');
+
 // Route for ministries
 Route::get('/ministries', [MinistryController::class, 'index'])->name('ministries.index');
 Route::get('/ministries/{slug}', [MinistryController::class, 'show'])->name('ministries.show');
