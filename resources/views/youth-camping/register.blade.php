@@ -6,7 +6,7 @@
 .form-section {
     margin-bottom: 2rem;
     padding-bottom: 1.5rem;
-    border-bottom: 1px solid #e5e5e5;
+    border-bottom: 1px solid #6b4a9e;
 }
 
 .form-section:last-child {
@@ -16,12 +16,12 @@
 .form-section__title {
     font-size: 1.2rem;
     font-weight: 600;
-    color: #333;
+    color: #ffffff;
     margin-bottom: 1rem;
 }
 
 .form-section__text {
-    color: #666;
+    color: #e0d4f7;
     margin-bottom: 1rem;
     font-size: 0.95rem;
     line-height: 1.5;
@@ -30,7 +30,7 @@
 .form-one__label {
     display: block;
     font-weight: 500;
-    color: #333;
+    color: #ffffff;
     margin-bottom: 0.5rem;
     font-size: 0.95rem;
 }
@@ -46,6 +46,7 @@
     align-items: center;
     cursor: pointer;
     font-size: 0.95rem;
+    color: #ffffff;
 }
 
 .form-one__radio input[type="radio"] {
@@ -58,6 +59,7 @@
     cursor: pointer;
     font-size: 0.95rem;
     line-height: 1.4;
+    color: #ffffff;
 }
 
 .form-one__checkbox input[type="checkbox"] {
@@ -137,9 +139,9 @@
     <div class="container">
         <div class="row gutter-y-50">
             <div class="col-lg-12 wow fadeInUp animated" data-wow-duration="1500ms" data-wow-delay="300ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 300ms; animation-name: fadeInUp;">
-                <form action="{{ route('youth-camping.register.submit', $youthCamping) }}" method="POST" class="become-volunteer__form form-one">
+                <form action="{{ route('youth-camping.register.submit', $youthCamping) }}" method="POST" class="become-volunteer__form form-one" style="background-color: #260c47">
                     @csrf
-                    <h3 class="become-volunteer__form__title">Youth Camping Registration Form</h3>
+                    <h3 class="become-volunteer__form__title text-white">Youth Camping Registration Form</h3>
 
                     @if(session('success'))
                         <div class="alert alert-success mb-4" style="background-color: #d4edda; color: #155724; padding: 1rem; border-radius: 4px; margin-bottom: 1rem;">
@@ -162,16 +164,16 @@
                         <div class="form-section">
                             <h4 class="form-section__title">Camp Information</h4>
                             <div class="form-grid-2">
-                                <div>
+                                <div style="color: #ffffff;">
                                     <strong>Event:</strong> {{ $youthCamping->name }}
                                 </div>
-                                <div>
+                                <div style="color: #ffffff;">
                                     <strong>Dates:</strong> {{ $youthCamping->start_date->format('M j') }} - {{ $youthCamping->end_date->format('M j, Y') }}
                                 </div>
-                                <div>
+                                <div style="color: #ffffff;">
                                     <strong>Location:</strong> {{ $youthCamping->location }}
                                 </div>
-                                <div>
+                                <div style="color: #ffffff;">
                                     <strong>Cost:</strong> ${{ number_format($youthCamping->cost, 2) }}
                                 </div>
                             </div>
@@ -204,11 +206,6 @@
                                         <option value="male" {{ old('child_gender') == 'male' ? 'selected' : '' }}>Male</option>
                                         <option value="female" {{ old('child_gender') == 'female' ? 'selected' : '' }}>Female</option>
                                     </select>
-                                </div>
-
-                                <div class="form-one__control">
-                                    <label class="form-one__label">Grade/School</label>
-                                    <input type="text" name="child_grade_school" placeholder="e.g., Grade 7 - Central School" class="form-one__control__input" value="{{ old('child_grade_school') }}">
                                 </div>
 
                                 <div class="form-one__control">
@@ -320,52 +317,69 @@
                         <!-- Medical Information Section -->
                         <div class="form-section">
                             <h4 class="form-section__title">Medical Information</h4>
+                            <p class="form-section__text">Please let us know if your child has any medical conditions, medications, or allergies we should be aware of.</p>
 
-                            <div class="form-grid">
-                                <div class="form-one__control">
-                                    <label class="form-one__label">Medical Conditions</label>
-                                    <textarea name="medical_conditions" rows="3" placeholder="List any medical conditions (separate with commas)" class="form-one__control__input form-one__control__message">{{ old('medical_conditions') }}</textarea>
+                            <div class="form-one__control">
+                                <label class="form-one__label">Does your child have any medical conditions, medications, or allergies? *</label>
+                                <div class="form-one__radio-group">
+                                    <label class="form-one__radio">
+                                        <input type="radio" name="has_medical_info" value="yes" {{ old('has_medical_info') == 'yes' ? 'checked' : '' }} onchange="toggleMedicalInfo()" required>
+                                        Yes, I need to provide medical information
+                                    </label>
+                                    <label class="form-one__radio">
+                                        <input type="radio" name="has_medical_info" value="no" {{ old('has_medical_info') == 'no' ? 'checked' : '' }} onchange="toggleMedicalInfo()" required>
+                                        No medical information to report
+                                    </label>
                                 </div>
+                            </div>
 
-                                <div class="form-one__control">
-                                    <label class="form-one__label">Current Medications</label>
-                                    <textarea name="medications" rows="3" placeholder="List any medications (separate with commas)" class="form-one__control__input form-one__control__message">{{ old('medications') }}</textarea>
-                                </div>
+                            <div id="medical_info_section" style="{{ old('has_medical_info') == 'yes' ? '' : 'display: none;' }}">
+                                <div class="form-grid">
+                                    <div class="form-one__control">
+                                        <label class="form-one__label">Medical Conditions</label>
+                                        <textarea name="medical_conditions" rows="3" placeholder="List any medical conditions (separate with commas)" class="form-one__control__input form-one__control__message">{{ old('medical_conditions') }}</textarea>
+                                    </div>
 
-                                <div class="form-one__control">
-                                    <label class="form-one__label">Allergies</label>
-                                    <textarea name="allergies" rows="3" placeholder="List any allergies (separate with commas)" class="form-one__control__input form-one__control__message">{{ old('allergies') }}</textarea>
-                                </div>
+                                    <div class="form-one__control">
+                                        <label class="form-one__label">Current Medications</label>
+                                        <textarea name="medications" rows="3" placeholder="List any medications (separate with commas)" class="form-one__control__input form-one__control__message">{{ old('medications') }}</textarea>
+                                    </div>
 
-                                <div class="form-one__control">
-                                    <label class="form-one__label">Dietary Requirements</label>
-                                    <textarea name="dietary_requirements" rows="3" placeholder="List any dietary requirements (separate with commas)" class="form-one__control__input form-one__control__message">{{ old('dietary_requirements') }}</textarea>
-                                </div>
+                                    <div class="form-one__control">
+                                        <label class="form-one__label">Allergies</label>
+                                        <textarea name="allergies" rows="3" placeholder="List any allergies (separate with commas)" class="form-one__control__input form-one__control__message">{{ old('allergies') }}</textarea>
+                                    </div>
 
-                                <div class="form-one__control">
-                                    <label class="form-one__label">Swimming Ability</label>
-                                    <select name="swimming_ability" class="form-one__control__input">
-                                        <option value="">Select Swimming Ability</option>
-                                        <option value="non_swimmer" {{ old('swimming_ability') == 'non_swimmer' ? 'selected' : '' }}>Non-swimmer</option>
-                                        <option value="beginner" {{ old('swimming_ability') == 'beginner' ? 'selected' : '' }}>Beginner</option>
-                                        <option value="intermediate" {{ old('swimming_ability') == 'intermediate' ? 'selected' : '' }}>Intermediate</option>
-                                        <option value="advanced" {{ old('swimming_ability') == 'advanced' ? 'selected' : '' }}>Advanced</option>
-                                    </select>
-                                </div>
+                                    <div class="form-one__control">
+                                        <label class="form-one__label">Dietary Requirements</label>
+                                        <textarea name="dietary_requirements" rows="3" placeholder="List any dietary requirements (separate with commas)" class="form-one__control__input form-one__control__message">{{ old('dietary_requirements') }}</textarea>
+                                    </div>
 
-                                <div class="form-one__control">
-                                    <label class="form-one__label">Doctor Name</label>
-                                    <input type="text" name="doctor_name" placeholder="Enter doctor's name" class="form-one__control__input" value="{{ old('doctor_name') }}">
-                                </div>
+                                    <div class="form-one__control">
+                                        <label class="form-one__label">Swimming Ability</label>
+                                        <select name="swimming_ability" class="form-one__control__input">
+                                            <option value="">Select Swimming Ability</option>
+                                            <option value="non_swimmer" {{ old('swimming_ability') == 'non_swimmer' ? 'selected' : '' }}>Non-swimmer</option>
+                                            <option value="beginner" {{ old('swimming_ability') == 'beginner' ? 'selected' : '' }}>Beginner</option>
+                                            <option value="intermediate" {{ old('swimming_ability') == 'intermediate' ? 'selected' : '' }}>Intermediate</option>
+                                            <option value="advanced" {{ old('swimming_ability') == 'advanced' ? 'selected' : '' }}>Advanced</option>
+                                        </select>
+                                    </div>
 
-                                <div class="form-one__control">
-                                    <label class="form-one__label">Doctor Phone</label>
-                                    <input type="tel" name="doctor_phone" placeholder="Enter doctor's phone" class="form-one__control__input" value="{{ old('doctor_phone') }}">
-                                </div>
+                                    <div class="form-one__control">
+                                        <label class="form-one__label">Doctor Name</label>
+                                        <input type="text" name="doctor_name" placeholder="Enter doctor's name" class="form-one__control__input" value="{{ old('doctor_name') }}">
+                                    </div>
 
-                                <div class="form-one__control">
-                                    <label class="form-one__label">Health Card Number</label>
-                                    <input type="text" name="health_card_number" placeholder="Enter health card number" class="form-one__control__input" value="{{ old('health_card_number') }}">
+                                    <div class="form-one__control">
+                                        <label class="form-one__label">Doctor Phone</label>
+                                        <input type="tel" name="doctor_phone" placeholder="Enter doctor's phone" class="form-one__control__input" value="{{ old('doctor_phone') }}">
+                                    </div>
+
+                                    <div class="form-one__control">
+                                        <label class="form-one__label">Health Card Number</label>
+                                        <input type="text" name="health_card_number" placeholder="Enter health card number" class="form-one__control__input" value="{{ old('health_card_number') }}">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -485,9 +499,19 @@ function togglePickupPersons() {
     }
 }
 
+function toggleMedicalInfo() {
+    const radio = document.querySelector('input[name="has_medical_info"]:checked');
+    const section = document.getElementById('medical_info_section');
+
+    if (radio && section) {
+        section.style.display = radio.value === 'yes' ? 'block' : 'none';
+    }
+}
+
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', function() {
     togglePickupPersons();
+    toggleMedicalInfo();
 });
 </script>
 
