@@ -214,3 +214,11 @@ Route::get('/media/citylife-music/{music}', [App\Http\Controllers\CityLifeMusicC
 Route::get('/sitemap.xml', [App\Http\Controllers\SEOController::class, 'sitemap'])->name('sitemap');
 Route::get('/robots.txt', [App\Http\Controllers\SEOController::class, 'robots'])->name('robots');
 
+// Youth Camping routes
+Route::get('/youth/camping', [App\Http\Controllers\YouthCampingController::class, 'index'])->name('youth-camping.index');
+Route::get('/youth/camping/{youthCamping:slug}', [App\Http\Controllers\YouthCampingController::class, 'show'])->name('youth-camping.show');
+Route::get('/youth/camping/{youthCamping:slug}/register', [App\Http\Controllers\YouthCampingController::class, 'register'])->name('youth-camping.register');
+Route::post('/youth/camping/{youthCamping:slug}/register', [App\Http\Controllers\YouthCampingController::class, 'processRegistration'])->name('youth-camping.register.submit');
+Route::get('/youth/camping/{youthCamping:slug}/registration-success/{registration}', [App\Http\Controllers\YouthCampingController::class, 'registrationSuccess'])->name('youth-camping.registration-success');
+Route::post('/youth/camping/check-registration', [App\Http\Controllers\YouthCampingController::class, 'checkRegistration'])->name('youth-camping.check-registration');
+
