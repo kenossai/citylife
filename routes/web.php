@@ -210,3 +210,7 @@ Route::get('/media/citylife-talktime/{talkTime}', [CityLifeTalkTimeController::c
 Route::get('/media/citylife-music', [App\Http\Controllers\CityLifeMusicController::class, 'index'])->name('citylife-music.index');
 Route::get('/media/citylife-music/{music}', [App\Http\Controllers\CityLifeMusicController::class, 'show'])->name('citylife-music.show');
 
+// SEO routes
+Route::get('/sitemap.xml', [App\Http\Controllers\SEOController::class, 'sitemap'])->name('sitemap');
+Route::get('/robots.txt', [App\Http\Controllers\SEOController::class, 'robots'])->name('robots');
+

@@ -129,6 +129,38 @@ class EventResource extends Resource
                             ->label('Featured Event')
                             ->helperText('Featured events will be highlighted'),
                     ])->columns(2),
+
+                Forms\Components\Section::make('SEO Settings')
+                    ->description('Search Engine Optimization settings for this event')
+                    ->schema([
+                        Forms\Components\TextInput::make('meta_title')
+                            ->label('Meta Title')
+                            ->helperText('Leave blank to auto-generate from event title')
+                            ->maxLength(60),
+
+                        Forms\Components\Textarea::make('meta_description')
+                            ->label('Meta Description')
+                            ->helperText('Leave blank to auto-generate from event description')
+                            ->rows(2)
+                            ->maxLength(160),
+
+                        Forms\Components\Textarea::make('meta_keywords')
+                            ->label('Meta Keywords')
+                            ->helperText('Comma-separated keywords for search engines')
+                            ->rows(2),
+
+                        Forms\Components\TextInput::make('canonical_url')
+                            ->label('Canonical URL')
+                            ->helperText('Custom canonical URL (leave blank to use default)')
+                            ->url(),
+
+                        Forms\Components\FileUpload::make('og_image')
+                            ->label('Social Media Image')
+                            ->helperText('Custom image for social media sharing (leave blank to use featured image)')
+                            ->image()
+                            ->directory('seo/events')
+                            ->imageEditor(),
+                    ])->columns(1)->collapsible(),
             ]);
     }
 
