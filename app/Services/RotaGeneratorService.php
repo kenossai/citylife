@@ -119,38 +119,141 @@ class RotaGeneratorService
                 if (!isset($allMembersByRole[$role])) {
                     $allMembersByRole[$role] = [];
                 }
-                $allMembersByRole[$role][] = $member->member->first_name . ' ' . $member->member->last_name;
-            }
-        }
-
-        // Shuffle members in each role for randomization
-        foreach ($allMembersByRole as $role => $roleMembers) {
-            shuffle($allMembersByRole[$role]);
-        }
-
-        // Generate schedule: Structure should be [role][date] = member_name
-        // This matches your Excel format where roles are rows and dates are columns
-        foreach ($allRoles as $roleName) {
-            $schedule[$roleName] = [];
-
-            foreach ($sundays as $index => $sunday) {
-                if (isset($allMembersByRole[$roleName]) && !empty($allMembersByRole[$roleName])) {
-                    // Get available members for this role
-                    $availableMembers = $allMembersByRole[$roleName];
-
-                    // Use round-robin with the shuffled list
-                    $memberIndex = $index % count($availableMembers);
-                    $assignedMember = $availableMembers[$memberIndex];
-
-                    $schedule[$roleName][$sunday] = $assignedMember;
-                } else {
-                    // No members available for this role
-                    $schedule[$roleName][$sunday] = '';
+                
+                // Store member name as first name only (matching your Excel format)
+                $memberName = $member->member->first_name;
+                if (!in_array($memberName, $allMembersByRole[$role])) {
+                    $allMembersByRole[$role][] = $memberName;
                 }
             }
         }
 
+        // Shuffle members in each role for randomization but maintain consistency
+        $memberRotationTracker = [];
+        foreach ($allMembersByRole as $role => $roleMembers) {
+            shuffle($allMembersByRole[$role]);
+            $memberRotationTracker[$role] = 0; // Track rotation index
+        }
+
+        // Generate comprehensive ministry schedule structure
+        $schedule = $this->generateMinistryRoles($allMembersByRole, $sundays, $memberRotationTracker);
+
         return $schedule;
+    }
+
+    private function generateMinistryRoles(array $allMembersByRole, array $sundays, array &$memberRotationTracker): array
+    {
+        $schedule = [];
+
+        // Define ministry structure based on your Excel format
+        $ministryStructure = [
+            // Preaching & Leadership
+            'Preaching' => [],
+            'Leading' => [],
+            
+            // Worship Team
+            'Worship Leader' => [],
+            'Lead/Second Guitar' => [],
+            'Bass Guitar' => [],
+            'Acoustic Guitar' => [],
+            'Piano 1' => [],
+            'Piano 2' => [],
+            'Drums' => [],
+            'Singers Team' => [],
+            
+            // Technical/Media Team  
+            'TL For The Day' => [],
+            'Media(Kelham)' => [],
+            'PA(Kelham)' => [],
+            'Visual(Kelham)' => [],
+            'Training/Shadow' => [],
+        ];
+
+        // Map actual roles to ministry structure roles
+        $roleMapping = [
+            'Lead Pastor' => 'Preaching',
+            'Assistant Pastor' => 'Preaching', 
+            'Youth Pastor' => 'Preaching',
+            'Bible Teacher' => 'Preaching',
+            'Evangelist' => 'Preaching',
+            
+            'Worship Leader' => 'Worship Leader',
+            'Lead Vocalist' => 'Leading',
+            'Background Vocalist' => 'Singers Team',
+            
+            'Guitarist' => 'Lead/Second Guitar',
+            'Lead Guitarist' => 'Lead/Second Guitar',
+            'Bassist' => 'Bass Guitar',
+            'Drummer' => 'Drums',
+            'Keyboardist' => 'Piano 1',
+            'Pianist' => 'Piano 2',
+            
+            'Sound Engineer' => 'PA(Kelham)',
+            'Camera Operator' => 'Visual(Kelham)',
+            'Graphics Designer' => 'Media(Kelham)',
+            'Lighting Technician' => 'Visual(Kelham)',
+            'Technical Director' => 'TL For The Day',
+            'IT Support' => 'Training/Shadow',
+        ];
+
+        // Generate assignments for each Sunday
+        foreach ($sundays as $index => $sunday) {
+            foreach ($ministryStructure as $ministryRole => $assignments) {
+                $schedule[$ministryRole][$sunday] = $this->assignMemberToRole(
+                    $ministryRole,
+                    $allMembersByRole,
+                    $roleMapping,
+                    $memberRotationTracker,
+                    $index
+                );
+            }
+        }
+
+        return $schedule;
+    }
+
+    private function assignMemberToRole(string $ministryRole, array $allMembersByRole, array $roleMapping, array &$memberRotationTracker, int $weekIndex): string
+    {
+        // Find available members for this ministry role
+        $availableMembers = [];
+        
+        foreach ($roleMapping as $actualRole => $mappedMinistryRole) {
+            if ($mappedMinistryRole === $ministryRole && isset($allMembersByRole[$actualRole])) {
+                $availableMembers = array_merge($availableMembers, $allMembersByRole[$actualRole]);
+            }
+        }
+
+        // Remove duplicates
+        $availableMembers = array_unique($availableMembers);
+
+        if (empty($availableMembers)) {
+            return ''; // No members available
+        }
+
+        // For certain roles, assign multiple people or specific patterns
+        if ($ministryRole === 'Singers Team') {
+            // Assign 2-3 singers
+            $singers = [];
+            $maxSingers = min(3, count($availableMembers));
+            for ($i = 0; $i < $maxSingers; $i++) {
+                $memberIndex = ($weekIndex + $i) % count($availableMembers);
+                $singers[] = $availableMembers[$memberIndex];
+            }
+            return implode(', ', $singers);
+        }
+
+        // Regular single assignment with rotation
+        if (!isset($memberRotationTracker[$ministryRole])) {
+            $memberRotationTracker[$ministryRole] = 0;
+        }
+
+        $memberIndex = $memberRotationTracker[$ministryRole] % count($availableMembers);
+        $assignedMember = $availableMembers[$memberIndex];
+        
+        // Increment rotation tracker
+        $memberRotationTracker[$ministryRole]++;
+
+        return $assignedMember;
     }
 
     private function getDepartmentMembers(string $department)

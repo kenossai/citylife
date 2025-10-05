@@ -34,6 +34,8 @@ class DatabaseSeeder extends Seeder
             CityLifeMusicSeeder::class,
             TechnicalDepartmentSeeder::class,
             WorshipDepartmentSeeder::class,
+            PreacherDepartmentSeeder::class,
+            DepRoleSeeder::class,
         ]);
     }
 }
