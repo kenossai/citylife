@@ -119,7 +119,7 @@ class RotaGeneratorService
                 if (!isset($allMembersByRole[$role])) {
                     $allMembersByRole[$role] = [];
                 }
-                
+
                 // Store member name as first name only (matching your Excel format)
                 $memberName = $member->member->first_name;
                 if (!in_array($memberName, $allMembersByRole[$role])) {
@@ -150,7 +150,7 @@ class RotaGeneratorService
             // Preaching & Leadership
             'Preaching' => [],
             'Leading' => [],
-            
+
             // Worship Team
             'Worship Leader' => [],
             'Lead/Second Guitar' => [],
@@ -160,8 +160,8 @@ class RotaGeneratorService
             'Piano 2' => [],
             'Drums' => [],
             'Singers Team' => [],
-            
-            // Technical/Media Team  
+
+            // Technical/Media Team
             'TL For The Day' => [],
             'Media(Kelham)' => [],
             'PA(Kelham)' => [],
@@ -172,22 +172,22 @@ class RotaGeneratorService
         // Map actual roles to ministry structure roles
         $roleMapping = [
             'Lead Pastor' => 'Preaching',
-            'Assistant Pastor' => 'Preaching', 
+            'Assistant Pastor' => 'Preaching',
             'Youth Pastor' => 'Preaching',
             'Bible Teacher' => 'Preaching',
             'Evangelist' => 'Preaching',
-            
+
             'Worship Leader' => 'Worship Leader',
             'Lead Vocalist' => 'Leading',
             'Background Vocalist' => 'Singers Team',
-            
+
             'Guitarist' => 'Lead/Second Guitar',
             'Lead Guitarist' => 'Lead/Second Guitar',
             'Bassist' => 'Bass Guitar',
             'Drummer' => 'Drums',
             'Keyboardist' => 'Piano 1',
             'Pianist' => 'Piano 2',
-            
+
             'Sound Engineer' => 'PA(Kelham)',
             'Camera Operator' => 'Visual(Kelham)',
             'Graphics Designer' => 'Media(Kelham)',
@@ -216,7 +216,7 @@ class RotaGeneratorService
     {
         // Find available members for this ministry role
         $availableMembers = [];
-        
+
         foreach ($roleMapping as $actualRole => $mappedMinistryRole) {
             if ($mappedMinistryRole === $ministryRole && isset($allMembersByRole[$actualRole])) {
                 $availableMembers = array_merge($availableMembers, $allMembersByRole[$actualRole]);
@@ -249,7 +249,7 @@ class RotaGeneratorService
 
         $memberIndex = $memberRotationTracker[$ministryRole] % count($availableMembers);
         $assignedMember = $availableMembers[$memberIndex];
-        
+
         // Increment rotation tracker
         $memberRotationTracker[$ministryRole]++;
 

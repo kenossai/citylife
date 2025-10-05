@@ -37,7 +37,7 @@ class RotaSeeder extends Seeder
                 '2025-10-20' => 'JC',
                 '2025-10-27' => 'Sofia',
             ],
-            
+
             // Worship Team
             'Worship Leader' => [
                 '2025-10-06' => 'JB',
@@ -87,7 +87,7 @@ class RotaSeeder extends Seeder
                 '2025-10-20' => 'Funmi, Mercy, Yvonne',
                 '2025-10-27' => 'Stephanie, Mercy, Vivienne',
             ],
-            
+
             // Technical Team
             'TL For The Day' => [
                 '2025-10-06' => 'Ken',

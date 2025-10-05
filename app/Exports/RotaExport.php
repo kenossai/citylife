@@ -60,12 +60,12 @@ class RotaExport implements FromArray, WithHeadings, WithStyles, WithColumnWidth
             foreach ($roles as $role) {
                 if (isset($scheduleData[$role])) {
                     $row = [$role]; // Start with role name
-                    
+
                     foreach ($sundays as $sunday) {
                         $assignment = $scheduleData[$role][$sunday] ?? '';
                         $row[] = $assignment;
                     }
-                    
+
                     $data[] = $row;
                 }
             }
