@@ -30,10 +30,16 @@
                     @foreach($categories as $category)
                         @if($category->products->count() > 0)
                             <div class="menu-category mb-5">
-                                <h4 class="menu-category__title">{{ $category->name }}</h4>
-                                @if($category->description)
-                                    <p class="menu-category__description">{{ $category->description }}</p>
-                                @endif
+                                <div class="menu-category__header" onclick="toggleCategory('{{ $category->id }}')" style="cursor: pointer;">
+                                    <h4 class="menu-category__title d-flex justify-content-between align-items-center">
+                                        <span>{{ $category->name }}</span>
+                                        <i class="fas fa-chevron-down category-arrow" id="arrow-{{ $category->id }}"></i>
+                                    </h4>
+                                    @if($category->description)
+                                        <p class="menu-category__description">{{ $category->description }}</p>
+                                    @endif
+                                </div>
+                                <div class="menu-category__content" id="category-{{ $category->id }}" style="display: none;">
 
                                 <div class="table-responsive">
                                     <table class="table cart-page__table">
@@ -113,6 +119,7 @@
                                     </table>
                                 </div>
                             </div>
+                        </div>
                         @endif
                     @endforeach
                 @else
@@ -213,6 +220,24 @@
     color: #333;
     border-bottom: 2px solid #e74c3c;
     padding-bottom: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.menu-category__header:hover .menu-category__title {
+    color: #e74c3c;
+}
+
+.menu-category__content {
+    transition: all 0.3s ease;
+}
+
+.category-arrow {
+    transition: transform 0.3s ease;
+    font-size: 1rem;
+}
+
+.category-arrow.rotated {
+    transform: rotate(180deg);
 }
 
 .cart-page__table__remove {
@@ -316,6 +341,19 @@
 <script>
 let orderItems = {};
 const taxRate = {{ $settings['tax_rate'] ?? 0 }} / 100;
+
+function toggleCategory(categoryId) {
+    const content = document.getElementById(`category-${categoryId}`);
+    const arrow = document.getElementById(`arrow-${categoryId}`);
+    
+    if (content.style.display === 'none') {
+        content.style.display = 'block';
+        arrow.classList.add('rotated');
+    } else {
+        content.style.display = 'none';
+        arrow.classList.remove('rotated');
+    }
+}
 
 function increaseQuantity(productId) {
     const productRow = document.querySelector(`[data-product-id="${productId}"]`);
