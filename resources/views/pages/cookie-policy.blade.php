@@ -30,7 +30,7 @@
                             </div>
                         </div>
                         <p class="section-header__text">
-                            We believe in transparency about how we collect and use data. This policy explains how we use cookies 
+                            We believe in transparency about how we collect and use data. This policy explains how we use cookies
                             and similar technologies to provide you with a better experience on our website.
                         </p>
                     </div>
@@ -38,8 +38,8 @@
                     <div class="about-one__content-block">
                         <h3 class="about-one__content__title">What are cookies?</h3>
                         <p class="about-one__content__text">
-                            Cookies are small text files that are stored on your computer or mobile device when you visit a website. 
-                            They help websites remember information about your visit, which can make it easier for you to visit the 
+                            Cookies are small text files that are stored on your computer or mobile device when you visit a website.
+                            They help websites remember information about your visit, which can make it easier for you to visit the
                             site again and make the site more useful to you.
                         </p>
                     </div>
@@ -47,8 +47,8 @@
                     <div class="about-one__content-block">
                         <h3 class="about-one__content__title">How we use cookies</h3>
                         <p class="about-one__content__text">
-                            City Life International Church uses cookies to improve your experience on our website, 
-                            understand how you interact with our content, and provide personalized features. 
+                            City Life International Church uses cookies to improve your experience on our website,
+                            understand how you interact with our content, and provide personalized features.
                             We are committed to protecting your privacy and being transparent about our data practices.
                         </p>
                     </div>
@@ -80,7 +80,7 @@
                                         @endif
                                     </h4>
                                     <p class="cookie-category-description">{{ $category['description'] }}</p>
-                                    
+
                                     <div class="cookie-details">
                                         <h6 class="cookie-details-title">Cookies in this category:</h6>
                                         @foreach($category['cookies'] as $cookieName => $cookieDescription)
@@ -99,10 +99,10 @@
                     <div class="about-one__content-block">
                         <h3 class="about-one__content__title">Managing your cookie preferences</h3>
                         <p class="about-one__content__text">
-                            You can change your cookie preferences at any time by clicking the "Cookie Settings" 
+                            You can change your cookie preferences at any time by clicking the "Cookie Settings"
                             button below. You can also manage cookies through your browser settings.
                         </p>
-                        
+
                         <div class="cookie-actions">
                             <a href="javascript:void(0)" onclick="window.cookieConsent.showPreferences()" class="citylife-btn">
                                 <span class="citylife-btn__icon-box">
@@ -187,8 +187,8 @@
                     <div class="about-one__content-block">
                         <h3 class="about-one__content__title">Data retention</h3>
                         <p class="about-one__content__text">
-                            Cookie consent preferences are stored for 12 months. After this period, 
-                            you will be asked to provide your consent again. You can withdraw or modify 
+                            Cookie consent preferences are stored for 12 months. After this period,
+                            you will be asked to provide your consent again. You can withdraw or modify
                             your consent at any time using the cookie settings.
                         </p>
                     </div>
@@ -196,7 +196,7 @@
                     <div class="about-one__content-block">
                         <h3 class="about-one__content__title">Contact us</h3>
                         <p class="about-one__content__text">
-                            If you have any questions about our cookie policy or how we handle your data, 
+                            If you have any questions about our cookie policy or how we handle your data,
                             please contact us:
                         </p>
                         <div class="contact-info">
@@ -222,7 +222,7 @@
                         <div class="policy-update-notice__content">
                             <h5 class="policy-update-notice__title">Policy Updates</h5>
                             <p class="policy-update-notice__text">
-                                This cookie policy was last updated on {{ date('F j, Y') }}. 
+                                This cookie policy was last updated on {{ date('F j, Y') }}.
                                 We may update this policy from time to time, and any changes will be posted on this page.
                             </p>
                         </div>
@@ -543,7 +543,7 @@
         flex-direction: column;
         text-align: center;
     }
-    
+
     .cookie-actions {
         justify-content: center;
     }
@@ -554,27 +554,27 @@
         font-size: 20px;
         padding-left: 25px;
     }
-    
+
     .cookie-category-item {
         padding: 20px;
     }
-    
+
     .cookie-category-icon {
         width: 50px;
         height: 50px;
         font-size: 20px;
     }
-    
+
     .cookie-actions {
         flex-direction: column;
         align-items: center;
     }
-    
+
     .policy-update-notice {
         flex-direction: column;
         text-align: center;
     }
-    
+
     .contact-info__item {
         flex-direction: column;
         text-align: center;
@@ -587,19 +587,19 @@
         font-size: 18px;
         padding-left: 20px;
     }
-    
+
     .cookie-category-title {
         font-size: 18px;
         flex-direction: column;
         align-items: flex-start;
         gap: 10px;
     }
-    
+
     .cookie-detail-item {
         flex-direction: column;
         gap: 5px;
     }
-    
+
     .cookie-name {
         min-width: auto;
     }
