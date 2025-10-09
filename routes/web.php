@@ -14,6 +14,20 @@ use App\Http\Controllers\TeachingSeriesController;
 use App\Http\Controllers\CityLifeTalkTimeController;
 use App\Http\Controllers\MinistryController;
 use App\Http\Controllers\MissionController;
+use App\Http\Controllers\CookieConsentController;
+
+// Cookie Consent Routes
+Route::prefix('cookie-consent')->group(function () {
+    Route::post('/save', [CookieConsentController::class, 'saveConsent'])->name('cookie-consent.save');
+    Route::get('/get', [CookieConsentController::class, 'getConsent'])->name('cookie-consent.get');
+    Route::get('/info', [CookieConsentController::class, 'getCookieInfo'])->name('cookie-consent.info');
+    Route::post('/accept-all', [CookieConsentController::class, 'acceptAll'])->name('cookie-consent.accept-all');
+    Route::post('/reject-all', [CookieConsentController::class, 'rejectAll'])->name('cookie-consent.reject-all');
+    Route::get('/analytics-code', [CookieConsentController::class, 'getAnalyticsCode'])->name('cookie-consent.analytics');
+});
+
+// Cookie Policy Page
+Route::get('/cookie-policy', [CookieConsentController::class, 'cookiePolicy'])->name('cookie-policy');
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about-citylife', [AboutController::class, 'index'])->name('about');

@@ -53,7 +53,65 @@
                 <p class="main-footer__copyright">
                     &copy; Copyright <span class="dynamic-year"></span> City Life Church. All Rights Reserved.
                 </p>
+                <div class="main-footer__privacy-links">
+                    <a href="/cookie-policy">Cookie Policy</a>
+                    <span class="separator">|</span>
+                    <button type="button" onclick="window.cookieConsent?.showPreferences()" class="cookie-preferences-link">
+                        Cookie Preferences
+                    </button>
+                </div>
             </div><!-- /.main-footer__inner -->
         </div><!-- /.container -->
     </div><!-- /.main-footer__bottom -->
 </footer><!-- /.main-footer -->
+
+<style>
+.main-footer__bottom__inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.main-footer__privacy-links {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.9rem;
+}
+
+.main-footer__privacy-links a,
+.cookie-preferences-link {
+    color: #7f8c8d;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    background: none;
+    border: none;
+    font-size: inherit;
+    cursor: pointer;
+    padding: 0;
+}
+
+.main-footer__privacy-links a:hover,
+.cookie-preferences-link:hover {
+    color: var(--citylife-base, #ff6b35);
+    text-decoration: underline;
+}
+
+.separator {
+    color: #bdc3c7;
+}
+
+@media (max-width: 768px) {
+    .main-footer__bottom__inner {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+
+    .main-footer__privacy-links {
+        justify-content: center;
+    }
+}
+</style>

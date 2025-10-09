@@ -89,4 +89,9 @@ return [
         'organization_id' => env('LINKEDIN_ORGANIZATION_ID'),
     ],
 
+    'google_analytics' => [
+        'id' => env('GOOGLE_ANALYTICS_ID'),
+        'enabled' => env('GOOGLE_ANALYTICS_ENABLED', false),
+    ],
+
 ];

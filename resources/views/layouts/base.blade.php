@@ -86,6 +86,9 @@
 
     <!-- Additional scripts stack -->
     @stack('scripts')
+
+    {{-- Cookie Consent Banner --}}
+    @include('components.cookie-consent')
 </body>
 
 </html>
