@@ -345,7 +345,7 @@ const taxRate = {{ $settings['tax_rate'] ?? 0 }} / 100;
 function toggleCategory(categoryId) {
     const content = document.getElementById(`category-${categoryId}`);
     const arrow = document.getElementById(`arrow-${categoryId}`);
-    
+
     if (content.style.display === 'none') {
         content.style.display = 'block';
         arrow.classList.add('rotated');
