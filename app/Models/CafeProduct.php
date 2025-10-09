@@ -111,7 +111,7 @@ class CafeProduct extends Model
         if ($this->image && file_exists(storage_path('app/public/' . $this->image))) {
             return asset('storage/' . $this->image);
         }
-        
+
         return asset('assets/images/cafe/product-default.jpg');
     }
 
@@ -131,7 +131,7 @@ class CafeProduct extends Model
         if (!$this->track_stock) {
             return true;
         }
-        
+
         return $this->stock_quantity > 0;
     }
 
@@ -163,15 +163,15 @@ class CafeProduct extends Model
         if (!$this->track_stock) {
             return 'Not tracked';
         }
-        
+
         if ($this->stock_quantity <= 0) {
             return 'Out of stock';
         }
-        
+
         if ($this->stock_quantity <= 5) {
             return 'Low stock';
         }
-        
+
         return 'In stock';
     }
 
@@ -181,7 +181,7 @@ class CafeProduct extends Model
     public function getDietaryBadgesAttribute(): array
     {
         $badges = [];
-        
+
         if ($this->dietary_info) {
             foreach ($this->dietary_info as $info) {
                 switch (strtolower($info)) {
@@ -203,7 +203,7 @@ class CafeProduct extends Model
                 }
             }
         }
-        
+
         return $badges;
     }
 }

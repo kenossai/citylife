@@ -72,7 +72,7 @@ class CafeCategory extends Model
         if ($this->image && file_exists(storage_path('app/public/' . $this->image))) {
             return asset('storage/' . $this->image);
         }
-        
+
         return asset('assets/images/cafe/category-default.jpg');
     }
 }

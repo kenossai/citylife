@@ -42,7 +42,7 @@ class CafeProductResource extends Resource
                             ->required()
                             ->maxLength(255)
                             ->live(onBlur: true)
-                            ->afterStateUpdated(fn (Forms\Set $set, ?string $state) => 
+                            ->afterStateUpdated(fn (Forms\Set $set, ?string $state) =>
                                 $set('slug', Str::slug($state))
                             ),
 
@@ -213,7 +213,7 @@ class CafeProductResource extends Resource
                         $state <= 5 => 'warning',
                         default => 'success',
                     })
-                    ->formatStateUsing(fn ($state, $record) => 
+                    ->formatStateUsing(fn ($state, $record) =>
                         $record->track_stock ? ($state ?? 'N/A') : 'Not tracked'
                     ),
 
@@ -248,7 +248,7 @@ class CafeProductResource extends Resource
 
                 Tables\Filters\Filter::make('low_stock')
                     ->label('Low Stock')
-                    ->query(fn (Builder $query): Builder => 
+                    ->query(fn (Builder $query): Builder =>
                         $query->where('track_stock', true)
                               ->where('stock_quantity', '<=', 5)
                     ),
@@ -293,7 +293,7 @@ class CafeProductResource extends Resource
         $lowStockCount = static::getModel()::where('track_stock', true)
                                            ->where('stock_quantity', '<=', 5)
                                            ->count();
-        
+
         return $lowStockCount > 0 ? 'warning' : null;
     }
 }

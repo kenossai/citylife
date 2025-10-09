@@ -57,14 +57,15 @@ class CafeOrderResource extends Resource
                                     ->maxLength(255),
                             ]),
 
-                        Forms\Components\Select::make('status')
+                        Forms\Components\Select::make('order_status')
+                            ->label('Order Status')
                             ->required()
                             ->options([
                                 'pending' => 'Pending',
                                 'confirmed' => 'Confirmed',
                                 'preparing' => 'Preparing',
                                 'ready' => 'Ready',
-                                'completed' => 'Completed',
+                                'served' => 'Served',
                                 'cancelled' => 'Cancelled',
                             ])
                             ->default('pending')
@@ -141,9 +142,9 @@ class CafeOrderResource extends Resource
                             ->columns(4)
                             ->reorderable(false)
                             ->collapsible()
-                            ->itemLabel(fn (array $state): ?string => 
-                                $state['product_id'] ? 
-                                    \App\Models\CafeProduct::find($state['product_id'])?->name ?? 'Product' 
+                            ->itemLabel(fn (array $state): ?string =>
+                                $state['product_id'] ?
+                                    \App\Models\CafeProduct::find($state['product_id'])?->name ?? 'Product'
                                     : 'New Item'
                             ),
                     ]),
@@ -215,13 +216,14 @@ class CafeOrderResource extends Resource
                     ->searchable()
                     ->sortable(),
 
-                Tables\Columns\SelectColumn::make('status')
+                Tables\Columns\SelectColumn::make('order_status')
+                    ->label('Status')
                     ->options([
                         'pending' => 'Pending',
                         'confirmed' => 'Confirmed',
                         'preparing' => 'Preparing',
                         'ready' => 'Ready',
-                        'completed' => 'Completed',
+                        'served' => 'Served',
                         'cancelled' => 'Cancelled',
                     ])
                     ->selectablePlaceholder(false),
@@ -267,13 +269,14 @@ class CafeOrderResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('status')
+                Tables\Filters\SelectFilter::make('order_status')
+                    ->label('Order Status')
                     ->options([
                         'pending' => 'Pending',
                         'confirmed' => 'Confirmed',
                         'preparing' => 'Preparing',
                         'ready' => 'Ready',
-                        'completed' => 'Completed',
+                        'served' => 'Served',
                         'cancelled' => 'Cancelled',
                     ]),
 
@@ -296,13 +299,13 @@ class CafeOrderResource extends Resource
 
                 Tables\Filters\Filter::make('today')
                     ->label('Today\'s Orders')
-                    ->query(fn (Builder $query): Builder => 
+                    ->query(fn (Builder $query): Builder =>
                         $query->whereDate('created_at', today())
                     ),
 
                 Tables\Filters\Filter::make('this_week')
                     ->label('This Week')
-                    ->query(fn (Builder $query): Builder => 
+                    ->query(fn (Builder $query): Builder =>
                         $query->whereBetween('created_at', [
                             now()->startOfWeek(),
                             now()->endOfWeek()
@@ -336,7 +339,8 @@ class CafeOrderResource extends Resource
                             ->label('Order Number'),
                         Infolists\Components\TextEntry::make('member.name')
                             ->label('Customer'),
-                        Infolists\Components\TextEntry::make('status')
+                        Infolists\Components\TextEntry::make('order_status')
+                            ->label('Order Status')
                             ->badge(),
                         Infolists\Components\TextEntry::make('payment_status')
                             ->label('Payment Status')
@@ -419,15 +423,15 @@ class CafeOrderResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        return static::getModel()::whereIn('status', ['pending', 'confirmed', 'preparing'])
+        return static::getModel()::whereIn('order_status', ['pending', 'confirmed', 'preparing'])
                                ->count() ?: null;
     }
 
     public static function getNavigationBadgeColor(): ?string
     {
-        $activeOrders = static::getModel()::whereIn('status', ['pending', 'confirmed', 'preparing'])
+        $activeOrders = static::getModel()::whereIn('order_status', ['pending', 'confirmed', 'preparing'])
                                           ->count();
-        
+
         return $activeOrders > 0 ? 'warning' : null;
     }
 }

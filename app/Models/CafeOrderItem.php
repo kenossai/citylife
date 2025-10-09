@@ -32,11 +32,11 @@ class CafeOrderItem extends Model
     protected static function boot()
     {
         parent::boot();
-        
+
         static::creating(function ($item) {
             $item->total_price = $item->quantity * $item->unit_price;
         });
-        
+
         static::updating(function ($item) {
             if ($item->isDirty(['quantity', 'unit_price'])) {
                 $item->total_price = $item->quantity * $item->unit_price;
@@ -84,14 +84,14 @@ class CafeOrderItem extends Model
         if (!$this->customizations) {
             return '';
         }
-        
+
         $text = [];
         foreach ($this->customizations as $key => $value) {
             if ($value) {
                 $text[] = ucfirst(str_replace('_', ' ', $key)) . ': ' . $value;
             }
         }
-        
+
         return implode(', ', $text);
     }
 }

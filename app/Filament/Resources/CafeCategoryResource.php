@@ -34,7 +34,7 @@ class CafeCategoryResource extends Resource
                             ->required()
                             ->maxLength(255)
                             ->live(onBlur: true)
-                            ->afterStateUpdated(fn (Forms\Set $set, ?string $state) => 
+                            ->afterStateUpdated(fn (Forms\Set $set, ?string $state) =>
                                 $set('slug', Str::slug($state))
                             ),
 

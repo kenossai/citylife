@@ -11,10 +11,16 @@ class CafeSetting extends Model
 
     protected $fillable = [
         'key',
+        'name',
         'value',
         'type',
         'group',
         'description',
+        'is_public',
+    ];
+
+    protected $casts = [
+        'is_public' => 'boolean',
     ];
 
     /**
@@ -23,11 +29,11 @@ class CafeSetting extends Model
     public static function get(string $key, $default = null)
     {
         $setting = static::where('key', $key)->first();
-        
+
         if (!$setting) {
             return $default;
         }
-        
+
         return static::castValue($setting->value, $setting->type);
     }
 
@@ -65,11 +71,11 @@ class CafeSetting extends Model
     {
         $settings = static::where('group', $group)->get();
         $result = [];
-        
+
         foreach ($settings as $setting) {
             $result[$setting->key] = static::castValue($setting->value, $setting->type);
         }
-        
+
         return $result;
     }
 
@@ -96,15 +102,15 @@ class CafeSetting extends Model
     {
         $hours = static::getOpeningHours();
         $today = strtolower(now()->format('l'));
-        
+
         if (!isset($hours[$today]) || $hours[$today]['closed']) {
             return false;
         }
-        
+
         $currentTime = now()->format('H:i');
         $openTime = $hours[$today]['open'];
         $closeTime = $hours[$today]['close'];
-        
+
         return $currentTime >= $openTime && $currentTime <= $closeTime;
     }
 
@@ -138,5 +144,13 @@ class CafeSetting extends Model
     public static function getMaxPreparationTime(): int
     {
         return (int) static::get('max_preparation_time', 30); // minutes
+    }
+
+    /**
+     * Scope to get only public settings.
+     */
+    public function scopePublic($query)
+    {
+        return $query->where('is_public', true);
     }
 }

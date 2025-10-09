@@ -30,6 +30,7 @@ class CafeOrder extends Model
         'special_instructions',
         'order_date',
         'completed_at',
+        'scheduled_for',
     ];
 
     protected $casts = [
@@ -39,6 +40,7 @@ class CafeOrder extends Model
         'total_amount' => 'decimal:2',
         'order_date' => 'datetime',
         'completed_at' => 'datetime',
+        'scheduled_for' => 'datetime',
     ];
 
     /**
@@ -47,12 +49,12 @@ class CafeOrder extends Model
     protected static function boot()
     {
         parent::boot();
-        
+
         static::creating(function ($order) {
             if (!$order->order_number) {
                 $order->order_number = static::generateOrderNumber();
             }
-            
+
             if (!$order->order_date) {
                 $order->order_date = now();
             }
@@ -83,7 +85,7 @@ class CafeOrder extends Model
         $prefix = 'CAFE';
         $date = now()->format('Ymd');
         $sequence = static::whereDate('created_at', today())->count() + 1;
-        
+
         return sprintf('%s-%s-%04d', $prefix, $date, $sequence);
     }
 
@@ -182,7 +184,7 @@ class CafeOrder extends Model
      */
     public function canBeRefunded(): bool
     {
-        return $this->payment_status === 'paid' && 
+        return $this->payment_status === 'paid' &&
                in_array($this->order_status, ['served', 'cancelled']);
     }
 
@@ -200,7 +202,7 @@ class CafeOrder extends Model
     public function updateStatus(string $status): void
     {
         $this->update(['order_status' => $status]);
-        
+
         if ($status === 'served') {
             $this->update(['completed_at' => now()]);
         }

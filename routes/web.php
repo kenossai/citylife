@@ -15,6 +15,7 @@ use App\Http\Controllers\CityLifeTalkTimeController;
 use App\Http\Controllers\MinistryController;
 use App\Http\Controllers\MissionController;
 use App\Http\Controllers\CookieConsentController;
+use App\Http\Controllers\CafeController;
 
 // Cookie Consent Routes
 Route::prefix('cookie-consent')->group(function () {
@@ -235,4 +236,19 @@ Route::get('/youth/camping/{youthCamping:slug}/register', [App\Http\Controllers\
 Route::post('/youth/camping/{youthCamping:slug}/register', [App\Http\Controllers\YouthCampingController::class, 'processRegistration'])->name('youth-camping.register.submit');
 Route::get('/youth/camping/{youthCamping:slug}/registration-success/{registration}', [App\Http\Controllers\YouthCampingController::class, 'registrationSuccess'])->name('youth-camping.registration-success');
 Route::post('/youth/camping/check-registration', [App\Http\Controllers\YouthCampingController::class, 'checkRegistration'])->name('youth-camping.check-registration');
+
+// Cafe Routes
+Route::prefix('cafe')->name('cafe.')->group(function () {
+    Route::get('/', [CafeController::class, 'menu'])->name('menu');
+    Route::get('/category/{slug}', [CafeController::class, 'category'])->name('category');
+    Route::get('/category/{categorySlug}/product/{productSlug}', [CafeController::class, 'product'])->name('product');
+
+    // Online Ordering
+    Route::get('/order', [CafeController::class, 'orderCreate'])->name('order.create');
+    Route::post('/order', [CafeController::class, 'orderStore'])->name('order.store');
+    Route::get('/order/confirmation/{orderNumber}', [CafeController::class, 'orderConfirmation'])->name('order.confirmation');
+
+    // Receipt (accessible by order ID for admin)
+    Route::get('/receipt/{order}', [CafeController::class, 'receipt'])->name('receipt');
+});
 
