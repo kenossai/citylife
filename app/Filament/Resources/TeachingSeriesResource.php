@@ -141,19 +141,49 @@ class TeachingSeriesResource extends Resource
                                             ->maxLength(255)
                                             ->placeholder('https://soundcloud.com/...'),
 
-                                        Forms\Components\FileUpload::make('sermon_notes')
-                                            ->label('Sermon Notes (PDF)')
-                                            ->acceptedFileTypes(['application/pdf'])
-                                            ->directory('teaching-series/notes')
-                                            ->disk('public')
-                                            ->maxSize(10240) // 10MB
-                                            ->getUploadedFileNameForStorageUsing(
-                                                fn (TemporaryUploadedFile $file, Get $get): string =>
-                                                Str::slug($get('title') ?? 'sermon-notes') . '-notes.' . $file->getClientOriginalExtension()
-                                            )
-                                            ->columnSpanFull(),
+                        Forms\Components\FileUpload::make('sermon_notes')
+                            ->label('Sermon Notes (PDF)')
+                            ->acceptedFileTypes(['application/pdf'])
+                            ->directory('teaching-series/notes')
+                            ->disk('public')
+                            ->maxSize(10240) // 10MB
+                            ->getUploadedFileNameForStorageUsing(
+                                fn (TemporaryUploadedFile $file, Get $get): string =>
+                                Str::slug($get('title') ?? 'sermon-notes') . '-notes.' . $file->getClientOriginalExtension()
+                            )
+                            ->helperText('Upload a PDF file for downloadable sermon notes')
+                            ->columnSpanFull(),
 
-                                        Forms\Components\TextInput::make('duration_minutes')
+                        Forms\Components\RichEditor::make('sermon_notes_content')
+                            ->label('Sermon Notes Content (SEO Optimized)')
+                            ->helperText('Add typeable sermon notes content for better SEO visibility and search indexing')
+                            ->toolbarButtons([
+                                'attachFiles',
+                                'blockquote',
+                                'bold',
+                                'bulletList',
+                                'codeBlock',
+                                'h2',
+                                'h3',
+                                'italic',
+                                'link',
+                                'orderedList',
+                                'redo',
+                                'strike',
+                                'underline',
+                                'undo',
+                            ])
+                            ->columnSpanFull(),
+
+                        Forms\Components\Select::make('sermon_notes_content_type')
+                            ->label('Content Type')
+                            ->options([
+                                'rich_text' => 'Rich Text (HTML)',
+                                'markdown' => 'Markdown',
+                                'plain_text' => 'Plain Text',
+                            ])
+                            ->default('rich_text')
+                            ->helperText('Choose how the sermon notes content should be formatted'),                                        Forms\Components\TextInput::make('duration_minutes')
                                             ->label('Duration (minutes)')
                                             ->numeric()
                                             ->minValue(1)
@@ -254,12 +284,20 @@ class TeachingSeriesResource extends Resource
                     ->color('success'),
 
                 Tables\Columns\IconColumn::make('sermon_notes')
-                    ->label('Notes')
+                    ->label('PDF Notes')
                     ->boolean()
                     ->trueIcon('heroicon-o-document-text')
                     ->falseIcon('heroicon-o-minus')
                     ->trueColor('info')
                     ->getStateUsing(fn ($record) => !empty($record->sermon_notes)),
+
+                Tables\Columns\IconColumn::make('sermon_notes_content')
+                    ->label('SEO Content')
+                    ->boolean()
+                    ->trueIcon('heroicon-o-document-magnifying-glass')
+                    ->falseIcon('heroicon-o-minus')
+                    ->trueColor('success')
+                    ->getStateUsing(fn ($record) => !empty($record->sermon_notes_content)),
 
                 Tables\Columns\IconColumn::make('is_featured')
                     ->label('Featured')

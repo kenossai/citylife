@@ -19,6 +19,8 @@ class TeachingSeries extends Model
         'video_url',
         'audio_url',
         'sermon_notes',
+        'sermon_notes_content',
+        'sermon_notes_content_type',
         'pastor',
         'category',
         'tags',
@@ -126,6 +128,21 @@ class TeachingSeries extends Model
         }
 
         return Str::limit($this->description, 150);
+    }
+
+    public function getSermonNotesTextAttribute()
+    {
+        if ($this->sermon_notes_content) {
+            // Strip HTML tags and return plain text for SEO purposes
+            return strip_tags($this->sermon_notes_content);
+        }
+
+        return null;
+    }
+
+    public function getHasSermonNotesContentAttribute()
+    {
+        return !empty($this->sermon_notes_content);
     }
 
     // Mutators

@@ -137,13 +137,46 @@
                                 <p class="blog-card-four__text blog-card-four__text--one">{{ $series->summary }}</p>
                             @endif
 
-                            @if($series->description)
-                                <div class="blog-card-four__text blog-card-four__text--two">
-                                    {!! $series->description !!}
-                                </div>
-                            @endif
+            @if($series->description)
+                <div class="blog-card-four__text blog-card-four__text--two">
+                    {!! $series->description !!}
+                </div>
+            @endif
 
-                            @if($series->scripture_references)
+            @if($series->sermon_notes_content)
+                <div class="blog-details__inner" style="margin-top: 2rem;">
+                    <div class="blog-details__inner__content">
+                        <h4 style="color: #2c5aa0; font-weight: 600; margin-bottom: 1rem; display: flex; align-items: center;">
+                            <i class="fa-solid fa-file-lines" style="margin-right: 0.5rem; color: #2c5aa0;"></i>
+                            Sermon Notes
+                        </h4>
+                        <div class="sermon-notes-content" style="
+                            background: #f8f9fa;
+                            padding: 1.5rem;
+                            border-radius: 8px;
+                            border-left: 4px solid #2c5aa0;
+                            line-height: 1.7;
+                            color: #333;
+                        ">
+                            @if($series->sermon_notes_content_type === 'markdown')
+                                {!! \Illuminate\Support\Str::markdown($series->sermon_notes_content) !!}
+                            @elseif($series->sermon_notes_content_type === 'plain_text')
+                                <pre style="white-space: pre-wrap; font-family: inherit; margin: 0;">{!! nl2br(e($series->sermon_notes_content)) !!}</pre>
+                            @else
+                                {!! $series->sermon_notes_content !!}
+                            @endif
+                        </div>
+                        @if($series->sermon_notes)
+                            <div style="margin-top: 1rem;">
+                                <a href="{{ $series->sermon_notes_url }}" target="_blank" class="citylife-btn citylife-btn--border-base" style="display: inline-flex; align-items: center; padding: 0.5rem 1rem; font-size: 0.9rem;">
+                                    <i class="fa-solid fa-download" style="margin-right: 0.5rem;"></i>
+                                    Download PDF Version
+                                </a>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            @endif                            @if($series->scripture_references)
                                 <div class="blog-details__inner">
                                     <div class="blog-details__inner__content">
                                         <h4>Scripture References</h4>

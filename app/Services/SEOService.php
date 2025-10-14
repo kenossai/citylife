@@ -88,7 +88,15 @@ class SEOService
      */
     protected function generateTeachingSeriesMetaTags(TeachingSeries $series): array
     {
-        $description = $this->truncateText($series->description ?? $series->summary, 160);
+        // Prioritize sermon notes content for description if available
+        $description = '';
+        if ($series->sermon_notes_content) {
+            $plainText = strip_tags($series->sermon_notes_content);
+            $description = $this->truncateText($plainText, 160);
+        } else {
+            $description = $this->truncateText($series->description ?? $series->summary, 160);
+        }
+
         $keywords = $this->generateTeachingSeriesKeywords($series);
 
         return [
@@ -335,11 +343,18 @@ class SEOService
      */
     protected function generateTeachingSeriesStructuredData(TeachingSeries $series): array
     {
-        return [
+        // Use sermon notes content for description if available
+        $description = $series->description ?? $series->summary;
+        if ($series->sermon_notes_content) {
+            $plainText = strip_tags($series->sermon_notes_content);
+            $description = $this->truncateText($plainText, 500);
+        }
+
+        $structuredData = [
             '@context' => 'https://schema.org',
             '@type' => 'VideoObject',
             'name' => $series->title,
-            'description' => $series->description ?? $series->summary,
+            'description' => $description,
             'thumbnailUrl' => $series->image ? asset('storage/' . $series->image) : null,
             'uploadDate' => $series->series_date?->toISOString(),
             'duration' => $series->duration_minutes ? 'PT' . $series->duration_minutes . 'M' : null,
@@ -354,6 +369,16 @@ class SEOService
                 ]
             ],
         ];
+
+        // Add transcript if sermon notes content is available
+        if ($series->sermon_notes_content) {
+            $structuredData['transcript'] = [
+                '@type' => 'MediaObject',
+                'text' => strip_tags($series->sermon_notes_content)
+            ];
+        }
+
+        return $structuredData;
     }
 
     /**
