@@ -456,16 +456,16 @@
                                 <label class="form-one__checkbox">
                                     <input type="checkbox" name="gdpr_consent" value="1" {{ old('gdpr_consent') ? 'checked' : '' }} required>
                                     <strong>Data Processing Consent *</strong><br>
-                                    I consent to City Life Church collecting and processing this information for the purpose of baby dedication arrangements. I understand that my data will be handled according to GDPR regulations and the church's privacy policy.
                                 </label>
+                                <p>I consent to City Life Church collecting and processing this information for the purpose of baby dedication arrangements. I understand that my data will be handled according to GDPR regulations and the church's privacy policy.</p>
                             </div>
 
                             <div class="form-one__control">
                                 <label class="form-one__checkbox">
                                     <input type="checkbox" name="newsletter_consent" value="1" {{ old('newsletter_consent') ? 'checked' : '' }}>
                                     <strong>Newsletter Subscription</strong><br>
-                                    I would like to receive family-focused newsletters and updates from City Life Church
                                 </label>
+                                <p>I would like to receive family-focused newsletters and updates from City Life Church</p>
                             </div>
                         </div>
 
