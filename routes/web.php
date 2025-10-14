@@ -16,6 +16,7 @@ use App\Http\Controllers\MinistryController;
 use App\Http\Controllers\MissionController;
 use App\Http\Controllers\CookieConsentController;
 use App\Http\Controllers\CafeController;
+use App\Http\Controllers\BabyDedicationController;
 
 // Cookie Consent Routes
 Route::prefix('cookie-consent')->group(function () {
@@ -250,5 +251,16 @@ Route::prefix('cafe')->name('cafe.')->group(function () {
 
     // Receipt (accessible by order ID for admin)
     Route::get('/receipt/{order}', [CafeController::class, 'receipt'])->name('receipt');
+});
+
+// Baby Dedication Routes
+Route::prefix('baby-dedication')->name('baby-dedication.')->group(function () {
+    Route::get('/', [BabyDedicationController::class, 'index'])->name('index');
+    Route::get('/register', [BabyDedicationController::class, 'create'])->name('create');
+    Route::post('/register', [BabyDedicationController::class, 'store'])->name('store');
+    Route::get('/success', [BabyDedicationController::class, 'success'])->name('success');
+
+    // API endpoint for checking member status
+    Route::get('/check-member', [BabyDedicationController::class, 'checkMemberStatus'])->name('check-member');
 });
 

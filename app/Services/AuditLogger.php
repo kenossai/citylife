@@ -13,14 +13,37 @@ class AuditLogger
     {
         $user = Auth::user();
 
+        // Determine if we should set user_id based on user type
+        $userId = null;
+        $userName = null;
+        $userEmail = null;
+
+        if ($user) {
+            // Only set user_id if the user is from the users table
+            if ($user instanceof \App\Models\User) {
+                $userId = $user->id;
+                $userName = $user->name ?? $user->full_name ?? ($user->first_name . ' ' . $user->last_name);
+                $userEmail = $user->email;
+            } elseif ($user instanceof \App\Models\Member) {
+                // For members, don't set user_id (since they're not in users table)
+                $userId = null;
+                $userName = $user->full_name ?? ($user->first_name . ' ' . $user->last_name);
+                $userEmail = $user->email;
+            }
+        }
+
         $auditData = array_merge([
-            'user_id' => $user?->id,
-            'user_name' => $user?->name,
-            'user_email' => $user?->email,
+            'user_id' => $userId,
+            'user_name' => $userName,
+            'user_email' => $userEmail,
             'ip_address' => Request::ip(),
             'user_agent' => Request::userAgent(),
             'url' => Request::fullUrl(),
             'method' => Request::method(),
+            'resource_type' => 'General',
+            'category' => 'general',
+            'severity' => 'medium',
+            'is_sensitive' => false,
         ], $data);
 
         return AuditTrail::create($auditData);
@@ -59,20 +82,52 @@ class AuditLogger
         ]);
     }
 
-    public static function logAuthentication(string $action, User $user = null): AuditTrail
+    public static function logAuthentication(string $action, $user = null): AuditTrail
     {
         $user = $user ?? Auth::user();
 
-        return self::log([
+        // Determine if we should set user_id based on user type
+        $userId = null;
+        $userName = null;
+        $userEmail = null;
+
+        if ($user) {
+            // Only set user_id if the user is from the users table
+            if ($user instanceof \App\Models\User) {
+                $userId = $user->id;
+                $userName = $user->name ?? $user->full_name ?? ($user->first_name . ' ' . $user->last_name);
+                $userEmail = $user->email;
+            } elseif ($user instanceof \App\Models\Member) {
+                // For members, don't set user_id (since they're not in users table)
+                $userId = null;
+                $userName = $user->full_name ?? ($user->first_name . ' ' . $user->last_name);
+                $userEmail = $user->email;
+            }
+        }
+
+        $auditData = [
+            'user_id' => $userId,
+            'user_name' => $userName,
+            'user_email' => $userEmail,
+            'ip_address' => Request::ip(),
+            'user_agent' => Request::userAgent(),
+            'url' => Request::fullUrl(),
+            'method' => Request::method(),
             'action' => $action,
-            'resource_type' => User::class,
+            'resource_type' => $user ? get_class($user) : 'Unknown',
             'resource_id' => $user?->id,
-            'resource_name' => $user?->name,
+            'resource_name' => $userName,
             'category' => 'authentication',
             'severity' => $action === 'login' ? 'low' : 'medium',
             'is_sensitive' => false,
             'description' => "User {$action}",
-        ]);
+            'context' => [
+                'user_type' => $user ? get_class($user) : 'Unknown',
+                'user_email' => $userEmail,
+            ],
+        ];
+
+        return AuditTrail::create($auditData);
     }
 
     public static function logSensitiveAccess(

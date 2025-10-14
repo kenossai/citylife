@@ -35,6 +35,7 @@
                             <li><a href="{{ route('media.index') }}">Media</a></li>
                             <li><a href="{{ route('teaching-series.index') }}">Teaching Series</a></li>
                             <li><a href="{{ route('events.index') }}">Events</a></li>
+                            <li><a href="{{ route('baby-dedication.index') }}">Baby Dedication</a></li>
                             <li><a href="{{ route('contact') }}">Contact Us</a></li>
                         </ul><!-- /.list-unstyled footer-widget__links -->
                     </div><!-- /.footer-widget -->

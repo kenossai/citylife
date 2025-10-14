@@ -44,6 +44,8 @@
                                     <li><a href="{{ route('ministries.show', $ministry->slug) }}">{{ $ministry->name }}</a></li>
                                 @endforeach
                                 <li><hr class="dropdown-divider"></li>
+                                <li><a href="{{ route('baby-dedication.index') }}">Baby Dedication</a></li>
+                                <li><a href="{{ route('volunteer.index') }}">Volunteer</a></li>
                                 <li><a href="{{ route('ministries.index') }}">View All Ministries</a></li>
                             </ul>
                         </li>

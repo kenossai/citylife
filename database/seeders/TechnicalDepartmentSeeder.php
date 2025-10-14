@@ -108,7 +108,6 @@ class TechnicalDepartmentSeeder extends Seeder
                         'technical_department_id' => $department->id,
                         'member_id' => $member->id,
                         'role' => $deptRoles[array_rand($deptRoles)],
-                        'tech_bio' => 'Experienced technical team member serving the church\'s technology needs.',
                         'joined_date' => now()->subMonths(rand(1, 36)),
                         'is_active' => true,
                         'is_head' => $index === 0, // First member is head

@@ -53,6 +53,8 @@ class Member extends Authenticatable
         'gdpr_consent_ip',
         'newsletter_consent',
         'newsletter_consent_date',
+        'last_login_at',
+        'last_login_ip',
         'photo',
         'notes',
         'is_active',
@@ -78,6 +80,7 @@ class Member extends Authenticatable
         'gdpr_consent_date' => 'datetime',
         'newsletter_consent' => 'boolean',
         'newsletter_consent_date' => 'datetime',
+        'last_login_at' => 'datetime',
     ];
 
     // Auto-generate membership number when creating
@@ -237,6 +240,11 @@ class Member extends Authenticatable
     }
 
     // Accessors
+    public function getNameAttribute()
+    {
+        return $this->full_name;
+    }
+
     public function getFullNameAttribute()
     {
         $name = $this->first_name;
