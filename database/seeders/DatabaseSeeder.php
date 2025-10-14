@@ -13,29 +13,71 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // Create admin user (if not exists)
+        User::firstOrCreate(
+            ['email' => 'admin@citylife.com'],
+            [
+                'name' => 'Admin User',
+                'password' => bcrypt('password'),
+            ]
+        );
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        // Create test user (if not exists)
+        User::firstOrCreate(
+            ['email' => 'test@example.com'],
+            [
+                'name' => 'Test User',
+                'password' => bcrypt('password'),
+            ]
+        );
 
         $this->call([
+            // Core system data (run first)
+            PermissionSeeder::class,
+            RoleSeeder::class,
+            UserRoleSeeder::class,
+
+            // Website content
             AboutPageSeeder::class,
+            BannerSeeder::class,
+            BecomingSectionSeeder::class,
+
+            // Members and related data
             MemberSeeder::class,
+
+            // Courses
             CourseSeeder::class,
             CourseLessonSeeder::class,
+
+            // Team and staff
             TeamMemberSeeder::class,
-            BannerSeeder::class,
-            EventSeeder::class,
-            BecomingSectionSeeder::class,
-            TeachingSeriesSeeder::class,
-            CityLifeTalkTimeSeeder::class,
-            CityLifeMusicSeeder::class,
+
+            // Departments and roles
             TechnicalDepartmentSeeder::class,
             WorshipDepartmentSeeder::class,
             PreacherDepartmentSeeder::class,
             DepRoleSeeder::class,
+
+            // Events and activities
+            EventSeeder::class,
+
+            // Media and content
+            TeachingSeriesSeeder::class,
+            CityLifeTalkTimeSeeder::class,
+            CityLifeMusicSeeder::class,
+
+            // Ministries and missions
+            MinistrySeeder::class,
+            MissionSeeder::class,
+
+            // Cafe system
+            CafeSettingsSeeder::class,
+            CafeDataSeeder::class,
+
+            // Additional data (depends on members/users)
+            ContactSubmissionSeeder::class,
+            PastoralReminderSeeder::class,
+            RotaSeeder::class,
         ]);
     }
 }
