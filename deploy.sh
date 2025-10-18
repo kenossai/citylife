@@ -20,7 +20,7 @@ php artisan db:seed --force
 # Cache configuration for production
 echo "⚡ Caching configuration..."
 php artisan config:cache
-php artisan route:cache  
+php artisan route:cache
 php artisan view:cache
 
 # Create storage link
