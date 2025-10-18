@@ -1,187 +1,391 @@
 <x-app-layout>
+    @section('title', ($settings['cafe_name'] ?? 'CityLife Cafe') . ' - Menu')
 
-@section('title', ($settings['cafe_name'] ?? 'CityLife Cafe') . ' - Menu')
+    @section('meta_description', $settings['cafe_description'] ?? 'Enjoy great food and fellowship at our church cafe')
 
-@section('meta_description', $settings['cafe_description'] ?? 'Enjoy great food and fellowship at our church cafe')
-
-@section('content')
-<div class="bg-gray-50 min-h-screen">
-    <!-- Hero Section -->
-    <div class="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-16">
-        <div class="container mx-auto px-4 text-center">
-            <h1 class="text-4xl md:text-5xl font-bold mb-4">
-                {{ $settings['cafe_name'] ?? 'CityLife Cafe' }}
-            </h1>
-            <p class="text-xl md:text-2xl mb-8 opacity-90">
-                {{ $settings['cafe_description'] ?? 'A warm and welcoming place to enjoy great food and fellowship' }}
-            </p>
-
-            @if(($settings['allow_online_ordering'] ?? 'false') === 'true')
-                <a href="{{ route('cafe.order.create') }}"
-                   class="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition duration-300 inline-block">
-                    Order Online
-                </a>
-            @endif
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="page-header__bg" style="background-image: url('{{ asset('assets/images/backgrounds/worship-banner-1.jpg') }}');"></div>
+        <div class="container">
+            <h2 class="page-header__title">{{ $settings['cafe_name'] ?? 'CityLife Cafe' }}</h2>
+            <ul class="cleenhearts-breadcrumb list-unstyled">
+                <li><a href="{{ route('home') }}">Home</a></li>
+                <li><span>Cafe Menu</span></li>
+            </ul>
         </div>
-    </div>
+    </section>
 
-    <!-- Opening Hours -->
-    <div class="bg-white py-8 border-b">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-6">
-                <h2 class="text-2xl font-bold text-gray-800 mb-2">Opening Hours</h2>
-                <div class="grid md:grid-cols-4 gap-4 text-sm">
-                    @foreach(['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'] as $day)
-                        <div class="flex justify-between items-center p-2 {{ $day === strtolower(now()->format('l')) ? 'bg-blue-50 rounded font-semibold' : '' }}">
-                            <span class="capitalize">{{ $day }}:</span>
-                            <span>{{ $settings["opening_hours_{$day}"] ?? 'Closed' }}</span>
+    <!-- Cafe Hero Section -->
+    <section class="about-one section-space">
+        <div class="about-one__bg">
+            <div class="about-one__bg__border"></div>
+            <div class="about-one__bg__inner" style="background-image: url('{{ asset('assets/images/backgrounds/worship-image.jpg') }}');"></div>
+        </div>
+        <div class="container">
+            <div class="row gutter-y-50">
+                <div class="col-xl-6 wow fadeInLeft" data-wow-delay="00ms" data-wow-duration="1500ms">
+                    <div class="about-one__left">
+                        <div class="about-one__image">
+                            <div class="about-one__video" style="background-image: url('{{ asset('assets/images/about/about-1-1.png') }}');">
+                                @if(($settings['allow_online_ordering'] ?? 'false') === 'true')
+                                    <a href="{{ route('cafe.order.create') }}" class="about-one__video__btn">
+                                        <span class="icon-cart"></span>
+                                        <i class="video-button__ripple"></i>
+                                    </a>
+                                @endif
+                            </div>
                         </div>
-                    @endforeach
+                    </div>
+                </div>
+                <div class="col-xl-6">
+                    <div class="about-one__content">
+                        <div class="sec-title">
+                            <h6 class="sec-title__tagline">WELCOME TO</h6>
+                            <h3 class="sec-title__title">{{ $settings['cafe_name'] ?? 'CityLife Cafe' }} <span class="sec-title__title__inner">Menu</span></h3>
+                        </div>
+                        <div class="about-one__text-box wow fadeInUp" data-wow-delay="00ms" data-wow-duration="1500ms">
+                            <p class="about-one__text">{{ $settings['cafe_description'] ?? 'A warm and welcoming place to enjoy great food and fellowship' }}</p>
+                        </div>
+
+                        @if(($settings['allow_online_ordering'] ?? 'false') === 'true')
+                        <div class="contact-information">
+                            <a href="{{ route('cafe.order.create') }}" class="contact-information__btn citylife-btn">
+                                <div class="citylife-btn__icon-box">
+                                    <div class="citylife-btn__icon-box__inner"><span class="icon-cart"></span></div>
+                                </div>
+                                <span class="citylife-btn__text">Order Online</span>
+                            </a>
+                        </div>
+                        @endif
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+        <img src="{{ asset('assets/images/shapes/about-shape-1-2.png') }}" alt="citylife" class="about-one__hand">
+    </section>
 
-    <!-- Menu Categories -->
-    <div class="container mx-auto px-4 py-12">
-        @if($categories->count() > 0)
-            <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-gray-800 mb-4">Our Menu</h2>
-                <p class="text-gray-600 max-w-2xl mx-auto">
-                    From freshly brewed coffee to delicious meals, we have something for everyone.
-                </p>
+    <!-- Opening Hours Section -->
+    <section class="pricing-one section-space" style="background-color: #f8f9fa;">
+        <div class="container">
+            <div class="sec-title text-center">
+                <h6 class="sec-title__tagline">OPENING HOURS</h6>
+                <h3 class="sec-title__title">Visit Us <span class="sec-title__title__inner">Anytime</span></h3>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="pricing-one__content">
+                        <div class="row gutter-y-30">
+                            @foreach(['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'] as $day)
+                                <div class="col-md-4 col-sm-6">
+                                    <div class="pricing-one__item {{ $day === strtolower(now()->format('l')) ? 'pricing-one__item--active' : '' }}">
+                                        <div class="pricing-one__item__inner">
+                                            <h4 class="pricing-one__item__title">{{ ucfirst($day) }}</h4>
+                                            <div class="pricing-one__item__price">
+                                                <span class="pricing-one__item__price__amount">{{ $settings["opening_hours_{$day}"] ?? 'Closed' }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Menu Categories Section -->
+    @if($categories->count() > 0)
+    <section class="services-page section-space">
+        <div class="container">
+            <div class="sec-title text-center">
+                <h6 class="sec-title__tagline">OUR DELICIOUS</h6>
+                <h3 class="sec-title__title">Cafe <span class="sec-title__title__inner">Menu</span></h3>
+                <p class="sec-title__text">From freshly brewed coffee to delicious meals, we have something for everyone.</p>
             </div>
 
-            <div class="space-y-16">
+            <div class="row gutter-y-30">
                 @foreach($categories as $category)
                     @if($category->products->count() > 0)
-                        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                        <div class="col-12">
                             <!-- Category Header -->
-                            <div class="bg-gradient-to-r from-gray-800 to-gray-700 text-white p-6">
-                                <div class="flex items-center justify-between">
-                                    <div>
-                                        <h3 class="text-2xl font-bold">{{ $category->name }}</h3>
-                                        @if($category->description)
-                                            <p class="text-gray-300 mt-2">{{ $category->description }}</p>
-                                        @endif
+                            <div class="services-page__single wow fadeInUp" data-wow-delay="100ms" data-wow-duration="1500ms">
+                                <div class="services-page__single__content">
+                                    <div class="services-page__single__content__inner">
+                                        <div class="services-page__single__content__left">
+                                            <h3 class="services-page__single__title">
+                                                <a href="{{ route('cafe.category', $category->slug) }}">{{ $category->name }}</a>
+                                            </h3>
+                                            @if($category->description)
+                                                <p class="services-page__single__text">{{ $category->description }}</p>
+                                            @endif
+                                        </div>
+                                        <div class="services-page__single__content__right">
+                                            <a href="{{ route('cafe.category', $category->slug) }}" class="services-page__single__btn citylife-btn">
+                                                <div class="citylife-btn__icon-box">
+                                                    <div class="citylife-btn__icon-box__inner"><span class="icon-duble-arrow"></span></div>
+                                                </div>
+                                                <span class="citylife-btn__text">View All</span>
+                                            </a>
+                                        </div>
                                     </div>
-                                    <a href="{{ route('cafe.category', $category->slug) }}"
-                                       class="bg-white bg-opacity-20 hover:bg-opacity-30 px-4 py-2 rounded-lg transition duration-300">
-                                        View All
-                                    </a>
                                 </div>
                             </div>
 
                             <!-- Products Grid -->
-                            <div class="p-6">
-                                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                    @foreach($category->products->take(6) as $product)
-                                        <div class="border rounded-lg p-4 hover:shadow-md transition duration-300">
-                                            @if($product->image)
-                                                <img src="{{ Storage::url($product->image) }}"
-                                                     alt="{{ $product->name }}"
-                                                     class="w-full h-32 object-cover rounded-lg mb-3">
-                                            @endif
-
-                                            <div class="flex justify-between items-start mb-2">
-                                                <h4 class="font-semibold text-lg text-gray-800">{{ $product->name }}</h4>
-                                                <span class="text-lg font-bold text-blue-600">£{{ number_format($product->price, 2) }}</span>
-                                            </div>
-
-                                            @if($product->description)
-                                                <p class="text-gray-600 text-sm mb-3">{{ $product->description }}</p>
-                                            @endif
-
-                                            <!-- Product Details -->
-                                            <div class="flex flex-wrap gap-2 mb-3">
-                                                @if($product->size)
-                                                    <span class="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs">{{ ucfirst($product->size) }}</span>
+                            <div class="row gutter-y-30 mt-4">
+                                @foreach($category->products->take(6) as $product)
+                                    <div class="col-lg-4 col-md-6">
+                                        <div class="services-card wow fadeInUp" data-wow-delay="{{ 100 + ($loop->index * 100) }}ms" data-wow-duration="1500ms">
+                                            <div class="services-card__content">
+                                                @if($product->image)
+                                                    <div class="services-card__image">
+                                                        <img src="{{ Storage::url($product->image) }}" alt="{{ $product->name }}">
+                                                    </div>
                                                 @endif
-                                                @if($product->temperature)
-                                                    <span class="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs">{{ ucfirst(str_replace('_', ' ', $product->temperature)) }}</span>
-                                                @endif
-                                                @if($product->preparation_time)
-                                                    <span class="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs">{{ $product->preparation_time }} min</span>
-                                                @endif
-                                            </div>
 
-                                            <!-- Dietary Info -->
-                                            @if($product->dietary_info && count($product->dietary_info) > 0)
-                                                <div class="flex flex-wrap gap-1 mb-3">
-                                                    @foreach($product->dietary_info as $diet)
-                                                        <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">{{ ucfirst(str_replace('_', ' ', $diet)) }}</span>
-                                                    @endforeach
+                                                <div class="services-card__content__inner">
+                                                    <div class="services-card__title-box">
+                                                        <h3 class="services-card__title">
+                                                            <a href="{{ route('cafe.product', [$category->slug, $product->slug]) }}">{{ $product->name }}</a>
+                                                        </h3>
+                                                        <div class="services-card__price">£{{ number_format($product->price, 2) }}</div>
+                                                    </div>
+
+                                                    @if($product->description)
+                                                        <p class="services-card__text">{{ Str::limit($product->description, 80) }}</p>
+                                                    @endif
+
+                                                    <!-- Product Details -->
+                                                    <div class="services-card__meta">
+                                                        @if($product->size)
+                                                            <span class="services-card__meta__item">{{ ucfirst($product->size) }}</span>
+                                                        @endif
+                                                        @if($product->temperature)
+                                                            <span class="services-card__meta__item">{{ ucfirst(str_replace('_', ' ', $product->temperature)) }}</span>
+                                                        @endif
+                                                        @if($product->preparation_time)
+                                                            <span class="services-card__meta__item">{{ $product->preparation_time }} min</span>
+                                                        @endif
+                                                    </div>
+
+                                                    <!-- Dietary Info -->
+                                                    @if($product->dietary_info && count($product->dietary_info) > 0)
+                                                        <div class="services-card__dietary">
+                                                            @foreach($product->dietary_info as $diet)
+                                                                <span class="services-card__dietary__tag">{{ ucfirst(str_replace('_', ' ', $diet)) }}</span>
+                                                            @endforeach
+                                                        </div>
+                                                    @endif
                                                 </div>
-                                            @endif
-
-                                            <a href="{{ route('cafe.product', [$category->slug, $product->slug]) }}"
-                                               class="block w-full text-center bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition duration-300">
-                                                View Details
-                                            </a>
+                                            </div>
                                         </div>
-                                    @endforeach
-                                </div>
-
-                                @if($category->products->count() > 6)
-                                    <div class="text-center mt-6">
-                                        <a href="{{ route('cafe.category', $category->slug) }}"
-                                           class="inline-block bg-gray-600 text-white px-6 py-2 rounded-lg hover:bg-gray-700 transition duration-300">
-                                            View All {{ $category->name }} ({{ $category->products->count() }} items)
-                                        </a>
                                     </div>
-                                @endif
+                                @endforeach
                             </div>
+
+                            @if($category->products->count() > 6)
+                                <div class="text-center mt-4">
+                                    <a href="{{ route('cafe.category', $category->slug) }}" class="citylife-btn">
+                                        <div class="citylife-btn__icon-box">
+                                            <div class="citylife-btn__icon-box__inner"><span class="icon-duble-arrow"></span></div>
+                                        </div>
+                                        <span class="citylife-btn__text">View All {{ $category->name }} ({{ $category->products->count() }} items)</span>
+                                    </a>
+                                </div>
+                            @endif
                         </div>
                     @endif
                 @endforeach
             </div>
-        @else
-            <div class="text-center py-16">
-                <div class="bg-white rounded-lg shadow-lg p-12 max-w-lg mx-auto">
-                    <h2 class="text-2xl font-bold text-gray-800 mb-4">Menu Coming Soon</h2>
-                    <p class="text-gray-600">Our delicious menu is being prepared. Please check back soon!</p>
-                </div>
-            </div>
-        @endif
-    </div>
-
-    <!-- Contact Information -->
-    <div class="bg-white border-t py-12">
-        <div class="container mx-auto px-4 text-center">
-            <h2 class="text-2xl font-bold text-gray-800 mb-6">Visit Us</h2>
-            <div class="grid md:grid-cols-3 gap-8">
-                @if(isset($settings['cafe_phone']))
-                    <div>
-                        <h3 class="font-semibold text-gray-800 mb-2">Phone</h3>
-                        <p class="text-gray-600">{{ $settings['cafe_phone'] }}</p>
-                    </div>
-                @endif
-
-                @if(isset($settings['cafe_email']))
-                    <div>
-                        <h3 class="font-semibold text-gray-800 mb-2">Email</h3>
-                        <p class="text-gray-600">{{ $settings['cafe_email'] }}</p>
-                    </div>
-                @endif
-
-                <div>
-                    <h3 class="font-semibold text-gray-800 mb-2">Payment Methods</h3>
-                    <div class="flex justify-center gap-2">
-                        @if(($settings['accept_cash'] ?? 'false') === 'true')
-                            <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">Cash</span>
-                        @endif
-                        @if(($settings['accept_card'] ?? 'false') === 'true')
-                            <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">Card</span>
-                            @if(isset($settings['minimum_card_amount']))
-                                <span class="text-gray-500 text-sm">
-                                    (Min £{{ number_format($settings['minimum_card_amount'], 2) }})
-                                </span>
-                            @endif
-                        @endif
+        </div>
+    </section>
+    @else
+    <section class="error-page section-space">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="error-page__content text-center">
+                        <h2 class="error-page__title">Menu Coming Soon</h2>
+                        <p class="error-page__text">Our delicious menu is being prepared. Please check back soon!</p>
+                        <a href="{{ route('home') }}" class="citylife-btn">
+                            <div class="citylife-btn__icon-box">
+                                <div class="citylife-btn__icon-box__inner"><span class="icon-duble-arrow"></span></div>
+                            </div>
+                            <span class="citylife-btn__text">Back to Home</span>
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
+    </section>
+    @endif
+
+    <!-- Contact Information Section -->
+    <section class="contact-information section-space" style="background-color: #f8f9fa;">
+        <div class="container">
+            <div class="sec-title text-center">
+                <h6 class="sec-title__tagline">VISIT US</h6>
+                <h3 class="sec-title__title">Cafe <span class="sec-title__title__inner">Information</span></h3>
+            </div>
+
+            <div class="row gutter-y-30">
+                @if(isset($settings['cafe_phone']))
+                <div class="col-lg-4 col-md-6">
+                    <div class="contact-information__item text-center">
+                        <div class="contact-information__item__icon">
+                            <span class="icon-phone"></span>
+                        </div>
+                        <div class="contact-information__item__content">
+                            <h4 class="contact-information__item__title">Phone</h4>
+                            <p class="contact-information__item__text">
+                                <a href="tel:{{ str_replace(' ', '', $settings['cafe_phone']) }}">{{ $settings['cafe_phone'] }}</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                @endif
+
+                @if(isset($settings['cafe_email']))
+                <div class="col-lg-4 col-md-6">
+                    <div class="contact-information__item text-center">
+                        <div class="contact-information__item__icon">
+                            <span class="icon-email"></span>
+                        </div>
+                        <div class="contact-information__item__content">
+                            <h4 class="contact-information__item__title">Email</h4>
+                            <p class="contact-information__item__text">
+                                <a href="mailto:{{ $settings['cafe_email'] }}">{{ $settings['cafe_email'] }}</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                @endif
+
+                <div class="col-lg-4 col-md-6">
+                    <div class="contact-information__item text-center">
+                        <div class="contact-information__item__icon">
+                            <span class="icon-credit-card"></span>
+                        </div>
+                        <div class="contact-information__item__content">
+                            <h4 class="contact-information__item__title">Payment Methods</h4>
+                            <div class="contact-information__item__payment">
+                                @if(($settings['accept_cash'] ?? 'false') === 'true')
+                                    <span class="payment-badge payment-badge--cash">Cash</span>
+                                @endif
+                                @if(($settings['accept_card'] ?? 'false') === 'true')
+                                    <span class="payment-badge payment-badge--card">Card</span>
+                                    @if(isset($settings['minimum_card_amount']))
+                                        <p class="payment-minimum">(Min £{{ number_format($settings['minimum_card_amount'], 2) }})</p>
+                                    @endif
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @if(($settings['allow_online_ordering'] ?? 'false') === 'true')
+            <div class="text-center mt-5">
+                <a href="{{ route('cafe.order.create') }}" class="citylife-btn citylife-btn--base">
+                    <div class="citylife-btn__icon-box">
+                        <div class="citylife-btn__icon-box__inner"><span class="icon-cart"></span></div>
+                    </div>
+                    <span class="citylife-btn__text">Start Your Order</span>
+                </a>
+            </div>
+            @endif
+        </div>
+    </section>
+
+    <!-- Custom Styles for Cafe Menu -->
+    <style>
+        .services-card__price {
+            color: #7c3aed;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-left: auto;
+        }
+
+        .services-card__title-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .services-card__meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .services-card__meta__item {
+            background-color: #f3f4f6;
+            color: #374151;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .services-card__dietary {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .services-card__dietary__tag {
+            background-color: #dcfce7;
+            color: #166534;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .payment-badge {
+            display: inline-block;
+            padding: 0.375rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin: 0.125rem;
+        }
+
+        .payment-badge--cash {
+            background-color: #dcfce7;
+            color: #166534;
+        }
+
+        .payment-badge--card {
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+
+        .payment-minimum {
+            margin-top: 0.5rem;
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+
+        .contact-information__item__payment {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .pricing-one__item--active {
+            background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+            color: white;
+        }
+
+        .pricing-one__item--active .pricing-one__item__title,
+        .pricing-one__item--active .pricing-one__item__price__amount {
+            color: white;
+        }
+    </style>
+
 </x-app-layout>
