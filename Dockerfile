@@ -50,9 +50,28 @@ COPY build-frontend.sh ./
 RUN chmod +x build-frontend.sh && ./build-frontend.sh
 
 # Create necessary directories and set permissions
-RUN mkdir -p storage/logs storage/framework/{cache,sessions,views} bootstrap/cache && \
+RUN mkdir -p storage/logs storage/framework/{cache,sessions,views} bootstrap/cache storage/app/public && \
+    mkdir -p storage/framework/cache/data && \
     chown -R www-data:www-data /var/www/html && \
     chmod -R 775 storage bootstrap/cache
+
+# Create .env file from example if it doesn't exist
+RUN if [ ! -f .env ] && [ -f .env.example ]; then cp .env.example .env; fi
+
+# Generate application key (will be overridden by environment variables)
+RUN php artisan key:generate --force || true
+
+# Create storage link
+RUN php artisan storage:link --force || true
+
+# Clear any potential cache issues
+RUN php artisan config:clear || true && \
+    php artisan route:clear || true && \
+    php artisan view:clear || true
+
+# Copy post-deployment script
+COPY post-deploy.sh ./
+RUN chmod +x post-deploy.sh
 
 # Remove development dependencies
 RUN rm -rf node_modules package*.json

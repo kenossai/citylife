@@ -15,7 +15,7 @@ if npm run build; then
     echo "✅ Frontend build successful!"
 else
     echo "❌ Frontend build failed, trying alternative approach..."
-    
+
     # Alternative approach: build without optimizations
     echo "🔄 Attempting build without optimizations..."
     if npx vite build --mode development; then
