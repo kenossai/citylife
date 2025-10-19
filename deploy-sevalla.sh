@@ -30,13 +30,22 @@ done
 echo "🔧 Running Composer scripts..."
 composer run-script post-autoload-dump || true
 
-# Install Node.js dependencies
+# Install Node.js dependencies (including dev dependencies for build)
 echo "📦 Installing Node.js dependencies..."
-npm ci --only=production
+npm ci
 
-# Build frontend assets
+# Run Filament upgrade to ensure assets are ready
+echo "🔧 Running Filament upgrade..."
+php artisan filament:upgrade --force || true
+
+# Build frontend assets with robust error handling
 echo "🏗️ Building frontend assets..."
-npm run build
+if [ -f "build-frontend.sh" ]; then
+    chmod +x build-frontend.sh
+    ./build-frontend.sh
+else
+    npm run build
+fi
 
 # Create necessary directories
 echo "📁 Creating storage directories..."

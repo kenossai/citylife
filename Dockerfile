@@ -32,8 +32,8 @@ RUN composer install --no-dev --no-interaction --prefer-dist --no-scripts --no-a
 # Copy package.json files
 COPY package.json package-lock.json* ./
 
-# Install Node.js dependencies
-RUN npm ci --only=production
+# Install Node.js dependencies (including dev dependencies for build)
+RUN npm ci
 
 # Copy the rest of the application
 COPY . .
@@ -42,8 +42,12 @@ COPY . .
 RUN composer dump-autoload --optimize && \
     composer run-script post-autoload-dump
 
-# Build frontend assets
-RUN npm run build
+# Run Filament upgrade to ensure assets are published
+RUN php artisan filament:upgrade --force || true
+
+# Build frontend assets with error handling
+COPY build-frontend.sh ./
+RUN chmod +x build-frontend.sh && ./build-frontend.sh
 
 # Create necessary directories and set permissions
 RUN mkdir -p storage/logs storage/framework/{cache,sessions,views} bootstrap/cache && \

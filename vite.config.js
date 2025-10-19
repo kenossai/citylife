@@ -22,14 +22,9 @@ export default defineConfig({
     build: {
         rollupOptions: {
             output: {
-                manualChunks: {
-                    vendor: ["filament"],
-                },
+                manualChunks: undefined,
             },
         },
         chunkSizeWarningLimit: 1000,
-    },
-    optimizeDeps: {
-        include: ["filament"],
     },
 });
