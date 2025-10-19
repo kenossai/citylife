@@ -1,0 +1,49 @@
+{
+  "name": "citylife-church",
+  "description": "City Life International Church website built with Laravel",
+  "repository": "https://github.com/kenossai/citylife",
+  "keywords": ["php", "laravel", "church", "website"],
+  "buildpacks": [
+    {
+      "url": "heroku/php"
+    }
+  ],
+  "env": {
+    "APP_KEY": {
+      "description": "Laravel application key",
+      "generator": "secret"
+    },
+    "APP_ENV": {
+      "description": "Laravel application environment",
+      "value": "production"
+    },
+    "APP_DEBUG": {
+      "description": "Laravel debug mode",
+      "value": "false"
+    },
+    "LOG_CHANNEL": {
+      "description": "Logging channel for Heroku",
+      "value": "errorlog"
+    },
+    "SESSION_DRIVER": {
+      "description": "Session driver",
+      "value": "database"
+    },
+    "CACHE_STORE": {
+      "description": "Cache store",
+      "value": "database"
+    },
+    "QUEUE_CONNECTION": {
+      "description": "Queue connection",
+      "value": "database"
+    }
+  },
+  "addons": [
+    {
+      "plan": "cleardb:ignite"
+    }
+  ],
+  "scripts": {
+    "postdeploy": "php artisan migrate --force"
+  }
+}
