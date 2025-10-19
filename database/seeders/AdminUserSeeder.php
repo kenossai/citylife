@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -28,7 +30,7 @@ class AdminUserSeeder extends Seeder
         try {
             $user->assignRole('super_admin');
             echo "Admin user created successfully with super_admin role!\n";
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             echo "Admin user created but role assignment failed: " . $e->getMessage() . "\n";
         }
 
