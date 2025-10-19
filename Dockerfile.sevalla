@@ -1,0 +1,63 @@
+# Sevalla-optimized Dockerfile for Laravel
+FROM php:8.2-fpm-alpine
+
+WORKDIR /var/www/html
+
+# Install essential system dependencies only
+RUN apk add --no-cache \
+  bash \
+  curl \
+  git \
+  libpng-dev \
+  libzip-dev \
+  oniguruma-dev \
+  nodejs \
+  npm \
+  && docker-php-ext-install \
+  pdo_mysql \
+  mbstring \
+  gd \
+  zip \
+  bcmath
+
+# Install Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Copy composer files
+COPY composer.json composer.lock ./
+
+# Install dependencies without scripts to avoid issues
+RUN composer install \
+  --no-dev \
+  --no-interaction \
+  --prefer-dist \
+  --no-scripts \
+  --no-autoloader
+
+# Copy package files
+COPY package*.json ./
+
+# Install Node dependencies
+RUN npm ci --only=production
+
+# Copy all application files
+COPY . .
+
+# Generate autoloader and run essential scripts only
+RUN composer dump-autoload --optimize
+
+# Build frontend assets
+RUN npm run build
+
+# Clean up
+RUN rm -rf node_modules package*.json
+
+# Set permissions
+RUN chown -R www-data:www-data /var/www/html \
+  && chmod -R 775 storage bootstrap/cache
+
+USER www-data
+
+EXPOSE 9000
+
+CMD ["php-fpm"]
