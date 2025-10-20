@@ -64,8 +64,8 @@
 # Boxed Home
 --------------------------------------------------------------*/
 :root {
-    --citylife-font: "DM Sans", sans-serif;
-    --citylife-heading-font: "Quicksand", sans-serif;
+    --citylife-font: "Cerebri Sans", sans-serif;
+    --citylife-heading-font: "Cerebri Sans", sans-serif;
     --citylife-heading-font2: "Castoro", serif;
     --citylife-special-font: "Schoolbell", cursive;
     --citylife-text: #757277;
@@ -325,7 +325,7 @@
 # Common
 --------------------------------------------------------------*/
 body {
-    font-family: var(--citylife-font, "DM Sans", sans-serif);
+    font-family: var(--citylife-font, "Cerebri Sans", sans-serif);
     color: var(--citylife-text, #757277);
     font-size: 16px;
     line-height: 1.75;
@@ -354,7 +354,7 @@ h3,
 h4,
 h5,
 h6 {
-    font-family: var(--citylife-heading-font, "Quicksand", sans-serif);
+    font-family: var(--citylife-heading-font, "Cerebri Sans", sans-serif);
     color: var(--citylife-base, #351c42);
     font-weight: 700;
 }

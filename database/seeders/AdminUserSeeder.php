@@ -12,7 +12,7 @@ class AdminUserSeeder extends Seeder
     {
         // Check if admin user already exists
         $existingAdmin = User::where('email', 'admin@citylife.com')->first();
-        
+
         if ($existingAdmin) {
             echo "Admin user already exists with email: admin@citylife.com\n";
             return;
