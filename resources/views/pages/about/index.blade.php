@@ -168,7 +168,7 @@
                 <div class="owl-nav disabled"><button type="button" role="presentation" class="owl-prev" aria-label="carousel button"><span class="icon-arrow-left"></span></button><button type="button" role="presentation" class="owl-next" aria-label="carousel button"><span class="icon-arrow-right"></span></button></div></div><!-- /.row -->
             </div><!-- /.container -->
         </section>
-    
+
 
     {{-- Leadership Section Start --}}
     <section class="team-one section-space">
@@ -235,7 +235,7 @@
             @endforeach
 
             </div><!-- /.team-one__carousel -->
-            
+
             <!-- View Teams Buttons -->
             <div class="text-center mt-5">
                 <div class="row justify-content-center">
@@ -257,7 +257,7 @@
                     </div>
                 </div>
             </div>
-            
+
         </div><!-- /.container -->
     </section>
     {{-- Leadership Section End --}}
