@@ -235,6 +235,29 @@
             @endforeach
 
             </div><!-- /.team-one__carousel -->
+            
+            <!-- View Teams Buttons -->
+            <div class="text-center mt-5">
+                <div class="row justify-content-center">
+                    <div class="col-auto">
+                        <a href="{{ route('team.pastoral') }}" class="citylife-btn">
+                            <div class="citylife-btn__icon-box">
+                                <div class="citylife-btn__icon-box__inner"><span class="icon-users"></span></div>
+                            </div>
+                            <span class="citylife-btn__text">View Pastoral Team</span>
+                        </a>
+                    </div>
+                    <div class="col-auto">
+                        <a href="{{ route('team.leadership') }}" class="citylife-btn citylife-btn--base2">
+                            <div class="citylife-btn__icon-box">
+                                <div class="citylife-btn__icon-box__inner"><span class="icon-users"></span></div>
+                            </div>
+                            <span class="citylife-btn__text">View Leadership Team</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
         </div><!-- /.container -->
     </section>
     {{-- Leadership Section End --}}

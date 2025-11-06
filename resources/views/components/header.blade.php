@@ -24,9 +24,6 @@
                         </li>
 
                         <li class="dropdown">
-                            <a href="{{ route('team.index') }}">Leadership</a>
-                        </li>
-                        <li class="dropdown">
                             <a href="{{ route('missions.index') }}">Missions</a>
                         </li>
 
