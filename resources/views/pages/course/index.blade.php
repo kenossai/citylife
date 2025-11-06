@@ -21,6 +21,16 @@
             @include('pages.course.partials.course-cards', ['courses' => $courses])
         </div><!-- /.row -->
 
+        <!-- Load More Button -->
+        <div id="load-more-container" class="text-center mt-5" style="display: none;">
+            <button id="load-more-btn" class="citylife-btn citylife-btn--base">
+                <div class="citylife-btn__icon-box">
+                    <div class="citylife-btn__icon-box__inner"><span class="icon-duble-arrow"></span></div>
+                </div>
+                <span class="citylife-btn__text">Load More Courses</span>
+            </button>
+        </div>
+
         <!-- Loading indicator -->
         <div id="loading-indicator" class="text-center" style="display: none;">
             <div class="spinner-border text-primary" role="status">
@@ -72,6 +82,7 @@ $(document).ready(function() {
 
                 if (!hasMorePages) {
                     $('#no-more-courses').show();
+                    $('#load-more-container').hide();
                 }
             },
             error: function(xhr, status, error) {
@@ -91,19 +102,15 @@ $(document).ready(function() {
         }
     });
 
-    // Optional: Load more button (fallback)
-    $('<button id="load-more-btn" class="btn btn-primary mt-4" style="display: none;">Load More Courses</button>')
-        .appendTo('#courses-container')
-        .click(function() {
-            loadMoreCourses();
-        });
+    // Load more button click handler
+    $('#load-more-btn').click(function() {
+        loadMoreCourses();
+    });
 
-    // Show load more button if infinite scroll fails
-    setTimeout(function() {
-        if (hasMorePages && !isLoading) {
-            $('#load-more-btn').show();
-        }
-    }, 5000);
+    // Show load more button if there are more pages
+    if (hasMorePages) {
+        $('#load-more-container').show();
+    }
 });
 </script>
 @endpush
