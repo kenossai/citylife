@@ -136,7 +136,7 @@
     <div class="container">
         <div class="row gutter-y-50">
             <div class="col-lg-12 wow fadeInUp animated" data-wow-duration="1500ms" data-wow-delay="300ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 300ms; animation-name: fadeInUp;">
-                <form action="{{ route('volunteer.store') }}" method="POST" class="become-volunteer__form form-one">
+                <form action="{{ route('volunteer.store') }}" method="POST" class="become-volunteer__form form-one" >
                     @csrf
                     <h3 class="become-volunteer__form__title">Volunteer Application Form</h3>
 
