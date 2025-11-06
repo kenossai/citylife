@@ -3,7 +3,7 @@
     @section('meta_description', 'Welcome to CityLife Church. Join us for worship, community, and spiritual growth. Discover our events, courses, and volunteer opportunities.')
 
     <!-- Welcome Audio -->
-    <audio id="welcome-audio" preload="auto" autoplay muted>
+    <audio id="welcome-audio" preload="auto" autoplay loop>
         <source src="{{ asset('assets/audio/welcome-sound.mp3') }}" type="audio/mpeg">
         <source src="{{ asset('assets/audio/welcome-sound.ogg') }}" type="audio/ogg">
         Your browser does not support the audio element.
@@ -28,8 +28,8 @@
     <style>
         .audio-control {
             position: fixed;
-            top: 100px;
-            right: 20px;
+            bottom: 20px;
+            left: 20px;
             z-index: 1000;
             background: rgba(124, 58, 237, 0.9);
             border-radius: 50%;
@@ -113,8 +113,8 @@
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .audio-control {
-                top: 80px;
-                right: 15px;
+                bottom: 15px;
+                left: 15px;
                 width: 45px;
                 height: 45px;
             }
