@@ -23,7 +23,6 @@
     <x-events :events="$events" />
     {{-- <x-support /> --}}
     <x-volunteer />
-
     <!-- Welcome Sound Styles -->
     <style>
         .audio-control {
