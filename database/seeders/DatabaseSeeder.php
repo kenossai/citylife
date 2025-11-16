@@ -70,10 +70,6 @@ class DatabaseSeeder extends Seeder
             MinistrySeeder::class,
             MissionSeeder::class,
 
-            // Cafe system
-            CafeSettingsSeeder::class,
-            CafeDataSeeder::class,
-
             // Additional data (depends on members/users)
             ContactSubmissionSeeder::class,
             PastoralReminderSeeder::class,
