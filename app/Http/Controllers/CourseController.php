@@ -116,14 +116,14 @@ class CourseController extends Controller
                 ->with('error', 'Registration for this course is currently closed.');
         }
 
-        // Validate the request
+        // Validate the request with data minimization
         $validated = $request->validate([
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
-            'phone' => 'required|string|max:20',
-            'membership_status' => 'required|in:visitor,regular_attendee,member',
-            'emergency_contact_name' => 'required|string|max:255',
+            'phone' => 'nullable|string|max:20', // Now optional
+            'membership_status' => 'nullable|in:visitor,regular_attendee,member', // Now optional
+            'emergency_contact_name' => 'nullable|string|max:255|required_with:phone', // Only required if phone provided
             'emergency_contact_relationship' => 'nullable|string|max:255',
             'terms_agreement' => 'required|accepted',
         ]);

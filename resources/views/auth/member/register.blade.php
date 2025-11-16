@@ -92,6 +92,7 @@
                                        placeholder="Phone Number (Optional)"
                                        class="form-one__control__input @error('phone') is-invalid @enderror"
                                        value="{{ old('phone') }}">
+                                <small class="text-muted">Only required if you want to receive SMS notifications</small>
                                 @error('phone')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -100,7 +101,7 @@
                             <div class="login-page__form__input-box form-one__control">
                                 <input type="password"
                                        name="password"
-                                       placeholder="Password (minimum 6 characters)"
+                                       placeholder="Password (minimum 8 characters)"
                                        class="form-one__control__input @error('password') is-invalid @enderror"
                                        required>
                                 @error('password')
@@ -127,9 +128,9 @@
                                     <div class="gdpr-consent" style="margin-bottom: 20px;">
                                         <label style="display: flex; align-items: flex-start; font-size: 14px; line-height: 1.4; color: #666;">
                                             <input type="checkbox" name="gdpr_consent" value="1" style="margin-right: 10px; margin-top: 2px;" required {{ old('gdpr_consent') ? 'checked' : '' }}>
-                                            <span>I consent to CityLife Church collecting and processing my personal data in accordance with the
-                                            <a href="#" style="color: #007bff; text-decoration: underline;" onclick="showGdprModal(); return false;">General Data Protection Regulation (GDPR)</a>.
-                                            Your data will only be used to respond to your inquiry and will not be shared with third parties without your explicit consent.</span>
+                                            <span>I consent to CityLife Church collecting and processing my personal data in accordance with our
+                                            <a href="{{ route('privacy-policy') }}" style="color: #007bff; text-decoration: underline;" target="_blank">Privacy Policy</a>.
+                                            Your data will only be used for church communication and will not be shared with third parties without your consent.</span>
                                         </label>
                                     </div>
                                 </div><!-- /.form-one__control -->

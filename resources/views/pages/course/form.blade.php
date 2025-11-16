@@ -68,7 +68,8 @@
 
                             <div class="become-volunteer__form__inner">
                                 <!-- Personal Information -->
-                                <h5 class="mb-3 text-primary">Personal Information</h5>
+                                <h5 class="mb-3 text-primary">Required Information</h5>
+                                <p class="text-muted small mb-3">We only collect essential information needed for course administration and safety purposes.</p>
 
                                 <div class="row">
                                     <div class="col-md-6">
@@ -93,73 +94,80 @@
                                     </div>
                                 </div>
 
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-one__control mb-3">
-                                            <input type="email" name="email" id="email" placeholder="Email Address *"
-                                                   class="form-one__control__input @error('email') is-invalid @enderror"
-                                                   value="{{ old('email') }}" required>
-                                            @error('email')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div><!-- /.form-one__control -->
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-one__control mb-3">
-                                            <input type="tel" name="phone" id="phone" placeholder="Phone Number *"
-                                                   class="form-one__control__input @error('phone') is-invalid @enderror"
-                                                   value="{{ old('phone') }}" required>
-                                            @error('phone')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div><!-- /.form-one__control -->
-                                    </div>
-                                </div>
+                                <div class="form-one__control mb-3">
+                                    <input type="email" name="email" id="email" placeholder="Email Address *"
+                                           class="form-one__control__input @error('email') is-invalid @enderror"
+                                           value="{{ old('email') }}" required>
+                                    <small class="text-muted">Required for course updates and completion certificate</small>
+                                    @error('email')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div><!-- /.form-one__control -->
+
+                                <!-- Optional Information -->
+                                <h5 class="mb-3 mt-4 text-primary">Optional Information</h5>
+                                <p class="text-muted small mb-3">This information helps us provide better support but is not required.</p>
+
+                                <div class="form-one__control mb-3">
+                                    <input type="tel" name="phone" id="phone" placeholder="Phone Number (Optional)"
+                                           class="form-one__control__input @error('phone') is-invalid @enderror"
+                                           value="{{ old('phone') }}">
+                                    <small class="text-muted">Only for emergency contact during course activities</small>
+                                    @error('phone')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div><!-- /.form-one__control -->
 
                                 <div class="form-one__control mb-3">
                                     <select name="membership_status" id="membership_status"
-                                            class="form-one__control__input @error('membership_status') is-invalid @enderror" required>
-                                        <option value="">Select your church status *</option>
+                                            class="form-one__control__input @error('membership_status') is-invalid @enderror">
+                                        <option value="">Select your church status (Optional)</option>
                                         <option value="visitor" {{ old('membership_status') == 'visitor' ? 'selected' : '' }}>First time visitor</option>
                                         <option value="regular_attendee" {{ old('membership_status') == 'regular_attendee' ? 'selected' : '' }}>Regular attendee</option>
                                         <option value="member" {{ old('membership_status') == 'member' ? 'selected' : '' }}>Church member</option>
                                     </select>
+                                    <small class="text-muted">Helps us understand our community better</small>
                                     @error('membership_status')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div><!-- /.form-one__control -->
 
-                                <!-- Emergency Contact -->
-                                <h5 class="mb-3 mt-4 text-primary">Emergency Contact</h5>
+                                <!-- Emergency Contact (Only if phone provided) -->
+                                <div id="emergency-contact-section" style="display: none;">
+                                    <h5 class="mb-3 mt-4 text-primary">Emergency Contact</h5>
+                                    <p class="text-muted small mb-3">Since you provided a phone number, please add an emergency contact for safety.</p>
 
-                                <div class="form-one__control mb-3">
-                                    <input type="text" name="emergency_contact_name" id="emergency_contact_name"
-                                           placeholder="Emergency Contact Name *"
-                                           class="form-one__control__input @error('emergency_contact_name') is-invalid @enderror"
-                                           value="{{ old('emergency_contact_name') }}" required>
-                                    @error('emergency_contact_name')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div><!-- /.form-one__control -->
-
-                                <div class="form-one__control mb-3">
-                                    <input type="text" name="emergency_contact_relationship" id="emergency_contact_relationship"
-                                           placeholder="Relationship (e.g., spouse, parent, friend)"
-                                           class="form-one__control__input @error('emergency_contact_relationship') is-invalid @enderror"
-                                           value="{{ old('emergency_contact_relationship') }}">
-                                    @error('emergency_contact_relationship')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div><!-- /.form-one__control -->
+                                    <div class="form-one__control mb-3">
+                                        <input type="text" name="emergency_contact_name" id="emergency_contact_name"
+                                               placeholder="Emergency Contact Name"
+                                               class="form-one__control__input @error('emergency_contact_name') is-invalid @enderror"
+                                               value="{{ old('emergency_contact_name') }}">
+                                        @error('emergency_contact_name')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div><!-- /.form-one__control -->
+                                </div>
 
                                 <!-- Terms Agreement -->
-                                <div class="form-one__control mb-3">
+                                <div class="form-one__control mb-3 mt-4">
+                                    <div class="data-protection-notice p-3 bg-light rounded mb-3">
+                                        <h6 class="text-primary mb-2"><i class="icon-shield"></i> Data Protection Notice</h6>
+                                        <p class="small mb-2">We collect minimal information necessary for course administration. Your data is:</p>
+                                        <ul class="small mb-2">
+                                            <li>Used only for course communication and safety purposes</li>
+                                            <li>Never shared with third parties without consent</li>
+                                            <li>Automatically deleted 2 years after course completion</li>
+                                            <li>Available for you to update or delete at any time</li>
+                                        </ul>
+                                        <p class="small mb-0">Contact us at <a href="mailto:info@citylifecc.com">info@citylifecc.com</a> to manage your data.</p>
+                                    </div>
+
                                     <div class="form-check">
                                         <input type="checkbox" name="terms_agreement" id="terms_agreement"
                                                class="form-check-input @error('terms_agreement') is-invalid @enderror"
                                                value="1" {{ old('terms_agreement') ? 'checked' : '' }} required>
                                         <label class="form-check-label" for="terms_agreement">
-                                            I agree to the course requirements and understand the commitment involved *
+                                            I agree to the course requirements and data processing as described above *
                                         </label>
                                         @error('terms_agreement')
                                             <div class="invalid-feedback">{{ $message }}</div>
@@ -191,4 +199,30 @@
                 </div><!-- /.row -->
             </div><!-- /.container -->
         </section>
+
+    <!-- Data Protection JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const phoneInput = document.getElementById('phone');
+            const emergencySection = document.getElementById('emergency-contact-section');
+            const emergencyNameInput = document.getElementById('emergency_contact_name');
+
+            function toggleEmergencyContact() {
+                if (phoneInput.value.trim() !== '') {
+                    emergencySection.style.display = 'block';
+                    emergencyNameInput.setAttribute('required', 'required');
+                } else {
+                    emergencySection.style.display = 'none';
+                    emergencyNameInput.removeAttribute('required');
+                    emergencyNameInput.value = '';
+                }
+            }
+
+            phoneInput.addEventListener('input', toggleEmergencyContact);
+            phoneInput.addEventListener('blur', toggleEmergencyContact);
+            
+            // Check on page load if phone field has value
+            toggleEmergencyContact();
+        });
+    </script>
 </x-app-layout>

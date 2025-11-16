@@ -30,6 +30,9 @@ Route::prefix('cookie-consent')->group(function () {
 // Cookie Policy Page
 Route::get('/cookie-policy', [CookieConsentController::class, 'cookiePolicy'])->name('cookie-policy');
 
+// Privacy Policy Page
+Route::view('/privacy-policy', 'pages.privacy-policy')->name('privacy-policy');
+
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about-citylife', [AboutController::class, 'index'])->name('about');
 Route::get('/about/core-values/{slug}', [AboutController::class, 'showCoreValue'])->name('about.core-value');
