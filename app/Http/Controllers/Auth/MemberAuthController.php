@@ -5,8 +5,13 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\Member;
 use App\Models\NewsletterSubscriber;
+use App\Models\Course;
+use App\Models\CourseEnrollment;
+use App\Notifications\CourseRegistrationConfirmation;
+use App\Services\SmsService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -140,6 +145,9 @@ class MemberAuthController extends Controller
         // Regenerate session for security
         $request->session()->regenerate();
 
+        // Auto-enroll the new member into the Christian Development Course
+        $this->autoEnrollChristianDevelopmentCourse($member);
+
         $successMessage = 'Registration successful! Welcome to City Life Church.';
         if ($consentGiven) {
             $successMessage .= ' You have been subscribed to our newsletter.';
@@ -147,6 +155,95 @@ class MemberAuthController extends Controller
 
         return redirect()->intended(route('courses.dashboard'))
             ->with('success', $successMessage);
+    }
+
+    /**
+     * Auto-enroll new member into Christian Development Course
+     */
+    private function autoEnrollChristianDevelopmentCourse(Member $member)
+    {
+        try {
+            DB::beginTransaction();
+
+            // Find the Christian Development Course by slug or title
+            $course = Course::where('slug', 'christian-development')
+                ->orWhere('title', 'LIKE', '%Christian Development%')
+                ->first();
+
+            if (!$course) {
+                Log::info('Christian Development course not found. Skipping auto-enrollment.', [
+                    'member_id' => $member->id,
+                    'member_email' => $member->email,
+                ]);
+                DB::rollBack();
+                return;
+            }
+
+            // Check if already enrolled
+            $existingEnrollment = CourseEnrollment::where('course_id', $course->id)
+                ->where('user_id', $member->id)
+                ->first();
+
+            if ($existingEnrollment) {
+                Log::info('Member already enrolled in Christian Development course.', [
+                    'member_id' => $member->id,
+                    'course_id' => $course->id,
+                ]);
+                DB::rollBack();
+                return;
+            }
+
+            // Create enrollment
+            $enrollment = CourseEnrollment::create([
+                'course_id' => $course->id,
+                'user_id' => $member->id,
+                'enrollment_date' => now(),
+                'status' => 'active',
+            ]);
+
+            // Update course enrollment count
+            $actualCount = CourseEnrollment::where('course_id', $course->id)
+                ->where('status', 'active')
+                ->count();
+            $course->update(['current_enrollments' => $actualCount]);
+
+            Log::info('Member auto-enrolled in Christian Development course.', [
+                'member_id' => $member->id,
+                'course_id' => $course->id,
+                'enrollment_id' => $enrollment->id,
+            ]);
+
+            // Send notifications
+            try {
+                $member->notify(new CourseRegistrationConfirmation($course, $enrollment));
+
+                // Send SMS if phone number is available
+                if ($member->phone) {
+                    $smsService = app(SmsService::class);
+                    $notification = new CourseRegistrationConfirmation($course, $enrollment);
+                    $message = $notification->getSmsMessage($member);
+                    $phone = $smsService->formatPhone($member->phone);
+                    $smsService->send($phone, $message);
+                }
+            } catch (\Exception $e) {
+                Log::error('Failed to send auto-enrollment notifications.', [
+                    'error' => $e->getMessage(),
+                    'member_id' => $member->id,
+                    'course_id' => $course->id,
+                ]);
+                // Don't fail the enrollment if notification fails
+            }
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Auto-enrollment in Christian Development course failed.', [
+                'error' => $e->getMessage(),
+                'member_id' => $member->id,
+                'trace' => $e->getTraceAsString(),
+            ]);
+            // Don't throw - we don't want to break registration if auto-enrollment fails
+        }
     }
 
     /**

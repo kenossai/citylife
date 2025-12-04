@@ -220,7 +220,7 @@
 
             phoneInput.addEventListener('input', toggleEmergencyContact);
             phoneInput.addEventListener('blur', toggleEmergencyContact);
-            
+
             // Check on page load if phone field has value
             toggleEmergencyContact();
         });

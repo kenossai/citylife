@@ -22,7 +22,7 @@
                     <div class="about-page__content">
                         <h3 class="about-page__title">Your Privacy Matters</h3>
                         <p class="about-page__text">
-                            City Life Church is committed to protecting your personal information and respecting your privacy rights. 
+                            City Life Church is committed to protecting your personal information and respecting your privacy rights.
                             This policy explains how we collect, use, and protect your data.
                         </p>
 
