@@ -5,9 +5,9 @@
             </div>
             <a href="{{ route('courses.show', $course->id) }}" class="donation-card__image">
                 @if($course->featured_image)
-                    <img src="{{ asset('media/' . $course->featured_image) }}" alt="{{ $course->title }}">
+                    <img src="{{ Storage::url('' . $course->featured_image) }}" alt="{{ $course->title }}">
                 @else
-                    <img src="{{ $course->featured_image ? asset('media/' . $course->featured_image) : 'assets/images/courses/course-default.jpg' }}" alt="{{ $course->title }}">
+                    <img src="{{ $course->featured_image ? Storage::url('' . $course->featured_image) : 'assets/images/courses/course-default.jpg' }}" alt="{{ $course->title }}">
                 @endif
                 <div class="donation-card__category">{{ $course->category }}</div>
             </a>

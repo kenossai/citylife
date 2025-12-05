@@ -223,7 +223,7 @@
                 <div class="item">
                     <div class="team-single">
                         <div class="team-single__image">
-                            <img src="{{ asset('media/' . $pastor->profile_image) }}" alt="{{ $pastor->full_name }}">
+                            <img src="{{ Storage::url('' . $pastor->profile_image) }}" alt="{{ $pastor->full_name }}">
                             <div class="team-single__content">
                                 <div class="team-single__content__inner">
                                     <h4 class="team-single__name">{{ $pastor->full_name }}</h4><!-- /.team-single__name -->

@@ -136,7 +136,7 @@
               <div class="donation-card">
                  <a href="{{ route('missions.show', $mission->slug) }}" class="donation-card__image">
                     @if($mission->featured_image)
-                    <img src="{{ asset('media/' . $mission->featured_image) }}" alt="{{ $mission->title }}">
+                    <img src="{{ Storage::url('' . $mission->featured_image) }}" alt="{{ $mission->title }}">
                     @else
                     <div class="donation-card__placeholder" style="height: 250px; background: #f8f9fa; display: flex; align-items: center; justify-content: center; color: #666;">
                         <span>Mission Image</span>

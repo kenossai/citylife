@@ -3,7 +3,7 @@
 @section('description', $talkTime->description ?? Str::limit($talkTime->description, 160))
 
 <section class="page-header">
-    <div class="page-header__bg" style="background-image: url('{{ $talkTime->image ? asset('media/' . $talkTime->image) : asset('assets/images/backgrounds/worship-banner-1.jpg') }}');"></div>
+    <div class="page-header__bg" style="background-image: url('{{ $talkTime->image ? Storage::url('' . $talkTime->image) : asset('assets/images/backgrounds/worship-banner-1.jpg') }}');"></div>
     <div class="container">
         <h2 class="text-white">{{ $talkTime->title }}</h2>
         <h2 class="page-header__title">CityLife TalkTime</h2>
@@ -49,7 +49,7 @@
                                         </div>
                                     @else
                                         <div class="position-relative">
-                                            <img src="{{ $talkTime->image ? asset('media/' . $talkTime->image) : asset('assets/images/defaults/talktime-default.jpg') }}" alt="{{ $talkTime->title }}">
+                                            <img src="{{ $talkTime->image ? Storage::url('' . $talkTime->image) : asset('assets/images/defaults/talktime-default.jpg') }}" alt="{{ $talkTime->title }}">
                                             <div class="position-absolute top-50 start-50 translate-middle">
                                                 <a href="{{ $talkTime->video_url }}" target="_blank" class="citylife-btn citylife-btn--base">
                                                     <span class="citylife-btn__icon-box">
@@ -62,7 +62,7 @@
                                     @endif
                                 @else
                                     <div class="position-relative">
-                                        <img src="{{ $talkTime->image ? asset('media/' . $talkTime->image) : asset('assets/images/defaults/talktime-default.jpg') }}" alt="{{ $talkTime->title }}">
+                                        <img src="{{ $talkTime->image ? Storage::url('' . $talkTime->image) : asset('assets/images/defaults/talktime-default.jpg') }}" alt="{{ $talkTime->title }}">
                                         <div class="position-absolute top-50 start-50 translate-middle">
                                             <a href="{{ $talkTime->video_url }}" target="_blank" class="citylife-btn citylife-btn--base">
                                                 <span class="citylife-btn__icon-box">
@@ -89,7 +89,7 @@
                         @else
                             <!-- Fallback to Image if no video -->
                             <div class="blog-card__image">
-                                <img src="{{ $talkTime->image ? asset('media/' . $talkTime->image) : asset('assets/images/defaults/talktime-default.jpg') }}" alt="{{ $talkTime->title }}">
+                                <img src="{{ $talkTime->image ? Storage::url('' . $talkTime->image) : asset('assets/images/defaults/talktime-default.jpg') }}" alt="{{ $talkTime->title }}">
                                 @if($talkTime->host)
                                     <div class="blog-details__hall">
                                         <span>Host:</span>
@@ -214,7 +214,7 @@
                                     @foreach($relatedTalkTimes as $related)
                                         <li class="sidebar__posts__item">
                                             <div class="sidebar__posts__image">
-                                                <img src="{{ $related->image ? asset('media/' . $related->image) : asset('assets/images/defaults/talktime-default.jpg') }}" width="90" height="60" alt="{{ $related->title }}">
+                                                <img src="{{ $related->image ? Storage::url('' . $related->image) : asset('assets/images/defaults/talktime-default.jpg') }}" width="90" height="60" alt="{{ $related->title }}">
                                             </div>
                                             <div class="sidebar__posts__content">
                                                 <p class="sidebar__posts__meta">
