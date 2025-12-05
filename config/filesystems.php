@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => env('FILESYSTEM_DISK', env('APP_ENV') === 'production' ? 's3' : 'public'),
+    'default' => env('FILESYSTEM_DISK', env('APP_ENV') === 'production' ? 'private' : 'public'),
 
     /*
     |--------------------------------------------------------------------------
@@ -56,6 +56,20 @@ return [
             'url' => env('AWS_URL'),
             'endpoint' => env('AWS_ENDPOINT'),
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
+            'throw' => false,
+            'report' => false,
+            'visibility' => 'public',
+        ],
+
+        'private' => [
+            'driver' => 's3',
+            'key' => env('LARAVEL_CLOUD_PRIVATE_KEY'),
+            'secret' => env('LARAVEL_CLOUD_PRIVATE_SECRET'),
+            'region' => env('LARAVEL_CLOUD_PRIVATE_REGION', 'auto'),
+            'bucket' => env('LARAVEL_CLOUD_PRIVATE_BUCKET'),
+            'url' => env('LARAVEL_CLOUD_PRIVATE_URL'),
+            'endpoint' => env('LARAVEL_CLOUD_PRIVATE_ENDPOINT'),
+            'use_path_style_endpoint' => env('LARAVEL_CLOUD_PRIVATE_USE_PATH_STYLE_ENDPOINT', false),
             'throw' => false,
             'report' => false,
             'visibility' => 'public',
