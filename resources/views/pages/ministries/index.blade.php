@@ -25,7 +25,7 @@
                     <div class="event-card-four">
                         <a href="event-details-right.html" class="event-card-four__image">
                             @if ($ministry->image)
-                                <img src="{{ asset('storage/' . $ministry->image) }}" alt="{{ $ministry->title }}">
+                                <img src="{{ asset('media/' . $ministry->image) }}" alt="{{ $ministry->title }}">
                             @else
                                 <img src="{{ asset('assets/images/events/event-2-1.jpg') }}" alt="{{ $ministry->name }}">
                             @endif

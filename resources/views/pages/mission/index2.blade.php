@@ -89,7 +89,7 @@
                 <div class="blog-card-three">
                     @if($mission->featured_image)
                     <div class="blog-card-three__image">
-                        <img src="{{ asset('storage/' . $mission->featured_image) }}" alt="{{ $mission->title }}">
+                        <img src="{{ asset('media/' . $mission->featured_image) }}" alt="{{ $mission->title }}">
                     </div>
                     @endif
                     <div class="blog-card-three__content">

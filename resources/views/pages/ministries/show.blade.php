@@ -20,7 +20,7 @@
             <div class="col-lg-8">
                 <div class="event-details__content">
                     <div class="event-details__image wow fadeInUp animated" data-wow-duration="1500ms" data-wow-delay="00ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 0ms; animation-name: fadeInUp;">
-                        <img src="{{ asset('storage/' . $ministry->featured_image) }}" alt="{{ $ministry->name }}">
+                        <img src="{{ asset('media/' . $ministry->featured_image) }}" alt="{{ $ministry->name }}">
                     </div><!-- /.event-details__image -->
                     @if ($ministry->meeting_time)
                         <div class="event-details__time">
@@ -36,12 +36,12 @@
                         <div class="row gutter-y-30">
                             <div class="col-md-6 wow fadeInUp animated" data-wow-delay="100ms" data-wow-duration="1500ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 100ms; animation-name: fadeInUp;">
                                     <div class="event-details__inner__image">
-                                        <img src="{{ asset('storage/' . $ministry->leader_image) }}" alt="{{ $ministry->leader }}">
+                                        <img src="{{ asset('media/' . $ministry->leader_image) }}" alt="{{ $ministry->leader }}">
                                     </div><!-- /.event-details__inner__image -->
                             </div><!-- /.col-md-6 -->
                             <div class="col-md-6 wow fadeInUp animated" data-wow-delay="300ms" data-wow-duration="1500ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 300ms; animation-name: fadeInUp;">
                                 <div class="event-details__inner__image">
-                                    <img src="{{ asset('storage/' . $ministry->assistant_leader_image) }}" alt="{{ $ministry->assistant_leader }}">
+                                    <img src="{{ asset('media/' . $ministry->assistant_leader_image) }}" alt="{{ $ministry->assistant_leader }}">
                                 </div><!-- /.event-details__inner__image -->
                             </div><!-- /.col-md-6 -->
                         </div><!-- /.row -->

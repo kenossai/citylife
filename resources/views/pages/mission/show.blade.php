@@ -3,7 +3,7 @@
 @section('description', $mission->description)
 
 <section class="page-header">
-    <div class="page-header__bg" style="background-image: url('{{ $mission->featured_image ? asset('storage/' . $mission->featured_image) : asset('assets/images/backgrounds/worship-banner-1.jpg') }}');"></div>
+    <div class="page-header__bg" style="background-image: url('{{ $mission->featured_image ? asset('media/' . $mission->featured_image) : asset('assets/images/backgrounds/worship-banner-1.jpg') }}');"></div>
     <div class="container">
         <h2 class="page-header__title">{{ $mission->title }}</h2>
         <p class="page-header__text">{{ $mission->description }}</p>
@@ -22,7 +22,7 @@
                 <div class="blog-details__content">
                     @if($mission->featured_image)
                     <div class="blog-details__image">
-                        <img src="{{ asset('storage/' . $mission->featured_image) }}" alt="{{ $mission->title }}" class="img-fluid">
+                        <img src="{{ asset('media/' . $mission->featured_image) }}" alt="{{ $mission->title }}" class="img-fluid">
                     </div>
                     @endif
 
@@ -54,7 +54,7 @@
                             @foreach($mission->gallery_images as $image)
                             <div class="col-md-4 col-sm-6">
                                 <div class="blog-details__gallery__item">
-                                    <img src="{{ asset('storage/' . $image) }}" alt="{{ $mission->title }}" class="img-fluid">
+                                    <img src="{{ asset('media/' . $image) }}" alt="{{ $mission->title }}" class="img-fluid">
                                 </div>
                             </div>
                             @endforeach
@@ -146,7 +146,7 @@
                             <div class="sidebar__related__item">
                                 @if($related->featured_image)
                                 <div class="sidebar__related__image">
-                                    <img width="100" src="{{ asset('storage/' . $related->featured_image) }}" alt="{{ $related->title }}">
+                                    <img width="100" src="{{ asset('media/' . $related->featured_image) }}" alt="{{ $related->title }}">
                                 </div>
                                 @endif
                                 <div class="sidebar__related__content">

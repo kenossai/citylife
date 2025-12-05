@@ -1,6 +1,6 @@
 
 @if($section)
-<section class="inspiring-one section-space" style="background-image: url('{{ $section->background_image ? asset('storage/' . $section->background_image) : 'assets/images/backgrounds/inspiring-bg-1-1.png' }}');">
+<section class="inspiring-one section-space" style="background-image: url('{{ $section->background_image ? asset('media/' . $section->background_image) : 'assets/images/backgrounds/inspiring-bg-1-1.png' }}');">
     <div class="container">
         <div class="row gutter-y-50">
             <div class="col-xl-6">
@@ -21,10 +21,10 @@
             <div class="col-xl-6">
                 <div class="inspiring-one__image">
                     <div class="inspiring-one__image__inner inspiring-one__image__inner--one wow fadeInRight" data-wow-duration="1500ms" data-wow-delay="00ms">
-                        <img src="{{ $section->left_image ? asset('storage/' . $section->left_image) : 'assets/images/inspiring/inspiring-1-1.jpg' }}" alt="inspiring">
+                        <img src="{{ $section->left_image ? asset('media/' . $section->left_image) : 'assets/images/inspiring/inspiring-1-1.jpg' }}" alt="inspiring">
                     </div><!-- /.inspiring-one__image__one -->
                     <div class="inspiring-one__image__inner inspiring-one__image__inner--two wow fadeInRight" data-wow-duration="1500ms" data-wow-delay="200ms">
-                        <img src="{{ $section->right_image ? asset('storage/' . $section->right_image) : 'assets/images/inspiring/inspiring-1-2.jpg' }}" alt="inspiring">
+                        <img src="{{ $section->right_image ? asset('media/' . $section->right_image) : 'assets/images/inspiring/inspiring-1-2.jpg' }}" alt="inspiring">
                     </div><!-- /.inspiring-one__image__two -->
                 </div><!-- /.inspiring-one__image -->
             </div><!-- /.col-xl-6 -->

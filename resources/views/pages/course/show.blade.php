@@ -51,7 +51,7 @@
                         <div class="donation-card-three donation-card">
                             @if ($course->featured_image)
                                 <div class="donation-card__image wow fadeInUp animated" data-wow-duration="1500ms" style="visibility: visible; animation-duration: 1500ms; animation-name: fadeInUp;">
-                                    <img src="{{ asset('storage/' . $course->featured_image) }}" alt="donation details">
+                                    <img src="{{ asset('media/' . $course->featured_image) }}" alt="donation details">
                                     <div class="donation-details__hall">
                                         <span>{{ $course->location }}</span>
                                     </div><!-- /.donation-details__hall -->

@@ -46,7 +46,7 @@
                             <div class="product-item wow fadeInUp animated" data-wow-duration="1500ms" data-wow-delay="000ms">
                                 <a href="{{ route('citylife-talktime.show', $talkTime->slug) }}" class="product-item__img">
                                     @if($talkTime->image)
-                                        <img src="{{ asset('storage/' . $talkTime->image) }}" alt="{{ $talkTime->title }}">
+                                        <img src="{{ asset('media/' . $talkTime->image) }}" alt="{{ $talkTime->title }}">
                                     @else
                                         <img src="{{ asset('assets/images/defaults/talktime-default.jpg') }}" alt="{{ $talkTime->title }}">
                                     @endif
@@ -163,7 +163,7 @@
                                 <div class="product__sidebar__featured-item mb-3">
                                     <a href="{{ route('citylife-talktime.show', $featured->slug) }}" class="d-flex">
                                         @if($featured->image)
-                                            <img src="{{ asset('storage/' . $featured->image) }}" alt="{{ $featured->title }}" class="me-3" style="width: 60px; height: 60px; object-fit: cover;">
+                                            <img src="{{ asset('media/' . $featured->image) }}" alt="{{ $featured->title }}" class="me-3" style="width: 60px; height: 60px; object-fit: cover;">
                                         @else
                                             <img src="{{ asset('assets/images/defaults/talktime-default.jpg') }}" alt="{{ $featured->title }}" class="me-3" style="width: 60px; height: 60px; object-fit: cover;">
                                         @endif

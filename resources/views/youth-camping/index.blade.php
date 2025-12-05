@@ -61,7 +61,7 @@
                     <div class="event-card-four">
                         <a href="{{ route('youth-camping.show', $currentCamping) }}" class="event-card-four__image">
                             @if($currentCamping->featured_image)
-                                <img src="{{ asset('storage/' . $currentCamping->featured_image) }}" alt="{{ $currentCamping->name }}">
+                                <img src="{{ asset('media/' . $currentCamping->featured_image) }}" alt="{{ $currentCamping->name }}">
                             @else
                                 <img src="{{ asset('assets/images/events/youth-camping-default.jpg') }}" alt="{{ $currentCamping->name }}">
                             @endif
@@ -194,7 +194,7 @@
                         <div class="event-card-four event-card-four--past">
                             <a href="{{ route('youth-camping.show', $camping) }}" class="event-card-four__image">
                                 @if($camping->featured_image)
-                                    <img src="{{ asset('storage/' . $camping->featured_image) }}" alt="{{ $camping->name }}">
+                                    <img src="{{ asset('media/' . $camping->featured_image) }}" alt="{{ $camping->name }}">
                                 @else
                                     <img src="{{ asset('assets/images/events/youth-camping-default.jpg') }}" alt="{{ $camping->name }}">
                                 @endif

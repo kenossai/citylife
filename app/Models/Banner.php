@@ -52,8 +52,8 @@ class Banner extends Model
             return asset($this->background_image);
         }
 
-        // Otherwise it's a storage file
-        return asset('storage/' . $this->background_image);
+        // Otherwise it's a storage file - use /media instead of /storage for Laravel Cloud
+        return asset('media/' . $this->background_image);
     }
 
     public function getOverlayStyleAttribute()
