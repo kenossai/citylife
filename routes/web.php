@@ -224,13 +224,27 @@ Route::get('/force-login', function () {
             ]);
         }
         
+        // Clear any existing auth
+        \Auth::guard('web')->logout();
+        session()->flush();
+        session()->regenerate();
+        
         // Force login
         \Auth::guard('web')->login($user, true);
         
-        // Regenerate session
-        request()->session()->regenerate();
+        // Verify login worked
+        $isLoggedIn = \Auth::guard('web')->check();
+        $currentUser = \Auth::guard('web')->user();
         
-        return redirect('/admin')->with('success', 'Logged in successfully!');
+        if (!$isLoggedIn) {
+            return response()->json([
+                'error' => 'Login failed',
+                'auth_check' => $isLoggedIn,
+                'session_data' => session()->all(),
+            ]);
+        }
+        
+        return redirect('/admin');
     } catch (\Exception $e) {
         return response()->json([
             'error' => $e->getMessage(),
