@@ -213,6 +213,32 @@ Route::get('/test-login', function (\Illuminate\Http\Request $request) {
     }
 });
 
+// Direct login bypass for Laravel Cloud
+Route::get('/force-login', function () {
+    try {
+        $user = \App\Models\User::where('email', 'admin@citylife.com')->first();
+        
+        if (!$user) {
+            return response()->json([
+                'error' => 'Admin user not found',
+            ]);
+        }
+        
+        // Force login
+        \Auth::guard('web')->login($user, true);
+        
+        // Regenerate session
+        request()->session()->regenerate();
+        
+        return redirect('/admin')->with('success', 'Logged in successfully!');
+    } catch (\Exception $e) {
+        return response()->json([
+            'error' => $e->getMessage(),
+            'trace' => $e->getTraceAsString(),
+        ]);
+    }
+});
+
 // Health Check for Laravel Cloud
 Route::get('/health', function () {
     try {
