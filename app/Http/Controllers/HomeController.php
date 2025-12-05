@@ -18,16 +18,14 @@ class HomeController extends Controller
                     $query->active()->ordered();
                 }])
                 ->first();
-            
+
             return view('index', compact('banners', 'events', 'section', 'aboutPage'));
         } catch (\Exception $e) {
-            // If database tables don't exist yet, show setup message
-            if (str_contains($e->getMessage(), "doesn't exist") || str_contains($e->getMessage(), 'SQLSTATE')) {
-                return response()->view('setup-required', [
-                    'error' => 'Database tables are not set up yet. Please run migrations or access /admin to complete setup.'
-                ], 503);
-            }
-            throw $e;
+            // Show detailed error for debugging
+            return response()->view('setup-required', [
+                'error' => $e->getMessage(),
+                'trace' => config('app.debug') ? $e->getTraceAsString() : null
+            ], 500);
         }
     }
 }
