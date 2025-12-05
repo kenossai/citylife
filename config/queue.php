@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => env('QUEUE_CONNECTION', 'database'),
+    'default' => env('QUEUE_CONNECTION', env('APP_ENV') === 'production' ? 'redis' : 'database'),
 
     /*
     |--------------------------------------------------------------------------
@@ -70,6 +70,7 @@ return [
             'retry_after' => (int) env('REDIS_QUEUE_RETRY_AFTER', 90),
             'block_for' => null,
             'after_commit' => false,
+            'database' => env('REDIS_QUEUE_DB', 2),
         ],
 
     ],

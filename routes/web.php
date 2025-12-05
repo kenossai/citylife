@@ -17,6 +17,30 @@ use App\Http\Controllers\MissionController;
 use App\Http\Controllers\CookieConsentController;
 use App\Http\Controllers\BabyDedicationController;
 
+// Health Check for Laravel Cloud
+Route::get('/health', function () {
+    try {
+        // Check database connection
+        \DB::connection()->getPdo();
+        
+        // Check cache
+        \Cache::get('health_check_test');
+        
+        return response()->json([
+            'status' => 'healthy',
+            'database' => 'connected',
+            'cache' => 'working',
+            'timestamp' => now()->toIso8601String(),
+        ], 200);
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => 'unhealthy',
+            'error' => $e->getMessage(),
+            'timestamp' => now()->toIso8601String(),
+        ], 503);
+    }
+})->name('health');
+
 // Cookie Consent Routes
 Route::prefix('cookie-consent')->group(function () {
     Route::post('/save', [CookieConsentController::class, 'saveConsent'])->name('cookie-consent.save');
