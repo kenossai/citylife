@@ -17,8 +17,8 @@ use App\Http\Controllers\MissionController;
 use App\Http\Controllers\CookieConsentController;
 use App\Http\Controllers\BabyDedicationController;
 
-// Serve storage files (fallback if symlink doesn't work on Laravel Cloud)
-Route::get('/storage/{path}', function ($path) {
+// Serve storage files (using /media instead of /storage to avoid nginx conflicts)
+Route::get('/media/{path}', function ($path) {
     $filePath = storage_path('app/public/' . $path);
     
     \Log::info('Storage file requested', [
