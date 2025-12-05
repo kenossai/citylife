@@ -131,6 +131,39 @@ Route::get('/session-debug', function () {
     }
 });
 
+// Storage debug
+Route::get('/storage-debug', function () {
+    try {
+        $publicDiskConfig = config('filesystems.disks.public');
+        $defaultDisk = config('filesystems.default');
+        
+        // List files in storage/app/public
+        $files = \Storage::disk('public')->allFiles();
+        
+        // Get URL for first file if exists
+        $sampleUrl = null;
+        if (count($files) > 0) {
+            $sampleUrl = \Storage::disk('public')->url($files[0]);
+        }
+        
+        return response()->json([
+            'default_disk' => $defaultDisk,
+            'public_disk_config' => $publicDiskConfig,
+            'app_url' => config('app.url'),
+            'storage_path' => storage_path('app/public'),
+            'files_count' => count($files),
+            'sample_files' => array_slice($files, 0, 5),
+            'sample_url' => $sampleUrl,
+            'storage_exists' => file_exists(storage_path('app/public')),
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'error' => $e->getMessage(),
+            'trace' => $e->getTraceAsString(),
+        ]);
+    }
+});
+
 // Clear session and logout
 Route::get('/clear-session', function () {
     try {
