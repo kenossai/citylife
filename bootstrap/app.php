@@ -21,11 +21,6 @@ return Application::configure(basePath: dirname(__DIR__))
         //     \App\Http\Middleware\EnsureConsistentSession::class,
         // ]);
 
-        // Ensure session is always available for web routes
-        $middleware->web(prepend: [
-            \Illuminate\Session\Middleware\StartSession::class,
-        ]);
-
         // Register permission middleware alias
         $middleware->alias([
             'permission' => \App\Http\Middleware\CheckPermission::class,
