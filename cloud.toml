@@ -4,8 +4,7 @@ This file is automatically detected by Laravel Cloud and configures your deploym
 
 ## Build Commands
 build = [
-    "mkdir -p storage/framework/sessions storage/framework/views storage/framework/cache/data storage/logs bootstrap/cache",
-    "chmod -R 775 storage bootstrap/cache",
+    "php create-storage-dirs.php",
     "composer install --optimize-autoloader --no-dev",
     "php artisan view:clear || true",
     "php artisan cache:clear || true",
