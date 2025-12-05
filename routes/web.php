@@ -62,7 +62,36 @@ Route::get('/cookie-policy', [CookieConsentController::class, 'cookiePolicy'])->
 // Privacy Policy Page
 Route::view('/privacy-policy', 'pages.privacy-policy')->name('privacy-policy');
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
+// Homepage - temporary simple version
+Route::get('/', function () {
+    try {
+        if (!\Schema::hasTable('banners')) {
+            return view('welcome'); // Use Laravel's default welcome page
+        }
+        
+        $banners = \App\Models\Banner::active()->ordered()->get();
+        $events = \App\Models\Event::published()->upcoming()->orderBy('start_date')->limit(3)->get();
+        $section = \App\Models\BecomingSection::getActiveSection();
+        $aboutPage = \App\Models\AboutPage::active()
+            ->with(['coreValues' => function($query) {
+                $query->active()->ordered();
+            }])
+            ->first();
+
+        return view('index', compact('banners', 'events', 'section', 'aboutPage'));
+    } catch (\Throwable $e) {
+        return response()->json([
+            'error' => $e->getMessage(),
+            'file' => $e->getFile(),
+            'line' => $e->getLine(),
+            'links' => [
+                'test' => url('/test'),
+                'health' => url('/health'),
+                'admin' => url('/admin'),
+            ]
+        ], 200);
+    }
+})->name('home');
 Route::get('/about-citylife', [AboutController::class, 'index'])->name('about');
 Route::get('/about/core-values/{slug}', [AboutController::class, 'showCoreValue'])->name('about.core-value');
 
