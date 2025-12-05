@@ -20,18 +20,18 @@ use App\Http\Controllers\BabyDedicationController;
 // Serve storage files (using /media instead of /storage to avoid nginx conflicts)
 Route::get('/media/{path}', function ($path) {
     $filePath = storage_path('app/public/' . $path);
-    
+
     \Log::info('Storage file requested', [
         'path' => $path,
         'full_path' => $filePath,
         'exists' => file_exists($filePath),
         'is_file' => is_file($filePath),
     ]);
-    
+
     if (!file_exists($filePath)) {
         abort(404, 'File not found: ' . $path);
     }
-    
+
     return response()->file($filePath);
 })->where('path', '.*');
 
@@ -144,16 +144,16 @@ Route::get('/storage-debug', function () {
         $publicDiskConfig = config('filesystems.disks.public');
         $s3DiskConfig = config('filesystems.disks.s3');
         $defaultDisk = config('filesystems.default');
-        
+
         // List files in current disk
         $files = \Storage::disk($defaultDisk)->allFiles();
-        
+
         // Get URL for first file if exists
         $sampleUrl = null;
         if (count($files) > 0) {
             $sampleUrl = \Storage::disk($defaultDisk)->url($files[0]);
         }
-        
+
         return response()->json([
             'default_disk' => $defaultDisk,
             'public_disk_config' => $publicDiskConfig,
@@ -188,10 +188,10 @@ Route::get('/clear-session', function () {
         \Auth::guard('member')->logout();
         session()->invalidate();
         session()->regenerateToken();
-        
+
         // Also clear the cookie
         \Cookie::queue(\Cookie::forget(config('session.cookie')));
-        
+
         return response()->json([
             'success' => true,
             'message' => 'Session and cookies cleared. Visit /force-login to login again',
@@ -207,22 +207,22 @@ Route::get('/clear-session', function () {
 Route::get('/reset-admin-password', function () {
     try {
         $admin = \App\Models\User::find(2); // The logged-in user from session
-        
+
         if (!$admin) {
             return response()->json([
                 'error' => 'User ID 2 not found',
                 'suggestion' => 'Visit /db-debug to see all users',
             ]);
         }
-        
+
         // Update password
         $admin->password = \Hash::make('CityLife2025!');
         $admin->save();
-        
+
         // Clear all sessions
         \Auth::guard('web')->logout();
         session()->flush();
-        
+
         return response()->json([
             'success' => true,
             'message' => 'Password reset successfully!',
@@ -250,9 +250,9 @@ Route::get('/test-login', function (\Illuminate\Http\Request $request) {
     try {
         $email = $request->input('email', 'admin@citylife.com');
         $password = $request->input('password', 'CityLife2025!');
-        
+
         $user = \App\Models\User::where('email', $email)->first();
-        
+
         if (!$user) {
             return response()->json([
                 'success' => false,
@@ -260,9 +260,9 @@ Route::get('/test-login', function (\Illuminate\Http\Request $request) {
                 'email' => $email,
             ]);
         }
-        
+
         $passwordMatches = \Hash::check($password, $user->password);
-        
+
         return response()->json([
             'user_found' => true,
             'user_id' => $user->id,
@@ -282,25 +282,25 @@ Route::get('/test-login', function (\Illuminate\Http\Request $request) {
 Route::get('/force-login', function () {
     try {
         $user = \App\Models\User::where('email', 'admin@citylife.com')->first();
-        
+
         if (!$user) {
             return response()->json([
                 'error' => 'Admin user not found',
             ]);
         }
-        
+
         // Clear any existing auth
         \Auth::guard('web')->logout();
         session()->flush();
         session()->regenerate();
-        
+
         // Force login
         \Auth::guard('web')->login($user, true);
-        
+
         // Verify login worked
         $isLoggedIn = \Auth::guard('web')->check();
         $currentUser = \Auth::guard('web')->user();
-        
+
         if (!$isLoggedIn) {
             return response()->json([
                 'error' => 'Login failed',
@@ -308,7 +308,7 @@ Route::get('/force-login', function () {
                 'session_data' => session()->all(),
             ]);
         }
-        
+
         return response()->json([
             'success' => true,
             'message' => 'Logged in successfully!',
@@ -336,9 +336,9 @@ Route::get('/simple-dashboard', function () {
     if (!\Auth::guard('web')->check()) {
         return redirect('/force-login');
     }
-    
+
     $user = \Auth::guard('web')->user();
-    
+
     return response()->json([
         'logged_in' => true,
         'user' => [
