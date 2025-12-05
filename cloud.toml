@@ -10,6 +10,7 @@ build = [
     "php artisan cache:clear || true",
     "php artisan config:clear || true",
     "php artisan migrate --force",
+    "php artisan db:seed --force",
     "php artisan storage:link || true",
     "php artisan view:cache",
     "php artisan event:cache",
