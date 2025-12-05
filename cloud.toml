@@ -4,15 +4,18 @@ This file is automatically detected by Laravel Cloud and configures your deploym
 
 ## Build Commands
 build = [
-    "mkdir -p storage/framework/{sessions,views,cache/data} storage/logs bootstrap/cache",
+    "mkdir -p storage/framework/sessions storage/framework/views storage/framework/cache/data storage/logs bootstrap/cache",
     "chmod -R 775 storage bootstrap/cache",
     "composer install --optimize-autoloader --no-dev",
+    "php artisan view:clear || true",
+    "php artisan cache:clear || true",
+    "php artisan config:clear || true",
     "php artisan migrate --force",
-    "php artisan storage:link",
-    "php artisan config:cache",
-    "php artisan route:cache",
+    "php artisan storage:link || true",
     "php artisan view:cache",
     "php artisan event:cache",
+    "php artisan config:cache",
+    "php artisan route:cache",
 ]
 
 ## Health Checks
