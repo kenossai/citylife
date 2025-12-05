@@ -14,7 +14,7 @@ class SEOService
     /**
      * Generate SEO meta tags for a given model
      */
-    public function generateMetaTags($model, string $type = null): array
+    public function generateMetaTags($model, ?string $type = null): array
     {
         $type = $type ?? $this->getModelType($model);
 
