@@ -88,6 +88,30 @@ Route::get('/create-admin-now', function () {
     }
 });
 
+// Session debug
+Route::get('/session-debug', function () {
+    try {
+        $sessionId = session()->getId();
+        session()->put('test_key', 'test_value');
+        
+        return response()->json([
+            'session_driver' => config('session.driver'),
+            'session_id' => $sessionId,
+            'session_data' => session()->all(),
+            'app_key_set' => !empty(config('app.key')),
+            'app_url' => config('app.url'),
+            'session_domain' => config('session.domain'),
+            'session_secure' => config('session.secure'),
+            'session_same_site' => config('session.same_site'),
+            'csrf_token' => csrf_token(),
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'error' => $e->getMessage(),
+        ]);
+    }
+});
+
 // Health Check for Laravel Cloud
 Route::get('/health', function () {
     try {
