@@ -1,15 +1,9 @@
 # Laravel Cloud Configuration
 
-This file is automatically detected by Laravel Cloud and configures your deployment.
-
 ## Build Commands
 build = [
     "php create-storage-dirs.php",
     "composer install --optimize-autoloader --no-dev",
-    "php artisan view:clear || true",
-    "php artisan cache:clear || true",
-    "php artisan config:clear || true",
-    "php artisan route:clear || true",
     "php artisan migrate --force",
     "php artisan db:seed --force || true",
     "php artisan storage:link || true",
@@ -20,14 +14,8 @@ build = [
 ## Health Checks
 [health]
 path = "/health"
-timeout = 30
 
 ## Workers
 [workers]
-queue = "php artisan queue:work --sleep=3 --tries=3 --max-time=3600"
+queue = "php artisan queue:work database --sleep=3 --tries=3"
 scheduler = "php artisan schedule:work"
-
-## Cron Jobs
-[cron]
-# Laravel scheduler handles all cron jobs
-"* * * * *" = "php artisan schedule:run"
