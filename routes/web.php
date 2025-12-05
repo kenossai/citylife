@@ -63,49 +63,7 @@ Route::get('/cookie-policy', [CookieConsentController::class, 'cookiePolicy'])->
 Route::view('/privacy-policy', 'pages.privacy-policy')->name('privacy-policy');
 
 // Homepage
-Route::get('/', function () {
-    try {
-        // Check if tables exist
-        if (!\Schema::hasTable('banners')) {
-            return response('<html><body style="padding: 50px; font-family: sans-serif; text-align: center;">
-                <h1>🏗️ CityLife Church</h1>
-                <p>Setup in progress. Database tables are being created.</p>
-                <p><a href="/admin">Go to Admin Panel</a></p>
-                </body></html>');
-        }
-
-        // Get data with safe defaults
-        $banners = \App\Models\Banner::active()->ordered()->get();
-        $events = \App\Models\Event::published()->upcoming()->orderBy('start_date')->limit(3)->get();
-        $section = \App\Models\BecomingSection::getActiveSection();
-        $aboutPage = \App\Models\AboutPage::active()
-            ->with(['coreValues' => function($query) {
-                $query->active()->ordered();
-            }])
-            ->first();
-
-        // Check if view exists
-        if (!view()->exists('index')) {
-            return response('<html><body style="padding: 50px; font-family: sans-serif; text-align: center;">
-                <h1>⚠️ View Not Found</h1>
-                <p>The index.blade.php view is missing or not compiled.</p>
-                <p><a href="/admin">Go to Admin Panel</a></p>
-                </body></html>');
-        }
-
-        return view('index', compact('banners', 'events', 'section', 'aboutPage'));
-        
-    } catch (\Throwable $e) {
-        // Return friendly error page
-        return response('<html><body style="padding: 50px; font-family: monospace;">
-            <h1 style="color: #e53e3e;">Homepage Error</h1>
-            <p><strong>Error:</strong> ' . htmlspecialchars($e->getMessage()) . '</p>
-            <p><strong>File:</strong> ' . htmlspecialchars($e->getFile()) . '</p>
-            <p><strong>Line:</strong> ' . $e->getLine() . '</p>
-            <p><a href="/admin">Go to Admin Panel</a> | <a href="/health">Health Check</a></p>
-            </body></html>');
-    }
-})->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about-citylife', [AboutController::class, 'index'])->name('about');
 Route::get('/about/core-values/{slug}', [AboutController::class, 'showCoreValue'])->name('about.core-value');
 
