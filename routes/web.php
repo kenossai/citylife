@@ -180,6 +180,39 @@ Route::get('/reset-admin-password', function () {
     }
 });
 
+// Test login credentials
+Route::post('/test-login', function (\Illuminate\Http\Request $request) {
+    try {
+        $email = $request->input('email', 'admin@citylife.com');
+        $password = $request->input('password', 'CityLife2025!');
+        
+        $user = \App\Models\User::where('email', $email)->first();
+        
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User not found',
+                'email' => $email,
+            ]);
+        }
+        
+        $passwordMatches = \Hash::check($password, $user->password);
+        
+        return response()->json([
+            'user_found' => true,
+            'user_id' => $user->id,
+            'user_email' => $user->email,
+            'password_matches' => $passwordMatches,
+            'password_hash' => $user->password,
+            'can_login' => $passwordMatches,
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'error' => $e->getMessage(),
+        ]);
+    }
+});
+
 // Health Check for Laravel Cloud
 Route::get('/health', function () {
     try {
