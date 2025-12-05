@@ -22,6 +22,37 @@ Route::get('/test', function () {
     return response('Laravel is working! Time: ' . now());
 });
 
+// Database debug route - check tables and users
+Route::get('/db-debug', function () {
+    try {
+        $users = \App\Models\User::all();
+        $members = \App\Models\Member::all();
+        
+        // Get table list
+        $tables = \DB::select('SHOW TABLES');
+        
+        return response()->json([
+            'database' => env('DB_DATABASE'),
+            'users_count' => $users->count(),
+            'users' => $users->map(fn($u) => [
+                'id' => $u->id,
+                'name' => $u->name,
+                'email' => $u->email,
+                'created_at' => $u->created_at,
+            ]),
+            'members_count' => $members->count(),
+            'tables_count' => count($tables),
+            'tables' => array_map(fn($t) => array_values((array)$t)[0], $tables),
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'error' => $e->getMessage(),
+            'file' => $e->getFile(),
+            'line' => $e->getLine(),
+        ]);
+    }
+});
+
 // Health Check for Laravel Cloud
 Route::get('/health', function () {
     try {
