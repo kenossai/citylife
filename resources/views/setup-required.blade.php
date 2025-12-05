@@ -94,7 +94,7 @@
 <body>
     <div class="container">
         <h1>🏗️ Setup Required</h1>
-        
+
         <div class="status">
             <strong>Status:</strong> CityLife Church is almost ready!
         </div>

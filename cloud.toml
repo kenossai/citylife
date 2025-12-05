@@ -6,7 +6,7 @@ build = [
     "composer install --optimize-autoloader --no-dev",
     "php artisan migrate --force",
     "php artisan db:seed --force || true",
-    "php create-admin.php",
+    "php artisan admin:create",
     "php artisan storage:link || true",
 ]
 

@@ -39,13 +39,13 @@ class HomeController extends Controller
             }
 
             return view('index', compact('banners', 'events', 'section', 'aboutPage'));
-            
+
         } catch (\Throwable $e) {
             // Catch all errors including fatal ones
             $error = htmlspecialchars($e->getMessage());
             $file = htmlspecialchars($e->getFile());
             $line = $e->getLine();
-            
+
             return response("<!DOCTYPE html>
             <html>
             <body style='font-family: monospace; padding: 50px; background: #f5f5f5;'>
@@ -57,8 +57,8 @@ class HomeController extends Controller
                     <p><strong>Line:</strong> {$line}</p>
                 </div>
                 <p>
-                    <a href='/test' style='color: #3182ce;'>Test Route</a> | 
-                    <a href='/health' style='color: #3182ce;'>Health Check</a> | 
+                    <a href='/test' style='color: #3182ce;'>Test Route</a> |
+                    <a href='/health' style='color: #3182ce;'>Health Check</a> |
                     <a href='/admin' style='color: #3182ce;'>Admin Panel</a>
                 </p>
             </body>
