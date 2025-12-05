@@ -8,6 +8,11 @@ build = [
     "php artisan storage:link || true",
 ]
 
+## Environment Variables (Laravel Cloud will inject these)
+[env]
+SESSION_DRIVER = "cookie"
+SESSION_ENCRYPT = "true"
+
 ## Health Checks
 [health]
 path = "/health"
