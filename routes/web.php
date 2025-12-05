@@ -27,10 +27,10 @@ Route::get('/db-debug', function () {
     try {
         $users = \App\Models\User::all();
         $members = \App\Models\Member::all();
-        
+
         // Get table list
         $tables = \DB::select('SHOW TABLES');
-        
+
         return response()->json([
             'database' => env('DB_DATABASE'),
             'users_count' => $users->count(),
@@ -58,7 +58,7 @@ Route::get('/setup-admin', function () {
     try {
         // Check if admin already exists
         $existingAdmin = \App\Models\User::where('email', 'admin@citylife.com')->first();
-        
+
         if ($existingAdmin) {
             return response()->json([
                 'message' => 'Admin user already exists',
@@ -66,7 +66,7 @@ Route::get('/setup-admin', function () {
                 'action' => 'Login at /admin with your credentials',
             ]);
         }
-        
+
         // Create new admin
         $user = \App\Models\User::create([
             'name' => 'Admin User',
@@ -74,7 +74,7 @@ Route::get('/setup-admin', function () {
             'password' => \Hash::make('CityLife2025!'),
             'email_verified_at' => now(),
         ]);
-        
+
         return response()->json([
             'success' => true,
             'message' => 'Admin user created successfully!',
@@ -101,7 +101,7 @@ Route::get('/session-debug', function () {
     try {
         $sessionId = session()->getId();
         session()->put('test_key', 'test_value');
-        
+
         return response()->json([
             'session_driver' => config('session.driver'),
             'session_id' => $sessionId,
@@ -112,6 +112,24 @@ Route::get('/session-debug', function () {
             'session_secure' => config('session.secure'),
             'session_same_site' => config('session.same_site'),
             'csrf_token' => csrf_token(),
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'error' => $e->getMessage(),
+        ]);
+    }
+});
+
+// Clear session and logout
+Route::get('/clear-session', function () {
+    try {
+        \Auth::guard('web')->logout();
+        session()->invalidate();
+        session()->regenerateToken();
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'Session cleared. You can now login at /admin',
         ]);
     } catch (\Exception $e) {
         return response()->json([
