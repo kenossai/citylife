@@ -17,15 +17,20 @@ use App\Http\Controllers\MissionController;
 use App\Http\Controllers\CookieConsentController;
 use App\Http\Controllers\BabyDedicationController;
 
+// Simple test route - no dependencies
+Route::get('/test', function () {
+    return response('Laravel is working! Time: ' . now());
+});
+
 // Health Check for Laravel Cloud
 Route::get('/health', function () {
     try {
         // Check database connection
         \DB::connection()->getPdo();
-        
+
         // Check cache
         \Cache::get('health_check_test');
-        
+
         return response()->json([
             'status' => 'healthy',
             'database' => 'connected',
