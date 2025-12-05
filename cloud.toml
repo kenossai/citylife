@@ -23,10 +23,9 @@ build = [
 path = "/health"
 timeout = 30
 
-## Workers (from Procfile)
+## Workers
 [workers]
-web = "php artisan octane:start --server=roadrunner --host=0.0.0.0 --port=$PORT"
-queue = "php artisan queue:work redis --sleep=3 --tries=3 --max-time=3600"
+queue = "php artisan queue:work --sleep=3 --tries=3 --max-time=3600"
 scheduler = "php artisan schedule:work"
 
 ## Cron Jobs
