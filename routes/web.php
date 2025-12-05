@@ -17,6 +17,17 @@ use App\Http\Controllers\MissionController;
 use App\Http\Controllers\CookieConsentController;
 use App\Http\Controllers\BabyDedicationController;
 
+// Serve storage files (fallback if symlink doesn't work on Laravel Cloud)
+Route::get('/storage/{path}', function ($path) {
+    $filePath = storage_path('app/public/' . $path);
+    
+    if (!file_exists($filePath)) {
+        abort(404);
+    }
+    
+    return response()->file($filePath);
+})->where('path', '.*');
+
 // Simple test route - no dependencies
 Route::get('/test', function () {
     return response('Laravel is working! Time: ' . now());
