@@ -124,13 +124,17 @@ Route::get('/session-debug', function () {
 Route::get('/clear-session', function () {
     try {
         \Auth::guard('web')->logout();
+        \Auth::guard('member')->logout();
         session()->invalidate();
         session()->regenerateToken();
         
+        // Also clear the cookie
+        \Cookie::queue(\Cookie::forget(config('session.cookie')));
+        
         return response()->json([
             'success' => true,
-            'message' => 'Session cleared. You can now login at /admin',
-        ]);
+            'message' => 'Session and cookies cleared. Visit /force-login to login again',
+        ])->withoutCookie(config('session.cookie'));
     } catch (\Exception $e) {
         return response()->json([
             'error' => $e->getMessage(),
