@@ -53,6 +53,41 @@ Route::get('/db-debug', function () {
     }
 });
 
+// Create admin user manually
+Route::get('/create-admin-now', function () {
+    try {
+        // Delete existing admin
+        \App\Models\User::where('email', 'admin@citylife.com')->delete();
+        
+        // Create new admin
+        $user = \App\Models\User::create([
+            'name' => 'Admin User',
+            'email' => 'admin@citylife.com',
+            'password' => \Hash::make('CityLife2025!'),
+            'email_verified_at' => now(),
+        ]);
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'Admin user created!',
+            'email' => 'admin@citylife.com',
+            'password' => 'CityLife2025!',
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+            ],
+            'next_step' => 'Login at /admin',
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'error' => $e->getMessage(),
+            'file' => $e->getFile(),
+            'line' => $e->getLine(),
+        ]);
+    }
+});
+
 // Health Check for Laravel Cloud
 Route::get('/health', function () {
     try {
