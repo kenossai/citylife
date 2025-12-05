@@ -248,13 +248,51 @@ Route::get('/force-login', function () {
             ]);
         }
         
-        return redirect('/admin');
+        return response()->json([
+            'success' => true,
+            'message' => 'Logged in successfully!',
+            'user' => [
+                'id' => $currentUser->id,
+                'name' => $currentUser->name,
+                'email' => $currentUser->email,
+            ],
+            'auth_check' => $isLoggedIn,
+            'next_steps' => [
+                'Try accessing /admin now',
+                'If 403 persists, use /simple-dashboard instead',
+            ],
+        ]);
     } catch (\Exception $e) {
         return response()->json([
             'error' => $e->getMessage(),
             'trace' => $e->getTraceAsString(),
         ]);
     }
+});
+
+// Simple dashboard bypass
+Route::get('/simple-dashboard', function () {
+    if (!\Auth::guard('web')->check()) {
+        return redirect('/force-login');
+    }
+    
+    $user = \Auth::guard('web')->user();
+    
+    return response()->json([
+        'logged_in' => true,
+        'user' => [
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+        ],
+        'message' => 'You are logged in! The /admin Filament panel has issues on Laravel Cloud.',
+        'workaround' => 'Use your local environment to manage content via Filament, or contact Laravel Cloud support about the 403 Forbidden issue.',
+        'available_routes' => [
+            '/db-debug' => 'View database contents',
+            '/session-debug' => 'View session info',
+            '/health' => 'Health check',
+        ],
+    ]);
 });
 
 // Health Check for Laravel Cloud
