@@ -142,21 +142,31 @@ Route::get('/session-debug', function () {
 Route::get('/storage-debug', function () {
     try {
         $publicDiskConfig = config('filesystems.disks.public');
+        $s3DiskConfig = config('filesystems.disks.s3');
         $defaultDisk = config('filesystems.default');
         
-        // List files in storage/app/public
-        $files = \Storage::disk('public')->allFiles();
+        // List files in current disk
+        $files = \Storage::disk($defaultDisk)->allFiles();
         
         // Get URL for first file if exists
         $sampleUrl = null;
         if (count($files) > 0) {
-            $sampleUrl = \Storage::disk('public')->url($files[0]);
+            $sampleUrl = \Storage::disk($defaultDisk)->url($files[0]);
         }
         
         return response()->json([
             'default_disk' => $defaultDisk,
             'public_disk_config' => $publicDiskConfig,
+            's3_disk_config' => [
+                'driver' => $s3DiskConfig['driver'] ?? null,
+                'key_set' => !empty($s3DiskConfig['key']),
+                'secret_set' => !empty($s3DiskConfig['secret']),
+                'region' => $s3DiskConfig['region'] ?? null,
+                'bucket' => $s3DiskConfig['bucket'] ?? null,
+                'endpoint' => $s3DiskConfig['endpoint'] ?? null,
+            ],
             'app_url' => config('app.url'),
+            'app_env' => config('app.env'),
             'storage_path' => storage_path('app/public'),
             'files_count' => count($files),
             'sample_files' => array_slice($files, 0, 5),
