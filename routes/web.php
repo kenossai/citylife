@@ -21,8 +21,15 @@ use App\Http\Controllers\BabyDedicationController;
 Route::get('/storage/{path}', function ($path) {
     $filePath = storage_path('app/public/' . $path);
     
+    \Log::info('Storage file requested', [
+        'path' => $path,
+        'full_path' => $filePath,
+        'exists' => file_exists($filePath),
+        'is_file' => is_file($filePath),
+    ]);
+    
     if (!file_exists($filePath)) {
-        abort(404);
+        abort(404, 'File not found: ' . $path);
     }
     
     return response()->file($filePath);
