@@ -29,6 +29,8 @@ return Application::configure(basePath: dirname(__DIR__))
         // Exclude admin creation routes from CSRF protection (temporary)
         $middleware->validateCsrfTokens(except: [
             '/create-admin-now',
+            '/admin/login',
+            '/admin/*',
         ]);
 
         // Register permission middleware alias
