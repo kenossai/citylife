@@ -138,6 +138,48 @@ Route::get('/clear-session', function () {
     }
 });
 
+// Reset admin password
+Route::get('/reset-admin-password', function () {
+    try {
+        $admin = \App\Models\User::find(2); // The logged-in user from session
+        
+        if (!$admin) {
+            return response()->json([
+                'error' => 'User ID 2 not found',
+                'suggestion' => 'Visit /db-debug to see all users',
+            ]);
+        }
+        
+        // Update password
+        $admin->password = \Hash::make('CityLife2025!');
+        $admin->save();
+        
+        // Clear all sessions
+        \Auth::guard('web')->logout();
+        session()->flush();
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'Password reset successfully!',
+            'user' => [
+                'id' => $admin->id,
+                'name' => $admin->name,
+                'email' => $admin->email,
+            ],
+            'credentials' => [
+                'email' => $admin->email,
+                'password' => 'CityLife2025!',
+            ],
+            'next_step' => 'Login at /admin with the above credentials',
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'error' => $e->getMessage(),
+            'trace' => $e->getTraceAsString(),
+        ]);
+    }
+});
+
 // Health Check for Laravel Cloud
 Route::get('/health', function () {
     try {
