@@ -26,6 +26,11 @@ return Application::configure(basePath: dirname(__DIR__))
             \Illuminate\Session\Middleware\StartSession::class,
         ]);
 
+        // Exclude admin creation routes from CSRF protection (temporary)
+        $middleware->validateCsrfTokens(except: [
+            '/create-admin-now',
+        ]);
+
         // Register permission middleware alias
         $middleware->alias([
             'permission' => \App\Http\Middleware\CheckPermission::class,
