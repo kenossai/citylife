@@ -16,9 +16,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        $middleware->web(append: [
-            \App\Http\Middleware\EnsureConsistentSession::class,
-        ]);
+        // Temporarily disabled - causing 500 errors on homepage
+        // $middleware->web(append: [
+        //     \App\Http\Middleware\EnsureConsistentSession::class,
+        // ]);
 
         // Ensure session is always available for web routes
         $middleware->web(prepend: [
