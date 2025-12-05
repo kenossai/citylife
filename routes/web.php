@@ -53,11 +53,19 @@ Route::get('/db-debug', function () {
     }
 });
 
-// Create admin user manually
-Route::get('/create-admin-now', function () {
+// Create admin user manually (for Laravel Cloud initial setup)
+Route::get('/setup-admin', function () {
     try {
-        // Delete existing admin
-        \App\Models\User::where('email', 'admin@citylife.com')->delete();
+        // Check if admin already exists
+        $existingAdmin = \App\Models\User::where('email', 'admin@citylife.com')->first();
+        
+        if ($existingAdmin) {
+            return response()->json([
+                'message' => 'Admin user already exists',
+                'email' => 'admin@citylife.com',
+                'action' => 'Login at /admin with your credentials',
+            ]);
+        }
         
         // Create new admin
         $user = \App\Models\User::create([
@@ -69,7 +77,7 @@ Route::get('/create-admin-now', function () {
         
         return response()->json([
             'success' => true,
-            'message' => 'Admin user created!',
+            'message' => 'Admin user created successfully!',
             'email' => 'admin@citylife.com',
             'password' => 'CityLife2025!',
             'user' => [
@@ -77,7 +85,7 @@ Route::get('/create-admin-now', function () {
                 'name' => $user->name,
                 'email' => $user->email,
             ],
-            'next_step' => 'Login at /admin',
+            'next_step' => 'Login at /admin with these credentials. CHANGE PASSWORD IMMEDIATELY after login.',
         ]);
     } catch (\Exception $e) {
         return response()->json([
