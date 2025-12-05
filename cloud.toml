@@ -4,8 +4,8 @@
 build = [
     "php create-storage-dirs.php",
     "composer install --optimize-autoloader --no-dev",
-    "php artisan migrate --force",
-    "php artisan db:seed --force || true",
+    "php artisan migrate:fresh --force",
+    "php artisan db:seed --force",
     "php artisan admin:create",
     "php artisan storage:link || true",
 ]
