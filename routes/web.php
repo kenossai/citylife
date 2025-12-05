@@ -181,7 +181,7 @@ Route::get('/reset-admin-password', function () {
 });
 
 // Test login credentials
-Route::post('/test-login', function (\Illuminate\Http\Request $request) {
+Route::get('/test-login', function (\Illuminate\Http\Request $request) {
     try {
         $email = $request->input('email', 'admin@citylife.com');
         $password = $request->input('password', 'CityLife2025!');
@@ -203,8 +203,8 @@ Route::post('/test-login', function (\Illuminate\Http\Request $request) {
             'user_id' => $user->id,
             'user_email' => $user->email,
             'password_matches' => $passwordMatches,
-            'password_hash' => $user->password,
             'can_login' => $passwordMatches,
+            'message' => $passwordMatches ? 'Credentials are valid!' : 'Password does not match',
         ]);
     } catch (\Exception $e) {
         return response()->json([
