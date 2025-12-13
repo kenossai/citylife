@@ -17,14 +17,14 @@ use App\Http\Controllers\MissionController;
 use App\Http\Controllers\CookieConsentController;
 use App\Http\Controllers\BabyDedicationController;
 
-// Serve storage files (using /media instead of /storage to avoid nginx conflicts)
-Route::get('/media/{path}', function ($path) {
-    $filePath = storage_path('app/public/' . $path);
-    if (!file_exists($filePath)) {
-        abort(404, 'File not found: ' . $path);
-    }
-    return response()->file($filePath);
-})->where('path', '.*');
+// /media route disabled - R2 storage serves files directly with public URLs
+// Route::get('/media/{path}', function ($path) {
+//     $filePath = storage_path('app/public/' . $path);
+//     if (!file_exists($filePath)) {
+//         abort(404, 'File not found: ' . $path);
+//     }
+//     return response()->file($filePath);
+// })->where('path', '.*');
 
 // Simple test route - no dependencies
 Route::get('/test', function () {
