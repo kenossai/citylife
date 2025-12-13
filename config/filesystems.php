@@ -13,8 +13,7 @@ return [
     |
     */
 
-    // Use S3 (R2) in production if AWS credentials are set, otherwise use public disk
-    'default' => env('AWS_ACCESS_KEY_ID') ? env('FILESYSTEM_DISK', 's3') : 'public',
+    'default' => env('FILESYSTEM_DISK', 'public'),
 
     /*
     |--------------------------------------------------------------------------
