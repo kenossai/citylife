@@ -53,7 +53,15 @@ class Banner extends Model
         }
 
         // Otherwise it's a storage file - use Storage facade for proper URL generation
-        return \Storage::disk(config('filesystems.default'))->url($this->background_image);
+        try {
+            return \Storage::disk(config('filesystems.default'))->url($this->background_image);
+        } catch (\Exception $e) {
+            \Log::error('Failed to generate storage URL', [
+                'file' => $this->background_image,
+                'error' => $e->getMessage()
+            ]);
+            return asset('assets/images/backgrounds/slider-1-2.jpeg'); // fallback
+        }
     }
 
     public function getOverlayStyleAttribute()
