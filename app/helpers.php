@@ -20,12 +20,6 @@ if (!function_exists('storage_url')) {
         $storage = Storage::disk($disk);
 
         try {
-            // If using S3/R2, generate temporary signed URLs (valid for 24 hours)
-            if ($disk === 's3') {
-                return $storage->temporaryUrl($path, now()->addHours(24));
-            }
-
-            // For local storage, use regular URL
             return $storage->url($path);
         } catch (\Exception $e) {
             \Log::error('Failed to generate storage URL', [
