@@ -94,7 +94,10 @@ class MissionResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('mission_type')
                     ->searchable(),
-                Tables\Columns\ImageColumn::make('featured_image'),
+                Tables\Columns\ImageColumn::make('featured_image')
+                    ->disk('s3')
+                    ->visibility('public')
+                    ->size(50),
                 Tables\Columns\TextColumn::make('contact_person')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('contact_email')

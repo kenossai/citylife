@@ -172,6 +172,8 @@ class EventResource extends Resource
             ->columns([
                 Tables\Columns\ImageColumn::make('featured_image')
                     ->label('Image')
+                    ->disk('s3')
+                    ->visibility('public')
                     ->circular()
                     ->size(60),
 

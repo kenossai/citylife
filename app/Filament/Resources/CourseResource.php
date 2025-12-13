@@ -106,7 +106,10 @@ class CourseResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('location')
                     ->searchable(),
-                Tables\Columns\ImageColumn::make('featured_image'),
+                Tables\Columns\ImageColumn::make('featured_image')
+                    ->disk('s3')
+                    ->visibility('public')
+                    ->size(50),
                 Tables\Columns\TextColumn::make('current_enrollments')
                     ->numeric()
                     ->sortable(),
