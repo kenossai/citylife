@@ -17,14 +17,29 @@ use App\Http\Controllers\MissionController;
 use App\Http\Controllers\CookieConsentController;
 use App\Http\Controllers\BabyDedicationController;
 
-// /media route disabled - R2 storage serves files directly with public URLs
-// Route::get('/media/{path}', function ($path) {
-//     $filePath = storage_path('app/public/' . $path);
-//     if (!file_exists($filePath)) {
-//         abort(404, 'File not found: ' . $path);
-//     }
-//     return response()->file($filePath);
-// })->where('path', '.*');
+// Serve storage files with proper CORS headers for Filament previews
+Route::get('/storage/{path}', function ($path) {
+    try {
+        $disk = \Storage::disk(config('filesystems.default'));
+        
+        if (!$disk->exists($path)) {
+            abort(404, 'File not found');
+        }
+        
+        $mimeType = $disk->mimeType($path);
+        $contents = $disk->get($path);
+        
+        return response($contents)
+            ->header('Content-Type', $mimeType)
+            ->header('Access-Control-Allow-Origin', '*')
+            ->header('Access-Control-Allow-Methods', 'GET, HEAD')
+            ->header('Access-Control-Allow-Headers', '*')
+            ->header('Cache-Control', 'public, max-age=31536000');
+    } catch (\Exception $e) {
+        \Log::error('Storage proxy error', ['path' => $path, 'error' => $e->getMessage()]);
+        abort(404);
+    }
+})->where('path', '.*');
 
 // Simple test route - no dependencies
 Route::get('/test', function () {
