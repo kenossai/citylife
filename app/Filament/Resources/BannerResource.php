@@ -76,6 +76,8 @@ class BannerResource extends Resource
             Tables\Columns\ImageColumn::make('background_image')
                 ->label('Image')
                 ->circular()
+                ->disk('s3')
+                ->visibility('public')
                 ->size(60),
 
             Tables\Columns\TextColumn::make('title')

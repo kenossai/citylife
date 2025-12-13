@@ -177,6 +177,8 @@ class AboutPageResource extends Resource
 
                 Tables\Columns\ImageColumn::make('featured_image')
                     ->circular()
+                    ->disk('s3')
+                    ->visibility('public')
                     ->size(50),
 
                 Tables\Columns\IconColumn::make('is_active')
