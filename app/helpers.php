@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Storage;
+
 if (!function_exists('storage_url')) {
     /**
      * Get the URL for a storage file, using signed URLs for S3/R2
@@ -31,7 +33,7 @@ if (!function_exists('storage_url')) {
                 'disk' => $disk,
                 'error' => $e->getMessage()
             ]);
-            
+
             return '';
         }
     }

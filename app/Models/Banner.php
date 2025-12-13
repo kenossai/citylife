@@ -55,12 +55,12 @@ class Banner extends Model
         // Otherwise it's a storage file - use Storage facade for proper URL generation
         try {
             $disk = \Storage::disk(config('filesystems.default'));
-            
+
             // If using S3/R2, use temporary signed URLs (valid for 24 hours)
             if (config('filesystems.default') === 's3') {
                 return $disk->temporaryUrl($this->background_image, now()->addHours(24));
             }
-            
+
             return $disk->url($this->background_image);
         } catch (\Exception $e) {
             \Log::error('Failed to generate storage URL', [
