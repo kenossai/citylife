@@ -44,16 +44,13 @@ class CloudStorageServiceProvider extends ServiceProvider
                     'visibility' => 'public',
                 ];
 
-                // If URL is not provided, construct it from endpoint and bucket
+                // Use the provided public URL from Laravel Cloud
                 if (!empty($diskData['url'])) {
                     $config['url'] = $diskData['url'];
-                } elseif (!empty($diskData['endpoint']) && !empty($diskData['bucket'])) {
-                    // For R2, construct public URL from bucket name
-                    $bucket = $diskData['bucket'];
-                    $accountId = explode('.', parse_url($diskData['endpoint'], PHP_URL_HOST))[0] ?? '';
-                    $config['url'] = "https://{$bucket}.{$accountId}.r2.cloudflarestorage.com";
                 }
 
+                // Also update the s3 disk with this configuration
+                Config::set("filesystems.disks.s3", $config);
                 Config::set("filesystems.disks.{$diskName}", $config);
 
                 // Set as default if specified
