@@ -56,6 +56,8 @@ class TechnicalDepartmentResource extends Resource
 
                         Forms\Components\FileUpload::make('head_image')
                             ->image()
+                            ->disk('s3')
+                            ->visibility('public')
                             ->directory('technical-departments/heads')
                             ->helperText('Photo of the department head'),
 

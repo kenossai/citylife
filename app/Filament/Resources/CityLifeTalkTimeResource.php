@@ -104,7 +104,8 @@ class CityLifeTalkTimeResource extends Resource
                                             ->label('Episode Thumbnail')
                                             ->image()
                                             ->directory('citylife-talktime')
-                                            ->disk('public')
+                                            ->disk('s3')
+                                            ->visibility('public')
                                             ->imageEditor()
                                             ->columnSpanFull(),
                                     ]),

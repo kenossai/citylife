@@ -122,7 +122,8 @@ class TeachingSeriesResource extends Resource
                                             ->label('Series Image')
                                             ->image()
                                             ->directory('teaching-series')
-                                            ->disk('public')
+                                            ->disk('s3')
+                                            ->visibility('public')
                                             ->imageEditor()
                                             ->columnSpanFull(),
                                     ]),
@@ -145,7 +146,8 @@ class TeachingSeriesResource extends Resource
                             ->label('Sermon Notes (PDF)')
                             ->acceptedFileTypes(['application/pdf'])
                             ->directory('teaching-series/notes')
-                            ->disk('public')
+                            ->disk('s3')
+                            ->visibility('public')
                             ->maxSize(10240) // 10MB
                             ->getUploadedFileNameForStorageUsing(
                                 fn (TemporaryUploadedFile $file, Get $get): string =>

@@ -46,6 +46,8 @@ class BannerResource extends Resource
                 Forms\Components\FileUpload::make('background_image')
                     ->required()
                     ->image()
+                    ->disk('s3')
+                    ->visibility('public')
                     ->directory('banners')
                     ->imageResizeMode('cover')
                     ->imageCropAspectRatio('16:9')

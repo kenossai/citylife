@@ -130,9 +130,9 @@ class TeamMemberResource extends Resource
             ])->columns(1),
 
             Forms\Components\Section::make('Media')->schema([
-                Forms\Components\FileUpload::make('profile_image')->image()->directory('team-members')
+                Forms\Components\FileUpload::make('profile_image')->image()->disk('s3')->visibility('public')->directory('team-members')
                     ->imageResizeMode('cover')->imageCropAspectRatio('1:1'),
-                Forms\Components\FileUpload::make('featured_image')->image()->directory('team-members')
+                Forms\Components\FileUpload::make('featured_image')->image()->disk('s3')->visibility('public')->directory('team-members')
                     ->imageResizeMode('cover')->imageCropAspectRatio('16:9'),
             ])->columns(2),
 

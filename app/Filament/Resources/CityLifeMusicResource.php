@@ -76,6 +76,8 @@ class CityLifeMusicResource extends Resource
 
                         Forms\Components\FileUpload::make('image')
                             ->image()
+                            ->disk('s3')
+                            ->visibility('public')
                             ->directory('citylife-music')
                             ->visibility('public')
                             ->columnSpanFull(),

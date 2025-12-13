@@ -46,6 +46,8 @@ class PreacherDepartmentResource extends Resource
 
                 Forms\Components\FileUpload::make('head_image')
                     ->image()
+                    ->disk('s3')
+                    ->visibility('public')
                     ->directory('preacher-departments'),
 
                 Forms\Components\Toggle::make('is_active')

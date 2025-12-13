@@ -56,6 +56,8 @@ class AboutPageResource extends Resource
 
                                 Forms\Components\FileUpload::make('featured_image')
                                     ->image()
+                                    ->disk('s3')
+                                    ->visibility('public')
                                     ->directory('about-page')
                                     ->helperText('Main banner image for the about page'),
                             ]),
@@ -114,6 +116,8 @@ class AboutPageResource extends Resource
 
                                 Forms\Components\FileUpload::make('lead_pastor_signature')
                                     ->image()
+                                    ->disk('s3')
+                                    ->visibility('public')
                                     ->directory('pastor-signatures')
                                     ->helperText('Pastor signature image'),
                             ]),

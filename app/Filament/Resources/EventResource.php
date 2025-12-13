@@ -80,6 +80,8 @@ class EventResource extends Resource
                         Forms\Components\FileUpload::make('featured_image')
                             ->label('Event Image')
                             ->image()
+                            ->disk('s3')
+                            ->visibility('public')
                             ->directory('events')
                             ->imageEditor()
                             ->required(),

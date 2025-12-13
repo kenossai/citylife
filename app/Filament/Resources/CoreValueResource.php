@@ -80,6 +80,8 @@ class CoreValueResource extends Resource
 
                         Forms\Components\FileUpload::make('featured_image')
                             ->image()
+                            ->disk('s3')
+                            ->visibility('public')
                             ->directory('core-values')
                             ->helperText('Optional featured image'),
 

@@ -54,7 +54,8 @@ class CourseResource extends Resource
                 Forms\Components\FileUpload::make('featured_image')
                     ->image()
                     ->directory('courses')
-                    ->disk('public'),
+                    ->disk('s3')
+                    ->visibility('public'),
                 Forms\Components\Textarea::make('requirements')
                     ->columnSpanFull(),
                 Forms\Components\Textarea::make('what_you_learn')

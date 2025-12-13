@@ -103,7 +103,8 @@ class CourseEnrollmentResource extends Resource
                     ->visible(fn ($get) => $get('certificate_issued')),
                 Forms\Components\FileUpload::make('certificate_file_path')
                     ->label('Certificate File')
-                    ->disk('public')
+                    ->disk('s3')
+                    ->visibility('public')
                     ->directory('certificates')
                     ->acceptedFileTypes(['application/pdf', 'image/*'])
                     ->maxSize(10240) // 10MB

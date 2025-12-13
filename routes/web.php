@@ -21,14 +21,14 @@ use App\Http\Controllers\BabyDedicationController;
 Route::get('/storage/{path}', function ($path) {
     try {
         $disk = \Storage::disk(config('filesystems.default'));
-        
+
         if (!$disk->exists($path)) {
             abort(404, 'File not found');
         }
-        
+
         $mimeType = $disk->mimeType($path);
         $contents = $disk->get($path);
-        
+
         return response($contents)
             ->header('Content-Type', $mimeType)
             ->header('Access-Control-Allow-Origin', '*')

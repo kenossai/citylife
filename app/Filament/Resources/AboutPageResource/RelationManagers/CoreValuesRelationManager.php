@@ -40,6 +40,8 @@ class CoreValuesRelationManager extends RelationManager
 
                 Forms\Components\FileUpload::make('featured_image')
                     ->image()
+                    ->disk('s3')
+                    ->visibility('public')
                     ->directory('core-values')
                     ->helperText('Featured image for this core value'),
 

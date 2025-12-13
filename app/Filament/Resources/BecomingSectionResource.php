@@ -38,18 +38,18 @@ class BecomingSectionResource extends Resource
                                     ->required()
                                     ->default('Are You Ready to Make a Difference?')
                                     ->columnSpan(2),
-                                    
+
                                 Forms\Components\TextInput::make('title')
                                     ->label('Main Title')
                                     ->required()
                                     ->default('Inspiring and Helping for Better'),
-                                    
+
                                 Forms\Components\TextInput::make('title_highlight')
                                     ->label('Highlighted Title Part')
                                     ->required()
                                     ->default('Lifestyle'),
                             ]),
-                            
+
                         Forms\Components\Textarea::make('description')
                             ->label('Description')
                             ->required()
@@ -65,17 +65,17 @@ class BecomingSectionResource extends Resource
                                     ->label('Volunteer Button Text')
                                     ->required()
                                     ->default('Become A Volunteer'),
-                                    
+
                                 Forms\Components\TextInput::make('volunteer_icon')
                                     ->label('Volunteer Icon Class')
                                     ->required()
                                     ->default('icon-unity'),
-                                    
+
                                 Forms\Components\TextInput::make('new_member_title')
                                     ->label('New Member Button Text')
                                     ->required()
                                     ->default("I'm New Here"),
-                                    
+
                                 Forms\Components\TextInput::make('new_member_icon')
                                     ->label('New Member Icon Class')
                                     ->required()
@@ -90,16 +90,22 @@ class BecomingSectionResource extends Resource
                                 Forms\Components\FileUpload::make('background_image')
                                     ->label('Background Image')
                                     ->image()
+                                    ->disk('s3')
+                                    ->visibility('public')
                                     ->directory('becoming/backgrounds'),
-                                    
+
                                 Forms\Components\FileUpload::make('left_image')
                                     ->label('Left Image')
                                     ->image()
+                                    ->disk('s3')
+                                    ->visibility('public')
                                     ->directory('becoming/images'),
-                                    
+
                                 Forms\Components\FileUpload::make('right_image')
                                     ->label('Right Image')
                                     ->image()
+                                    ->disk('s3')
+                                    ->visibility('public')
                                     ->directory('becoming/images'),
                             ]),
                     ]),
@@ -122,25 +128,25 @@ class BecomingSectionResource extends Resource
                     ->label('Tagline')
                     ->searchable()
                     ->limit(50),
-                    
+
                 Tables\Columns\TextColumn::make('title')
                     ->label('Title')
                     ->searchable()
                     ->formatStateUsing(fn ($record) => $record->title . ' ' . $record->title_highlight),
-                    
+
                 Tables\Columns\TextColumn::make('volunteer_title')
                     ->label('Volunteer Button')
                     ->limit(30),
-                    
+
                 Tables\Columns\TextColumn::make('new_member_title')
                     ->label('New Member Button')
                     ->limit(30),
-                    
+
                 Tables\Columns\BooleanColumn::make('is_active')
                     ->label('Active')
                     ->trueIcon('heroicon-o-check-circle')
                     ->falseIcon('heroicon-o-x-circle'),
-                    
+
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Created')
                     ->dateTime()

@@ -48,6 +48,8 @@ class SEOSettingsResource extends Resource
                             ->label('Default Social Media Image')
                             ->helperText('This image will be used when pages don\'t have a specific image')
                             ->image()
+                            ->disk('s3')
+                            ->visibility('public')
                             ->directory('seo/og-images')
                             ->imageEditor(),
                     ]),

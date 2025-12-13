@@ -94,11 +94,15 @@ class MinistryResource extends Resource
 
                         Forms\Components\FileUpload::make('leader_image')
                             ->image()
+                            ->disk('s3')
+                            ->visibility('public')
                             ->directory('ministries/leaders')
                             ->helperText('Photo of the ministry leader'),
 
                         Forms\Components\FileUpload::make('assistant_leader_image')
                             ->image()
+                            ->disk('s3')
+                            ->visibility('public')
                             ->directory('ministries/leaders')
                             ->helperText('Photo of the assistant leader'),
 
@@ -131,6 +135,8 @@ class MinistryResource extends Resource
                     ->schema([
                         Forms\Components\FileUpload::make('featured_image')
                             ->image()
+                            ->disk('s3')
+                            ->visibility('public')
                             ->directory('ministries')
                             ->helperText('Featured image for the ministry'),
                     ]),

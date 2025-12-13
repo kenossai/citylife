@@ -52,10 +52,14 @@ class MissionResource extends Resource
                     ]),
                 Forms\Components\FileUpload::make('featured_image')
                     ->image()
+                    ->disk('s3')
+                    ->visibility('public')
                     ->directory('missions/featured'),
                 Forms\Components\FileUpload::make('gallery_images')
                     ->image()
                     ->multiple()
+                    ->disk('s3')
+                    ->visibility('public')
                     ->directory('missions/gallery')
                     ->maxFiles(10)
                     ->reorderable()

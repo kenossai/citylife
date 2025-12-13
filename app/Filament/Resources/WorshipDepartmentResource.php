@@ -46,6 +46,8 @@ class WorshipDepartmentResource extends Resource
 
                 Forms\Components\FileUpload::make('head_image')
                     ->image()
+                    ->disk('s3')
+                    ->visibility('public')
                     ->directory('worship-departments'),
 
                 Forms\Components\TextInput::make('contact_email')
