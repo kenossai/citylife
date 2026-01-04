@@ -45,6 +45,11 @@ class CoreValuesRelationManager extends RelationManager
                     ->columnSpanFull()
                     ->helperText('Detailed description of this core value'),
 
+                Forms\Components\Textarea::make('short_description')
+                    ->maxLength(500)
+                    ->rows(3)
+                    ->helperText('Brief summary (optional, used for preview)'),
+
                 Forms\Components\Textarea::make('bible_verse')
                     ->maxLength(500)
                     ->helperText('Bible verse related to this core value'),
