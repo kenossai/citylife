@@ -146,7 +146,7 @@
                                     <div class="event-card-four__time">
                                        {{ $value->title }}
                                     </div><!-- /.event-card-four__time -->
-                                    <h4 class="event-card-four__title">{!! $value->excerpt !!}</h4><!-- /.event-card-four__title -->
+                                    <h4 class="event-card-four__title">{!! $value->short_description !!}</h4><!-- /.event-card-four__title -->
                                      @if($value->bible_verse)
                                     <div class="event-card-four__text"><em>{!! $value->description !!}</em></div><!-- /.event-card-four__text -->
                                     <div class="event-card-four__text"><em>{{ $value->bible_verse }}</em></div><!-- /.event-card-four__text -->
