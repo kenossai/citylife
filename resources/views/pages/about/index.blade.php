@@ -42,7 +42,7 @@
                     <div class="about-one__content">
                         <div class="sec-title">
                             <h6 class="sec-title__tagline">{{ strtoupper($aboutPage->title) }}</h6><!-- /.sec-title__tagline -->
-                            <h3 class="sec-title__title">{{ $aboutPage->church_name }} <span class="sec-title__title__inner">{{ $aboutPage->church_description }}</span></h3><!-- /.sec-title__title -->
+                            <h3 class="sec-title__title">{{ $aboutPage->church_name }} <span class="sec-title__title__inner">{!! $aboutPage->church_description !!}</span></h3><!-- /.sec-title__title -->
                         </div><!-- /.sec-title -->
                         <div class="about-one__text-box wow fadeInUp" data-wow-delay="00ms" data-wow-duration="1500ms">
                             <p class="about-one__text"><strong>Affiliated with:</strong> {{ $aboutPage->affiliation }}</p>
@@ -146,9 +146,9 @@
                                     <div class="event-card-four__time">
                                        {{ $value->title }}
                                     </div><!-- /.event-card-four__time -->
-                                    <h4 class="event-card-four__title">{{ $value->excerpt }}</h4><!-- /.event-card-four__title -->
+                                    <h4 class="event-card-four__title">{!! $value->excerpt !!}</h4><!-- /.event-card-four__title -->
                                      @if($value->bible_verse)
-                                    <div class="event-card-four__text"><em>{{ $value->description }}</em></div><!-- /.event-card-four__text -->
+                                    <div class="event-card-four__text"><em>{!! $value->description !!}</em></div><!-- /.event-card-four__text -->
                                     <div class="event-card-four__text"><em>{{ $value->bible_verse }}</em></div><!-- /.event-card-four__text -->
                                     <ul class="event-card-four__meta">
                                         @if($value->bible_reference)
@@ -182,7 +182,7 @@
                         </div><!-- /.sec-title -->
                     </div><!-- /.col-xxl-8 col-lg-7 -->
                     <div class="col-xxl-4 col-lg-5 wow fadeInRight" data-wow-duration="1500ms">
-                        <p class="team-one__text">We help companies develop powerful corporate social responsibility, grantmaking, and employee engagement strategies.</p><!-- /.team-one__text -->
+                        <p class="team-one__text">{!! $aboutPage->pastoral_team_description !!}</p><!-- /.team-one__text -->
                     </div><!-- /.col-xxl-4 col-lg-5 -->
                 </div><!-- /.row gutter-y-40 -->
             </div><!-- /.team-one__top -->
