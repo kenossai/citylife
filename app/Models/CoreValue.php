@@ -78,21 +78,26 @@ class CoreValue extends Model
 
     public function getExcerptAttribute()
     {
-        if ($this->short_description) {
-            return $this->short_description;
-        }
+        try {
+            if ($this->short_description) {
+                return $this->short_description;
+            }
 
-        if ($this->description) {
-            return Str::limit(strip_tags($this->description), 150);
-        }
+            if ($this->description) {
+                $clean = strip_tags($this->description);
+                return Str::limit($clean, 150);
+            }
 
-        return '';
+            return '';
+        } catch (\Exception $e) {
+            return '';
+        }
     }
 
     // Mutators
     public function setSlugAttribute($value)
     {
-        $this->attributes['slug'] = Str::slug($value ?: $this->title);
+        $this->attributes['slug'] = Str::slug($value ?: ($this->title ?? ''));
     }
 
     public function setTitleAttribute($value)
@@ -100,7 +105,7 @@ class CoreValue extends Model
         $this->attributes['title'] = $value;
 
         // Auto-generate slug if not set
-        if (!$this->slug) {
+        if (empty($this->attributes['slug'])) {
             $this->attributes['slug'] = Str::slug($value);
         }
     }

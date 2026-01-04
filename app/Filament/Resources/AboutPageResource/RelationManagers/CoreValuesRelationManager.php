@@ -82,19 +82,16 @@ class CoreValuesRelationManager extends RelationManager
                     ->sortable()
                     ->weight('bold'),
 
-                Tables\Columns\TextColumn::make('excerpt')
+                Tables\Columns\TextColumn::make('short_description')
+                    ->label('Description')
                     ->limit(50)
-                    ->tooltip(function (Tables\Columns\TextColumn $column): ?string {
-                        $state = $column->getState();
-                        if (strlen($state) <= 50) {
-                            return null;
-                        }
-                        return $state;
-                    }),
+                    ->default('—')
+                    ->wrap(),
 
                 Tables\Columns\TextColumn::make('bible_reference')
                     ->badge()
-                    ->color('primary'),                Tables\Columns\IconColumn::make('is_active')
+                    ->color('primary')
+                    ->default('—'),                Tables\Columns\IconColumn::make('is_active')
                     ->boolean()
                     ->trueIcon('heroicon-o-check-circle')
                     ->falseIcon('heroicon-o-x-circle')
