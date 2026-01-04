@@ -85,6 +85,12 @@ class CoreValuesRelationManager extends RelationManager
                     ->searchable()
                     ->sortable(),
 
+                Tables\Columns\TextColumn::make('short_description')
+                    ->label('Description')
+                    ->limit(50)
+                    ->wrap()
+                    ->default('—'),
+
                 Tables\Columns\TextColumn::make('slug')
                     ->searchable(),
 
