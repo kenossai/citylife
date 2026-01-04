@@ -53,9 +53,13 @@ class CoreValuesRelationManager extends RelationManager
                     ->maxLength(255)
                     ->helperText('Bible verse reference (e.g., John 3:16)'),
 
-                Forms\Components\TextInput::make('featured_image')
-                    ->maxLength(255)
-                    ->helperText('Featured image path (S3 URL or path)'),
+                Forms\Components\FileUpload::make('featured_image')
+                    ->image()
+                    ->disk('s3')
+                    ->visibility('public')
+                    ->directory('core-values')
+                    ->maxSize(5120)
+                    ->helperText('Featured image for this core value'),
 
                 Forms\Components\Toggle::make('is_active')
                     ->default(true)
