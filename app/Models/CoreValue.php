@@ -81,11 +81,11 @@ class CoreValue extends Model
         if ($this->short_description) {
             return $this->short_description;
         }
-        
+
         if ($this->description) {
             return Str::limit(strip_tags($this->description), 150);
         }
-        
+
         return '';
     }
 

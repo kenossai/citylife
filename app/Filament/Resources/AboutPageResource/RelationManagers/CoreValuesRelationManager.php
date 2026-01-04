@@ -34,8 +34,8 @@ class CoreValuesRelationManager extends RelationManager
                 Forms\Components\TextInput::make('slug')
                     ->required()
                     ->maxLength(255)
-                    ->unique('core_values', 'slug', ignoreRecord: true, callback: function ($query, $livewire) {
-                        return $query->where('about_page_id', $livewire->ownerRecord->id);
+                    ->unique('core_values', 'slug', ignoreRecord: true, modifyRuleUsing: function ($rule, $livewire) {
+                        return $rule->where('about_page_id', $livewire->ownerRecord->id);
                     })
                     ->rules(['alpha_dash'])
                     ->helperText('URL-friendly version (auto-generated from title)'),
