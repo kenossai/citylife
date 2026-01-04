@@ -79,42 +79,20 @@ class CoreValuesRelationManager extends RelationManager
             ->columns([
                 Tables\Columns\TextColumn::make('title')
                     ->searchable()
-                    ->sortable()
-                    ->weight('bold'),
+                    ->sortable(),
 
-                Tables\Columns\TextColumn::make('short_description')
-                    ->label('Description')
-                    ->limit(50)
-                    ->default('—')
-                    ->wrap(),
+                Tables\Columns\TextColumn::make('slug')
+                    ->searchable(),
 
-                Tables\Columns\TextColumn::make('bible_reference')
-                    ->badge()
-                    ->color('primary')
-                    ->default('—'),                Tables\Columns\IconColumn::make('is_active')
-                    ->boolean()
-                    ->trueIcon('heroicon-o-check-circle')
-                    ->falseIcon('heroicon-o-x-circle')
-                    ->trueColor('success')
-                    ->falseColor('danger'),
-
-                Tables\Columns\IconColumn::make('is_featured')
-                    ->boolean()
-                    ->trueIcon('heroicon-o-star')
-                    ->falseIcon('heroicon-o-outline-star')
-                    ->trueColor('warning'),
+                Tables\Columns\ToggleColumn::make('is_active')
+                    ->label('Active'),
 
                 Tables\Columns\TextColumn::make('sort_order')
                     ->numeric()
-                    ->sortable()
-                    ->toggleable(),
+                    ->sortable(),
             ])
             ->filters([
-                Tables\Filters\TernaryFilter::make('is_active')
-                    ->label('Active Status'),
-
-                Tables\Filters\TernaryFilter::make('is_featured')
-                    ->label('Featured Status'),
+                //
             ])
             ->headerActions([
                 Tables\Actions\CreateAction::make()
@@ -129,7 +107,6 @@ class CoreValuesRelationManager extends RelationManager
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ])
-            ->defaultSort('sort_order', 'asc')
-            ->reorderable('sort_order');
+            ->defaultSort('sort_order', 'asc');
     }
 }
