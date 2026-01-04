@@ -48,7 +48,7 @@
                             <p class="about-one__text"><strong>Affiliated with:</strong> {{ $aboutPage->affiliation }}</p>
                         </div><!-- /.about-one__text-box -->
                         <div class="about-one__text-box wow fadeInUp" data-wow-delay="00ms" data-wow-duration="1500ms">
-                            <p class="about-one__text">{{ $aboutPage->introduction }}</p>
+                            <p class="about-one__text">{!! $aboutPage->introduction !!}</p>
                         </div><!-- /.about-one__text-box -->
 
                         {{-- Contact Information --}}
