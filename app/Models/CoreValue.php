@@ -73,12 +73,20 @@ class CoreValue extends Model
 
     public function getShortTitleAttribute()
     {
-        return Str::limit($this->title, 20);
+        return Str::limit($this->title ?? '', 20);
     }
 
     public function getExcerptAttribute()
     {
-        return $this->short_description ?: Str::limit(strip_tags($this->description), 150);
+        if ($this->short_description) {
+            return $this->short_description;
+        }
+        
+        if ($this->description) {
+            return Str::limit(strip_tags($this->description), 150);
+        }
+        
+        return '';
     }
 
     // Mutators

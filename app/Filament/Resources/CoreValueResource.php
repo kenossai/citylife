@@ -78,20 +78,9 @@ class CoreValueResource extends Resource
                             ->maxLength(255)
                             ->helperText('Icon class (e.g., heroicon-o-heart)'),
 
-                        Forms\Components\FileUpload::make('featured_image')
-                            ->image()
-                            ->disk('s3')
-                            ->visibility('public')
-                            ->directory('core-values')
-                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp', 'image/gif'])
-                            ->maxSize(5120)
-                            ->imagePreviewHeight('250')
-                            ->loadingIndicatorPosition('center')
-                            ->panelLayout('integrated')
-                            ->removeUploadedFileButtonPosition('right')
-                            ->uploadButtonPosition('left')
-                            ->uploadProgressIndicatorPosition('left')
-                            ->helperText('Optional featured image'),
+                        Forms\Components\TextInput::make('featured_image')
+                            ->maxLength(255)
+                            ->helperText('Featured image path (S3 URL or path)'),
 
                         Forms\Components\ColorPicker::make('background_color')
                             ->helperText('Background color for the value card'),

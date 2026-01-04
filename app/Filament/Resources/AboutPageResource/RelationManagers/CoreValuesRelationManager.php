@@ -34,7 +34,9 @@ class CoreValuesRelationManager extends RelationManager
                 Forms\Components\TextInput::make('slug')
                     ->required()
                     ->maxLength(255)
-                    ->unique(ignoreRecord: true)
+                    ->unique('core_values', 'slug', ignoreRecord: true, callback: function ($query, $livewire) {
+                        return $query->where('about_page_id', $livewire->ownerRecord->id);
+                    })
                     ->rules(['alpha_dash'])
                     ->helperText('URL-friendly version (auto-generated from title)'),
 
@@ -51,20 +53,9 @@ class CoreValuesRelationManager extends RelationManager
                     ->maxLength(255)
                     ->helperText('Bible verse reference (e.g., John 3:16)'),
 
-                Forms\Components\FileUpload::make('featured_image')
-                    ->image()
-                    ->disk('s3')
-                    ->visibility('public')
-                    ->directory('core-values')
-                    ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp', 'image/gif'])
-                    ->maxSize(5120)
-                    ->imagePreviewHeight('250')
-                    ->loadingIndicatorPosition('center')
-                    ->panelLayout('integrated')
-                    ->removeUploadedFileButtonPosition('right')
-                    ->uploadButtonPosition('left')
-                    ->uploadProgressIndicatorPosition('left')
-                    ->helperText('Featured image for this core value'),
+                Forms\Components\TextInput::make('featured_image')
+                    ->maxLength(255)
+                    ->helperText('Featured image path (S3 URL or path)'),
 
                 Forms\Components\Toggle::make('is_active')
                     ->default(true)
