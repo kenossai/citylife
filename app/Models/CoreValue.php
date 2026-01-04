@@ -68,7 +68,18 @@ class CoreValue extends Model
             return null;
         }
 
-        return asset('storage/' . $this->featured_image);
+        // If it's already a full URL, return it
+        if (filter_var($this->featured_image, FILTER_VALIDATE_URL)) {
+            return $this->featured_image;
+        }
+
+        // Get S3 URL from storage disk
+        try {
+            return \Storage::disk('s3')->url($this->featured_image);
+        } catch (\Exception $e) {
+            // Fallback to local storage if S3 fails
+            return asset('storage/' . $this->featured_image);
+        }
     }
 
     public function getShortTitleAttribute()
