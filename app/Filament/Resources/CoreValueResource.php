@@ -83,6 +83,14 @@ class CoreValueResource extends Resource
                             ->disk('s3')
                             ->visibility('public')
                             ->directory('core-values')
+                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp', 'image/gif'])
+                            ->maxSize(5120)
+                            ->imagePreviewHeight('250')
+                            ->loadingIndicatorPosition('center')
+                            ->panelLayout('integrated')
+                            ->removeUploadedFileButtonPosition('right')
+                            ->uploadButtonPosition('left')
+                            ->uploadProgressIndicatorPosition('left')
                             ->helperText('Optional featured image'),
 
                         Forms\Components\ColorPicker::make('background_color')

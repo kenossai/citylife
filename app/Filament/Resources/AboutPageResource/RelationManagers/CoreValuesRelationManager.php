@@ -23,7 +23,20 @@ class CoreValuesRelationManager extends RelationManager
                 Forms\Components\TextInput::make('title')
                     ->required()
                     ->maxLength(255)
+                    ->live(onBlur: true)
+                    ->afterStateUpdated(function (string $context, $state, Forms\Set $set) {
+                        if ($context === 'create') {
+                            $set('slug', \Illuminate\Support\Str::slug($state));
+                        }
+                    })
                     ->helperText('The name of this core value'),
+
+                Forms\Components\TextInput::make('slug')
+                    ->required()
+                    ->maxLength(255)
+                    ->unique(ignoreRecord: true)
+                    ->rules(['alpha_dash'])
+                    ->helperText('URL-friendly version (auto-generated from title)'),
 
                 Forms\Components\RichEditor::make('description')
                     ->required()
@@ -43,6 +56,14 @@ class CoreValuesRelationManager extends RelationManager
                     ->disk('s3')
                     ->visibility('public')
                     ->directory('core-values')
+                    ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp', 'image/gif'])
+                    ->maxSize(5120)
+                    ->imagePreviewHeight('250')
+                    ->loadingIndicatorPosition('center')
+                    ->panelLayout('integrated')
+                    ->removeUploadedFileButtonPosition('right')
+                    ->uploadButtonPosition('left')
+                    ->uploadProgressIndicatorPosition('left')
                     ->helperText('Featured image for this core value'),
 
                 Forms\Components\Toggle::make('is_active')
@@ -69,10 +90,6 @@ class CoreValuesRelationManager extends RelationManager
                     ->searchable()
                     ->sortable()
                     ->weight('bold'),
-
-                Tables\Columns\ImageColumn::make('featured_image')
-                    ->circular()
-                    ->size(50),
 
                 Tables\Columns\TextColumn::make('excerpt')
                     ->limit(50)
