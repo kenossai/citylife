@@ -35,7 +35,7 @@ class ContactController extends Controller
         $recentSubmissions = ContactSubmission::where('ip_address', $request->ip())
             ->where('created_at', '>', now()->subHour())
             ->count();
-        
+
         if ($recentSubmissions >= 3) {
             Log::warning('Contact form spam detected: rate limit exceeded', [
                 'ip' => $request->ip(),
@@ -54,7 +54,7 @@ class ContactController extends Controller
             'купить|продвижение|рейтинг',
             'bit\.ly|tinyurl|goo\.gl',
         ];
-        
+
         $combinedText = $request->input('message') . ' ' . $request->input('subject');
         foreach ($suspiciousPatterns as $pattern) {
             if (preg_match('/' . $pattern . '/i', $combinedText)) {
@@ -75,7 +75,7 @@ class ContactController extends Controller
             $formTime = (int) $request->input('form_time');
             $currentTime = time();
             $timeDiff = $currentTime - $formTime;
-            
+
             // Form filled too quickly (less than 3 seconds) - likely a bot
             if ($timeDiff < 3) {
                 Log::warning('Contact form spam detected: filled too quickly', [
