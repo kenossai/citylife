@@ -22,7 +22,7 @@
                             <div class="citylife-btn__icon-box">
                                 <div class="citylife-btn__icon-box__inner"><span class="icon-duble-arrow"></span></div>
                             </div>
-                            <span class="citylife-btn__text">Become A Volunteer</span>
+                            <span class="citylife-btn__text">Serve With Us</span>
                         </a><!-- /.citylife-btn -->
                     </div><!-- /.help-people__content__bottom -->
                 </div><!-- /.help-people__content__inner -->
