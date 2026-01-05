@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
 class TeamMember extends Model
@@ -84,6 +85,17 @@ class TeamMember extends Model
     public function scopeBySlug($query, $slug)
     {
         return $query->where('slug', $slug);
+    }
+
+    // Relationships
+    public function books(): HasMany
+    {
+        return $this->hasMany(Book::class, 'team_member_id');
+    }
+
+    public function publishedBooks(): HasMany
+    {
+        return $this->hasMany(Book::class, 'team_member_id')->where('is_active', true);
     }
 
     // Accessors
