@@ -91,7 +91,10 @@ class TeamMemberResource extends Resource
     public static function table(Table $table): Table
     {
         return $table->columns([
-            Tables\Columns\ImageColumn::make('profile_image')->circular()->size(50),
+            Tables\Columns\ImageColumn::make('profile_image')
+            ->disk('s3')
+            ->visibility('public')
+            ->circular()->size(50),
             Tables\Columns\TextColumn::make('full_name')->label('Name')->searchable(['first_name', 'last_name'])->weight('bold'),
             Tables\Columns\TextColumn::make('position')->searchable()->wrap(),
             Tables\Columns\TextColumn::make('team_type')->badge()->color(fn (string $state): string => match ($state) {
