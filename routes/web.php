@@ -16,6 +16,7 @@ use App\Http\Controllers\MinistryController;
 use App\Http\Controllers\MissionController;
 use App\Http\Controllers\CookieConsentController;
 use App\Http\Controllers\BabyDedicationController;
+use App\Http\Controllers\BookController;
 
 // Serve storage files with proper CORS headers for Filament previews
 Route::get('/storage/{path}', function ($path) {
@@ -104,6 +105,10 @@ Route::get('/team/pastoral', [TeamController::class, 'pastoral'])->name('team.pa
 Route::get('/team/leadership', [TeamController::class, 'leadership'])->name('team.leadership');
 Route::get('/team', [TeamController::class, 'index'])->name('team.index');
 Route::get('/team/{slug}', [TeamController::class, 'show'])->name('team.member');
+
+// Route for books
+Route::get('/books', [App\Http\Controllers\BookController::class, 'index'])->name('books.index');
+Route::get('/books/{slug}', [App\Http\Controllers\BookController::class, 'show'])->name('books.show');
 
 // Fallback login route (redirects to member login)
 Route::get('/login', function() {

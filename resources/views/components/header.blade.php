@@ -61,6 +61,9 @@
                             <a href="{{ route('events.index') }}">Events</a>
                         </li>
                         <li>
+                            <a href="{{ route('books.index') }}">Books</a>
+                        </li>
+                        <li>
                             <a href="{{ route('contact') }}">Contact Us</a>
                         </li>
                         @auth('member')
