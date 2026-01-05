@@ -18,7 +18,10 @@ class ContactSubmission extends Model
         'message',
         'gdpr_consent',
         'ip_address',
+        'user_agent',
         'status',
+        'is_spam',
+        'spam_reason',
         'admin_notes',
         'responded_at',
         'responded_by',
@@ -26,6 +29,7 @@ class ContactSubmission extends Model
 
     protected $casts = [
         'gdpr_consent' => 'boolean',
+        'is_spam' => 'boolean',
         'responded_at' => 'datetime',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',

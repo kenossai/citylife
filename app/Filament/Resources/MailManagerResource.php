@@ -176,6 +176,15 @@ class MailManagerResource extends Resource
                         'archived' => 'Archived',
                         default => ucfirst($state),
                     }),
+
+                Tables\Columns\IconColumn::make('is_spam')
+                    ->label('Spam')
+                    ->boolean()
+                    ->trueIcon('heroicon-s-exclamation-triangle')
+                    ->falseIcon('heroicon-o-check-circle')
+                    ->trueColor('danger')
+                    ->falseColor('success')
+                    ->tooltip(fn ($record) => $record->is_spam ? $record->spam_reason : 'Legitimate'),
             ])
             ->filters([
                 SelectFilter::make('status')
@@ -196,6 +205,11 @@ class MailManagerResource extends Resource
                         'Donations' => 'Donations',
                         'Technical Support' => 'Technical Support',
                     ]),
+                Tables\Filters\TernaryFilter::make('is_spam')
+                    ->label('Spam Status')
+                    ->placeholder('All messages')
+                    ->trueLabel('Spam only')
+                    ->falseLabel('Legitimate only'),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make()
@@ -207,6 +221,32 @@ class MailManagerResource extends Resource
                     ->visible(fn (ContactSubmission $record) => $record->status === 'new')
                     ->action(function (ContactSubmission $record) {
                         $record->update(['status' => 'read']);
+                    })
+                    ->requiresConfirmation(),
+                Tables\Actions\Action::make('markAsSpam')
+                    ->label('Mark as Spam')
+                    ->icon('heroicon-o-exclamation-triangle')
+                    ->color('danger')
+                    ->visible(fn (ContactSubmission $record) => !$record->is_spam)
+                    ->action(function (ContactSubmission $record) {
+                        $record->update([
+                            'is_spam' => true,
+                            'spam_reason' => 'Manually marked as spam by admin',
+                            'status' => 'archived',
+                        ]);
+                    })
+                    ->requiresConfirmation(),
+                Tables\Actions\Action::make('markAsLegitimate')
+                    ->label('Not Spam')
+                    ->icon('heroicon-o-check-circle')
+                    ->color('success')
+                    ->visible(fn (ContactSubmission $record) => $record->is_spam)
+                    ->action(function (ContactSubmission $record) {
+                        $record->update([
+                            'is_spam' => false,
+                            'spam_reason' => null,
+                            'status' => 'new',
+                        ]);
                     })
                     ->requiresConfirmation(),
             ])
@@ -231,6 +271,26 @@ class MailManagerResource extends Resource
                             });
                         })
                         ->requiresConfirmation(),
+                    Tables\Actions\BulkAction::make('markAsSpam')
+                        ->label('Mark as Spam')
+                        ->icon('heroicon-o-exclamation-triangle')
+                        ->color('danger')
+                        ->action(function ($records) {
+                            $records->each(function ($record) {
+                                $record->update([
+                                    'is_spam' => true,
+                                    'spam_reason' => 'Bulk marked as spam by admin',
+                                    'status' => 'archived',
+                                ]);
+                            });
+                        })
+                        ->requiresConfirmation()
+                        ->deselectRecordsAfterCompletion(),
+                    Tables\Actions\DeleteBulkAction::make()
+                        ->label('Delete Spam')
+                        ->requiresConfirmation()
+                        ->modalHeading('Delete selected messages')
+                        ->modalDescription('Are you sure you want to permanently delete these messages?'),
                 ]),
             ])
             ->defaultSort('created_at', 'desc');
