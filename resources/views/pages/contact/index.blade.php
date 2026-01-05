@@ -101,6 +101,14 @@
                     </div>
                     @endif                    <form class="contact-one__form__inner form-one wow fadeInUp animated" data-wow-duration="1500ms" action="{{ route('contact.submit') }}" method="POST" style="visibility: visible; animation-duration: 1500ms; animation-name: fadeInUp;">
                         @csrf
+                        
+                        {{-- Anti-spam: Honeypot fields (hidden from real users) --}}
+                        <input type="text" name="website" style="display:none !important" tabindex="-1" autocomplete="off">
+                        <input type="text" name="url" style="display:none !important" tabindex="-1" autocomplete="off">
+                        
+                        {{-- Anti-spam: Timestamp field for time-based validation --}}
+                        <input type="hidden" name="form_time" value="{{ time() }}">
+                        
                         <div class="row gutter-y-20">
                             <div class="col-12">
                                 <div class="form-one__control">
