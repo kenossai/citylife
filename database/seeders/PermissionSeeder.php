@@ -62,6 +62,13 @@ class PermissionSeeder extends Seeder
             ['name' => 'communications.send_sms', 'display_name' => 'Send SMS', 'category' => 'communications', 'description' => 'Send SMS messages to members'],
             ['name' => 'communications.manage_templates', 'display_name' => 'Manage Templates', 'category' => 'communications', 'description' => 'Create and edit communication templates'],
 
+            // Books Management
+            ['name' => 'books.view_all', 'display_name' => 'View All Books', 'category' => 'books', 'description' => 'View all books and publications'],
+            ['name' => 'books.create', 'display_name' => 'Create Books', 'category' => 'books', 'description' => 'Add new books to the system'],
+            ['name' => 'books.edit', 'display_name' => 'Edit Books', 'category' => 'books', 'description' => 'Modify book information'],
+            ['name' => 'books.delete', 'display_name' => 'Delete Books', 'category' => 'books', 'description' => 'Remove books from the system'],
+            ['name' => 'books.manage_all', 'display_name' => 'Manage All Books', 'category' => 'books', 'description' => 'Full control over book management'],
+
             // Reports & Analytics
             ['name' => 'reports.view_analytics', 'display_name' => 'View Analytics', 'category' => 'reports', 'description' => 'View system analytics and dashboards'],
             ['name' => 'reports.generate_reports', 'display_name' => 'Generate Reports', 'category' => 'reports', 'description' => 'Generate various reports'],

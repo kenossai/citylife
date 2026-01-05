@@ -44,7 +44,8 @@ class RoleSeeder extends Seeder
                 'permissions' => [
                     'members.view_all', 'members.edit', 'pastoral.*',
                     'communications.send_emails', 'communications.send_sms',
-                    'reports.view_analytics', 'reports.generate_reports'
+                    'reports.view_analytics', 'reports.generate_reports',
+                    'books.*'
                 ]
             ],
             [
