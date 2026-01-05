@@ -26,7 +26,7 @@ class BookResource extends Resource
 
     protected static ?int $navigationSort = 4;
 
-    protected static string $policy = \App\Policies\BookPolicy::class;
+    protected static ?string $policy = \App\Policies\BookPolicy::class;
 
     public static function form(Form $form): Form
     {
