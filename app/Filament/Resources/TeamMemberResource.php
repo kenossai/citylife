@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\TeamMemberResource\Pages;
+use App\Filament\Resources\TeamMemberResource\RelationManagers;
 use App\Models\TeamMember;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -57,76 +58,10 @@ class TeamMemberResource extends Resource
                 Forms\Components\TextInput::make('started_ministry')->numeric()->placeholder('Year started ministry')->minValue(1900)->maxValue(date('Y')),
             ])->columns(3),
 
-            Forms\Components\Section::make('Publications & Courses')->schema([
-                Forms\Components\Repeater::make('books_written')
-                    ->label('Books & Publications')
-                    ->schema([
-                        Forms\Components\TextInput::make('title')
-                            ->label('Book Title')
-                            ->required()
-                            ->columnSpan(2),
-                        Forms\Components\TextInput::make('subtitle')
-                            ->label('Subtitle')
-                            ->columnSpan(2),
-                        Forms\Components\Textarea::make('description')
-                            ->label('Description')
-                            ->rows(3)
-                            ->columnSpan(2),
-                        Forms\Components\FileUpload::make('cover_image')
-                            ->label('Book Cover')
-                            ->image()
-                            ->directory('books')
-                            ->imageResizeMode('cover')
-                            ->imageCropAspectRatio('3:4')
-                            ->columnSpan(1),
-                        Forms\Components\Group::make([
-                            Forms\Components\TextInput::make('isbn')
-                                ->label('ISBN')
-                                ->placeholder('978-0-123456-78-9'),
-                            Forms\Components\DatePicker::make('publication_date')
-                                ->label('Publication Date'),
-                            Forms\Components\TextInput::make('publisher')
-                                ->label('Publisher'),
-                        ])->columnSpan(1)->columns(1),
-                        Forms\Components\TextInput::make('purchase_link')
-                            ->label('Purchase Link')
-                            ->url()
-                            ->placeholder('https://amazon.com/...')
-                            ->columnSpan(1),
-                        Forms\Components\TextInput::make('download_link')
-                            ->label('Download Link')
-                            ->url()
-                            ->placeholder('https://example.com/download')
-                            ->columnSpan(1),
-                        Forms\Components\Select::make('format')
-                            ->label('Format')
-                            ->options([
-                                'paperback' => 'Paperback',
-                                'hardcover' => 'Hardcover',
-                                'ebook' => 'E-book',
-                                'audiobook' => 'Audiobook',
-                                'pdf' => 'PDF',
-                            ])
-                            ->multiple()
-                            ->columnSpan(1),
-                        Forms\Components\TextInput::make('price')
-                            ->label('Price')
-                            ->prefix('$')
-                            ->numeric()
-                            ->columnSpan(1),
-                    ])
-                    ->columns(2)
-                    ->collapsible()
-                    ->itemLabel(fn (array $state): ?string => $state['title'] ?? null)
-                    ->addActionLabel('Add Book')
-                    ->columnSpanFull(),
-
-                Forms\Components\TagsInput::make('courses_taught')->placeholder('Courses they teach...'),
-            ])->columns(1),
-
             Forms\Components\Section::make('Ministry Details')->schema([
                 Forms\Components\Textarea::make('calling_testimony')->placeholder('Their calling story')->rows(4),
                 Forms\Components\Textarea::make('achievements')->placeholder('Notable achievements')->rows(3),
+                Forms\Components\TagsInput::make('courses_taught')->placeholder('Courses they teach...'),
             ])->columns(1),
 
             Forms\Components\Section::make('Media')->schema([
@@ -162,6 +97,12 @@ class TeamMemberResource extends Resource
             Tables\Columns\TextColumn::make('team_type')->badge()->color(fn (string $state): string => match ($state) {
                 'pastoral' => 'success', 'leadership' => 'primary',
             })->formatStateUsing(fn (string $state): string => ucfirst($state) . ' Team'),
+            Tables\Columns\TextColumn::make('books_count')
+                ->label('Books')
+                ->counts('books')
+                ->badge()
+                ->color('info')
+                ->sortable(),
             Tables\Columns\TextColumn::make('joined_church')->label('Joined')->date('Y')->sortable(),
             Tables\Columns\TextColumn::make('sort_order')->label('Order')->sortable(),
             Tables\Columns\IconColumn::make('is_active')->boolean()->label('Active'),
@@ -186,7 +127,9 @@ class TeamMemberResource extends Resource
 
     public static function getRelations(): array
     {
-        return [];
+        return [
+            RelationManagers\BooksRelationManager::class,
+        ];
     }
 
     public static function getPages(): array
