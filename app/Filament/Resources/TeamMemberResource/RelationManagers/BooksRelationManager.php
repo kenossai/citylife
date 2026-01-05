@@ -28,35 +28,35 @@ class BooksRelationManager extends RelationManager
                             ->required()
                             ->maxLength(255)
                             ->columnSpan(2),
-                        
+
                         Forms\Components\TextInput::make('subtitle')
                             ->maxLength(255)
                             ->columnSpan(2),
-                        
+
                         Forms\Components\RichEditor::make('description')
                             ->toolbarButtons([
-                                'bold', 'italic', 'underline', 'strike', 
+                                'bold', 'italic', 'underline', 'strike',
                                 'link', 'bulletList', 'orderedList', 'blockquote'
                             ])
                             ->columnSpanFull(),
-                        
+
                         Forms\Components\Textarea::make('short_description')
                             ->maxLength(500)
                             ->rows(3)
                             ->columnSpanFull(),
                     ])->columns(2),
-                
+
                 Forms\Components\Section::make('Publishing Details')
                     ->schema([
                         Forms\Components\TextInput::make('publisher')
                             ->maxLength(255),
-                        
+
                         Forms\Components\DatePicker::make('published_date')
                             ->label('Publication Date'),
-                        
+
                         Forms\Components\TextInput::make('edition')
                             ->maxLength(255),
-                        
+
                         Forms\Components\Select::make('language')
                             ->options([
                                 'English' => 'English',
@@ -68,22 +68,22 @@ class BooksRelationManager extends RelationManager
                             ])
                             ->default('English')
                             ->required(),
-                        
+
                         Forms\Components\TextInput::make('isbn')
                             ->label('ISBN')
                             ->maxLength(255)
                             ->unique(ignoreRecord: true),
-                        
+
                         Forms\Components\TextInput::make('isbn13')
                             ->label('ISBN-13')
                             ->maxLength(255)
                             ->unique(ignoreRecord: true),
-                        
+
                         Forms\Components\TextInput::make('pages')
                             ->numeric()
                             ->minValue(1)
                             ->label('Number of Pages'),
-                        
+
                         Forms\Components\Select::make('format')
                             ->options([
                                 'hardcover' => 'Hardcover',
@@ -94,7 +94,7 @@ class BooksRelationManager extends RelationManager
                             ->default('paperback')
                             ->required(),
                     ])->columns(2),
-                
+
                 Forms\Components\Section::make('Media')
                     ->schema([
                         Forms\Components\FileUpload::make('cover_image')
@@ -107,7 +107,7 @@ class BooksRelationManager extends RelationManager
                             ->imageCropAspectRatio('3:4')
                             ->imageEditor()
                             ->columnSpan(1),
-                        
+
                         Forms\Components\FileUpload::make('back_cover_image')
                             ->label('Back Cover')
                             ->image()
@@ -117,7 +117,7 @@ class BooksRelationManager extends RelationManager
                             ->imageEditor()
                             ->columnSpan(1),
                     ])->columns(2),
-                
+
                 Forms\Components\Section::make('Pricing & Links')
                     ->schema([
                         Forms\Components\TextInput::make('price')
@@ -125,7 +125,7 @@ class BooksRelationManager extends RelationManager
                             ->prefix('£')
                             ->minValue(0)
                             ->step(0.01),
-                        
+
                         Forms\Components\Select::make('currency')
                             ->options([
                                 'GBP' => 'GBP (£)',
@@ -134,20 +134,20 @@ class BooksRelationManager extends RelationManager
                             ])
                             ->default('GBP')
                             ->required(),
-                        
+
                         Forms\Components\TextInput::make('purchase_link')
                             ->label('Purchase Link')
                             ->url()
                             ->maxLength(255)
                             ->placeholder('https://example.com/purchase'),
-                        
+
                         Forms\Components\TextInput::make('amazon_link')
                             ->label('Amazon Link')
                             ->url()
                             ->maxLength(255)
                             ->placeholder('https://amazon.com/...'),
                     ])->columns(2),
-                
+
                 Forms\Components\Section::make('Categories & Topics')
                     ->schema([
                         Forms\Components\Select::make('category')
@@ -166,42 +166,42 @@ class BooksRelationManager extends RelationManager
                                 'Church History' => 'Church History',
                             ])
                             ->searchable(),
-                        
+
                         Forms\Components\TagsInput::make('tags')
                             ->placeholder('Add tags...'),
-                        
+
                         Forms\Components\TagsInput::make('topics')
                             ->placeholder('Add topics covered...')
                             ->helperText('Topics covered in the book'),
                     ])->columns(1),
-                
+
                 Forms\Components\Section::make('Display Settings')
                     ->schema([
                         Forms\Components\Toggle::make('is_active')
                             ->label('Active')
                             ->default(true)
                             ->inline(false),
-                        
+
                         Forms\Components\Toggle::make('is_featured')
                             ->label('Featured')
                             ->default(false)
                             ->inline(false),
-                        
+
                         Forms\Components\TextInput::make('sort_order')
                             ->numeric()
                             ->default(0),
                     ])->columns(3),
-                
+
                 Forms\Components\Section::make('SEO')
                     ->schema([
                         Forms\Components\TextInput::make('slug')
                             ->required()
                             ->maxLength(255)
                             ->unique(ignoreRecord: true),
-                        
+
                         Forms\Components\TextInput::make('meta_title')
                             ->maxLength(60),
-                        
+
                         Forms\Components\Textarea::make('meta_description')
                             ->maxLength(160)
                             ->rows(2),
@@ -221,7 +221,7 @@ class BooksRelationManager extends RelationManager
                         ->height(240)
                         ->defaultImageUrl(fn () => 'https://via.placeholder.com/180x240?text=No+Cover')
                         ->extraImgAttributes(['class' => 'rounded-lg shadow-lg']),
-                    
+
                     Tables\Columns\TextColumn::make('title')
                         ->weight('bold')
                         ->size('sm')
@@ -251,10 +251,10 @@ class BooksRelationManager extends RelationManager
                         'Youth Ministry' => 'Youth Ministry',
                         'Church History' => 'Church History',
                     ]),
-                
+
                 Tables\Filters\TernaryFilter::make('is_featured')
                     ->label('Featured'),
-                
+
                 Tables\Filters\TernaryFilter::make('is_active')
                     ->label('Active'),
             ])
