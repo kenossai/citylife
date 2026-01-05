@@ -23,13 +23,13 @@
                 {{-- Book Image --}}
                 <div class="col-lg-5">
                     <div class="product-details__image">
-                        <img src="{{ $book->cover_image ? Storage::disk('s3')->url($book->cover_image) : asset('assets/images/products/product-d-1.png') }}" 
-                             alt="{{ $book->title }}" 
+                        <img src="{{ $book->cover_image ? Storage::disk('s3')->url($book->cover_image) : asset('assets/images/products/product-d-1.png') }}"
+                             alt="{{ $book->title }}"
                              class="img-fluid">
                         @if($book->back_cover_image)
                         <div class="mt-3">
-                            <img src="{{ Storage::disk('s3')->url($book->back_cover_image) }}" 
-                                 alt="{{ $book->title }} - Back Cover" 
+                            <img src="{{ Storage::disk('s3')->url($book->back_cover_image) }}"
+                                 alt="{{ $book->title }} - Back Cover"
                                  class="img-fluid">
                         </div>
                         @endif
@@ -49,7 +49,7 @@
                         @endif
 
                         <h3 class="product-details__title">{{ $book->title }}</h3>
-                        
+
                         @if($book->subtitle)
                         <h5 class="product-details__subtitle text-muted">{{ $book->subtitle }}</h5>
                         @endif
@@ -58,7 +58,7 @@
                         <div class="product-details__author mb-3">
                             <span class="icon-user"></span>
                             <span>by </span>
-                            <a href="{{ route('team.show', $book->teamMember->slug) }}" class="font-weight-bold">
+                            <a href="{{ route('team.member', $book->teamMember->slug) }}" class="font-weight-bold">
                                 {{ $book->teamMember->full_name }}
                             </a>
                         </div>
@@ -228,8 +228,8 @@
                         <h3 class="mb-4">About the Author</h3>
                         <div class="row align-items-center">
                             <div class="col-md-3">
-                                <img src="{{ $book->teamMember->photo ? Storage::disk('s3')->url($book->teamMember->photo) : asset('assets/images/team/team-1-1.png') }}" 
-                                     alt="{{ $book->teamMember->full_name }}" 
+                                <img src="{{ $book->teamMember->photo ? Storage::disk('s3')->url($book->teamMember->photo) : asset('assets/images/team/team-1-1.png') }}"
+                                     alt="{{ $book->teamMember->full_name }}"
                                      class="img-fluid rounded">
                             </div>
                             <div class="col-md-9">
@@ -238,7 +238,7 @@
                                 @if($book->teamMember->bio)
                                 <p>{{ $book->teamMember->bio }}</p>
                                 @endif
-                                <a href="{{ route('team.show', $book->teamMember->slug) }}" class="citylife-btn citylife-btn--border mt-3">
+                                <a href="{{ route('team.member', $book->teamMember->slug) }}" class="citylife-btn citylife-btn--border mt-3">
                                     <span class="citylife-btn__icon-box">
                                         <span class="citylife-btn__icon-box__inner"><span class="icon-user"></span></span>
                                     </span>

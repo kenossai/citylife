@@ -33,15 +33,15 @@
                         </div>
                         <div class="about-two__text-box">
                             <p class="about-two__text">
-                                Explore a collection of books and publications authored by our dedicated team members. 
-                                From theological insights to practical Christian living, each work reflects years of 
+                                Explore a collection of books and publications authored by our dedicated team members.
+                                From theological insights to practical Christian living, each work reflects years of
                                 ministry experience and deep biblical understanding.
                             </p>
                         </div>
                         <div class="about-two__text-box">
                             <p class="about-two__text">
-                                Whether you're seeking spiritual growth, biblical knowledge, or inspiration for your 
-                                faith journey, our publications offer wisdom and guidance rooted in Scripture and 
+                                Whether you're seeking spiritual growth, biblical knowledge, or inspiration for your
+                                faith journey, our publications offer wisdom and guidance rooted in Scripture and
                                 enriched by real-life ministry experience.
                             </p>
                         </div>
@@ -80,7 +80,7 @@
                                     @if($book->teamMember)
                                     <div class="product-card__author">
                                         <span class="icon-user"></span>
-                                        <a href="{{ route('team.show', $book->teamMember->slug) }}">{{ $book->teamMember->full_name }}</a>
+                                        <a href="{{ route('team.member', $book->teamMember->slug) }}">{{ $book->teamMember->full_name }}</a>
                                     </div>
                                     @endif
                                 </div>
@@ -158,14 +158,14 @@
                         <div class="team-card__image">
                             <img src="{{ $author->photo ? Storage::disk('s3')->url($author->photo) : asset('assets/images/team/team-1-1.png') }}" alt="{{ $author->full_name }}">
                             <div class="team-card__hover">
-                                <a href="{{ route('team.show', $author->slug) }}">
+                                <a href="{{ route('team.member', $author->slug) }}">
                                     <span class="icon-right-arrow"></span>
                                 </a>
                             </div>
                         </div>
                         <div class="team-card__content">
                             <h3 class="team-card__title">
-                                <a href="{{ route('team.show', $author->slug) }}">{{ $author->full_name }}</a>
+                                <a href="{{ route('team.member', $author->slug) }}">{{ $author->full_name }}</a>
                             </h3>
                             <p class="team-card__designation">{{ $author->position }}</p>
                             @if($author->books_count)
