@@ -12,11 +12,11 @@
                 <div class="help-people__content__inner">
                     <div class="sec-title">
 
-                        <h6 class="sec-title__tagline @@extraClassName">Help people now</h6><!-- /.sec-title__tagline -->
+                        <h6 class="sec-title__tagline @@extraClassName">Volunteer now</h6><!-- /.sec-title__tagline -->
 
-                        <h3 class="sec-title__title">Charity For The People You Care <span class="sec-title__title__inner">About</span></h3><!-- /.sec-title__title -->
+                        <h3 class="sec-title__title">Serving People. Sharing Hope. Transforming Lives.</h3><!-- /.sec-title__title -->
                     </div><!-- /.sec-title -->
-                    <p class="help-people__text">Dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernaturaut odit aut fugit, sed quia consequuntur. Dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas.</p><!-- /.help-people__text -->
+                    <p class="help-people__text">At CityLife International Church, we are committed to serving people with compassion, faith, and practical support. Through worship, outreach, and community initiatives, we respond to real needs while sharing the hope found in Jesus Christ. Together, we make a lasting difference in lives, families, and our city.</p><!-- /.help-people__text -->
                     <div class="help-people__content__bottom">
                         <a href="{{ route('volunteer.index') }}" class="citylife-btn">
                             <div class="citylife-btn__icon-box">

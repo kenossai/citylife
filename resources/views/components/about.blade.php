@@ -23,7 +23,7 @@
                     <div class="about-one__content">
                         <div class="sec-title">
                             <h6 class="sec-title__tagline">{{ strtoupper($aboutPage->title) }}</h6><!-- /.sec-title__tagline -->
-                            <h3 class="sec-title__title">{{ $aboutPage->church_name }} <span class="sec-title__title__inner">{{ $aboutPage->church_description }}</span></h3><!-- /.sec-title__title -->
+                            <h3 class="sec-title__title">{{ $aboutPage->church_name }} <span class="sec-title__title__inner">{!! $aboutPage->church_description !!}</span></h3><!-- /.sec-title__title -->
                         </div><!-- /.sec-title -->
                         <div class="about-one__text-box wow fadeInUp" data-wow-delay="00ms" data-wow-duration="1500ms">
                             <p class="about-one__text"><strong>Affiliated with:</strong> {{ $aboutPage->affiliation }}</p>
@@ -63,7 +63,7 @@
                                 </div>
                                 <span class="citylife-btn__text">more about us</span>
                             </a><!-- /.contact-information__btn -->
-                            
+
                         </div><!-- /.contact-information -->
                     </div><!-- /.about-one__content -->
                 </div>
