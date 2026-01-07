@@ -116,7 +116,7 @@ class BookResource extends Resource
                     Forms\Components\FileUpload::make('cover_image')
                         ->label('Book Cover')
                         ->image()
-                        ->disk('s3')
+                        ->disk('public')
                         ->visibility('public')
                         ->directory('books/covers')
                         ->imageResizeMode('cover')
@@ -127,7 +127,7 @@ class BookResource extends Resource
                     Forms\Components\FileUpload::make('back_cover_image')
                         ->label('Back Cover')
                         ->image()
-                        ->disk('s3')
+                        ->disk('public')
                         ->visibility('public')
                         ->directory('books/covers')
                         ->imageEditor()
@@ -137,7 +137,7 @@ class BookResource extends Resource
                         ->label('Sample Pages')
                         ->multiple()
                         ->image()
-                        ->disk('s3')
+                        ->disk('public')
                         ->visibility('public')
                         ->directory('books/samples')
                         ->maxFiles(10)
@@ -260,6 +260,8 @@ class BookResource extends Resource
             ->columns([
                 Tables\Columns\ImageColumn::make('cover_image')
                     ->label('Cover')
+                    ->disk('s3')    
+                    ->visibility('public')
                     ->circular()
                     ->defaultImageUrl(fn () => 'https://via.placeholder.com/50x75?text=No+Cover'),
 
