@@ -2,10 +2,11 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Auth\Events\Login;
-use Illuminate\Support\Facades\Event;
 use Livewire\Livewire;
+use Illuminate\Auth\Events\Login;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\ServiceProvider;
 use App\Livewire\Filament\NotificationIcon;
 
 class AppServiceProvider extends ServiceProvider
@@ -39,5 +40,7 @@ class AppServiceProvider extends ServiceProvider
             // Log authentication event
             \App\Services\AuditLogger::logAuthentication('login', $event->user);
         });
+
+        Paginator::useBootstrapFive();
     }
 }
