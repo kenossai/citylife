@@ -92,6 +92,48 @@ class MemberAuthController extends Controller
      */
     public function register(Request $request)
     {
+        // HONEYPOT TRAP: If website field is filled, it's a bot
+        if ($request->filled('website')) {
+            Log::warning('Bot registration blocked (honeypot triggered)', [
+                'ip' => $request->ip(),
+                'email' => $request->email,
+                'website' => $request->website,
+            ]);
+            
+            // Pretend success to fool the bot
+            return redirect()->route('member.login')
+                ->with('success', 'Registration successful! Please check your email to verify your account.');
+        }
+
+        // TIMING ATTACK PROTECTION: Check form submission speed
+        $formLoadTime = $request->input('form_load_time');
+        if ($formLoadTime) {
+            $timeTaken = time() - (int) $formLoadTime;
+            if ($timeTaken < 3) {
+                Log::warning('Bot registration blocked (too fast)', [
+                    'ip' => $request->ip(),
+                    'email' => $request->email,
+                    'time_taken' => $timeTaken,
+                ]);
+                
+                return redirect()->back()
+                    ->withErrors(['email' => 'Please take your time filling out the form.'])
+                    ->withInput();
+            }
+        }
+
+        // DISPOSABLE EMAIL BLOCKING
+        if ($this->isDisposableEmail($request->email)) {
+            Log::warning('Bot registration blocked (disposable email)', [
+                'ip' => $request->ip(),
+                'email' => $request->email,
+            ]);
+            
+            return redirect()->back()
+                ->withErrors(['email' => 'Temporary or disposable email addresses are not allowed. Please use a permanent email address.'])
+                ->withInput();
+        }
+
         $validator = Validator::make($request->all(), [
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
@@ -153,7 +195,10 @@ class MemberAuthController extends Controller
             $successMessage .= ' You have been subscribed to our newsletter.';
         }
 
-        return redirect()->intended(route('courses.dashboard'))
+        // Clear any intended URL from session to prevent redirect to admin
+        $request->session()->forget('url.intended');
+
+        return redirect()->route('courses.dashboard')
             ->with('success', $successMessage);
     }
 
@@ -258,5 +303,35 @@ class MemberAuthController extends Controller
 
         return redirect()->route('member.login')
             ->with('success', 'You have been logged out successfully.');
+    }
+
+    /**
+     * Check if email is from a disposable/temporary email provider
+     */
+    private function isDisposableEmail(string $email): bool
+    {
+        $domain = strtolower(substr(strrchr($email, "@"), 1));
+        
+        $disposableDomains = [
+            '10minutemail.com', '10minutemail.net', '10minutemail.org',
+            'guerrillamail.com', 'guerrillamail.net', 'guerrillamailblock.com',
+            'mailinator.com', 'mailinator.net', 'mailinator2.com',
+            'temp-mail.org', 'tempmail.com', 'tempmail.net', 'tempmail.de',
+            'throwaway.email', 'trashmail.com', 'trashmail.net',
+            'yopmail.com', 'yopmail.net', 'yopmail.fr',
+            'fakeinbox.com', 'fakemailgenerator.com',
+            'getnada.com', 'getairmail.com',
+            'sharklasers.com', 'grr.la',
+            'maildrop.cc', 'mailnesia.com', 'mailcatch.com',
+            'mintemail.com', 'mytemp.email', 'mytempmail.com',
+            'dispostable.com', 'emailondeck.com',
+            'burnermail.io', 'temp-mail.io',
+            'disposablemail.com', 'spam4.me',
+            'harakirimail.com', 'jetable.org',
+            'mohmal.com', 'sharklasers.com',
+            'throwawaymail.com', 'tmails.net',
+        ];
+
+        return in_array($domain, $disposableDomains);
     }
 }
