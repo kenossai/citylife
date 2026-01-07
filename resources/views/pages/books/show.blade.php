@@ -119,127 +119,294 @@
         <div class="product-details__description-wrapper">
             <div class="container">
                 <!-- /.product-description -->
+                @if($book->description)
                 <div class="product-details__description">
-                    <h3 class="product-details__description__title">product Description</h3>
+                    <h3 class="product-details__description__title">About This Book</h3>
                     <div class="product-details__text__box wow fadeInUp animated" data-wow-delay="300ms" style="visibility: visible; animation-delay: 300ms; animation-name: fadeInUp;">
                         <p class="product-details__description__text">
-                            Neque porro est qui dolorem ipsum quia quaed inventor veritatis et quasi architecto beatae vitae dicta
-                            sunt explicabo. Aelltes port lacus quis enim var sed efficitur turpis gilla sed sit amet finibus eros.
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                            {!! $book->description !!}
                         </p>
-                        <p class="product-details__description__text">
-                            When an unknown printer took a galley of type and scrambled it to make a type specimen book. It has
-                            survived not only five centuries, but also the leap into electronic typesetting, remaining
-                            essentially unchanged. Aelltes port lacus quis enim var sed efficitur turpis gilla sed sit
-                            amet finibus eros. Neque porro est qui dolorem ipsum quia quaed inventor veritatis et quasi
-                            architecto beatae vitae dicta sunt explicabo. Aelltes port lacus quis enim var sed efficitur turpis
-                            gilla sed sit amet finibus eros. Lorem Ipsum is simply dummy text of the printing and typesetting
-                            industry.
-                        </p>
-                        <p class="product-details__description__text">
-                            When an unknown printer took a galley of type and scrambled it to make a type specimen book. It has
-                            survived not only five centuries, but also the leap into electronic typesetting, remaining
-                            essentially unchanged. Aelltes port lacus quis enim var sed efficitur turpis gilla sed sit
-                            amet finibus eros.
-                        </p>
+
                     </div><!-- /.product-details__text__box -->
                 </div>
+                @endif
                 <!-- /.product-description -->
             </div><!-- /.container -->
         </div><!-- /.product-details__description__wrapper -->
 
         <div class="container">
             <!-- /.product-comment -->
-            <div class="product-details__comment comments-one">
-                <h3 class="product-details__comment__title comments-one__title sec-title__title">02 reviews, for smart sofa</h3><!-- /.comments-one__title -->
-                <ul class="list-unstyled comments-one__list">
-                    <li class="comments-one__card wow fadeInUp animated" data-wow-delay="100ms" data-wow-duration="1500ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 100ms; animation-name: fadeInUp;">
-                        <div class="comments-one__card__image">
-                            <img src="assets/images/blog/blog-comment-1-1.png" alt="Kevin martin">
-                        </div><!-- /.comments-one__card__image -->
-                        <div class="comments-one__card__content">
-                            <div class="comments-one__card__top">
-                                <div class="comments-one__card__info">
-                                    <h3 class="comments-one__card__title">Kevin martin</h3><!-- /.comments-one__card__title -->
-                                    <p class="comments-one__card__date">March 20, 2023 at 2:37 pm</p><!-- /.comments-one__card__date -->
-                                </div><!-- /.comments-one__card__info -->
-                                <div class="citylife-ratings @@extraClassName">
-                                    <span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span>
-                                </div><!-- /.product-ratings -->
-                            </div><!-- /.comments-one__card__top -->
-                            <p class="comments-one__card__text">Neque porro est qui dolorem ipsum quia quaed inventor veritatis et quasi architecto beatae vitae dicta sunt explicabo. Aelltes port lacus quis enim var sed efficitur turpis gilla sed sit amet finibus eros. Lorem Ipsum is simply dummy</p><!-- /.comments-one__card__text -->
-                        </div><!-- /.comments-one__card__content -->
-                    </li><!-- /.comments-one__card -->
-                    <li class="comments-one__card wow fadeInUp animated" data-wow-delay="100ms" data-wow-duration="1500ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 100ms; animation-name: fadeInUp;">
-                        <div class="comments-one__card__image">
-                            <img src="assets/images/blog/blog-comment-1-2.png" alt="Sarah albert">
-                        </div><!-- /.comments-one__card__image -->
-                        <div class="comments-one__card__content">
-                            <div class="comments-one__card__top">
-                                <div class="comments-one__card__info">
-                                    <h3 class="comments-one__card__title">Sarah albert</h3><!-- /.comments-one__card__title -->
-                                    <p class="comments-one__card__date">March 20, 2023 at 2:37 pm</p><!-- /.comments-one__card__date -->
-                                </div><!-- /.comments-one__card__info -->
-                                <div class="citylife-ratings @@extraClassName">
-                                    <span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span>
-                                </div><!-- /.product-ratings -->
-                            </div><!-- /.comments-one__card__top -->
-                            <p class="comments-one__card__text">Neque porro est qui dolorem ipsum quia quaed inventor veritatis et quasi architecto beatae vitae dicta sunt explicabo. Aelltes port lacus quis enim var sed efficitur turpis gilla sed sit amet finibus eros. Lorem Ipsum is simply dummy</p><!-- /.comments-one__card__text -->
-                        </div><!-- /.comments-one__card__content -->
-                    </li><!-- /.comments-one__card -->
-                </ul><!-- /.list-unstyled comments-one__list -->
-            </div><!-- /.product-details__comment comments-one -->
+            @if($book->teamMember)
+                <div class="product-details__comment comments-one">
+                    <h3 class="product-details__comment__title comments-one__title sec-title__title">About Author</h3><!-- /.comments-one__title -->
+                    <ul class="list-unstyled comments-one__list">
+                        <li class="comments-one__card wow fadeInUp animated" data-wow-delay="100ms" data-wow-duration="1500ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 100ms; animation-name: fadeInUp;">
+                            <div class="comments-one__card__image">
+                                <img src="{{ $book->teamMember->photo ? Storage::disk('s3')->url($book->teamMember->photo) : asset('assets/images/team/team-1-1.png') }}" alt="Kevin martin">
+                            </div><!-- /.comments-one__card__image -->
+                            <div class="comments-one__card__content">
+                                <div class="comments-one__card__top">
+                                    <div class="comments-one__card__info">
+                                        <h3 class="comments-one__card__title">{{ $book->teamMember->full_name }}</h3><!-- /.comments-one__card__title -->
+                                        <p class="comments-one__card__date">{{ $book->teamMember->position }}</p><!-- /.comments-one__card__date -->
+                                    </div><!-- /.comments-one__card__info -->
+                                </div><!-- /.comments-one__card__top -->
+                                @if($book->teamMember->bio)
+                                    <p class="comments-one__card__text">
+                                        {{ $book->teamMember->bio }}
+                                    </p>
+                                @endif
+                            </div><!-- /.comments-one__card__content -->
+                        </li><!-- /.comments-one__card -->
+                        <li class="comments-one__card wow fadeInUp animated" data-wow-delay="100ms" data-wow-duration="1500ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 100ms; animation-name: fadeInUp;">
+                            <div class="comments-one__card__image">
+                                <img src="assets/images/blog/blog-comment-1-2.png" alt="Sarah albert">
+                            </div><!-- /.comments-one__card__image -->
+                        </li><!-- /.comments-one__card -->
+                    </ul><!-- /.list-unstyled comments-one__list -->
+                </div><!-- /.product-details__comment comments-one -->
+            @endif
             <!-- /.product-comment -->
         </div><!-- /.container -->
 
-        <div class="container">
-            <!-- /.product-comment-form -->
-            <div class="product-details__comments-form comments-form">
-                <div class="product-details__comments-form__top">
-                    <h3 class="product-details__comments-form__title comments-form__title sec-title__title">Add a review</h3><!-- /.comments-form__title -->
-                    <p class="product-details__comments-form__text">Your email address will not be published. Required fields are marked *</p>
-                    <div class="product-details__comments-form__ratings">
-                        <p class="product-details__comments-form__ratings__text">Rate this product? *</p>
-                        <div class="citylife-ratings @@extraClassName">
-                            <span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span>
-                        </div><!-- /.product-ratings -->
-                    </div><!-- /.product-details__comments-form__ratings -->
-                </div><!-- /.product-details__comments-form__top -->
-                <form class="comments-form__form contact-form-validated form-one" novalidate="novalidate">
-                    <div class="row gutter-y-30">
-                        <div class="col-md-6 wow fadeInUp animated" data-wow-delay="100ms" data-wow-duration="1500ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 100ms; animation-name: fadeInUp;">
-                            <div class="form-one__control">
-                                <input type="text" name="name" placeholder="Your name" class="form-one__control__input">
-                            </div><!-- /.form-one__control -->
-                        </div><!-- /.col-md-6 -->
-                        <div class="col-md-6 wow fadeInUp animated" data-wow-delay="300ms" data-wow-duration="1500ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 300ms; animation-name: fadeInUp;">
-                            <div class="form-one__control">
-                                <input type="email" name="email" placeholder="Email address" class="form-one__control__input">
-                            </div><!-- /.form-one__control -->
-                        </div><!-- /.col-md-6 -->
-                        <div class="col-12 wow fadeInUp animated" data-wow-delay="100ms" data-wow-duration="1500ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 100ms; animation-name: fadeInUp;">
-                            <div class="form-one__control">
-                                <textarea name="message" placeholder="write message . . ." class="form-one__control__input form-one__control__message"></textarea>
-                            </div><!-- /.form-one__control -->
-                        </div><!-- /.col-12-->
-                        <div class="col-12">
-                            <div class="form-one__control">
-                                <button type="submit" class="citylife-btn">
-                                    <span class="citylife-btn__icon-box">
-                                        <span class="citylife-btn__icon-box__inner"><span class="icon-duble-arrow"></span></span>
-                                    </span>
-                                    <span class="citylife-btn__text">submit review</span>
-                                </button>
-                            </div><!-- /.form-one__control -->
-                        </div><!-- /.col-12 -->
-                    </div><!-- /.form-one__group -->
-                </form>
-                <div class="result"></div>
-            </div><!-- /.comments-form -->
-            <!-- /.product-comment-form -->
-        </div><!-- /.container -->
     </section>
     {{-- Book Details Section --}}
+
+    <section class="product-details section-space">
+        <div class="container">
+            <div class="row gutter-y-50">
+                {{-- Book Image --}}
+                <div class="col-lg-5">
+                    <div class="product-details__image">
+                        <img src="{{ $book->cover_image ? Storage::disk('s3')->url($book->cover_image) : asset('assets/images/products/product-d-1.png') }}"
+                             alt="{{ $book->title }}"
+                             class="img-fluid">
+                        @if($book->back_cover_image)
+                        <div class="mt-3">
+                            <img src="{{ Storage::disk('s3')->url($book->back_cover_image) }}"
+                                 alt="{{ $book->title }} - Back Cover"
+                                 class="img-fluid">
+                        </div>
+                        @endif
+                    </div>
+                </div>
+
+                {{-- Book Info --}}
+                <div class="col-lg-7">
+                    <div class="product-details__content">
+                        @if($book->category)
+                        <div class="product-details__category mb-3">
+                            <span class="badge badge-primary">{{ $book->category }}</span>
+                            @if($book->is_featured)
+                            <span class="badge badge-warning ml-2">Featured</span>
+                            @endif
+                        </div>
+                        @endif
+
+                        <h3 class="product-details__title">{{ $book->title }}</h3>
+
+                        @if($book->subtitle)
+                        <h5 class="product-details__subtitle text-muted">{{ $book->subtitle }}</h5>
+                        @endif
+
+                        @if($book->teamMember)
+                        <div class="product-details__author mb-3">
+                            <span class="icon-user"></span>
+                            <span>by </span>
+                            <a href="{{ route('team.member', $book->teamMember->slug) }}" class="font-weight-bold">
+                                {{ $book->teamMember->full_name }}
+                            </a>
+                        </div>
+                        @endif
+
+                        @if($book->price)
+                        <div class="product-details__price">
+                            <span class="amount">£{{ number_format($book->price, 2) }}</span>
+                            @if($book->currency != 'GBP')
+                            <span class="currency-note text-muted ml-2">({{ $book->currency }})</span>
+                            @endif
+                        </div>
+                        @endif
+
+                        @if($book->short_description)
+                        <div class="product-details__short-description">
+                            <p>{{ $book->short_description }}</p>
+                        </div>
+                        @endif
+
+                        {{-- Book Meta Information --}}
+                        <div class="product-details__meta">
+                            <table class="table table-borderless">
+                                @if($book->publisher)
+                                <tr>
+                                    <th width="150">Publisher:</th>
+                                    <td>{{ $book->publisher }}</td>
+                                </tr>
+                                @endif
+                                @if($book->published_date)
+                                <tr>
+                                    <th>Published:</th>
+                                    <td>{{ $book->published_date->format('F Y') }}</td>
+                                </tr>
+                                @endif
+                                @if($book->edition)
+                                <tr>
+                                    <th>Edition:</th>
+                                    <td>{{ $book->edition }}</td>
+                                </tr>
+                                @endif
+                                <tr>
+                                    <th>Format:</th>
+                                    <td>
+                                        <span class="badge badge-{{ $book->format == 'ebook' ? 'info' : 'secondary' }}">
+                                            {{ ucfirst($book->format) }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                @if($book->pages)
+                                <tr>
+                                    <th>Pages:</th>
+                                    <td>{{ $book->pages }}</td>
+                                </tr>
+                                @endif
+                                <tr>
+                                    <th>Language:</th>
+                                    <td>{{ $book->language }}</td>
+                                </tr>
+                                @if($book->isbn)
+                                <tr>
+                                    <th>ISBN:</th>
+                                    <td>{{ $book->isbn }}</td>
+                                </tr>
+                                @endif
+                                @if($book->isbn13)
+                                <tr>
+                                    <th>ISBN-13:</th>
+                                    <td>{{ $book->isbn13 }}</td>
+                                </tr>
+                                @endif
+                            </table>
+                        </div>
+
+                        {{-- Purchase Links --}}
+                        <div class="product-details__links mt-4">
+                            @if($book->purchase_link)
+                            <a href="{{ $book->purchase_link }}" target="_blank" class="citylife-btn mb-2 mr-2">
+                                <span class="citylife-btn__icon-box">
+                                    <span class="citylife-btn__icon-box__inner"><span class="icon-shopping-cart"></span></span>
+                                </span>
+                                <span class="citylife-btn__text">Purchase Book</span>
+                            </a>
+                            @endif
+                            @if($book->amazon_link)
+                            <a href="{{ $book->amazon_link }}" target="_blank" class="citylife-btn citylife-btn--border mb-2 mr-2">
+                                <span class="citylife-btn__icon-box">
+                                    <span class="citylife-btn__icon-box__inner"><span class="icon-shopping-cart"></span></span>
+                                </span>
+                                <span class="citylife-btn__text">Buy on Amazon</span>
+                            </a>
+                            @endif
+                            @if($book->preview_link)
+                            <a href="{{ $book->preview_link }}" target="_blank" class="citylife-btn citylife-btn--border mb-2">
+                                <span class="citylife-btn__icon-box">
+                                    <span class="citylife-btn__icon-box__inner"><span class="icon-eye"></span></span>
+                                </span>
+                                <span class="citylife-btn__text">Preview</span>
+                            </a>
+                            @endif
+                        </div>
+
+                        {{-- Tags --}}
+                        @if($book->tags || $book->topics)
+                        <div class="product-details__tags mt-4">
+                            @if($book->tags)
+                            <div class="mb-2">
+                                <strong>Tags:</strong>
+                                @foreach($book->tags as $tag)
+                                <span class="badge badge-light">{{ $tag }}</span>
+                                @endforeach
+                            </div>
+                            @endif
+                            @if($book->topics)
+                            <div>
+                                <strong>Topics:</strong>
+                                @foreach($book->topics as $topic)
+                                <span class="badge badge-light">{{ $topic }}</span>
+                                @endforeach
+                            </div>
+                            @endif
+                        </div>
+                        @endif
+                    </div>
+                </div>
+            </div>
+
+            {{-- Full Description --}}
+            @if($book->description)
+            <div class="row mt-5">
+                <div class="col-12">
+                    <div class="product-details__description">
+                        <h3 class="mb-4">About This Book</h3>
+                        <div class="content">
+                            {!! $book->description !!}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endif
+
+            {{-- Sample Pages --}}
+            @if($book->sample_pages && count($book->sample_pages) > 0)
+            <div class="row mt-5">
+                <div class="col-12">
+                    <h3 class="mb-4">Sample Pages</h3>
+                    <div class="sample-pages-gallery">
+                        <div class="row gutter-y-30">
+                            @foreach($book->sample_pages as $sample)
+                            <div class="col-md-4">
+                                <a href="{{ Storage::disk('s3')->url($sample) }}" class="sample-page-link" data-fancybox="sample-pages">
+                                    <img src="{{ Storage::disk('s3')->url($sample) }}" alt="Sample Page" class="img-fluid">
+                                </a>
+                            </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endif
+
+            {{-- About the Author --}}
+            @if($book->teamMember)
+            <div class="row mt-5">
+                <div class="col-12">
+                    <div class="author-bio">
+                        <h3 class="mb-4">About the Author</h3>
+                        <div class="row align-items-center">
+                            <div class="col-md-3">
+                                <img src="{{ $book->teamMember->photo ? Storage::disk('s3')->url($book->teamMember->photo) : asset('assets/images/team/team-1-1.png') }}"
+                                     alt="{{ $book->teamMember->full_name }}"
+                                     class="img-fluid rounded">
+                            </div>
+                            <div class="col-md-9">
+                                <h4>{{ $book->teamMember->full_name }}</h4>
+                                <p class="text-muted">{{ $book->teamMember->position }}</p>
+                                @if($book->teamMember->bio)
+                                <p>{{ $book->teamMember->bio }}</p>
+                                @endif
+                                <a href="{{ route('team.member', $book->teamMember->slug) }}" class="citylife-btn citylife-btn--border mt-3">
+                                    <span class="citylife-btn__icon-box">
+                                        <span class="citylife-btn__icon-box__inner"><span class="icon-user"></span></span>
+                                    </span>
+                                    <span class="citylife-btn__text">View Profile</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endif
+        </div>
+    </section>
 
     {{-- Related Books --}}
     @if($relatedBooks && $relatedBooks->count() > 0)
