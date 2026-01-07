@@ -3,145 +3,98 @@
     @section('description', 'Explore books and publications by our team members. Discover inspiring Christian literature, theological works, and spiritual guidance.')
     @section('keywords', 'Christian books, publications, theological books, spiritual literature, CityLife authors')
 
-    {{-- Page Header --}}
     <section class="page-header">
-        <div class="page-header__bg" style="background-image: url('{{ asset('assets/images/backgrounds/page-header-bg-1-1.jpg') }}');"></div>
+        <div class="page-header__bg" style="background-image: url('{{ asset('assets/images/backgrounds/worship-banner-1.jpg') }}');"></div>
+        <!-- /.page-header__bg -->
         <div class="container">
             <h2 class="page-header__title">Books & Publications</h2>
             <ul class="citylife-breadcrumb list-unstyled">
                 <li><i class="icon-home"></i> <a href="{{ route('home') }}">Home</a></li>
-                <li><span>Books</span></li>
-            </ul>
-        </div>
+                <li><span>Books & Publications</span></li>
+            </ul><!-- /.thm-breadcrumb list-unstyled -->
+        </div><!-- /.container -->
     </section>
 
-    {{-- Books Introduction Section --}}
-    <section class="about-two section-space">
-        <div class="container">
-            <div class="row gutter-y-50 align-items-center">
-                <div class="col-lg-6">
-                    <div class="about-two__image">
-                        <img src="{{ asset('assets/images/resources/about-2-1.png') }}" alt="books" class="about-two__image__one wow fadeInUp" data-wow-delay="00ms" data-wow-duration="1500ms">
-                        <img src="{{ asset('assets/images/shapes/about-2-shape-1.png') }}" alt="shape" class="about-two__image__shape">
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="about-two__content">
-                        <div class="sec-title">
-                            <h6 class="sec-title__tagline">OUR PUBLICATIONS</h6>
-                            <h3 class="sec-title__title">Discover Inspiring <span class="sec-title__title__inner">Christian Literature</span></h3>
-                        </div>
-                        <div class="about-two__text-box">
-                            <p class="about-two__text">
-                                Explore a collection of books and publications authored by our dedicated team members.
-                                From theological insights to practical Christian living, each work reflects years of
-                                ministry experience and deep biblical understanding.
-                            </p>
-                        </div>
-                        <div class="about-two__text-box">
-                            <p class="about-two__text">
-                                Whether you're seeking spiritual growth, biblical knowledge, or inspiration for your
-                                faith journey, our publications offer wisdom and guidance rooted in Scripture and
-                                enriched by real-life ministry experience.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    <section class="product-page section-space-bottom">
+            <div class="container">
 
-    {{-- Books Grid Section --}}
-    <section class="products section-space-bottom">
-        <div class="container">
-            @if($books->count() > 0)
-                <div class="row gutter-y-30">
-                    @foreach($books as $book)
-                    <div class="col-lg-4 col-md-6 col-sm-12">
-                        <div class="product-card wow fadeInUp" data-wow-delay="00ms" data-wow-duration="1500ms">
-                            <div class="product-card__image">
-                                <img src="{{ $book->cover_image ? Storage::disk('s3')->url($book->cover_image) : asset('assets/images/products/product-1-1.png') }}" alt="{{ $book->title }}">
-                                @if($book->is_featured)
-                                <div class="product-card__sale">Featured</div>
-                                @endif
-                                <div class="product-card__quick-view">
-                                    <a href="{{ route('books.show', $book->slug) }}" class="product-card__quick-view__icon">
-                                        <span class="icon-eye"></span>
+                <div class="row gutter-y-40 justify-content-center">
+                    <div class="col-lg-12">
+                        <div class="product__info-top">
+                            <div class="product__showing-text-box">
+                                <p class="product__showing-text">Showing 1–{{ $books->count() }} of {{ $books->total() }} results</p>
+                            </div>
+                            <div class="product__showing-sort">
+
+                                <form action="{{ route('books.index') }}" method="GET">
+                                    <select name="sort" onchange="this.form.submit()" class="selectpicker" aria-label="Sort Books">
+                                        <option value="">Sort by Default</option>
+                                        <option value="title_asc" {{ request('sort') == 'title_asc' ? 'selected' : '' }}>Title: A to Z</option>
+                                        <option value="title_desc" {{ request('sort') == 'title_desc' ? 'selected' : '' }}>Title: Z to A</option>
+                                        <option value="price_asc" {{ request('sort') == 'price_asc' ? 'selected' : '' }}>Price: Low to High</option>
+                                        <option value="price_desc" {{ request('sort') == 'price_desc' ? 'selected' : '' }}>Price: High to Low</option>
+                                        <option value="newest" {{ request('sort') == 'newest' ? 'selected' : '' }}>Newest Arrivals</option>
+                                    </select>
+                                </form>
+                            </div>
+                        </div>
+                        @if($books->count() > 0)
+                        <div class="row gutter-y-30">
+                            @foreach($books as $book)
+                            <div class="col-lg-3 col-sm-6 ">
+                                <div class="product-item wow fadeInUp" data-wow-duration='1500ms'
+                                    data-wow-delay='000ms'>
+                                    <a href="product-details.html" class="product-item__img">
+                                        <img src="{{ $book->cover_image ? Storage::disk('s3')->url($book->cover_image) : asset('assets/images/products/product-1-1.png') }}" alt="Big sofa">
+                                    </a><!-- /.product-image -->
+                                    <div class="product-item__content">
+                                        <h4 class="product-item__title"><a href="{{ route('books.show', $book->slug) }}">{{ $book->title }}</a></h4>
+                                        <!-- /.product-title -->
+                                        <div class="product-item__price"><span>£{{ number_format($book->price, 2) }}</span></div><!-- /.product-price -->
+                                        <a href="cart.html"
+                                            class="citylife-btn citylife-btn--border product-item__link">
+                                            <div class="citylife-btn__icon-box">
+                                                <div class="citylife-btn__icon-box__inner"><span
+                                                        class="icon-trolley"></span></div>
+                                            </div>
+                                            <span class="citylife-btn__text">Purchase</span>
+                                        </a>
+                                    </div><!-- /.product-content -->
+                                </div><!-- /.product-item -->
+                            </div>
+                            @endforeach
+                        </div><!-- /.row -->
+                        @else
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="empty-state text-center py-5">
+                                    <div class="empty-state__icon mb-4">
+                                        <span class="icon-book-open" style="font-size: 72px; color: var(--citylife-base);"></span>
+                                    </div>
+                                    <h3>No Books Available Yet</h3>
+                                    <p class="text-muted">We're currently building our library of publications. Check back soon!</p>
+                                    <a href="{{ route('home') }}" class="citylife-btn mt-4">
+                                        <span class="citylife-btn__icon-box">
+                                            <span class="citylife-btn__icon-box__inner"><span class="icon-home"></span></span>
+                                        </span>
+                                        <span class="citylife-btn__text">Return Home</span>
                                     </a>
                                 </div>
                             </div>
-                            <div class="product-card__content">
-                                <div class="product-card__content__top">
-                                    @if($book->category)
-                                    <div class="product-card__category">
-                                        <a href="{{ route('books.index', ['category' => $book->category]) }}">{{ $book->category }}</a>
-                                    </div>
-                                    @endif
-                                    @if($book->teamMember)
-                                    <div class="product-card__author">
-                                        <span class="icon-user"></span>
-                                        <a href="{{ route('team.member', $book->teamMember->slug) }}">{{ $book->teamMember->full_name }}</a>
-                                    </div>
-                                    @endif
-                                </div>
-                                <h3 class="product-card__title">
-                                    <a href="{{ route('books.show', $book->slug) }}">{{ $book->title }}</a>
-                                </h3>
-                                @if($book->subtitle)
-                                <p class="product-card__subtitle">{{ $book->subtitle }}</p>
-                                @endif
-                                @if($book->short_description)
-                                <p class="product-card__text">{{ Str::limit($book->short_description, 100) }}</p>
-                                @endif
-                                <div class="product-card__bottom">
-                                    @if($book->price)
-                                    <span class="product-card__price">£{{ number_format($book->price, 2) }}</span>
-                                    @endif
-                                    <div class="product-card__format">
-                                        <span class="badge badge-{{ $book->format == 'ebook' ? 'info' : 'secondary' }}">
-                                            {{ ucfirst($book->format) }}
-                                        </span>
-                                    </div>
-                                </div>
-                                <a href="{{ route('books.show', $book->slug) }}" class="product-card__link citylife-btn">
-                                    <span class="citylife-btn__icon-box">
-                                        <span class="citylife-btn__icon-box__inner"><span class="icon-duble-arrow"></span></span>
-                                    </span>
-                                    <span class="citylife-btn__text">View Details</span>
-                                </a>
-                            </div>
                         </div>
-                    </div>
-                    @endforeach
-                </div>
+                        @endif
+                    </div><!-- /.col-lg-9 -->
+                    <div class="col-lg-12">
+                        @if($books->hasPages())
+                        <div class="pagination-wrapper text-center mt-5">
+                            {{ $books->links() }}
+                        </div><!-- /.post-pagination -->
+                        @endif
+                    </div><!-- /.col-lg-12 -->
+                </div><!-- /.row -->
 
-                {{-- Pagination --}}
-                @if($books->hasPages())
-                <div class="pagination-wrapper text-center mt-5">
-                    {{ $books->links() }}
-                </div>
-                @endif
-            @else
-                <div class="row">
-                    <div class="col-12">
-                        <div class="empty-state text-center py-5">
-                            <div class="empty-state__icon mb-4">
-                                <span class="icon-book-open" style="font-size: 72px; color: var(--citylife-base);"></span>
-                            </div>
-                            <h3>No Books Available Yet</h3>
-                            <p class="text-muted">We're currently building our library of publications. Check back soon!</p>
-                            <a href="{{ route('home') }}" class="citylife-btn mt-4">
-                                <span class="citylife-btn__icon-box">
-                                    <span class="citylife-btn__icon-box__inner"><span class="icon-home"></span></span>
-                                </span>
-                                <span class="citylife-btn__text">Return Home</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            @endif
-        </div>
-    </section>
+            </div><!-- /.container -->
+        </section>
 
     {{-- Featured Authors Section --}}
     @if($featuredAuthors->count() > 0)
