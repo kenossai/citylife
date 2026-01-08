@@ -9,7 +9,7 @@
                     <span class="icon-grid"></span>
                 </button><!-- /.main-header__sidebar-btn -->
             </div><!-- /.main-header__logo -->
-            
+
             <nav class="main-header__nav main-menu" style="flex: 1; display: flex; justify-content: center;">
                 <ul class="main-menu__list">
                     <li>
@@ -68,7 +68,7 @@
                     @endauth
                 </ul>
             </nav><!-- /.main-header__nav -->
-            
+
             <div class="main-header__right">
                 <div class="mobile-nav__btn mobile-nav__toggler">
                     <span></span>
