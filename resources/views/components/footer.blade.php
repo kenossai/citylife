@@ -2,7 +2,7 @@
     <div class="main-footer__top">
         <div class="container">
             <div class="row gutter-y-30">
-                <div class="col-md-12 col-xl-4 wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="00ms">
+                <div class="col-md-12 col-xl-3 wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="00ms">
                     <div class="footer-widget footer-widget--about">
                         <a href="{{ route('home') }}" class="footer-widget__logo">
                             <img src="{{ asset('assets/images/logo.png') }}" width="100" alt="City Life Church">
@@ -32,14 +32,36 @@
                         <ul class="list-unstyled footer-widget__links">
                             <li><a href="{{ route('home') }}">Home</a></li>
                             <li><a href="{{ route('about') }}">About Us</a></li>
-                            <li><a href="{{ route('media.index') }}">Media</a></li>
-                            <li><a href="{{ route('teaching-series.index') }}">Teaching Series</a></li>
                             <li><a href="{{ route('events.index') }}">Events</a></li>
-                            <li><a href="{{ route('baby-dedication.index') }}">Baby Dedication</a></li>
                             <li><a href="{{ route('contact') }}">Contact Us</a></li>
+                            <li><a href="{{ route('baby-dedication.index') }}">Baby Dedication</a></li>
+                            <li><a href="{{ route('volunteer.index') }}">Volunteer</a></li>
                         </ul><!-- /.list-unstyled footer-widget__links -->
                     </div><!-- /.footer-widget -->
                 </div><!-- /.col-md-3 -->
+                <div class="col-md-3 wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="600ms">
+                    <div class="footer-widget footer-widget--links">
+                        <h2 class="footer-widget__title">Resources</h2><!-- /.footer-widget__title -->
+                        <ul class="list-unstyled footer-widget__links">
+                            <li><a href="{{ route('courses.index') }}">Courses</a></li>
+                            <li><a href="{{ route('books.index') }}">Books</a></li>
+                            <li><a href="{{ route('teaching-series.index') }}">Teaching Series</a></li>
+                            <li><a href="{{ route('citylife-talktime.index') }}">CityLife TalkTimes</a></li>
+                            <li><a href="{{ route('citylife-music.index') }}">CityLife Music</a></li>
+                            @guest('member')
+                            <li><a href="{{ route('member.login') }}">Member Login</a></li>
+                            <li><a href="{{ route('member.register') }}">Member Register</a></li>
+                            @else
+                            <li>
+                                <form action="{{ route('member.logout') }}" method="POST" class="d-inline">
+                                    @csrf
+                                    <a href="#" onclick="event.preventDefault(); this.closest('form').submit();">Logout</a>
+                                </form>
+                            </li>
+                            @endguest
+                        </ul><!-- /.list-unstyled footer-widget__links -->
+                    </div><!-- /.footer-widget -->
+                </div><!-- /.col-md-4 -->
             </div><!-- /.row -->
         </div><!-- /.container -->
         <div class="main-footer__top__shape-box">
