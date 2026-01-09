@@ -82,6 +82,8 @@
                     <button type="button" onclick="window.cookieConsent?.showPreferences()" class="cookie-preferences-link">
                         Cookie Preferences
                     </button>
+                    <span class="separator">|</span>
+                    <a href="/privacy-policy">Privacy Policy</a>
                 </div>
             </div><!-- /.main-footer__inner -->
         </div><!-- /.container -->
