@@ -29,6 +29,9 @@
         .logo {
             max-width: 150px;
             margin-bottom: 20px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
         }
         h1 {
             color: #ff6b35;
@@ -106,7 +109,15 @@
 <body>
     <div class="email-container">
         <div class="header">
-            <img src="{{ asset('assets/images/logo.png') }}" alt="CityLife Church" class="logo">
+            @php
+                $logoPath = public_path('assets/images/logo_small_black.png');
+                $logoData = file_exists($logoPath) ? base64_encode(file_get_contents($logoPath)) : null;
+            @endphp
+            @if($logoData)
+                <img src="data:image/png;base64,{{ $logoData }}" alt="CityLife Church" class="logo">
+            @else
+                <strong style="font-size: 20px; color: #ff6b35;">CityLife Church</strong>
+            @endif
             <h1>Welcome to the Team!</h1>
         </div>
 
