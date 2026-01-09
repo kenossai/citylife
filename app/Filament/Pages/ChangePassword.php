@@ -44,7 +44,12 @@ class ChangePassword extends Page
                     ->label('New Password')
                     ->password()
                     ->required()
-                    ->rule(Password::default())
+                    ->rule(Password::min(8)
+                        ->letters()
+                        ->mixedCase()
+                        ->numbers()
+                        ->symbols()
+                        ->uncompromised())
                     ->same('password_confirmation')
                     ->different('current_password')
                     ->rules([
