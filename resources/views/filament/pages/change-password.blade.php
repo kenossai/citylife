@@ -1,4 +1,8 @@
 <x-filament-panels::page>
+    <div class="flex justify-center mb-8">
+        <img src="{{ url('assets/images/logo_small_white.png') }}" alt="CityLife Church" class="h-12">
+    </div>
+
     @if(auth()->user()->force_password_change)
         <div class="mb-6 p-4 bg-warning-50 border-l-4 border-warning-500 text-warning-700 dark:bg-warning-900/20 dark:text-warning-400 dark:border-warning-600 rounded-r">
             <div class="flex">

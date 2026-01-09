@@ -46,6 +46,16 @@ class ChangePassword extends Page
                     ->required()
                     ->rule(Password::default())
                     ->same('password_confirmation')
+                    ->different('current_password')
+                    ->rules([
+                        function () {
+                            return function (string $attribute, $value, \Closure $fail) {
+                                if (Hash::check($value, auth()->user()->password)) {
+                                    $fail('The new password must be different from your current password.');
+                                }
+                            };
+                        },
+                    ])
                     ->validationAttribute('password'),
 
                 TextInput::make('password_confirmation')
@@ -79,13 +89,16 @@ class ChangePassword extends Page
         $this->redirect('/admin');
     }
 
-    // public fuw
+    public function getHeading(): string
+    {
+        return '';
+    }
 
-    // public function getSubheading(): ?string
-    // {
-    //     return auth()->user()->force_password_change
-    //         ? 'You must change your password before continuing'
-    //         : null;
-    // }
+    public function getSubheading(): ?string
+    {
+        return auth()->user()->force_password_change
+            ? 'For security reasons, you must change your temporary password before continuing'
+            : null;
+    }
 }
 
