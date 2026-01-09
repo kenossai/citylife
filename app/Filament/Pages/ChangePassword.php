@@ -8,6 +8,7 @@ use Filament\Pages\Page;
 use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Support\HtmlString;
 
 class ChangePassword extends Page
 {
@@ -78,18 +79,13 @@ class ChangePassword extends Page
         $this->redirect('/admin');
     }
 
-    public function getHeading(): string
-    {
-        return auth()->user()->force_password_change
-            ? 'Change Your Password'
-            : 'Change Password';
-    }
+    // public fuw
 
-    public function getSubheading(): ?string
-    {
-        return auth()->user()->force_password_change
-            ? 'You must change your password before continuing'
-            : null;
-    }
+    // public function getSubheading(): ?string
+    // {
+    //     return auth()->user()->force_password_change
+    //         ? 'You must change your password before continuing'
+    //         : null;
+    // }
 }
 
