@@ -30,7 +30,7 @@
                             @endif
                         </h2>
                         <div class="main-slider-one__btn">
-                            <a href="{{ route('volunteer.index') }}" class="citylife-btn">
+                            <a href="{{ route('our-ministry') }}" class="citylife-btn">
                                 <div class="citylife-btn__icon-box">
                                     <div class="citylife-btn__icon-box__inner"><span class="icon-duble-arrow"></span></div>
                                 </div>

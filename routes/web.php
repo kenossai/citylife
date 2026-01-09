@@ -62,6 +62,7 @@ Route::view('/privacy-policy', 'pages.privacy-policy')->name('privacy-policy');
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about-citylife', [AboutController::class, 'index'])->name('about');
 Route::get('/about/core-values/{slug}', [AboutController::class, 'showCoreValue'])->name('about.core-value');
+Route::get('/our-ministry', [AboutController::class, 'ourMinistry'])->name('our-ministry');
 
 
 // Route for the course controller

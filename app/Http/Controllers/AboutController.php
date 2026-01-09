@@ -62,6 +62,16 @@ class AboutController extends Controller
     }
 
     /**
+     * Display the our ministry page.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function ourMinistry()
+    {
+        return view('pages.about.our-ministry');
+    }
+
+    /**
      * Create a default about page if none exists.
      *
      * @return AboutPage
