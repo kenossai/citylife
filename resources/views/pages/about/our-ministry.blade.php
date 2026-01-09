@@ -24,7 +24,7 @@
         <div class="row">
             <div class="col-xl-12">
                 <div class="about-page__content">
-                    <div class="section-header text-center">
+                    <div class="section-header">
                         <h2 class="section-header__title">Welcome to CityLife Church</h2>
                     </div>
 
@@ -42,135 +42,63 @@
                         </p>
                     </div>
                 </div>
+                <div class="about-page__content">
+                    <div class="section-header">
+                        <h2 class="section-header__title mt-5">Our Ministry</h2>
+                    </div>
+
+                    <div class="about-page__text-box mt-4">
+                        <h6 class="services-one__item__title">
+                        <a href="{{ route('ministries.index') }}">Prayer Ministry</a>
+                    </h6>
+                    <p class="services-one__item__text">
+                        Our Prayer Ministry is the spiritual backbone of our church, committed to interceding for our congregation, community, and world.
+                    </p>
+                    <h6 class="services-one__item__title">
+                        <a href="{{ route('ministries.index') }}">Outreach Programs</a>
+                    </h6>
+                    <p class="services-one__item__text">
+                        We provide support to our community through various initiatives including food distribution, educational support, and family assistance programs.
+                    </p>
+                    <h6 class="services-one__item__title">
+                        <a href="{{ route('ministries.index') }}">Youth & Children</a>
+                    </h6>
+                    <p class="services-one__item__text">
+                        Building the next generation through engaging programs, biblical teaching, and mentorship opportunities for young people.
+                    </p>
+                    <h6 class="services-one__item__title">
+                        <a href="{{ route('ministries.index') }}">Worship & Arts</a>
+                    </h6>
+                    <p class="services-one__item__text">
+                        Experience powerful worship and creative expression through music, dance, drama, and other artistic ministries.
+                    </p>
+                    <h6 class="services-one__item__title">
+                        <a href="{{ route('ministries.index') }}">Teaching & Discipleship</a>
+                    </h6>
+                    <p class="services-one__item__text">
+                        Providing biblical teaching and discipleship programs to help believers grow in their faith and live out their calling.
+                    </p>
+                    <h6 class="services-one__item__title">
+                        <a href="{{ route('ministries.index') }}">Community Service</a>
+                    </h6>
+                    <p class="services-one__item__text">
+                        Engaging in various community service projects to support and uplift those in need.
+                    </p>
+                    <h6 class="about-page__content__title">Service Times</h6>
+                    <ul class="list-unstyled about-page__list">
+                        <li><i class="fas fa-check-circle"></i> Sunday Service: 10:00 AM</li>
+                        {{-- <li><i class="fas fa-check-circle"></i> Tuesday Prayer Meeting: 7:00 PM</li> --}}
+                        <li><i class="fas fa-check-circle"></i> Thursday Prayer Meeting: 7:30 PM</li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
 </section>
 <!-- Welcome Section End -->
 
-<!-- Our Ministries Section Start -->
-<section class="services-one section-space" style="background-color: #f8f9fa;">
-    <div class="container">
-        <div class="section-header text-center">
-            <h2 class="section-header__title">Our Ministries</h2>
-            <p class="section-header__text">Discover the various ways we serve our community and make a difference</p>
-        </div>
-
-        <div class="row gutter-y-30 mt-5">
-            <!-- Ministry 1 -->
-            <div class="col-lg-4 col-md-6">
-                <div class="services-one__item" style="height: 100%;">
-                    <div class="services-one__item__icon">
-                        <span class="icon-prayer"></span>
-                    </div>
-                    <h3 class="services-one__item__title">
-                        <a href="{{ route('ministries.index') }}">Prayer Ministry</a>
-                    </h3>
-                    <p class="services-one__item__text">
-                        Our Prayer Ministry is the spiritual backbone of our church, committed to interceding for our congregation, community, and world.
-                    </p>
-                    <a href="{{ route('ministries.index') }}" class="services-one__item__link">
-                        <span class="icon-duble-arrow"></span>
-                    </a>
-                </div>
-            </div>
-
-            <!-- Ministry 2 -->
-            <div class="col-lg-4 col-md-6">
-                <div class="services-one__item" style="height: 100%;">
-                    <div class="services-one__item__icon">
-                        <span class="icon-love"></span>
-                    </div>
-                    <h3 class="services-one__item__title">
-                        <a href="{{ route('ministries.index') }}">Outreach Programs</a>
-                    </h3>
-                    <p class="services-one__item__text">
-                        We provide support to our community through various initiatives including food distribution, educational support, and family assistance programs.
-                    </p>
-                    <a href="{{ route('ministries.index') }}" class="services-one__item__link">
-                        <span class="icon-duble-arrow"></span>
-                    </a>
-                </div>
-            </div>
-
-            <!-- Ministry 3 -->
-            <div class="col-lg-4 col-md-6">
-                <div class="services-one__item" style="height: 100%;">
-                    <div class="services-one__item__icon">
-                        <span class="icon-hands"></span>
-                    </div>
-                    <h3 class="services-one__item__title">
-                        <a href="{{ route('ministries.index') }}">Youth & Children</a>
-                    </h3>
-                    <p class="services-one__item__text">
-                        Building the next generation through engaging programs, biblical teaching, and mentorship opportunities for young people.
-                    </p>
-                    <a href="{{ route('ministries.index') }}" class="services-one__item__link">
-                        <span class="icon-duble-arrow"></span>
-                    </a>
-                </div>
-            </div>
-
-            <!-- Ministry 4 -->
-            <div class="col-lg-4 col-md-6">
-                <div class="services-one__item" style="height: 100%;">
-                    <div class="services-one__item__icon">
-                        <span class="icon-music"></span>
-                    </div>
-                    <h3 class="services-one__item__title">
-                        <a href="{{ route('ministries.index') }}">Worship & Arts</a>
-                    </h3>
-                    <p class="services-one__item__text">
-                        Experience powerful worship and creative expression through music, dance, drama, and other artistic ministries.
-                    </p>
-                    <a href="{{ route('ministries.index') }}" class="services-one__item__link">
-                        <span class="icon-duble-arrow"></span>
-                    </a>
-                </div>
-            </div>
-
-            <!-- Ministry 5 -->
-            <div class="col-lg-4 col-md-6">
-                <div class="services-one__item" style="height: 100%;">
-                    <div class="services-one__item__icon">
-                        <span class="icon-bible"></span>
-                    </div>
-                    <h3 class="services-one__item__title">
-                        <a href="{{ route('ministries.index') }}">Teaching & Discipleship</a>
-                    </h3>
-                    <p class="services-one__item__text">
-                        Grow in your faith through Bible studies, small groups, and discipleship programs designed for spiritual growth.
-                    </p>
-                    <a href="{{ route('ministries.index') }}" class="services-one__item__link">
-                        <span class="icon-duble-arrow"></span>
-                    </a>
-                </div>
-            </div>
-
-            <!-- Ministry 6 -->
-            <div class="col-lg-4 col-md-6">
-                <div class="services-one__item" style="height: 100%;">
-                    <div class="services-one__item__icon">
-                        <span class="icon-solidarity"></span>
-                    </div>
-                    <h3 class="services-one__item__title">
-                        <a href="{{ route('ministries.index') }}">Community Service</a>
-                    </h3>
-                    <p class="services-one__item__text">
-                        Making a tangible difference in our local community through volunteering, service projects, and partnership initiatives.
-                    </p>
-                    <a href="{{ route('ministries.index') }}" class="services-one__item__link">
-                        <span class="icon-duble-arrow"></span>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<!-- Our Ministries Section End -->
-
 <!-- Get Involved Section Start -->
-<section class="contact-one section-space">
+<section class="contact-one p-5">
     <div class="container">
         <div class="section-header text-center">
             <h2 class="section-header__title">Get Involved</h2>
@@ -182,7 +110,7 @@
             <div class="col-lg-4 col-md-6">
                 <div class="contact-one__item text-center">
                     <div class="contact-one__item__icon">
-                        <span class="icon-user"></span>
+                        {{-- <span class="icon-user"></span> --}}
                     </div>
                     <h3 class="contact-one__item__title">New to Church?</h3>
                     <p class="contact-one__item__text">
@@ -203,7 +131,7 @@
             <div class="col-lg-4 col-md-6">
                 <div class="contact-one__item text-center">
                     <div class="contact-one__item__icon">
-                        <span class="icon-calendar"></span>
+                        {{-- <span class="icon-calendar"></span> --}}
                     </div>
                     <h3 class="contact-one__item__title">Upcoming Events</h3>
                     <p class="contact-one__item__text">
@@ -224,7 +152,7 @@
             <div class="col-lg-4 col-md-6">
                 <div class="contact-one__item text-center">
                     <div class="contact-one__item__icon">
-                        <span class="icon-video-camera"></span>
+                        {{-- <span class="icon-video-camera"></span> --}}
                     </div>
                     <h3 class="contact-one__item__title">Messages & Media</h3>
                     <p class="contact-one__item__text">
