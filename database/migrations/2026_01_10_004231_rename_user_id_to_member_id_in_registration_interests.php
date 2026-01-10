@@ -24,7 +24,7 @@ return new class extends Migration
                 // Rename the column
                 $table->renameColumn('user_id', 'member_id');
             });
-            
+
             // Add new foreign key constraint in a separate statement
             Schema::table('registration_interests', function (Blueprint $table) {
                 $table->foreign('member_id')->references('id')->on('members')->nullOnDelete();
@@ -50,7 +50,7 @@ return new class extends Migration
                 // Rename back to user_id
                 $table->renameColumn('member_id', 'user_id');
             });
-            
+
             // Restore old foreign key constraint
             Schema::table('registration_interests', function (Blueprint $table) {
                 $table->foreign('user_id')->references('id')->on('users')->nullOnDelete();

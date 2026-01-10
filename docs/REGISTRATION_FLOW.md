@@ -12,6 +12,8 @@ Modal popup appears - Enter email
     ↓
 Submit → Record saved as "pending" in registration_interests table
     ↓
+Admin receives email notification about new interest
+    ↓
 Admin views in Filament dashboard
     ↓
 Admin approves interest
@@ -68,8 +70,19 @@ Account created + CDC course auto-assigned + Redirected to course dashboard
   - Duplicate prevention
   - Success message display
   - Auto-closes after 3 seconds
+  - Sends notification to all active admin users
 
-### 5. Email Notification
+### 5. Admin Notification
+- **File**: `app/Notifications/NewRegistrationInterest.php`
+- **Email Template**: `resources/views/emails/admin/new-registration-interest.blade.php`
+- **Features**:
+  - Email notification to all active admins
+  - Database notification for in-app alerts
+  - Queued for background processing
+  - Contains direct link to admin panel
+  - Shows user email and submission time
+
+### 6. Email Notification (User)
 - **File**: `app/Notifications/RegistrationInvitation.php`
 - **Content**:
   - Welcome message
@@ -77,19 +90,19 @@ Account created + CDC course auto-assigned + Redirected to course dashboard
   - 7-day expiration notice
   - Information about CDC course enrollment
 
-### 6. Registration Controller Updates
+### 7. Registration Controller Updates
 - **File**: `app/Http/Controllers/Auth/MemberAuthController.php`
 - **New Methods**:
   - `showRegisterWithToken($token)` - Display registration form with pre-filled email
   - `registerWithToken($token)` - Process registration, create account, auto-enroll CDC
 
-### 7. Routes
+### 8. Routes
 - **File**: `routes/web.php`
 - **New Routes**:
   - `GET /register/{token}` - Registration form with token
   - `POST /register/{token}` - Submit registration with token
 
-### 8. Views
+### 9. Views
 - **File**: `resources/views/auth/member/register-with-token.blade.php`
 - **Features**:
   - Pre-filled email field (readonly)
@@ -97,7 +110,7 @@ Account created + CDC course auto-assigned + Redirected to course dashboard
   - Token validation
   - Direct redirect to course dashboard after completion
 
-### 9. Layout Updates
+### 10. Layout Updates
 - **File**: `resources/views/layouts/base.blade.php`
 - **Changes**:
   - Added `@livewireStyles` in head
@@ -115,16 +128,21 @@ Account created + CDC course auto-assigned + Redirected to course dashboard
 2. Modal popup appears
 3. User enters email and clicks "Submit Interest"
 4. Success message: "Thank you for your interest! We'll review your request and send you a registration link soon."
+5. All active admin users receive email notification about the new interest
 
 ### Step 2: Admin Approval
-1. Admin logs into Filament (/admin)
-2. Navigates to User Management > Registration Interests
-3. Views pending interests
-4. Clicks "Approve" button (or bulk approve multiple)
-5. System automatically:
+1. Admin receives email notification with:
+   - User's email address
+   - Submission timestamp
+   - Direct link to admin panel
+2. Admin logs into Filament (/admin)
+3. Navigates to User Management > Registration Interests (or clicks link in email)
+4. Views pending interests
+5. Clicks "Approve" button (or bulk approve multiple)
+6. System automatically:
    - Updates status to "approved"
    - Generates unique token
-   - Sends invitation email
+   - Sends invitation email to user
 
 ### Step 3: Complete Registration
 1. User receives email with subject: "Welcome to CityLife Church - Complete Your Registration"

@@ -3,8 +3,11 @@
 namespace App\Livewire;
 
 use App\Models\RegistrationInterest;
+use App\Models\User;
+use App\Notifications\NewRegistrationInterest;
 use Livewire\Component;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Notification;
 
 class RegistrationInterestModal extends Component
 {
@@ -42,10 +45,16 @@ class RegistrationInterestModal extends Component
         $this->validate();
 
         try {
-            RegistrationInterest::create([
+            $interest = RegistrationInterest::create([
                 'email' => $this->email,
                 'status' => 'pending',
             ]);
+
+            // Notify all admin users about the new registration interest
+            $admins = User::where('is_active', true)->get();
+            if ($admins->count() > 0) {
+                Notification::send($admins, new NewRegistrationInterest($interest));
+            }
 
             $this->successMessage = 'Thank you for your interest! We\'ll review your request and send you a registration link soon.';
             $this->email = '';
