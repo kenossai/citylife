@@ -117,12 +117,14 @@
                         We'd love to get to know you! Fill out our welcome form to help us connect with you better.
                     </p>
                     <div class="contact-one__item__btn">
-                        <a href="{{ route('member.register') }}" class="citylife-btn citylife-btn--base">
+                        <button type="button"
+                                onclick="window.dispatchEvent(new CustomEvent('open-registration-modal'))"
+                                class="citylife-btn citylife-btn--base">
                             <div class="citylife-btn__icon-box">
                                 <div class="citylife-btn__icon-box__inner"><span class="icon-duble-arrow"></span></div>
                             </div>
-                            <span class="citylife-btn__text">Join Us</span>
-                        </a>
+                            <span class="citylife-btn__text">Join with Us</span>
+                        </button>
                     </div>
                 </div>
             </div>

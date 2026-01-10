@@ -125,6 +125,10 @@ Route::prefix('member')->name('member.')->group(function () {
     Route::post('logout', [App\Http\Controllers\Auth\MemberAuthController::class, 'logout'])->name('logout');
 });
 
+// Registration with token (from invitation email)
+Route::get('/register/{token}', [App\Http\Controllers\Auth\MemberAuthController::class, 'showRegisterWithToken'])->name('register.with-token');
+Route::post('/register/{token}', [App\Http\Controllers\Auth\MemberAuthController::class, 'registerWithToken'])->name('register.with-token.submit');
+
 // Protected Member Routes (using internal auth logic instead of middleware)
 Route::get('/my-courses', [CourseController::class, 'dashboard'])->name('courses.dashboard');
 Route::get('/courses/{slug}/lessons', [CourseController::class, 'lessons'])->name('courses.lessons');

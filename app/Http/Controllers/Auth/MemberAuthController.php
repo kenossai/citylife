@@ -99,7 +99,7 @@ class MemberAuthController extends Controller
                 'email' => $request->email,
                 'website' => $request->website,
             ]);
-            
+
             // Pretend success to fool the bot
             return redirect()->route('member.login')
                 ->with('success', 'Registration successful! Please check your email to verify your account.');
@@ -115,7 +115,7 @@ class MemberAuthController extends Controller
                     'email' => $request->email,
                     'time_taken' => $timeTaken,
                 ]);
-                
+
                 return redirect()->back()
                     ->withErrors(['email' => 'Please take your time filling out the form.'])
                     ->withInput();
@@ -128,7 +128,7 @@ class MemberAuthController extends Controller
                 'ip' => $request->ip(),
                 'email' => $request->email,
             ]);
-            
+
             return redirect()->back()
                 ->withErrors(['email' => 'Temporary or disposable email addresses are not allowed. Please use a permanent email address.'])
                 ->withInput();
@@ -311,7 +311,7 @@ class MemberAuthController extends Controller
     private function isDisposableEmail(string $email): bool
     {
         $domain = strtolower(substr(strrchr($email, "@"), 1));
-        
+
         $disposableDomains = [
             '10minutemail.com', '10minutemail.net', '10minutemail.org',
             'guerrillamail.com', 'guerrillamail.net', 'guerrillamailblock.com',
@@ -333,5 +333,131 @@ class MemberAuthController extends Controller
         ];
 
         return in_array($domain, $disposableDomains);
+    }
+
+    /**
+     * Show registration form with token (from invitation email)
+     */
+    public function showRegisterWithToken($token)
+    {
+        // Find the registration interest by token
+        $interest = \App\Models\RegistrationInterest::where('token', $token)
+            ->where('status', 'approved')
+            ->whereNull('registered_at')
+            ->first();
+
+        if (!$interest) {
+            return redirect()->route('member.register')
+                ->withErrors(['token' => 'Invalid or expired registration link. Please submit a new interest.']);
+        }
+
+        // Check if token is expired (7 days)
+        if ($interest->approved_at && $interest->approved_at->lt(now()->subDays(7))) {
+            return redirect()->route('member.register')
+                ->withErrors(['token' => 'This registration link has expired. Please submit a new interest.']);
+        }
+
+        // Redirect if already logged in
+        if (Auth::guard('member')->check()) {
+            return redirect()->route('courses.dashboard');
+        }
+
+        return view('auth.member.register-with-token', compact('interest', 'token'));
+    }
+
+    /**
+     * Handle registration with token
+     */
+    public function registerWithToken(Request $request, $token)
+    {
+        // Find the registration interest by token
+        $interest = \App\Models\RegistrationInterest::where('token', $token)
+            ->where('status', 'approved')
+            ->whereNull('registered_at')
+            ->first();
+
+        if (!$interest) {
+            return redirect()->route('member.register')
+                ->withErrors(['token' => 'Invalid or expired registration link.']);
+        }
+
+        // Check if token is expired (7 days)
+        if ($interest->approved_at && $interest->approved_at->lt(now()->subDays(7))) {
+            return redirect()->route('member.register')
+                ->withErrors(['token' => 'This registration link has expired. Please submit a new interest.']);
+        }
+
+        // Validate input
+        $validator = Validator::make($request->all(), [
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:members|in:' . $interest->email,
+            'password' => 'required|string|min:6|confirmed',
+            'phone' => 'nullable|string|max:20',
+            'gdpr_consent' => 'required|accepted',
+            'newsletter' => 'nullable|boolean',
+        ], [
+            'email.in' => 'The email address must match the invited email address.',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $consentGiven = $request->has('newsletter') && $request->newsletter;
+
+        // Create the member
+        $member = Member::create([
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'phone' => $request->phone,
+            'membership_status' => 'regular_attendee',
+            'is_active' => true,
+            'receives_newsletter' => $consentGiven,
+            'receives_sms' => false,
+            'gdpr_consent' => true,
+            'gdpr_consent_date' => now(),
+            'gdpr_consent_ip' => $request->ip(),
+            'newsletter_consent' => $consentGiven,
+            'newsletter_consent_date' => $consentGiven ? now() : null,
+        ]);
+
+        // Update the registration interest
+        $interest->update([
+            'registered_at' => now(),
+            'member_id' => $member->id,
+        ]);
+
+        // Add to newsletter subscribers if they consented
+        if ($consentGiven) {
+            NewsletterSubscriber::subscribe($request->email, [
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+                'source' => 'member_registration',
+                'gdpr_consent' => true,
+                'gdpr_consent_date' => now(),
+                'gdpr_consent_ip' => $request->ip(),
+            ]);
+        }
+
+        // Log the user in
+        Auth::guard('member')->login($member);
+
+        // Regenerate session for security
+        $request->session()->regenerate();
+
+        // Auto-enroll into Christian Development Course
+        $this->autoEnrollChristianDevelopmentCourse($member);
+
+        // Clear any intended URL from session
+        $request->session()->forget('url.intended');
+
+        // Redirect to course dashboard
+        return redirect()->route('courses.dashboard')
+            ->with('success', 'Welcome to CityLife Church! You have been enrolled in the Church Development Course.');
     }
 }

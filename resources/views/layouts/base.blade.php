@@ -42,6 +42,12 @@
 
     <!-- core styles -->
     <link rel="stylesheet" href="{{ asset('assets/css/citylife.css') }}" />
+
+    @livewireStyles
+
+    <style>
+        [x-cloak] { display: none !important; }
+    </style>
 </head>
 
 <body class="custom-cursor">
@@ -53,6 +59,9 @@
     </div>
 
     {{ $slot }}
+
+    <!-- Registration Interest Modal -->
+    @livewire('registration-interest-modal')
 
 
 
@@ -82,6 +91,8 @@
     <script src="{{ asset('js/session-manager.js') }}"></script>
     <!-- core js -->
     <script src="{{ asset('assets/js/citylife.js') }}"></script>
+
+    @livewireScripts
 
     <!-- Additional scripts stack -->
     @stack('scripts')
