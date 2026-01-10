@@ -50,7 +50,7 @@
                             <li><a href="{{ route('citylife-music.index') }}">CityLife Music</a></li>
                             @guest('member')
                             <li><a href="{{ route('member.login') }}">Member Login</a></li>
-                            <li><a href="{{ route('member.register') }}">Member Register</a></li>
+                            <li><a target="_blank" href="https://apps.apple.com/gb/app/city-life-international/id6746858070">Download Our App</a></li>
                             @else
                             <li>
                                 <form action="{{ route('member.logout') }}" method="POST" class="d-inline">
