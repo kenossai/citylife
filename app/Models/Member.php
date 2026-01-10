@@ -90,9 +90,22 @@ class Member extends Authenticatable
 
         static::creating(function ($member) {
             if (empty($member->membership_number)) {
-                $member->membership_number = 'CL' . date('Y') . str_pad(static::count() + 1, 4, '0', STR_PAD_LEFT);
+                $member->membership_number = static::generateUniqueMembershipNumber();
             }
         });
+    }
+
+    /**
+     * Generate a unique membership number
+     */
+    protected static function generateUniqueMembershipNumber(): string
+    {
+        do {
+            // Format: CL + Year + Random 4 digits
+            $number = 'CL' . date('Y') . str_pad(random_int(1, 9999), 4, '0', STR_PAD_LEFT);
+        } while (static::where('membership_number', $number)->exists());
+
+        return $number;
     }
 
     // Mutators to ensure data consistency
