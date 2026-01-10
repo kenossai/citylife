@@ -260,7 +260,7 @@ class BookResource extends Resource
             ->columns([
                 Tables\Columns\ImageColumn::make('cover_image')
                     ->label('Cover')
-                    ->disk('s3')    
+                    ->disk('s3')
                     ->visibility('public')
                     ->circular()
                     ->defaultImageUrl(fn () => 'https://via.placeholder.com/50x75?text=No+Cover'),
