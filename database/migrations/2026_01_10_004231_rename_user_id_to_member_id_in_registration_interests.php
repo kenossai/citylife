@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::table('registration_interests', function (Blueprint $table) {
             // Drop the old foreign key constraint
             $table->dropForeign(['user_id']);
-            
+
             // Rename the column
             $table->renameColumn('user_id', 'member_id');
-            
+
             // Add new foreign key constraint to members table
             $table->foreign('member_id')->references('id')->on('members')->nullOnDelete();
         });
@@ -31,10 +31,10 @@ return new class extends Migration
         Schema::table('registration_interests', function (Blueprint $table) {
             // Drop the new foreign key constraint
             $table->dropForeign(['member_id']);
-            
+
             // Rename back to user_id
             $table->renameColumn('member_id', 'user_id');
-            
+
             // Restore old foreign key constraint
             $table->foreign('user_id')->references('id')->on('users')->nullOnDelete();
         });

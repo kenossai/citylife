@@ -426,11 +426,8 @@ class MemberAuthController extends Controller
             'newsletter_consent_date' => $consentGiven ? now() : null,
         ]);
 
-        // Update the registration interest
-        $interest->update([
-            'registered_at' => now(),
-            'member_id' => $member->id,
-        ]);
+        // Delete the registration interest after successful registration
+        $interest->delete();
 
         // Add to newsletter subscribers if they consented
         if ($consentGiven) {
