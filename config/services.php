@@ -94,4 +94,10 @@ return [
         'enabled' => env('GOOGLE_ANALYTICS_ENABLED', false),
     ],
 
+    'churchsuite' => [
+        'api_url' => env('CHURCHSUITE_API_URL', 'https://api.churchsuite.com/v1'),
+        'account_name' => env('CHURCHSUITE_ACCOUNT_NAME'),
+        'api_key' => env('CHURCHSUITE_API_KEY'),
+    ],
+
 ];
