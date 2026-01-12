@@ -7,6 +7,7 @@ use App\Filament\Resources\MemberResource\RelationManagers;
 use App\Models\Member;
 use App\Exports\MembersExport;
 use App\Exports\MembersContactExport;
+use App\Services\ChurchSuiteService;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -241,6 +242,19 @@ class MemberResource extends Resource
                     ->sortable(),
                 Tables\Columns\IconColumn::make('is_active')
                     ->boolean(),
+                Tables\Columns\BadgeColumn::make('churchsuite_sync_status')
+                    ->label('ChurchSuite')
+                    ->colors([
+                        'success' => 'synced',
+                        'danger' => 'failed',
+                        'warning' => 'pending',
+                    ])
+                    ->formatStateUsing(fn (?string $state): string => $state ? ucfirst($state) : 'Not Synced')
+                    ->toggleable(),
+                Tables\Columns\TextColumn::make('churchsuite_synced_at')
+                    ->label('Last Synced')
+                    ->dateTime()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\IconColumn::make('spouse_is_member')
                     ->label('Spouse Member')
                     ->boolean()
@@ -269,6 +283,50 @@ class MemberResource extends Resource
                     ->label('Active Members Only'),
             ])
             ->actions([
+                Tables\Actions\Action::make('syncToChurchSuite')
+                    ->label('Sync to ChurchSuite')
+                    ->icon('heroicon-o-arrow-path')
+                    ->color('primary')
+                    ->requiresConfirmation()
+                    ->modalHeading('Transfer to ChurchSuite')
+                    ->modalDescription('This will transfer the member data to ChurchSuite. Continue?')
+                    ->action(function (Member $record) {
+                        try {
+                            $service = app(ChurchSuiteService::class);
+
+                            if (!$service->isConfigured()) {
+                                Notification::make()
+                                    ->title('ChurchSuite Not Configured')
+                                    ->body('Please configure ChurchSuite credentials in your .env file.')
+                                    ->danger()
+                                    ->send();
+                                return;
+                            }
+
+                            $result = $service->transferMember($record);
+
+                            if ($result['success']) {
+                                Notification::make()
+                                    ->title('Success!')
+                                    ->body("Member successfully transferred to ChurchSuite.")
+                                    ->success()
+                                    ->send();
+                            } else {
+                                Notification::make()
+                                    ->title('Transfer Failed')
+                                    ->body($result['message'])
+                                    ->danger()
+                                    ->send();
+                            }
+                        } catch (\Exception $e) {
+                            Notification::make()
+                                ->title('Error')
+                                ->body('An error occurred: ' . $e->getMessage())
+                                ->danger()
+                                ->send();
+                        }
+                    })
+                    ->visible(fn (Member $record) => $record->churchsuite_sync_status !== 'synced'),
                 Tables\Actions\EditAction::make(),
             ])
             ->headerActions([
@@ -392,6 +450,59 @@ class MemberResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\BulkAction::make('bulkSyncToChurchSuite')
+                        ->label('Sync to ChurchSuite')
+                        ->icon('heroicon-o-arrow-path')
+                        ->color('primary')
+                        ->requiresConfirmation()
+                        ->modalHeading('Bulk Transfer to ChurchSuite')
+                        ->modalDescription(fn ($records) => 'Transfer ' . $records->count() . ' selected members to ChurchSuite?')
+                        ->action(function ($records) {
+                            $service = app(ChurchSuiteService::class);
+
+                            if (!$service->isConfigured()) {
+                                Notification::make()
+                                    ->title('ChurchSuite Not Configured')
+                                    ->body('Please configure ChurchSuite credentials in your .env file.')
+                                    ->danger()
+                                    ->send();
+                                return;
+                            }
+
+                            $successful = 0;
+                            $failed = 0;
+                            $errors = [];
+
+                            foreach ($records as $record) {
+                                try {
+                                    $result = $service->transferMember($record);
+                                    if ($result['success']) {
+                                        $successful++;
+                                    } else {
+                                        $failed++;
+                                        $errors[] = $record->first_name . ' ' . $record->last_name . ': ' . $result['message'];
+                                    }
+                                } catch (\Exception $e) {
+                                    $failed++;
+                                    $errors[] = $record->first_name . ' ' . $record->last_name . ': ' . $e->getMessage();
+                                }
+                            }
+
+                            if ($failed === 0) {
+                                Notification::make()
+                                    ->title('Bulk Sync Completed')
+                                    ->body("Successfully transferred {$successful} members to ChurchSuite.")
+                                    ->success()
+                                    ->send();
+                            } else {
+                                Notification::make()
+                                    ->title('Bulk Sync Completed with Errors')
+                                    ->body("Successful: {$successful}, Failed: {$failed}")
+                                    ->warning()
+                                    ->send();
+                            }
+                        })
+                        ->deselectRecordsAfterCompletion(),
                     Tables\Actions\BulkAction::make('exportSelected')
                         ->label('Export Selected (Full)')
                         ->icon('heroicon-o-arrow-down-tray')
