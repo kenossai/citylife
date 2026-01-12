@@ -163,6 +163,60 @@ class CourseEnrollment extends Model
         if ($this->course->has_certificate && $completedLessons >= $this->course->min_attendance_for_certificate) {
             $this->issueCertificate();
         }
+
+        // Auto-transfer to ChurchSuite if this is a CDC course completion
+        $this->transferToChurchSuiteIfEligible();
+    }
+
+    /**
+     * Transfer member to ChurchSuite if they completed CDC course
+     */
+    public function transferToChurchSuiteIfEligible()
+    {
+        // Check if this is a CDC/Christian Development Course
+        $isCDCCourse = stripos($this->course->title, 'Christian Development') !== false ||
+                       stripos($this->course->title, 'CDC') !== false;
+
+        if (!$isCDCCourse) {
+            return;
+        }
+
+        // Check if member is already synced
+        if ($this->user->churchsuite_sync_status === 'synced') {
+            \Log::info('Member already synced to ChurchSuite', [
+                'member_id' => $this->user->id,
+                'enrollment_id' => $this->id,
+            ]);
+            return;
+        }
+
+        try {
+            $churchSuiteService = app(\App\Services\ChurchSuiteService::class);
+
+            if (!$churchSuiteService->isConfigured()) {
+                \Log::warning('ChurchSuite not configured, skipping auto-transfer');
+                return;
+            }
+
+            $result = $churchSuiteService->transferMember($this->user);
+
+            if ($result['success']) {
+                \Log::info('CDC graduate successfully transferred to ChurchSuite', [
+                    'member_id' => $this->user->id,
+                    'enrollment_id' => $this->id,
+                    'churchsuite_id' => $result['churchsuite_id'] ?? null,
+                ]);
+
+                // Flash success message for the user
+                session()->flash('churchsuite_transfer', 'Congratulations! Your membership data has been transferred to ChurchSuite.');
+            }
+        } catch (\Exception $e) {
+            \Log::error('Failed to auto-transfer CDC graduate to ChurchSuite', [
+                'member_id' => $this->user->id,
+                'enrollment_id' => $this->id,
+                'error' => $e->getMessage(),
+            ]);
+        }
     }
 
     public function issueCertificate()
