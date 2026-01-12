@@ -58,6 +58,10 @@ class Member extends Authenticatable
         'photo',
         'notes',
         'is_active',
+        'churchsuite_id',
+        'churchsuite_synced_at',
+        'churchsuite_sync_status',
+        'churchsuite_sync_error',
     ];
 
     protected $hidden = [
@@ -81,6 +85,7 @@ class Member extends Authenticatable
         'newsletter_consent' => 'boolean',
         'newsletter_consent_date' => 'datetime',
         'last_login_at' => 'datetime',
+        'churchsuite_synced_at' => 'datetime',
     ];
 
     // Auto-generate membership number when creating
