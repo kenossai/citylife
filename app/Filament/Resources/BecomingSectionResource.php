@@ -22,6 +22,8 @@ class BecomingSectionResource extends Resource
     protected static ?string $navigationLabel = 'Becoming Section';
 
     protected static ?string $modelLabel = 'Becoming Section';
+    
+    protected static ?string $navigationGroup = 'Content Management';
 
     protected static ?int $navigationSort = 4;
 
