@@ -32,7 +32,8 @@
                                         {{ $contactInfo->address }}<br>
                                         {{ $contactInfo->city }}, {{ $contactInfo->postal_code }}, {{ $contactInfo->country }}
                                     @else
-                                        123 Faith Street, CityLife Community<br>Springfield, CA 90210, USA
+                                        1 South Parade Shalesmoor
+                                        <br>Sheffield, S3 8SS, United Kingdom
                                     @endif
                                 </address>
                             </div><!-- /.contact-one__info__content -->
@@ -43,7 +44,7 @@
                             </div><!-- /.contact-one__info__icon -->
                             <div class="contact-one__info__content">
                                 <h4 class="contact-one__info__title">Church Office</h4>
-                                <a href="tel:{{ $contactInfo?->phone ?? '(555) 123-4567' }}" class="contact-one__info__text contact-one__info__text--link">{{ $contactInfo?->phone ?? '(555) 123-4567' }}</a>
+                                <a href="tel:{{ $contactInfo?->phone ?? '0114 272 8243' }}" class="contact-one__info__text contact-one__info__text--link">{{ $contactInfo?->phone ?? '0114 272 8243' }}</a>
                             </div><!-- /.contact-one__info__content -->
                         </div><!-- /.contact-one__info__item -->
                         <div class="contact-one__info__item">
@@ -52,7 +53,9 @@
                             </div><!-- /.contact-one__info__icon -->
                             <div class="contact-one__info__content">
                                 <h4 class="contact-one__info__title">Email Address</h4>
-                                <a href="mailto:{{ $contactInfo?->email ?? 'info@citylifechurch.org' }}" class="contact-one__info__text contact-one__info__text--link">{{ $contactInfo?->email ?? 'info@citylifechurch.org' }}</a>
+                                <a href="mailto:{{ $contactInfo?->email ?? 'admin1@citylifecc.com' }}" class="contact-one__info__text contact-one__info__text--link">{{ $contactInfo?->email ?? 'admin1@citylifecc.com' }}</a>
+                                <br>
+                                <a href="mailto:admin2@citylifecc.com" class="contact-one__info__text contact-one__info__text--link">admin2@citylifecc.com</a>
                             </div><!-- /.contact-one__info__content -->
                         </div><!-- /.contact-one__info__item -->
                         <div class="contact-one__info__item">
@@ -65,7 +68,7 @@
                                     @if($contactInfo && $contactInfo->office_hours)
                                         {{ $contactInfo->office_hours }}
                                     @else
-                                        Mon - Fri: 9:00 AM - 5:00 PM<br>Sat: 10:00 AM - 2:00 PM<br>Sun: After Service
+                                        10.00 am - 3 pm Mon to Wed
                                     @endif
                                 </p>
                             </div><!-- /.contact-one__info__content -->
