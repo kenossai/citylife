@@ -21,8 +21,9 @@
                             <li> <span class="icon-location"></span>
                                 <address>1 South Parade Sheffield S3 8SS</address>
                             </li>
-                            <li> <span class="icon-phone"></span><a href="tel:(217)555-0123">(217) 555-0123</a></li>
-                            <li> <span class="icon-envelope"></span><a href="mailto:info@citylifechurch.org">info@citylifechurch.org</a></li>
+                            <li> <span class="icon-phone"></span><a href="tel:0114 272 8243">0114 272 8243</a></li>
+                            <li> <span class="icon-envelope"></span><a href="mailto:admin1@citylifecc.com">admin1@citylifecc.com</a></li>
+                            <li> <span class="icon-envelope"></span><a href="mailto:admin2@citylifecc.com">admin2@citylifecc.com</a></li>
                         </ul><!-- /.list-unstyled -->
                     </div><!-- /.footer-widget -->
                 </div><!-- /.col-xl-3 col-md-5 -->

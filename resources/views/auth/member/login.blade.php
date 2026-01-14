@@ -98,7 +98,8 @@
                             <div class="login-page__form__signin">
                                 <p class="login-page__form__register-text">
                                     Don't have an account?
-                                    <a href="{{ route('member.register') }}">Register as Member</a>
+                                    <a type="button"
+                                onclick="window.dispatchEvent(new CustomEvent('open-registration-modal'))">Register as Member</a>
                                 </p>
                                 <p class="login-page__form__register-text">
                                     <a href="{{ route('courses.index') }}">← Back to Courses</a>
