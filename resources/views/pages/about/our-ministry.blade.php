@@ -217,24 +217,7 @@
 <!-- Connect Section End -->
 
 <!-- Information Section Start -->
-<section class="about-page section-space">
-    <div class="container">
-        <div class="row gutter-y-30">
-            <div class="col-lg-6">
-                <div class="about-page__content">
-                    <h3 class="about-page__content__title">Service Times</h3>
-                    <ul class="list-unstyled about-page__list">
-                        <li><i class="fas fa-check-circle"></i> Sunday Service: 10:00 AM</li>
-                        <li><i class="fas fa-check-circle"></i> Wednesday Bible Study: 7:00 PM</li>
-                        <li><i class="fas fa-check-circle"></i> Friday Prayer Meeting: 6:30 PM</li>
-                    </ul>
-                </div>
-            </div>
 
-
-        </div>
-    </div>
-</section>
 <!-- Information Section End -->
 
 </x-app-layout>
