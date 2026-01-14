@@ -29,13 +29,15 @@
                             <br><span class="main-slider-one__title__text">{{ $banner->description }}</span>
                             @endif
                         </h2>
+                        
                         <div class="main-slider-one__btn">
-                            <a href="{{ route('our-ministry') }}" class="citylife-btn">
+                            <button type="button"
+                                onclick="window.dispatchEvent(new CustomEvent('open-registration-modal'))" class="citylife-btn">
                                 <div class="citylife-btn__icon-box">
                                     <div class="citylife-btn__icon-box__inner"><span class="icon-duble-arrow"></span></div>
                                 </div>
                                 <span class="citylife-btn__text">join with us</span>
-                            </a>
+                            </button>
                         </div>
                     </div>
                 </div>

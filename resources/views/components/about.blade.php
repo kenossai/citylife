@@ -57,7 +57,7 @@
                         @endif --}}
 
                         <div class="contact-information mt-4">
-                            <a href="{{ route('about') }}" class="contact-information__btn citylife-btn">
+                            <a href="{{ route('our-ministry') }}" class="contact-information__btn citylife-btn">
                                 <div class="citylife-btn__icon-box">
                                     <div class="citylife-btn__icon-box__inner"><span class="icon-duble-arrow"></span></div>
                                 </div>
