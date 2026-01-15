@@ -42,11 +42,46 @@ class DepRoleResource extends Resource
 
                 Forms\Components\Select::make('department_type')
                     ->options([
-                        'worship' => 'Worship',
-                        'technical' => 'Technical',
-                        'preacher' => 'Preacher',
+                        'Core Ministries' => [
+                            'preacher'     => 'Preaching & Teaching',
+                            'worship'      => 'Worship & Music',
+                            'prayer'       => 'Prayer & Intercession',
+                            'discipleship' => 'Discipleship & Doctrine',
+                        ],
+
+                        'Pastoral & Care' => [
+                            'pastoral_care' => 'Pastoral Care & Counseling',
+                            'follow_up'     => 'Follow-Up & Assimilation',
+                            'visitation'    => 'Visitation & Benevolence',
+                        ],
+
+                        'Outreach & Growth' => [
+                            'evangelism' => 'Evangelism & Outreach',
+                            'missions'   => 'Missions',
+                        ],
+
+                        'Age-Based Ministries' => [
+                            'children'     => 'Children Ministry',
+                            'youth'        => 'Youth Ministry',
+                            'young_adults' => 'Young Adults Ministry',
+                            'women'        => 'Women Ministry',
+                            'men'          => 'Men Ministry',
+                        ],
+
+                        'Operations' => [
+                            'administration' => 'Administration',
+                            'finance'        => 'Finance',
+                            'stewardship'     => 'Stewardship',
+                        ],
+
+                        'Support & Media' => [
+                            'technical'   => 'Technical & Media',
+                            'protocol'    => 'Protocol & Hospitality',
+                            'security'    => 'Security & Safety',
+                        ],
                     ])
                     ->required()
+                    ->label('Department')
                     ->native(false),
 
                 Forms\Components\Toggle::make('is_active')
