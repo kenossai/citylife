@@ -68,8 +68,20 @@ Route::get('/our-ministry', [AboutController::class, 'ourMinistry'])->name('our-
 // Route for the course controller
 Route::get('/courses', [CourseController::class, 'index'])->name('courses.index');
 Route::get('/courses/{slug}', [CourseController::class, 'show'])->name('courses.show');
-Route::get('/courses/{slug}/register', [CourseController::class, 'showRegistrationForm'])->name('courses.register.form');
-Route::post('/courses/{slug}/register', [CourseController::class, 'processRegistration'])->name('courses.register');
+
+// Protected course routes - require authentication and verification
+Route::middleware(['member.auth'])->group(function () {
+    Route::get('/courses/{slug}/register', [CourseController::class, 'showRegistrationForm'])->name('courses.register.form');
+    Route::post('/courses/{slug}/register', [CourseController::class, 'processRegistration'])->name('courses.register');
+
+    // Member dashboard and course access
+    Route::get('/my-courses', [CourseController::class, 'dashboard'])->name('courses.dashboard');
+    Route::get('/courses/{slug}/lessons', [CourseController::class, 'lessons'])->name('courses.lessons');
+    Route::get('/courses/{courseSlug}/lessons/{lessonSlug}', [CourseController::class, 'showLesson'])->name('courses.lesson.show');
+    Route::get('/courses/{courseSlug}/lessons/{lessonSlug}/quiz', [CourseController::class, 'showQuiz'])->name('courses.lesson.quiz');
+    Route::post('/courses/{courseSlug}/lessons/{lessonSlug}/complete', [CourseController::class, 'completeLesson'])->name('courses.lesson.complete');
+    Route::post('/courses/{courseSlug}/lessons/{lessonSlug}/quiz', [CourseController::class, 'submitQuiz'])->name('courses.lesson.quiz.submit');
+});
 
 // Certificate download route (public access)
 Route::get('/certificate/{enrollment_id}/download', [CourseController::class, 'downloadCertificate'])->name('certificate.download');
@@ -129,13 +141,9 @@ Route::prefix('member')->name('member.')->group(function () {
 Route::get('/register/{token}', [App\Http\Controllers\Auth\MemberAuthController::class, 'showRegisterWithToken'])->name('register.with-token');
 Route::post('/register/{token}', [App\Http\Controllers\Auth\MemberAuthController::class, 'registerWithToken'])->name('register.with-token.submit');
 
-// Protected Member Routes (using internal auth logic instead of middleware)
-Route::get('/my-courses', [CourseController::class, 'dashboard'])->name('courses.dashboard');
-Route::get('/courses/{slug}/lessons', [CourseController::class, 'lessons'])->name('courses.lessons');
-Route::get('/courses/{courseSlug}/lessons/{lessonSlug}', [CourseController::class, 'showLesson'])->name('courses.lesson.show');
-Route::get('/courses/{courseSlug}/lessons/{lessonSlug}/quiz', [CourseController::class, 'showQuiz'])->name('courses.lesson.quiz');
-Route::post('/courses/{courseSlug}/lessons/{lessonSlug}/complete', [CourseController::class, 'completeLesson'])->name('courses.lesson.complete');
-Route::post('/courses/{courseSlug}/lessons/{lessonSlug}/quiz', [CourseController::class, 'submitQuiz'])->name('courses.lesson.quiz.submit');
+// Email verification route
+Route::get('/verify-email/{token}', [App\Http\Controllers\Auth\MemberAuthController::class, 'verifyEmail'])->name('member.verify-email');
+
 
 // Debug route to check authentication
 Route::get('/auth-debug', function() {
