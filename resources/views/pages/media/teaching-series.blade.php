@@ -44,12 +44,35 @@
                     @forelse($teachingSeries as $series)
                         <div class="col-sm-6">
                             <div class="product-item wow fadeInUp animated" data-wow-duration="1500ms" data-wow-delay="000ms">
-                                <a href="{{ route('teaching-series.show', $series->slug) }}" class="product-item__img">
+                                <a href="{{ route('teaching-series.show', $series->slug) }}" class="product-item__img" style="position: relative;">
                                     <img src="{{ $series->image_url }}" alt="{{ $series->title }}">
+                                    @if($series->is_upcoming)
+                                        <div class="coming-soon-overlay" style="
+                                            position: absolute;
+                                            top: 0;
+                                            left: 0;
+                                            right: 0;
+                                            bottom: 0;
+                                            background: rgba(44, 90, 160, 0.85);
+                                            display: flex;
+                                            align-items: center;
+                                            justify-content: center;
+                                            flex-direction: column;
+                                            color: white;
+                                            z-index: 5;
+                                        ">
+                                            <i class="fa-regular fa-clock" style="font-size: 3rem; margin-bottom: 0.5rem;"></i>
+                                            <h4 style="color: white; font-size: 1.5rem; margin: 0; font-weight: 700;">Coming Soon</h4>
+                                            <p style="color: white; margin: 0.5rem 0 0 0; font-size: 0.9rem;">{{ $series->series_date->format('M j, Y') }}</p>
+                                        </div>
+                                    @endif
                                 </a>
                                 <div class="product-item__content">
                                     <h4 class="product-item__title">
                                         <a href="{{ route('teaching-series.show', $series->slug) }}">{{ $series->title }}</a>
+                                        @if($series->is_upcoming)
+                                            <span class="badge bg-warning text-dark ms-2" style="font-size: 0.7rem; vertical-align: middle;">Upcoming</span>
+                                        @endif
                                     </h4>
                                     <div class="product-item__meta">
                                         @if($series->pastor)

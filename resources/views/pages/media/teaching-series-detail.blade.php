@@ -88,8 +88,28 @@
                             </div>
                         @else
                             <!-- Fallback to Image if no video -->
-                            <div class="blog-card__image">
+                            <div class="blog-card__image" style="position: relative;">
                                 <img src="{{ $series->image_url }}" alt="{{ $series->title }}">
+                                @if($series->is_upcoming)
+                                    <div class="coming-soon-overlay" style="
+                                        position: absolute;
+                                        top: 0;
+                                        left: 0;
+                                        right: 0;
+                                        bottom: 0;
+                                        background: rgba(44, 90, 160, 0.9);
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        flex-direction: column;
+                                        color: white;
+                                        z-index: 5;
+                                    ">
+                                        <i class="fa-regular fa-clock" style="font-size: 4rem; margin-bottom: 1rem;"></i>
+                                        <h3 style="color: white; font-size: 2rem; margin: 0; font-weight: 700;">Coming Soon</h3>
+                                        <p style="color: white; margin: 1rem 0 0 0; font-size: 1.1rem;">{{ $series->series_date->format('F j, Y') }}</p>
+                                    </div>
+                                @endif
                                 @if($series->pastor)
                                     <div class="blog-details__hall">
                                         <span>Pastor:</span>
@@ -131,7 +151,12 @@
                                     </li>
                                 @endif
                             </ul>
-                            <h3 class="blog-card__title">{{ $series->title }}</h3>
+                            <h3 class="blog-card__title">
+                                {{ $series->title }}
+                                @if($series->is_upcoming)
+                                    <span class="badge bg-warning text-dark ms-2" style="font-size: 0.8rem;">Upcoming - {{ $series->series_date->format('M j, Y') }}</span>
+                                @endif
+                            </h3>
 
                             @if($series->summary)
                                 <p class="blog-card-four__text blog-card-four__text--one">{{ $series->summary }}</p>
