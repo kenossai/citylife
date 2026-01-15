@@ -31,7 +31,8 @@ class MemberResource extends Resource
 
     protected static ?string $navigationGroup = 'Member Management';
 
-    protected static ?int $navigationSort = 1;
+    // protected static ?int $navigationSort = 1;
+    protected static ?int $navigationGroupSort = 10;
 
     public static function form(Form $form): Form
     {

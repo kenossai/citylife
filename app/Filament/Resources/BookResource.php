@@ -22,7 +22,7 @@ class BookResource extends Resource
 
     protected static ?string $modelLabel = 'Book';
 
-    protected static ?string $navigationGroup = 'Team Management';
+    protected static ?string $navigationGroup = 'Resources';
 
     protected static ?int $navigationSort = 4;
 

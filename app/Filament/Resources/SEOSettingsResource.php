@@ -20,6 +20,8 @@ class SEOSettingsResource extends Resource
 
     protected static ?string $navigationLabel = 'SEO Settings';
 
+    protected static ?int $navigationGroupSort = 40;
+
     public static function form(Form $form): Form
     {
         return $form
