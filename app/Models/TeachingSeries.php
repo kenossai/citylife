@@ -78,6 +78,16 @@ class TeachingSeries extends Model
         return $query->where('category', $category);
     }
 
+    public function scopeUpcoming($query)
+    {
+        return $query->where('series_date', '>', now())->orderBy('series_date', 'asc');
+    }
+
+    public function scopePast($query)
+    {
+        return $query->where('series_date', '<=', now())->orderBy('series_date', 'desc');
+    }
+
     // Relationships
     public function teamMember(): BelongsTo
     {
@@ -151,6 +161,19 @@ class TeachingSeries extends Model
     public function getHasSermonNotesContentAttribute()
     {
         return !empty($this->sermon_notes_content);
+    }
+
+    public function getIsUpcomingAttribute()
+    {
+        return $this->series_date && $this->series_date->isFuture();
+    }
+
+    public function getStatusAttribute()
+    {
+        if (!$this->series_date) {
+            return 'No Date';
+        }
+        return $this->series_date->isFuture() ? 'Upcoming' : 'Past';
     }
 
     // Mutators

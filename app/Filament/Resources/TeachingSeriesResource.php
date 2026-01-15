@@ -296,6 +296,20 @@ class TeachingSeriesResource extends Resource
                     ->date()
                     ->sortable(),
 
+                Tables\Columns\TextColumn::make('status')
+                    ->badge()
+                    ->getStateUsing(fn ($record) => $record->status)
+                    ->color(fn (string $state): string => match ($state) {
+                        'Upcoming' => 'warning',
+                        'Past' => 'success',
+                        default => 'gray',
+                    })
+                    ->icon(fn (string $state): string => match ($state) {
+                        'Upcoming' => 'heroicon-o-clock',
+                        'Past' => 'heroicon-o-check-circle',
+                        default => 'heroicon-o-question-mark-circle',
+                    }),
+
                 Tables\Columns\TextColumn::make('duration_minutes')
                     ->label('Duration')
                     ->formatStateUsing(fn ($state) => $state ? "{$state} min" : '-')
@@ -375,6 +389,22 @@ class TeachingSeriesResource extends Resource
 
                 Tables\Filters\TernaryFilter::make('is_featured')
                     ->label('Featured Status'),
+
+                SelectFilter::make('status')
+                    ->label('Status')
+                    ->options([
+                        'upcoming' => 'Upcoming',
+                        'past' => 'Past',
+                    ])
+                    ->query(function (Builder $query, array $data) {
+                        if ($data['value'] === 'upcoming') {
+                            return $query->upcoming();
+                        }
+                        if ($data['value'] === 'past') {
+                            return $query->past();
+                        }
+                        return $query;
+                    }),
             ])
             ->actions([
                 Tables\Actions\Action::make('sendNote')
