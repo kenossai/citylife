@@ -15,6 +15,7 @@ use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Auth;
 
 class RegistrationInterestResource extends Resource
 {
@@ -65,7 +66,8 @@ class RegistrationInterestResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('email')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->copyable(),
                 Tables\Columns\BadgeColumn::make('status')
                     ->colors([
                         'warning' => 'pending',
@@ -77,8 +79,21 @@ class RegistrationInterestResource extends Resource
                     ->label('Registered')
                     ->boolean()
                     ->trueIcon('heroicon-o-check-circle')
+                    ->trueColor('success')
                     ->falseIcon('heroicon-o-x-circle')
+                    ->falseColor('warning')
                     ->sortable(),
+                Tables\Columns\TextColumn::make('member.full_name')
+                    ->label('Member Name')
+                    ->getStateUsing(function ($record) {
+                        if ($record->member) {
+                            return trim($record->member->first_name . ' ' . $record->member->last_name);
+                        }
+                        return null;
+                    })
+                    ->url(fn ($record) => $record->member ? route('filament.admin.resources.members.edit', $record->member) : null)
+                    ->color('primary')
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('approver.name')
                     ->label('Approved By')
                     ->sortable()
@@ -87,7 +102,13 @@ class RegistrationInterestResource extends Resource
                     ->dateTime()
                     ->sortable()
                     ->toggleable(),
+                Tables\Columns\TextColumn::make('registered_at')
+                    ->label('Registration Date')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('created_at')
+                    ->label('Interest Date')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -116,7 +137,7 @@ class RegistrationInterestResource extends Resource
                     ->action(function (RegistrationInterest $record) {
                         $record->update([
                             'status' => 'approved',
-                            'approved_by' => auth()->id(),
+                            'approved_by' => Auth::id(),
                             'approved_at' => now(),
                         ]);
 
@@ -141,7 +162,7 @@ class RegistrationInterestResource extends Resource
                     ->action(function (RegistrationInterest $record) {
                         $record->update([
                             'status' => 'rejected',
-                            'approved_by' => auth()->id(),
+                            'approved_by' => Auth::id(),
                             'approved_at' => now(),
                         ]);
 
@@ -181,7 +202,7 @@ class RegistrationInterestResource extends Resource
                                 if ($record->isPending()) {
                                     $record->update([
                                         'status' => 'approved',
-                                        'approved_by' => auth()->id(),
+                                        'approved_by' => Auth::id(),
                                         'approved_at' => now(),
                                     ]);
 

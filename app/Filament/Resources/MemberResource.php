@@ -272,6 +272,18 @@ class MemberResource extends Resource
                         'member' => 'Member',
                         'inactive' => 'Inactive',
                     ]),
+                Tables\Filters\Filter::make('pending_approval')
+                    ->label('Pending Approval')
+                    ->query(fn (Builder $query): Builder => $query->whereNull('approved_at')->whereNotNull('email_verified_at'))
+                    ->toggle(),
+                Tables\Filters\Filter::make('email_verified')
+                    ->label('Email Verified')
+                    ->query(fn (Builder $query): Builder => $query->whereNotNull('email_verified_at'))
+                    ->toggle(),
+                Tables\Filters\Filter::make('email_not_verified')
+                    ->label('Email Not Verified')
+                    ->query(fn (Builder $query): Builder => $query->whereNull('email_verified_at'))
+                    ->toggle(),
                 Tables\Filters\SelectFilter::make('baptism_status')
                     ->options([
                         'Not Baptized' => 'Not Baptized',
