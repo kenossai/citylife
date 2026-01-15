@@ -48,6 +48,36 @@ class MemberAuthController extends Controller
         // Debug logging
         Log::info('Login attempt for: ' . $credentials['email']);
 
+        // Find the member first to check their status
+        $member = Member::where('email', strtolower(trim($credentials['email'])))->first();
+
+        if (!$member) {
+            throw ValidationException::withMessages([
+                'email' => 'The provided credentials do not match our records.',
+            ]);
+        }
+
+        // Check if email is verified
+        if (!$member->hasVerifiedEmail()) {
+            throw ValidationException::withMessages([
+                'email' => 'Please verify your email address before logging in. Check your inbox for the verification link.',
+            ]);
+        }
+
+        // Check if approved by admin
+        if (!$member->isApproved()) {
+            throw ValidationException::withMessages([
+                'email' => 'Your account is pending admin approval. You will be notified via email once approved.',
+            ]);
+        }
+
+        // Check if account is active
+        if (!$member->is_active) {
+            throw ValidationException::withMessages([
+                'email' => 'Your account has been deactivated. Please contact the administrator.',
+            ]);
+        }
+
         if (Auth::guard('member')->attempt($credentials, $remember)) {
             $request->session()->regenerate();
 
@@ -167,9 +197,15 @@ class MemberAuthController extends Controller
             'gdpr_consent_ip' => $request->ip(),
             'newsletter_consent' => $consentGiven,
             'newsletter_consent_date' => $consentGiven ? now() : null,
+            'email_verified_at' => null, // Not verified yet
+            'approved_at' => null, // Not approved yet
         ]);
 
-        // Add to newsletter subscribers if they consented
+        // Generate and send email verification
+        $verificationToken = $member->generateEmailVerificationToken();
+        $member->notify(new \App\Notifications\MemberEmailVerification($verificationToken));
+
+        // Add to newsletter subscribers if they consented (but mark as pending verification)
         if ($consentGiven) {
             NewsletterSubscriber::subscribe($request->email, [
                 'first_name' => $request->first_name,
@@ -181,25 +217,61 @@ class MemberAuthController extends Controller
             ]);
         }
 
-        // Log the user in
-        Auth::guard('member')->login($member);
+        // DO NOT log the user in - they must verify email first
 
-        // Regenerate session for security
-        $request->session()->regenerate();
+        // Notify admins about new member registration for approval
+        $this->notifyAdminsAboutNewMember($member);
 
-        // Auto-enroll the new member into the Christian Development Course
-        $this->autoEnrollChristianDevelopmentCourse($member);
+        $successMessage = 'Registration successful! Please check your email to verify your account. After verification, an administrator will review and approve your account.';
 
-        $successMessage = 'Registration successful! Welcome to City Life Church.';
-        if ($consentGiven) {
-            $successMessage .= ' You have been subscribed to our newsletter.';
+        return redirect()->route('member.login')
+            ->with('success', $successMessage);
+    }
+
+    /**
+     * Notify admins about new member registration
+     */
+    private function notifyAdminsAboutNewMember(Member $member)
+    {
+        // Get all admin users
+        $admins = \App\Models\User::whereHas('roles', function ($query) {
+            $query->where('name', 'admin');
+        })->get();
+
+        foreach ($admins as $admin) {
+            // Send notification to admin (you can create a notification for this)
+            Log::info('New member registered - pending approval', [
+                'member_id' => $member->id,
+                'member_email' => $member->email,
+                'admin_notified' => $admin->email,
+            ]);
+        }
+    }
+
+    /**
+     * Handle email verification
+     */
+    public function verifyEmail(Request $request, $token)
+    {
+        $hashedToken = hash('sha256', $token);
+
+        $member = Member::where('email_verification_token', $hashedToken)->first();
+
+        if (!$member) {
+            return redirect()->route('member.login')
+                ->with('error', 'Invalid verification link.');
         }
 
-        // Clear any intended URL from session to prevent redirect to admin
-        $request->session()->forget('url.intended');
+        // Mark email as verified
+        $member->markEmailAsVerified();
 
-        return redirect()->route('courses.dashboard')
-            ->with('success', $successMessage);
+        Log::info('Member email verified', [
+            'member_id' => $member->id,
+            'email' => $member->email,
+        ]);
+
+        return redirect()->route('member.login')
+            ->with('success', 'Email verified successfully! Your account is now pending admin approval. You will be notified via email once approved.');
     }
 
     /**
@@ -426,8 +498,11 @@ class MemberAuthController extends Controller
             'newsletter_consent_date' => $consentGiven ? now() : null,
         ]);
 
-        // Delete the registration interest after successful registration
-        $interest->delete();
+        // Mark the registration interest as completed instead of deleting it
+        $interest->update([
+            'registered_at' => now(),
+            'member_id' => $member->id,
+        ]);
 
         // Add to newsletter subscribers if they consented
         if ($consentGiven) {
@@ -441,20 +516,37 @@ class MemberAuthController extends Controller
             ]);
         }
 
-        // Log the user in
-        Auth::guard('member')->login($member);
+        // Send email verification notification
+        try {
+            $verificationToken = $member->generateEmailVerificationToken();
+            $member->notify(new \App\Notifications\MemberEmailVerification($verificationToken));
+
+            Log::info('Email verification sent to new member from complete registration', [
+                'member_id' => $member->id,
+                'email' => $member->email,
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Failed to send email verification from complete registration', [
+                'member_id' => $member->id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+        }
+
+        // DO NOT log the user in - they need to verify email first
+        // Auth::guard('member')->login($member);
 
         // Regenerate session for security
         $request->session()->regenerate();
 
-        // Auto-enroll into Christian Development Course
+        // Auto-enroll into Christian Development Course (even though they can't access it yet)
         $this->autoEnrollChristianDevelopmentCourse($member);
 
         // Clear any intended URL from session
         $request->session()->forget('url.intended');
 
-        // Redirect to course dashboard
-        return redirect()->route('courses.dashboard')
-            ->with('success', 'Welcome to CityLife Church! You have been enrolled in the Church Development Course.');
+        // Redirect to login with verification message
+        return redirect()->route('member.login')
+            ->with('success', 'Account created successfully! Please check your email (' . $member->email . ') to verify your email address. After verification, your account will need admin approval before you can login.');
     }
 }
