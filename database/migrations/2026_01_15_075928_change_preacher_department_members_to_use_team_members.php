@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::table('preacher_department_members', function (Blueprint $table) {
             // Drop the old foreign key constraint
             $table->dropForeign(['member_id']);
-            
+
             // Rename the column from member_id to team_member_id
             $table->renameColumn('member_id', 'team_member_id');
         });
@@ -36,7 +36,7 @@ return new class extends Migration
         Schema::table('preacher_department_members', function (Blueprint $table) {
             // Drop the new foreign key constraint
             $table->dropForeign(['team_member_id']);
-            
+
             // Rename the column back
             $table->renameColumn('team_member_id', 'member_id');
         });

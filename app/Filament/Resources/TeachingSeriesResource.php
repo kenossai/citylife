@@ -66,16 +66,19 @@ class TeachingSeriesResource extends Resource
                                             ->unique(TeachingSeries::class, 'slug', ignoreRecord: true)
                                             ->rules(['alpha_dash']),
 
-                                        Forms\Components\Select::make('pastor')
-                                            ->options([
-                                                'Pastor John Smith' => 'Pastor John Smith',
-                                                'Pastor Mary Johnson' => 'Pastor Mary Johnson',
-                                                'Pastor David Wilson' => 'Pastor David Wilson',
-                                                'Guest Speaker' => 'Guest Speaker',
-                                            ])
+                                        Forms\Components\Select::make('team_member_id')
+                                            ->label('Speaker/Pastor')
+                                            ->relationship('teamMember', 'first_name')
+                                            ->getOptionLabelFromRecordUsing(fn ($record) => "{$record->title} {$record->first_name} {$record->last_name}")
                                             ->searchable()
-                                            ->allowHtml(false)
-                                            ->preload(),
+                                            ->preload()
+                                            ->helperText('Select from Leadership Team members'),
+
+                                        Forms\Components\TextInput::make('pastor')
+                                            ->label('Guest Speaker (if not from team)')
+                                            ->maxLength(255)
+                                            ->placeholder('Enter guest speaker name')
+                                            ->helperText('Use this field only for guest speakers not in the leadership team'),
 
                                         Forms\Components\Select::make('category')
                                             ->options([
@@ -257,11 +260,31 @@ class TeachingSeriesResource extends Resource
                     ->sortable()
                     ->limit(30),
 
-                Tables\Columns\TextColumn::make('pastor')
-                    ->searchable()
+                Tables\Columns\TextColumn::make('speaker')
+                    ->label('Speaker/Pastor')
+                    ->getStateUsing(function ($record) {
+                        if ($record->teamMember) {
+                            return "{$record->teamMember->title} {$record->teamMember->first_name} {$record->teamMember->last_name}";
+                        }
+                        return $record->pastor ?? 'N/A';
+                    })
+                    ->searchable(['pastor'])
                     ->sortable()
                     ->badge()
                     ->color('info'),
+
+                Tables\Columns\TextColumn::make('speaker_type')
+                    ->label('Type')
+                    ->badge()
+                    ->getStateUsing(function ($record) {
+                        return $record->team_member_id ? 'Team' : 'Guest';
+                    })
+                    ->color(fn (string $state): string => match ($state) {
+                        'Team' => 'success',
+                        'Guest' => 'warning',
+                        default => 'gray',
+                    })
+                    ->toggleable(isToggledHiddenByDefault: true),
 
                 Tables\Columns\TextColumn::make('category')
                     ->searchable()
@@ -336,14 +359,16 @@ class TeachingSeriesResource extends Resource
                     ])
                     ->multiple(),
 
-                SelectFilter::make('pastor')
-                    ->options([
-                        'Pastor John Smith' => 'Pastor John Smith',
-                        'Pastor Mary Johnson' => 'Pastor Mary Johnson',
-                        'Pastor David Wilson' => 'Pastor David Wilson',
-                        'Guest Speaker' => 'Guest Speaker',
-                    ])
-                    ->multiple(),
+                SelectFilter::make('team_member_id')
+                    ->label('Team Speaker')
+                    ->relationship('teamMember', 'first_name')
+                    ->getOptionLabelFromRecordUsing(fn ($record) => "{$record->title} {$record->first_name} {$record->last_name}")
+                    ->multiple()
+                    ->preload(),
+
+                Tables\Filters\Filter::make('guest_speakers')
+                    ->label('Guest Speakers Only')
+                    ->query(fn (Builder $query): Builder => $query->whereNull('team_member_id')->whereNotNull('pastor')),
 
                 Tables\Filters\TernaryFilter::make('is_published')
                     ->label('Published Status'),

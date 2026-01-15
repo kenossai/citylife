@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
 
 class TeachingSeries extends Model
@@ -22,6 +23,7 @@ class TeachingSeries extends Model
         'sermon_notes_content',
         'sermon_notes_content_type',
         'pastor',
+        'team_member_id',
         'category',
         'tags',
         'series_date',
@@ -74,6 +76,12 @@ class TeachingSeries extends Model
     public function scopeByCategory($query, $category)
     {
         return $query->where('category', $category);
+    }
+
+    // Relationships
+    public function teamMember(): BelongsTo
+    {
+        return $this->belongsTo(TeamMember::class, 'team_member_id');
     }
 
     public function scopeOrderByDate($query, $direction = 'desc')
