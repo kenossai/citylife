@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class TeachingSeries extends Model
@@ -124,7 +125,7 @@ class TeachingSeries extends Model
     public function getImageUrlAttribute()
     {
         if ($this->image) {
-            return asset('storage/' . $this->image);
+            return Storage::disk('s3')->url($this->image);
         }
 
         return asset('assets/images/defaults/teaching-series-default.jpg');
@@ -133,7 +134,7 @@ class TeachingSeries extends Model
     public function getSermonNotesUrlAttribute()
     {
         if ($this->sermon_notes) {
-            return asset('storage/' . $this->sermon_notes);
+            return Storage::disk('s3')->url($this->sermon_notes);
         }
 
         return null;

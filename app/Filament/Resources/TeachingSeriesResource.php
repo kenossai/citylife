@@ -252,6 +252,7 @@ class TeachingSeriesResource extends Resource
             ->columns([
                 Tables\Columns\ImageColumn::make('image')
                     ->label('Image')
+                    ->disk('s3')
                     ->circular()
                     ->size(60),
 
