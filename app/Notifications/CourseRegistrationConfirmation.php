@@ -43,18 +43,12 @@ class CourseRegistrationConfirmation extends Notification // Temporarily disable
     {
         return (new MailMessage)
             ->subject('Course Registration Confirmation - ' . $this->course->title)
-            ->greeting('Hello ' . $notifiable->first_name . '!')
-            ->line('Thank you for registering for **' . $this->course->title . '**.')
-            ->line('**Course Details:**')
-            ->line('Start Date: ' . $this->course->start_date?->format('F j, Y'))
-            ->line('End Date: ' . $this->course->end_date?->format('F j, Y'))
-            ->line('Location: ' . ($this->course->location ?: 'TBA'))
-            ->line('Instructor: ' . ($this->course->instructor ?: 'TBA'))
-            ->line('')
-            ->line('We will contact you soon with additional details about the course.')
-            ->action('View Course Details', url('/courses/' . $this->course->slug))
-            ->line('If you have any questions, please don\'t hesitate to contact us.')
-            ->salutation('Blessings, The CityLife Team');
+            ->view('emails.course-registration-confirmation', [
+                'member' => $notifiable,
+                'course' => $this->course,
+                'enrollment' => $this->enrollment,
+                'courseUrl' => url('/courses/' . $this->course->slug),
+            ]);
     }
 
     /**
