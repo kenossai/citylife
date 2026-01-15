@@ -19,24 +19,41 @@ class ContactController extends Controller
 
     public function submit(Request $request)
     {
-        // Anti-spam: Check honeypot field (should be empty)
-        if ($request->filled('website') || $request->filled('url')) {
-            Log::warning('Contact form spam detected: honeypot field filled', [
+        // Anti-spam: Block known spam IP addresses
+        $blockedIPs = config('spam-protection.blocked_ips', []);
+
+        if (in_array($request->ip(), $blockedIPs)) {
+            Log::warning('Contact form blocked: IP in blacklist', [
                 'ip' => $request->ip(),
-                'user_agent' => $request->userAgent(),
             ]);
-            // Pretend success to bot
             return redirect()->route('contact')->with('success',
                 'Thank you for reaching out! Your message has been received and we will get back to you soon. God bless!'
             );
         }
 
-        // Anti-spam: Rate limiting (max 3 submissions per hour from same IP)
+        // Anti-spam: Check honeypot field (should be empty)
+        $honeypotFields = config('spam-protection.honeypot_fields', ['website', 'url']);
+        foreach ($honeypotFields as $field) {
+            if ($request->filled($field)) {
+                Log::warning('Contact form spam detected: honeypot field filled', [
+                    'ip' => $request->ip(),
+                    'field' => $field,
+                    'user_agent' => $request->userAgent(),
+                ]);
+                // Pretend success to bot
+                return redirect()->route('contact')->with('success',
+                    'Thank you for reaching out! Your message has been received and we will get back to you soon. God bless!'
+                );
+            }
+        }
+
+        // Anti-spam: Rate limiting (max submissions per hour from same IP)
+        $rateLimit = config('spam-protection.rate_limit_per_hour', 3);
         $recentSubmissions = ContactSubmission::where('ip_address', $request->ip())
             ->where('created_at', '>', now()->subHour())
             ->count();
 
-        if ($recentSubmissions >= 3) {
+        if ($recentSubmissions >= $rateLimit) {
             Log::warning('Contact form spam detected: rate limit exceeded', [
                 'ip' => $request->ip(),
                 'count' => $recentSubmissions,
@@ -46,28 +63,53 @@ class ContactController extends Controller
             );
         }
 
-        // Anti-spam: Check for suspicious content
-        $suspiciousPatterns = [
-            'https?:\/\/proff?seo\.ru',
-            'https?:\/\/.*\.ru\/prodvizhenie',
-            'SEO.*promotion',
-            'купить|продвижение|рейтинг',
-            'bit\.ly|tinyurl|goo\.gl',
-        ];
+        // Anti-spam: Check foconfig('spam-protection.suspicious_patterns', []);
 
-        $combinedText = $request->input('message') . ' ' . $request->input('subject');
+        $combinedText = $request->input('message') . ' ' . $request->input('subject') . ' ' . $request->input('name');
+
         foreach ($suspiciousPatterns as $pattern) {
             if (preg_match('/' . $pattern . '/i', $combinedText)) {
                 Log::warning('Contact form spam detected: suspicious content', [
                     'ip' => $request->ip(),
                     'pattern' => $pattern,
                     'email' => $request->input('email'),
+                    'matched_text' => substr($combinedText, 0, 200),
                 ]);
                 // Pretend success to bot
                 return redirect()->route('contact')->with('success',
                     'Thank you for reaching out! Your message has been received and we will get back to you soon. God bless!'
                 );
             }
+        }
+
+        // Anti-spam: Block disposable email domains
+        $disposableEmailDomains = config('spam-protection.disposable_email_domains', []);
+
+        $emailDomain = strtolower(substr(strrchr($request->input('email'), "@"), 1));
+        if (in_array($emailDomain, $disposableEmailDomains)) {
+            Log::warning('Contact form spam detected: disposable email', [
+                'ip' => $request->ip(),
+                'email' => $request->input('email'),
+                'domain' => $emailDomain,
+            ]);
+            return redirect()->route('contact')->with('error',
+                'Please use a permanent email address. Temporary email services are not accepted.'
+            );
+        }
+
+        // Anti-spam: Check for excessive URLs in message
+        $maxUrls = config('spam-protection.max_urls_in_message', 2);
+        $urlCount = preg_match_all('/https?:\/\/[^\s]+/i', $request->input('message'), $matches);
+        if ($urlCount > $maxUrlsmatch_all('/https?:\/\/[^\s]+/i', $request->input('message'), $matches);
+        if ($urlCount > 2) {
+            Log::warning('Contact form spam detected: excessive URLs', [
+                'ip' => $request->ip(),
+                'url_count' => $urlCount,
+                'email' => $request->input('email'),
+            ]);
+            return redirect()->route('contact')->with('success',
+                'Thank you for reaching out! Your message has been received and we will get back to you soon. God bless!'
+            );
         }
 
         // Anti-spam: Time-based validation (form loaded timestamp check)
@@ -109,8 +151,9 @@ class ContactController extends Controller
         }
 
         try {
-            // Store the contact submission in database
-            $submission = ContactSubmission::create([
+            $minTime = config('spam-protection.minimum_form_time', 3);
+            // Form filled too quickly - likely a bot
+            if ($timeDiff < $minTimetactSubmission::create([
                 'name' => $validated['name'],
                 'email' => $validated['email'],
                 'phone' => $validated['phone'],
