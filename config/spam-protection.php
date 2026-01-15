@@ -27,7 +27,8 @@ return [
 
     // Blocked IP addresses
     'blocked_ips' => [
-        '37.139.53.35', // Spam detected on Jan 14, 2026
+        '37.139.53.35',
+        '107.189.30.236' // Spam detected on Jan 14, 2026
         // Add more IPs as you identify them
     ],
 
