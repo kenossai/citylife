@@ -4,13 +4,17 @@ namespace App\Filament\Resources\SpamProtectionResource\Pages;
 
 use App\Filament\Resources\SpamProtectionResource;
 use Filament\Actions;
-use Filament\Resources\Pages\ManageRecords;
+use Filament\Resources\Pages\Page;
 use Filament\Forms;
 use Filament\Notifications\Notification;
+use Filament\Infolists;
+use Filament\Infolists\Infolist;
 
-class ManageSpamProtection extends ManageRecords
+class ManageSpamProtection extends Page
 {
     protected static string $resource = SpamProtectionResource::class;
+    
+    protected static string $view = 'filament.pages.manage-spam-protection';
 
     protected function getHeaderActions(): array
     {
@@ -41,11 +45,6 @@ class ManageSpamProtection extends ManageRecords
                         ->persistent()
                         ->send();
                 }),
-            Actions\Action::make('view_stats')
-                ->label('View Statistics')
-                ->icon('heroicon-o-chart-bar')
-                ->color('primary')
-                ->url(route('filament.admin.resources.contact-submissions.index')),
         ];
     }
 
