@@ -182,6 +182,8 @@
                             border-left: 4px solid #2c5aa0;
                             line-height: 1.7;
                             color: #333;
+                            max-height: 500px;
+                            overflow-y: auto;
                         ">
                             @if($series->sermon_notes_content_type === 'markdown')
                                 {!! \Illuminate\Support\Str::markdown($series->sermon_notes_content) !!}
