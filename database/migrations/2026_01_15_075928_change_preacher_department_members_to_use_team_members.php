@@ -12,18 +12,18 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('preacher_department_members', function (Blueprint $table) {
-            // Make team_member_id nullable to allow both member types
-            $table->unsignedBigInteger('team_member_id')->nullable()->change();
+            // Drop the old foreign key constraint
+            $table->dropForeign(['member_id']);
             
-            // Add member_id column back as nullable
-            $table->unsignedBigInteger('member_id')->nullable()->after('preacher_department_id');
+            // Rename the column from member_id to team_member_id
+            $table->renameColumn('member_id', 'team_member_id');
         });
 
-        // Add foreign key for member_id
+        // Add the new foreign key constraint in a separate call (required for some DB versions)
         Schema::table('preacher_department_members', function (Blueprint $table) {
-            $table->foreign('member_id')
+            $table->foreign('team_member_id')
                 ->references('id')
-                ->on('members')
+                ->on('team_members')
                 ->onDelete('cascade');
         });
     }
@@ -34,12 +34,19 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('preacher_department_members', function (Blueprint $table) {
-            // Drop the member_id foreign key and column
-            $table->dropForeign(['member_id']);
-            $table->dropColumn('member_id');
+            // Drop the new foreign key constraint
+            $table->dropForeign(['team_member_id']);
             
-            // Make team_member_id required again
-            $table->unsignedBigInteger('team_member_id')->nullable(false)->change();
+            // Rename the column back
+            $table->renameColumn('team_member_id', 'member_id');
+        });
+
+        // Add the old foreign key constraint back
+        Schema::table('preacher_department_members', function (Blueprint $table) {
+            $table->foreign('member_id')
+                ->references('id')
+                ->on('members')
+                ->onDelete('cascade');
         });
     }
 };
