@@ -9,7 +9,7 @@ class PreacherDepartmentMember extends Model
 {
     protected $fillable = [
         'preacher_department_id',
-        'member_id',
+        'team_member_id',
         'role',
         'joined_date',
         'is_active',
@@ -27,8 +27,8 @@ class PreacherDepartmentMember extends Model
         return $this->belongsTo(PreacherDepartment::class);
     }
 
-    public function member(): BelongsTo
+    public function teamMember(): BelongsTo
     {
-        return $this->belongsTo(Member::class);
+        return $this->belongsTo(TeamMember::class, 'team_member_id');
     }
 }

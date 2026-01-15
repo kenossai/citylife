@@ -35,17 +35,9 @@ class PreacherDepartmentMemberResource extends Resource
                     ->searchable()
                     ->preload(),
 
-                Forms\Components\Select::make('member_id')
-                    ->label('Team Member')
-                    ->options(function () {
-                        return \App\Models\TeamMember::query()
-                            ->orderBy('first_name')
-                            ->get()
-                            ->mapWithKeys(function ($member) {
-                                $name = trim(($member->title ? $member->title . ' ' : '') . $member->first_name . ' ' . $member->last_name);
-                                return [$member->id => $name];
-                            });
-                    })
+                Forms\Components\Select::make('team_member_id')
+                    ->relationship('teamMember', 'first_name')
+                    ->getOptionLabelFromRecordUsing(fn ($record) => "{$record->title} {$record->first_name} {$record->last_name}")
                     ->required()
                     ->searchable()
                     ->preload(),
@@ -74,12 +66,12 @@ class PreacherDepartmentMemberResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('member.first_name')
+                Tables\Columns\TextColumn::make('teamMember.first_name')
                     ->label('First Name')
                     ->searchable()
                     ->sortable(),
 
-                Tables\Columns\TextColumn::make('member.last_name')
+                Tables\Columns\TextColumn::make('teamMember.last_name')
                     ->label('Last Name')
                     ->searchable()
                     ->sortable(),
