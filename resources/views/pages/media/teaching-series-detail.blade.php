@@ -105,7 +105,7 @@
                                         color: white;
                                         z-index: 5;
                                     ">
-                                        <i class="fa-regular fa-clock" style="font-size: 4rem; margin-bottom: 1rem;"></i>
+                                        <i class="icon-clock" style="font-size: 4rem; margin-bottom: 1rem;"></i>
                                         <h3 style="color: white; font-size: 2rem; margin: 0; font-weight: 700;">Coming Soon</h3>
                                         <p style="color: white; margin: 1rem 0 0 0; font-size: 1.1rem;">{{ $series->series_date->format('F j, Y') }}</p>
                                     </div>
