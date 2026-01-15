@@ -87,6 +87,22 @@ class RegistrationInterest extends Model
      */
     public function isRegistered(): bool
     {
-        return !is_null($this->registered_at) && !is_null($this->user_id);
+        return !is_null($this->registered_at) && !is_null($this->member_id);
+    }
+
+    /**
+     * Scope for registered interests
+     */
+    public function scopeRegistered($query)
+    {
+        return $query->whereNotNull('registered_at')->whereNotNull('member_id');
+    }
+
+    /**
+     * Scope for not registered interests
+     */
+    public function scopeNotRegistered($query)
+    {
+        return $query->whereNull('registered_at');
     }
 }
