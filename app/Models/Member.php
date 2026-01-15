@@ -24,6 +24,11 @@ class Member extends Authenticatable
         'spouse_is_member',
         'spouse_member_id',
         'email',
+        'email_verified_at',
+        'email_verification_token',
+        'approved_at',
+        'approved_by',
+        'approval_notes',
         'password',
         'phone',
         'alternative_phone',
@@ -86,6 +91,8 @@ class Member extends Authenticatable
         'newsletter_consent_date' => 'datetime',
         'last_login_at' => 'datetime',
         'churchsuite_synced_at' => 'datetime',
+        'email_verified_at' => 'datetime',
+        'approved_at' => 'datetime',
     ];
 
     // Auto-generate membership number when creating
@@ -337,5 +344,64 @@ class Member extends Authenticatable
         }
 
         return $birthday;
+    }
+
+    /**
+     * Check if member's email is verified
+     */
+    public function hasVerifiedEmail(): bool
+    {
+        return !is_null($this->email_verified_at);
+    }
+
+    /**
+     * Mark email as verified
+     */
+    public function markEmailAsVerified(): bool
+    {
+        return $this->forceFill([
+            'email_verified_at' => now(),
+            'email_verification_token' => null,
+        ])->save();
+    }
+
+    /**
+     * Check if member is approved by admin
+     */
+    public function isApproved(): bool
+    {
+        return !is_null($this->approved_at);
+    }
+
+    /**
+     * Check if member can access the system
+     */
+    public function canAccessSystem(): bool
+    {
+        return $this->is_active
+            && $this->hasVerifiedEmail()
+            && $this->isApproved();
+    }
+
+    /**
+     * Generate email verification token
+     */
+    public function generateEmailVerificationToken(): string
+    {
+        $token = bin2hex(random_bytes(32));
+
+        $this->forceFill([
+            'email_verification_token' => hash('sha256', $token),
+        ])->save();
+
+        return $token;
+    }
+
+    /**
+     * Relationship with approver
+     */
+    public function approvedBy()
+    {
+        return $this->belongsTo(User::class, 'approved_by');
     }
 }

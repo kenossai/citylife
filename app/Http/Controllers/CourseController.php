@@ -137,6 +137,8 @@ class CourseController extends Controller
             // Check if member already exists by email (case insensitive)
             $member = Member::whereRaw('LOWER(TRIM(email)) = ?', [$normalizedEmail])->first();
 
+            $isNewMember = false; // Track if this is a new member
+            
             if (!$member) {
                 // Generate a unique membership number
                 $membershipNumber = 'CL' . date('Y') . str_pad(Member::count() + 1, 4, '0', STR_PAD_LEFT);
@@ -153,7 +155,11 @@ class CourseController extends Controller
                     'emergency_contact_relationship' => $validated['emergency_contact_relationship'],
                     'first_visit_date' => now(),
                     'is_active' => true,
+                    'email_verified_at' => null, // Not verified yet
+                    'approved_at' => null, // Not approved yet
                 ]);
+
+                $isNewMember = true; // Mark as new member
 
                 Log::info('New member created during course registration', [
                     'member_id' => $member->id,
@@ -257,11 +263,59 @@ class CourseController extends Controller
 
             DB::commit();
 
+            Log::info('Transaction committed, checking if new member needs verification email', [
+                'isNewMember' => $isNewMember,
+                'member_id' => $member->id,
+                'email' => $member->email
+            ]);
+
+            // Send email verification for new members AFTER transaction commits
+            if ($isNewMember) {
+                try {
+                    Log::info('About to generate verification token for new member', [
+                        'member_id' => $member->id,
+                        'email' => $member->email
+                    ]);
+                    
+                    $verificationToken = $member->generateEmailVerificationToken();
+                    
+                    Log::info('Verification token generated, about to send notification', [
+                        'member_id' => $member->id,
+                        'token_length' => strlen($verificationToken)
+                    ]);
+                    
+                    $member->notify(new \App\Notifications\MemberEmailVerification($verificationToken));
+                    
+                    Log::info('Email verification notification sent successfully', [
+                        'member_id' => $member->id,
+                        'email' => $member->email,
+                        'course_id' => $course->id
+                    ]);
+                } catch (\Exception $e) {
+                    // Log error but don't fail the registration
+                    Log::error('Failed to send email verification', [
+                        'member_id' => $member->id,
+                        'error' => $e->getMessage(),
+                        'trace' => $e->getTraceAsString()
+                    ]);
+                }
+            } else {
+                Log::info('Not a new member, skipping verification email', [
+                    'member_id' => $member->id,
+                    'email' => $member->email
+                ]);
+            }
+
             // Store user email in session for enrollment tracking
             session(['user_email' => $member->email]);
 
             // Redirect with success message and notification status
             $successMessage = 'Successfully registered for ' . $course->title . '! ';
+            
+            if ($isNewMember) {
+                $successMessage .= 'Please check your email (' . $member->email . ') for a verification link. You must verify your email and wait for admin approval before accessing the course. ';
+            }
+            
             $successMessage .= 'A confirmation email has been sent to ' . $member->email;
 
             if ($member->phone) {
