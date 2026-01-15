@@ -13,7 +13,7 @@ use Filament\Infolists\Infolist;
 class ManageSpamProtection extends Page
 {
     protected static string $resource = SpamProtectionResource::class;
-    
+
     protected static string $view = 'filament.pages.manage-spam-protection';
 
     protected function getHeaderActions(): array

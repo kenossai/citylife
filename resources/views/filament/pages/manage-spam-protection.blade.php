@@ -129,7 +129,7 @@
             <div class="prose prose-sm dark:prose-invert max-w-none">
                 <p>To modify spam protection settings, edit the configuration file:</p>
                 <pre class="rounded-lg bg-gray-100 p-3 dark:bg-gray-800"><code>config/spam-protection.php</code></pre>
-                
+
                 <h4>Adding a Blocked IP:</h4>
                 <ol>
                     <li>Open <code>config/spam-protection.php</code></li>
