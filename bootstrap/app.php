@@ -16,9 +16,10 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\EnsureConsistentSession::class,
         ]);
 
-        // Register permission middleware alias
+        // Register middleware aliases
         $middleware->alias([
             'permission' => \App\Http\Middleware\CheckPermission::class,
+            'member.auth' => \App\Http\Middleware\MemberAuthenticated::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
