@@ -419,7 +419,7 @@ class MemberAuthController extends Controller
             ->first();
 
         if (!$interest) {
-            return redirect()->route('member.register')
+            return redirect()->route('home')
                 ->withErrors(['token' => 'Invalid or expired registration link. Please submit a new interest.']);
         }
 
@@ -449,13 +449,13 @@ class MemberAuthController extends Controller
             ->first();
 
         if (!$interest) {
-            return redirect()->route('member.register')
+            return redirect()->route('home')
                 ->withErrors(['token' => 'Invalid or expired registration link.']);
         }
 
         // Check if token is expired (7 days)
         if ($interest->approved_at && $interest->approved_at->lt(now()->subDays(7))) {
-            return redirect()->route('member.register')
+            return redirect()->route('home')
                 ->withErrors(['token' => 'This registration link has expired. Please submit a new interest.']);
         }
 

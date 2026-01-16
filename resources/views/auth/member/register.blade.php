@@ -3,7 +3,7 @@
 
     <!-- Page Header -->
     <section class="page-header">
-        <div class="page-header__bg" style="background-image: url('{{ asset('assets/images/backgrounds/page-header-bg-1-1.jpg') }}');"></div>
+        <div class="page-header__bg" style="background-image: url('{{ asset('assets/images/backgrounds/worship-banner-1.jpg') }}');"></div>
         <div class="container">
             <h2 class="page-header__title">Member Registration</h2>
             <ul class="citylife-breadcrumb list-unstyled">
@@ -45,13 +45,13 @@
 
                         <form class="login-page__form__box form-one" method="POST" action="{{ route('member.register.submit') }}">
                             @csrf
-                            
+
                             {{-- HONEYPOT FIELD - Hidden from humans, visible to bots --}}
                             <input type="text" name="website" value="" style="display:none !important; position: absolute; left: -9999px;" tabindex="-1" autocomplete="off">
-                            
+
                             {{-- TIMING PROTECTION - Track when form was loaded --}}
                             <input type="hidden" name="form_load_time" value="{{ time() }}">
-                            
+
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="login-page__form__input-box form-one__control">

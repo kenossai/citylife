@@ -3,7 +3,7 @@
 
     <!-- Page Header -->
     <section class="page-header">
-        <div class="page-header__bg" style="background-image: url('{{ asset('assets/images/backgrounds/page-header-bg-1-1.jpg') }}');"></div>
+        <div class="page-header__bg" style="background-image: url('{{ asset('assets/images/backgrounds/worship-banner-1.jpg') }}');"></div>
         <div class="container">
             <h2 class="page-header__title">Member Login</h2>
             <ul class="citylife-breadcrumb list-unstyled">

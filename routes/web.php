@@ -132,8 +132,6 @@ Route::get('/login', function() {
 Route::prefix('member')->name('member.')->group(function () {
     Route::get('login', [App\Http\Controllers\Auth\MemberAuthController::class, 'showLogin'])->name('login');
     Route::post('login', [App\Http\Controllers\Auth\MemberAuthController::class, 'login'])->name('login.submit');
-    Route::get('register', [App\Http\Controllers\Auth\MemberAuthController::class, 'showRegister'])->name('register');
-    Route::post('register', [App\Http\Controllers\Auth\MemberAuthController::class, 'register'])->name('register.submit');
     Route::post('logout', [App\Http\Controllers\Auth\MemberAuthController::class, 'logout'])->name('logout');
 });
 
