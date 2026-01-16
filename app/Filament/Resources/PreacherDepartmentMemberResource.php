@@ -39,6 +39,7 @@ class PreacherDepartmentMemberResource extends Resource
                     ->relationship('teamMember', 'first_name')
                     ->getOptionLabelFromRecordUsing(fn ($record) => "{$record->title} {$record->first_name} {$record->last_name}")
                     ->required()
+                    ->label('Pastor/Leadership Member')
                     ->searchable()
                     ->preload(),
 
