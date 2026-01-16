@@ -74,7 +74,8 @@ class ContactController extends Controller
             );
         }
 
-        // Anti-spam: Check foconfig('spam-protection.suspicious_patterns', []);
+        // Anti-spam: Check for suspicious patterns
+        $suspiciousPatterns = config('spam-protection.suspicious_patterns', []);
 
         $combinedText = $request->input('message') . ' ' . $request->input('subject') . ' ' . $request->input('name');
 
@@ -111,8 +112,7 @@ class ContactController extends Controller
         // Anti-spam: Check for excessive URLs in message
         $maxUrls = config('spam-protection.max_urls_in_message', 2);
         $urlCount = preg_match_all('/https?:\/\/[^\s]+/i', $request->input('message'), $matches);
-        if ($urlCount > $maxUrlsmatch_all('/https?:\/\/[^\s]+/i', $request->input('message'), $matches);
-        if ($urlCount > 2) {
+        if ($urlCount > $maxUrls) {
             Log::warning('Contact form spam detected: excessive URLs', [
                 'ip' => $request->ip(),
                 'url_count' => $urlCount,
@@ -162,9 +162,8 @@ class ContactController extends Controller
         }
 
         try {
-            $minTime = config('spam-protection.minimum_form_time', 3);
-            // Form filled too quickly - likely a bot
-            if ($timeDiff < $minTimetactSubmission::create([
+            // Create contact submission
+            $submission = ContactSubmission::create([
                 'name' => $validated['name'],
                 'email' => $validated['email'],
                 'phone' => $validated['phone'],
