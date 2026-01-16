@@ -176,7 +176,7 @@
 <!-- Get Involved Section End -->
 
 <!-- Connect Section Start -->
-<section class="cta-one section-space" style="background-color: #ff6b35;">
+<section class="cta-one section-space" style="background-color: #520162;">
     <div class="container">
         <div class="row">
             <div class="col-xl-12">
