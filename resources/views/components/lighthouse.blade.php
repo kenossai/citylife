@@ -30,14 +30,6 @@
                                             <i class="fab fa-facebook-f" aria-hidden="true"></i>
                                             <span class="sr-only">Facebook</span>
                                             @break
-                                        @case('twitter')
-                                            <i class="fab fa-twitter" aria-hidden="true"></i>
-                                            <span class="sr-only">Twitter</span>
-                                            @break
-                                        @case('linkedin')
-                                            <i class="fab fa-linkedin-in" aria-hidden="true"></i>
-                                            <span class="sr-only">Linkedin</span>
-                                            @break
                                         @case('youtube')
                                             <i class="fab fa-youtube" aria-hidden="true"></i>
                                             <span class="sr-only">Youtube</span>
@@ -58,14 +50,6 @@
                         <a href="https://facebook.com">
                             <i class="fab fa-facebook-f" aria-hidden="true"></i>
                             <span class="sr-only">Facebook</span>
-                        </a>
-                        <a href="https://twitter.com">
-                            <i class="fab fa-twitter" aria-hidden="true"></i>
-                            <span class="sr-only">Twitter</span>
-                        </a>
-                        <a href="https://linkedin.com" aria-hidden="true">
-                            <i class="fab fa-linkedin-in"></i>
-                            <span class="sr-only">Linkedin</span>
                         </a>
                         <a href="https://youtube.com" aria-hidden="true">
                             <i class="fab fa-youtube"></i>
