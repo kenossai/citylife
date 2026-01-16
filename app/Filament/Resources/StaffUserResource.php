@@ -23,7 +23,7 @@ class StaffUserResource extends Resource
 
     protected static ?string $navigationGroup = 'Administration';
 
-    protected static ?string $navigationLabel = 'Staff Users';
+    protected static ?string $navigationLabel = 'Admin Users';
 
     protected static ?int $navigationSort = 3;
 
