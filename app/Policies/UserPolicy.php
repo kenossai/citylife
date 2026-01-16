@@ -12,7 +12,7 @@ class UserPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->hasRole('super_admin') || $user->hasPermission('system.manage_users');
+        return $user->hasRole('super_admin') || $user->hasRole('developer') || $user->hasPermission('system.manage_users');
     }
 
     /**
@@ -25,7 +25,7 @@ class UserPolicy
             return true;
         }
 
-        return $user->hasRole('super_admin') || $user->hasPermission('system.manage_users');
+        return $user->hasRole('super_admin') || $user->hasRole('developer') || $user->hasPermission('system.manage_users');
     }
 
     /**
@@ -33,7 +33,7 @@ class UserPolicy
      */
     public function create(User $user): bool
     {
-        return $user->hasRole('super_admin') || $user->hasPermission('system.manage_users');
+        return $user->hasRole('super_admin') || $user->hasRole('developer') || $user->hasPermission('system.manage_users');
     }
 
     /**
@@ -46,12 +46,15 @@ class UserPolicy
             return true;
         }
 
-        // Prevent editing super admin unless you are super admin
-        if ($model->hasRole('super_admin') && !$user->hasRole('super_admin')) {
+        // Prevent editing super admin or developer unless you are super admin or developer
+        if ($model->hasRole('super_admin') && !$user->hasRole('super_admin') && !$user->hasRole('developer')) {
+            return false;
+        }
+        if ($model->hasRole('developer') && !$user->hasRole('super_admin') && !$user->hasRole('developer')) {
             return false;
         }
 
-        return $user->hasRole('super_admin') || $user->hasPermission('system.manage_users');
+        return $user->hasRole('super_admin') || $user->hasRole('developer') || $user->hasPermission('system.manage_users');
     }
 
     /**
@@ -64,12 +67,15 @@ class UserPolicy
             return false;
         }
 
-        // Cannot delete super admin unless you are super admin
-        if ($model->hasRole('super_admin') && !$user->hasRole('super_admin')) {
+        // Cannot delete super admin or developer unless you are super admin or developer
+        if ($model->hasRole('super_admin') && !$user->hasRole('super_admin') && !$user->hasRole('developer')) {
+            return false;
+        }
+        if ($model->hasRole('developer') && !$user->hasRole('super_admin') && !$user->hasRole('developer')) {
             return false;
         }
 
-        return $user->hasRole('super_admin') || $user->hasPermission('system.manage_users');
+        return $user->hasRole('super_admin') || $user->hasRole('developer') || $user->hasPermission('system.manage_users');
     }
 
     /**
@@ -77,7 +83,7 @@ class UserPolicy
      */
     public function restore(User $user, User $model): bool
     {
-        return $user->hasRole('super_admin') || $user->hasPermission('system.manage_users');
+        return $user->hasRole('super_admin') || $user->hasRole('developer') || $user->hasPermission('system.manage_users');
     }
 
     /**
@@ -85,8 +91,8 @@ class UserPolicy
      */
     public function forceDelete(User $user, User $model): bool
     {
-        // Only super admin can force delete users
-        return $user->hasRole('super_admin');
+        // Only super admin or developer can force delete users
+        return $user->hasRole('super_admin') || $user->hasRole('developer');
     }
 
     /**
@@ -99,11 +105,14 @@ class UserPolicy
             return false;
         }
 
-        // Cannot manage super admin roles unless you are super admin
-        if ($model->hasRole('super_admin') && !$user->hasRole('super_admin')) {
+        // Cannot manage super admin or developer roles unless you are super admin or developer
+        if ($model->hasRole('super_admin') && !$user->hasRole('super_admin') && !$user->hasRole('developer')) {
+            return false;
+        }
+        if ($model->hasRole('developer') && !$user->hasRole('super_admin') && !$user->hasRole('developer')) {
             return false;
         }
 
-        return $user->hasRole('super_admin') || $user->hasPermission('system.manage_roles');
+        return $user->hasRole('super_admin') || $user->hasRole('developer') || $user->hasPermission('system.manage_roles');
     }
 }

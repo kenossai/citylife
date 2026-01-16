@@ -23,6 +23,15 @@ class RoleSeeder extends Seeder
                 'permissions' => ['*'] // All permissions
             ],
             [
+                'name' => 'developer',
+                'display_name' => 'Developer',
+                'description' => 'Full system access for development and technical management',
+                'color' => 'slate',
+                'priority' => 950,
+                'is_system_role' => true,
+                'permissions' => ['*'] // All permissions
+            ],
+            [
                 'name' => 'admin',
                 'display_name' => 'Administrator',
                 'description' => 'Has administrative access to most functions',

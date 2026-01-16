@@ -13,7 +13,7 @@ class RolePolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->hasRole('super_admin') || $user->hasPermission('system.manage_roles');
+        return $user->hasRole('super_admin') || $user->hasRole('developer') || $user->hasPermission('system.manage_roles');
     }
 
     /**
@@ -21,7 +21,7 @@ class RolePolicy
      */
     public function view(User $user, Role $role): bool
     {
-        return $user->hasRole('super_admin') || $user->hasPermission('system.manage_roles');
+        return $user->hasRole('super_admin') || $user->hasRole('developer') || $user->hasPermission('system.manage_roles');
     }
 
     /**
@@ -29,7 +29,7 @@ class RolePolicy
      */
     public function create(User $user): bool
     {
-        return $user->hasRole('super_admin') || $user->hasPermission('system.manage_roles');
+        return $user->hasRole('super_admin') || $user->hasRole('developer') || $user->hasPermission('system.manage_roles');
     }
 
     /**
@@ -37,12 +37,12 @@ class RolePolicy
      */
     public function update(User $user, Role $role): bool
     {
-        // Prevent non-super-admins from editing system roles
-        if ($role->is_system_role && !$user->hasRole('super_admin')) {
+        // Prevent non-super-admins and non-developers from editing system roles
+        if ($role->is_system_role && !$user->hasRole('super_admin') && !$user->hasRole('developer')) {
             return false;
         }
 
-        return $user->hasRole('super_admin') || $user->hasPermission('system.manage_roles');
+        return $user->hasRole('super_admin') || $user->hasRole('developer') || $user->hasPermission('system.manage_roles');
     }
 
     /**
@@ -60,7 +60,7 @@ class RolePolicy
             return false;
         }
 
-        return $user->hasRole('super_admin') || $user->hasPermission('system.manage_roles');
+        return $user->hasRole('super_admin') || $user->hasRole('developer') || $user->hasPermission('system.manage_roles');
     }
 
     /**
@@ -68,7 +68,7 @@ class RolePolicy
      */
     public function restore(User $user, Role $role): bool
     {
-        return $user->hasRole('super_admin') || $user->hasPermission('system.manage_roles');
+        return $user->hasRole('super_admin') || $user->hasRole('developer') || $user->hasPermission('system.manage_roles');
     }
 
     /**
@@ -76,7 +76,7 @@ class RolePolicy
      */
     public function forceDelete(User $user, Role $role): bool
     {
-        // Only super admin can force delete roles
-        return $user->hasRole('super_admin');
+        // Only super admin or developer can force delete roles
+        return $user->hasRole('super_admin') || $user->hasRole('developer');
     }
 }
