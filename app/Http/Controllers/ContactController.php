@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 use App\Models\ContactSubmission;
 use App\Models\Contact;
+use App\Models\BlockedIp;
 use App\Mail\ContactFormSubmitted;
 
 class ContactController extends Controller
@@ -19,12 +20,22 @@ class ContactController extends Controller
 
     public function submit(Request $request)
     {
-        // Anti-spam: Block known spam IP addresses
-        $blockedIPs = config('spam-protection.blocked_ips', []);
+        $userIp = $request->ip();
 
-        if (in_array($request->ip(), $blockedIPs)) {
+        // Anti-spam: Block known spam IP addresses (config file + database)
+        $configBlockedIPs = config('spam-protection.blocked_ips', []);
+        $isDatabaseBlocked = BlockedIp::isBlocked($userIp);
+
+        if (in_array($userIp, $configBlockedIPs) || $isDatabaseBlocked) {
+            // Increment spam count if IP is in database
+            if ($isDatabaseBlocked) {
+                $blockedIp = BlockedIp::where('ip_address', $userIp)->first();
+                $blockedIp?->incrementSpamCount();
+            }
+
             Log::warning('Contact form blocked: IP in blacklist', [
-                'ip' => $request->ip(),
+                'ip' => $userIp,
+                'source' => $isDatabaseBlocked ? 'database' : 'config',
             ]);
             return redirect()->route('contact')->with('success',
                 'Thank you for reaching out! Your message has been received and we will get back to you soon. God bless!'

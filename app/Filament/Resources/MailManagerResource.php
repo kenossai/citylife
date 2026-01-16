@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\MailManagerResource\Pages;
 use App\Filament\Resources\MailManagerResource\RelationManagers;
 use App\Models\ContactSubmission;
+use App\Models\BlockedIp;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -228,12 +229,34 @@ class MailManagerResource extends Resource
                     ->icon('heroicon-o-exclamation-triangle')
                     ->color('danger')
                     ->visible(fn (ContactSubmission $record) => !$record->is_spam)
-                    ->action(function (ContactSubmission $record) {
+                    ->form([
+                        Forms\Components\Toggle::make('block_ip')
+                            ->label('Block this IP address')
+                            ->helperText('Automatically block this IP from future submissions')
+                            ->default(true),
+                    ])
+                    ->action(function (ContactSubmission $record, array $data) {
                         $record->update([
                             'is_spam' => true,
                             'spam_reason' => 'Manually marked as spam by admin',
                             'status' => 'archived',
                         ]);
+
+                        // Auto-block IP if checkbox is checked
+                        if ($data['block_ip'] ?? true) {
+                            BlockedIp::blockIp(
+                                $record->ip_address,
+                                "Auto-blocked from spam submission: {$record->subject}",
+                                auth()->id(),
+                                true
+                            );
+
+                            \Filament\Notifications\Notification::make()
+                                ->title('IP Blocked')
+                                ->success()
+                                ->body("IP {$record->ip_address} has been blocked.")
+                                ->send();
+                        }
                     })
                     ->requiresConfirmation(),
                 Tables\Actions\Action::make('markAsLegitimate')
@@ -275,14 +298,43 @@ class MailManagerResource extends Resource
                         ->label('Mark as Spam')
                         ->icon('heroicon-o-exclamation-triangle')
                         ->color('danger')
-                        ->action(function ($records) {
-                            $records->each(function ($record) {
+                        ->form([
+                            Forms\Components\Toggle::make('block_ips')
+                                ->label('Block all IP addresses')
+                                ->helperText('Automatically block all IPs from these submissions')
+                                ->default(true),
+                        ])
+                        ->action(function ($records, array $data) {
+                            $blockedCount = 0;
+                            
+                            $records->each(function ($record) use ($data, &$blockedCount) {
                                 $record->update([
                                     'is_spam' => true,
                                     'spam_reason' => 'Bulk marked as spam by admin',
                                     'status' => 'archived',
                                 ]);
+
+                                // Auto-block IP if checkbox is checked
+                                if ($data['block_ips'] ?? true) {
+                                    if (!BlockedIp::isBlocked($record->ip_address)) {
+                                        BlockedIp::blockIp(
+                                            $record->ip_address,
+                                            "Auto-blocked from bulk spam marking: {$record->subject}",
+                                            auth()->id(),
+                                            true
+                                        );
+                                        $blockedCount++;
+                                    }
+                                }
                             });
+
+                            if ($blockedCount > 0) {
+                                \Filament\Notifications\Notification::make()
+                                    ->title('IPs Blocked')
+                                    ->success()
+                                    ->body("{$blockedCount} IP address(es) have been blocked.")
+                                    ->send();
+                            }
                         })
                         ->requiresConfirmation()
                         ->deselectRecordsAfterCompletion(),
