@@ -123,6 +123,8 @@ class StaffUserResource extends Resource
                             ->image()
                             ->imageEditor()
                             ->maxSize(2048)
+                            ->disk('s3')
+                            ->visibility('public')
                             ->directory('avatars')
                             ->columnSpanFull(),
                     ]),
@@ -151,8 +153,9 @@ class StaffUserResource extends Resource
             ->columns([
                 Tables\Columns\ImageColumn::make('avatar')
                     ->circular()
-                    ->defaultImageUrl(url('/images/default-avatar.png'))
-                    ->size(40),
+                    ->disk('s3')
+                    ->visibility('public')
+                    ->size(60),
 
                 Tables\Columns\TextColumn::make('name')
                     ->label('Full Name')
