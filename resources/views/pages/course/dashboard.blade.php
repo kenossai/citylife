@@ -678,12 +678,12 @@
         }
 
         .btn-modern.btn-primary {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            background: linear-gradient(135deg, #513170 0%, #351c42 100%);
             color: white;
         }
 
         .btn-modern.btn-primary:hover {
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            background-color: #ffc107;
             color: white;
             transform: translateY(-1px);
         }
