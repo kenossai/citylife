@@ -81,6 +81,12 @@ Route::middleware(['member.auth'])->group(function () {
     Route::get('/courses/{courseSlug}/lessons/{lessonSlug}/quiz', [CourseController::class, 'showQuiz'])->name('courses.lesson.quiz');
     Route::post('/courses/{courseSlug}/lessons/{lessonSlug}/complete', [CourseController::class, 'completeLesson'])->name('courses.lesson.complete');
     Route::post('/courses/{courseSlug}/lessons/{lessonSlug}/quiz', [CourseController::class, 'submitQuiz'])->name('courses.lesson.quiz.submit');
+
+    // Member Profile Management
+    Route::get('/my-profile', [App\Http\Controllers\MemberProfileController::class, 'index'])->name('member.profile');
+    Route::put('/my-profile', [App\Http\Controllers\MemberProfileController::class, 'update'])->name('member.profile.update');
+    Route::put('/my-profile/password', [App\Http\Controllers\MemberProfileController::class, 'updatePassword'])->name('member.profile.password');
+    Route::put('/my-profile/preferences', [App\Http\Controllers\MemberProfileController::class, 'updatePreferences'])->name('member.profile.preferences');
 });
 
 // Certificate download route (public access)

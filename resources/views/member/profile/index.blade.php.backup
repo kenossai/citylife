@@ -1,0 +1,419 @@
+<x-app-layout>
+@section('title', 'My Profile - CityLife Church')
+
+<section class="page-header">
+    <div class="page-header__bg" style="background-image: url('{{ asset('assets/images/backgrounds/worship-banner-1.jpg') }}');"></div>
+    <div class="container">
+        <h2 class="page-header__title">My Profile</h2>
+        <ul class="citylife-breadcrumb list-unstyled">
+            <li><i class="icon-home"></i> <a href="{{ route('home') }}">Home</a></li>
+            <li><span>My Profile</span></li>
+        </ul>
+    </div>
+</section>
+
+<section class="become-volunteer section-space">
+    <div class="container">
+        @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+            <strong><i class="fa fa-check-circle"></i> Success!</strong> {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        @endif
+
+        <div class="row gutter-y-50">
+            <!-- Sidebar -->
+            <div class="col-lg-4">
+                <aside class="sidebar-event">
+                    <div class="sidebar-event__contact contact-one sidebar-event__item wow fadeInUp animated" data-wow-duration="1500ms" data-wow-delay="00ms">
+                        <div class="contact-one__info">
+                            <div class="contact-one__info__item text-center">
+                                <div class="mb-3">
+                                    <div class="contact-one__info__icon mx-auto" style="font-size: 48px;">
+                                        <span class="icon-user"></span>
+                                    </div>
+                                </div>
+                                <div class="contact-one__info__content">
+                                    <h4 class="contact-one__info__title">{{ $member->first_name }} {{ $member->last_name }}</h4>
+                                    <p class="contact-one__info__text text-muted small mb-0">{{ $member->email }}</p>
+                                </div>
+                            </div>
+
+                            <div class="contact-one__info__item">
+                                <div class="contact-one__info__content">
+                                    <h4 class="contact-one__info__title mb-3">
+                                        <span class="icon-edit"></span> Manage Account
+                                    </h4>
+                                    <ul class="list-unstyled">
+                                        <li class="mb-2">
+                                            <a href="#profile" data-bs-toggle="pill" class="contact-one__info__text contact-one__info__text--link active">
+                                                <i class="fa fa-user me-2"></i> Profile Information
+                                            </a>
+                                        </li>
+                                        <li class="mb-2">
+                                            <a href="#password" data-bs-toggle="pill" class="contact-one__info__text contact-one__info__text--link">
+                                                <i class="fa fa-lock me-2"></i> Change Password
+                                            </a>
+                                        </li>
+                                        <li class="mb-2">
+                                            <a href="#preferences" data-bs-toggle="pill" class="contact-one__info__text contact-one__info__text--link">
+                                                <i class="fa fa-cog me-2"></i> Preferences
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="contact-one__info__item">
+                                <div class="contact-one__info__content">
+                                    <h4 class="contact-one__info__title mb-3">
+                                        <span class="icon-book"></span> My Learning
+                                    </h4>
+                                    <a href="{{ route('courses.dashboard') }}" class="citylife-btn citylife-btn--base-two w-100">
+                                        <div class="citylife-btn__icon-box">
+                                            <div class="citylife-btn__icon-box__inner"><span class="icon-book"></span></div>
+                                        </div>
+                                        <span class="citylife-btn__text">View My Courses</span>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="contact-one__info__item">
+                                <div class="contact-one__info__content">
+                                    <form action="{{ route('member.logout') }}" method="POST">
+                                        @csrf
+                                        <button type="submit" class="citylife-btn w-100">
+                                            <div class="citylife-btn__icon-box">
+                                                <div class="citylife-btn__icon-box__inner"><span class="fa fa-sign-out"></span></div>
+                                            </div>
+                                            <span class="citylife-btn__text">Logout</span>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-lg-8 wow fadeInUp animated" data-wow-duration="1500ms" data-wow-delay="300ms">
+                <div class="tab-content">
+                    <!-- Profile Information Tab -->
+                    <div class="tab-pane fade show active" id="profile">
+                        <form action="{{ route('member.profile.update') }}" method="POST" class="become-volunteer__form form-one" style="background-color: #351c42">
+                            @csrf
+                            @method('PUT')
+
+                            <div class="become-volunteer__form__bg" style="background-image: url('{{ asset('assets/images/backgrounds/become-volunteer-bg-1-1.png') }}');"></div>
+                            <h3 class="become-volunteer__form__title">Personal Information</h3>
+
+                            <div class="become-volunteer__form__inner">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-one__control form-one__control--full">
+                                            <input type="text" name="first_name" placeholder="First Name *"
+                                                class="form-one__control__input @error('first_name') is-invalid @enderror"
+                                                value="{{ old('first_name', $member->first_name) }}" required>
+                                            @error('first_name')
+                                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-one__control form-one__control--full">
+                                            <input type="text" name="last_name" placeholder="Last Name *"
+                                                class="form-one__control__input @error('last_name') is-invalid @enderror"
+                                                value="{{ old('last_name', $member->last_name) }}" required>
+                                            @error('last_name')
+                                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-one__control form-one__control--full">
+                                            <input type="email" name="email" placeholder="Email Address *"
+                                                class="form-one__control__input @error('email') is-invalid @enderror"
+                                                value="{{ old('email', $member->email) }}" required>
+                                            @error('email')
+                                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-one__control form-one__control--full">
+                                            <input type="tel" name="phone" placeholder="Phone"
+                                                class="form-one__control__input @error('phone') is-invalid @enderror"
+                                                value="{{ old('phone', $member->phone) }}">
+                                            @error('phone')
+                                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-one__control form-one__control--full">
+                                    <input type="date" name="date_of_birth" placeholder="Date of Birth"
+                                        class="form-one__control__input @error('date_of_birth') is-invalid @enderror"
+                                        value="{{ old('date_of_birth', $member->date_of_birth?->format('Y-m-d')) }}">
+                                    @error('date_of_birth')
+                                        <div class="invalid-feedback d-block">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="form-one__control form-one__control--full">
+                                    <textarea name="address" placeholder="Address"
+                                        class="form-one__control__input @error('address') is-invalid @enderror"
+                                        rows="2">{{ old('address', $member->address) }}</textarea>
+                                    @error('address')
+                                        <div class="invalid-feedback d-block">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-one__control form-one__control--full">
+                                            <input type="text" name="city" placeholder="City"
+                                                class="form-one__control__input @error('city') is-invalid @enderror"
+                                                value="{{ old('city', $member->city) }}">
+                                            @error('city')
+                                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-one__control form-one__control--full">
+                                            <input type="text" name="postcode" placeholder="Postcode"
+                                                class="form-one__control__input @error('postcode') is-invalid @enderror"
+                                                value="{{ old('postcode', $member->postcode) }}">
+                                            @error('postcode')
+                                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-one__control form-one__control--full">
+                                            <input type="text" name="country" placeholder="Country"
+                                                class="form-one__control__input @error('country') is-invalid @enderror"
+                                                value="{{ old('country', $member->country) }}">
+                                            @error('country')
+                                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <h5 class="mt-4 mb-3">Emergency Contact</h5>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-one__control form-one__control--full">
+                                            <input type="text" name="emergency_contact_name" placeholder="Emergency Contact Name"
+                                                class="form-one__control__input @error('emergency_contact_name') is-invalid @enderror"
+                                                value="{{ old('emergency_contact_name', $member->emergency_contact_name) }}">
+                                            @error('emergency_contact_name')
+                                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-one__control form-one__control--full">
+                                            <input type="tel" name="emergency_contact_phone" placeholder="Emergency Contact Phone"
+                                                class="form-one__control__input @error('emergency_contact_phone') is-invalid @enderror"
+                                                value="{{ old('emergency_contact_phone', $member->emergency_contact_phone) }}">
+                                            @error('emergency_contact_phone')
+                                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-one__control form-one__control--full">
+                                            <input type="text" name="emergency_contact_relationship" placeholder="Relationship"
+                                                class="form-one__control__input @error('emergency_contact_relationship') is-invalid @enderror"
+                                                value="{{ old('emergency_contact_relationship', $member->emergency_contact_relationship) }}">
+                                            @error('emergency_contact_relationship')
+                                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-one__control form-one__control--full">
+                                    <button type="submit" class="citylife-btn">
+                                        <div class="citylife-btn__icon-box">
+                                            <div class="citylife-btn__icon-box__inner"><span class="icon-duble-arrow"></span></div>
+                                        </div>
+                                        <span class="citylife-btn__text">Update Profile</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Change Password Tab -->
+                    <div class="tab-pane fade" id="password">
+                        <form action="{{ route('member.profile.password') }}" method="POST" class="become-volunteer__form form-one">
+                            @csrf
+                            @method('PUT')
+
+                            <div class="become-volunteer__form__bg" style="background-image: url('{{ asset('assets/images/backgrounds/become-volunteer-bg-1-1.png') }}');"></div>
+                            <h3 class="become-volunteer__form__title">Change Password</h3>
+
+                            <div class="become-volunteer__form__inner">
+                                <div class="form-one__control form-one__control--full">
+                                    <input type="password" name="current_password" placeholder="Current Password *"
+                                        class="form-one__control__input @error('current_password') is-invalid @enderror" required>
+                                    @error('current_password')
+                                        <div class="invalid-feedback d-block">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-one__control form-one__control--full">
+                                            <input type="password" name="password" placeholder="New Password *"
+                                                class="form-one__control__input @error('password') is-invalid @enderror" required>
+                                            @error('password')
+                                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-one__control form-one__control--full">
+                                            <input type="password" name="password_confirmation" placeholder="Confirm New Password *"
+                                                class="form-one__control__input" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-one__control form-one__control--full">
+                                    <button type="submit" class="citylife-btn">
+                                        <div class="citylife-btn__icon-box">
+                                            <div class="citylife-btn__icon-box__inner"><span class="icon-duble-arrow"></span></div>
+                                        </div>
+                                        <span class="citylife-btn__text">Update Password</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Preferences Tab -->
+                    <div class="tab-pane fade" id="preferences">
+                        <form action="{{ route('member.profile.preferences') }}" method="POST" class="become-volunteer__form form-one">
+                            @csrf
+                            @method('PUT')
+
+                            <div class="become-volunteer__form__bg" style="background-image: url('{{ asset('assets/images/backgrounds/become-volunteer-bg-1-1.png') }}');"></div>
+                            <h3 class="become-volunteer__form__title">Communication Preferences</h3>
+
+                            <div class="become-volunteer__form__inner">
+                                <p class="text-muted mb-4">Choose how you'd like to receive updates from us:</p>
+
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="checkbox" id="receive_newsletter"
+                                        name="receive_newsletter" value="1" {{ $member->receive_newsletter ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="receive_newsletter">
+                                        <strong>Newsletter</strong>
+                                        <br>
+                                        <small class="text-muted">Receive our monthly church newsletter</small>
+                                    </label>
+                                </div>
+
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="checkbox" id="receive_event_updates"
+                                        name="receive_event_updates" value="1" {{ $member->receive_event_updates ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="receive_event_updates">
+                                        <strong>Event Updates</strong>
+                                        <br>
+                                        <small class="text-muted">Get notified about upcoming events and activities</small>
+                                    </label>
+                                </div>
+
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="checkbox" id="receive_course_updates"
+                                        name="receive_course_updates" value="1" {{ $member->receive_course_updates ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="receive_course_updates">
+                                        <strong>Course Updates</strong>
+                                        <br>
+                                        <small class="text-muted">Receive updates about courses and training programs</small>
+                                    </label>
+                                </div>
+
+                                <div class="form-check mb-4">
+                                    <input class="form-check-input" type="checkbox" id="receive_sms"
+                                        name="receive_sms" value="1" {{ $member->receive_sms ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="receive_sms">
+                                        <strong>SMS Notifications</strong>
+                                        <br>
+                                        <small class="text-muted">Receive important updates via SMS</small>
+                                    </label>
+                                </div>
+
+                                <div class="form-one__control form-one__control--full">
+                                    <button type="submit" class="citylife-btn">
+                                        <div class="citylife-btn__icon-box">
+                                            <div class="citylife-btn__icon-box__inner"><span class="icon-duble-arrow"></span></div>
+                                        </div>
+                                        <span class="citylife-btn__text">Save Preferences</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+.tab-pane {
+    display: none;
+}
+.tab-pane.active {
+    display: block;
+}
+.sidebar-event__contact .contact-one__info__text.contact-one__info__text--link.active {
+    color: var(--citylife-base, #fbb710);
+    font-weight: 600;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Tab switching functionality
+    const tabLinks = document.querySelectorAll('[data-bs-toggle="pill"]');
+
+    tabLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            // Remove active class from all links
+            tabLinks.forEach(l => l.classList.remove('active'));
+
+            // Add active class to clicked link
+            this.classList.add('active');
+
+            // Hide all tab panes
+            const tabPanes = document.querySelectorAll('.tab-pane');
+            tabPanes.forEach(pane => {
+                pane.classList.remove('show', 'active');
+            });
+
+            // Show target tab pane
+            const targetId = this.getAttribute('href').substring(1);
+            const targetPane = document.getElementById(targetId);
+            if (targetPane) {
+                targetPane.classList.add('show', 'active');
+            }
+        });
+    });
+});
+</script>
+</x-app-layout>
