@@ -76,7 +76,7 @@
                                     <div class="event-details__speaker__content__inner">
                                         <div class="event-details__speaker__indentity">
                                             <h4 class="event-details__speaker__name">{{ $event->eventAnchor->first_name }} {{ $event->eventAnchor->last_name }}</h4><!-- /.event-details__speaker__name -->
-                                            <p class="event-details__speaker__designation">{{ $event->eventAnchor->position ?? 'Event Host' }}</p><!-- /.event-details__speaker__designation -->
+                                            <p class="event-details__speaker__designation">Host/{{ $event->eventAnchor->position ?? 'Host' }}</p><!-- /.event-details__speaker__designation -->
                                         </div><!-- /.event-details__speaker__indentity -->
                                     </div>
                                 </div><!-- /.event-details__speaker__content -->
