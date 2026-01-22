@@ -56,6 +56,12 @@ class TeamMember extends Model
         'started_ministry' => 'integer',
     ];
 
+    protected $appends = [
+        'profile_image_url',
+        'full_name',
+        'display_name',
+    ];
+
     // Scopes
     public function scopeActive($query)
     {

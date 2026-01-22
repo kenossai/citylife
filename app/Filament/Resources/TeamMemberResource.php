@@ -66,9 +66,9 @@ class TeamMemberResource extends Resource
             ])->columns(1),
 
             Forms\Components\Section::make('Media')->schema([
-                Forms\Components\FileUpload::make('profile_image')->image()->disk('s3')->visibility('public')->directory('team-members')
+                Forms\Components\FileUpload::make('profile_image')->image()->disk('public')->visibility('public')->directory('team-members')
                     ->imageResizeMode('cover')->imageCropAspectRatio('1:1'),
-                Forms\Components\FileUpload::make('featured_image')->image()->disk('s3')->visibility('public')->directory('team-members')
+                Forms\Components\FileUpload::make('featured_image')->image()->disk('public')->visibility('public')->directory('team-members')
                     ->imageResizeMode('cover')->imageCropAspectRatio('16:9'),
             ])->columns(2),
 
@@ -93,7 +93,7 @@ class TeamMemberResource extends Resource
     {
         return $table->columns([
             Tables\Columns\ImageColumn::make('profile_image')
-            ->disk('s3')
+            ->disk('public')
             ->visibility('public')
             ->circular()->size(50),
             Tables\Columns\TextColumn::make('full_name')->label('Name')->searchable(['first_name', 'last_name'])->weight('bold'),
