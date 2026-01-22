@@ -71,7 +71,7 @@
                             <div class="event-details__speaker__info wow fadeInUp animated" data-wow-duration="1500ms" data-wow-delay="00ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 0ms; animation-name: fadeInUp;">
                                 <div class="event-details__speaker__image">
                                     @if($event->eventAnchor->profile_image)
-                                        <img src="{{ Storage::disk('s3')->url($event->eventAnchor->profile_image) }}" alt="{{ $event->eventAnchor->first_name }} {{ $event->eventAnchor->last_name }}">
+                                        <img src="{{ $event->eventAnchor->profile_image }}" alt="{{ $event->eventAnchor->first_name }} {{ $event->eventAnchor->last_name }}">
                                     @else
                                         <img src="{{ asset('assets/images/events/event-speaker-1-1.png') }}" alt="{{ $event->eventAnchor->first_name }} {{ $event->eventAnchor->last_name }}">
                                     @endif
