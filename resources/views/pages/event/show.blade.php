@@ -60,12 +60,33 @@
                     @endif
                 </div><!-- /.contact-information -->
 
-            @if($event->event_anchor || $event->guest_speaker)
+            @if($event->eventAnchor || $event->event_anchor || $event->speakers->count() > 0 || $event->guest_speaker)
                 <div class="event-details__speaker">
-                    <h3 class="event-details__speaker__title event-details__title">Host & Guest Speaker</h3><!-- /.event-details__speaker__title -->
+                    <h3 class="event-details__speaker__title event-details__title">Host & Guest Speakers</h3><!-- /.event-details__speaker__title -->
 
                     <div class="row gutter-y-30">
-                        @if($event->event_anchor)
+                        {{-- Event Host/Anchor --}}
+                        @if($event->eventAnchor)
+                        <div class="col-md-3 text-center">
+                            <div class="event-details__speaker__info wow fadeInUp animated" data-wow-duration="1500ms" data-wow-delay="00ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 0ms; animation-name: fadeInUp;">
+                                <div class="event-details__speaker__image">
+                                    @if($event->eventAnchor->profile_image)
+                                        <img src="{{ Storage::disk('s3')->url($event->eventAnchor->profile_image) }}" alt="{{ $event->eventAnchor->first_name }} {{ $event->eventAnchor->last_name }}">
+                                    @else
+                                        <img src="{{ asset('assets/images/events/event-speaker-1-1.png') }}" alt="{{ $event->eventAnchor->first_name }} {{ $event->eventAnchor->last_name }}">
+                                    @endif
+                                </div><!-- /.event-details__speaker__image -->
+                                <div class="event-details__speaker__content">
+                                    <div class="event-details__speaker__content__inner">
+                                        <div class="event-details__speaker__indentity">
+                                            <h4 class="event-details__speaker__name">{{ $event->eventAnchor->first_name }} {{ $event->eventAnchor->last_name }}</h4><!-- /.event-details__speaker__name -->
+                                            <p class="event-details__speaker__designation">{{ $event->eventAnchor->position ?? 'Event Host' }}</p><!-- /.event-details__speaker__designation -->
+                                        </div><!-- /.event-details__speaker__indentity -->
+                                    </div>
+                                </div><!-- /.event-details__speaker__content -->
+                            </div><!-- /.event-details__speaker__info -->
+                        </div><!-- /.col-md-3 -->
+                        @elseif($event->event_anchor)
                         <div class="col-md-3 text-center">
                             <div class="event-details__speaker__info wow fadeInUp animated" data-wow-duration="1500ms" data-wow-delay="00ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 0ms; animation-name: fadeInUp;">
                                 <div class="event-details__speaker__image">
@@ -75,15 +96,35 @@
                                     <div class="event-details__speaker__content__inner">
                                         <div class="event-details__speaker__indentity">
                                             <h4 class="event-details__speaker__name">{{ $event->event_anchor }}</h4><!-- /.event-details__speaker__name -->
-                                            <p class="event-details__speaker__designation">Event Anchor/Host</p><!-- /.event-details__speaker__designation -->
+                                            <p class="event-details__speaker__designation">Event Host</p><!-- /.event-details__speaker__designation -->
                                         </div><!-- /.event-details__speaker__indentity -->
                                     </div>
                                 </div><!-- /.event-details__speaker__content -->
                             </div><!-- /.event-details__speaker__info -->
-                        </div><!-- /.col-md-6 -->
+                        </div><!-- /.col-md-3 -->
                         @endif
 
-                        @if($event->guest_speaker)
+                        {{-- Guest Speakers from relationship --}}
+                        @foreach($event->speakers as $index => $speaker)
+                        <div class="col-md-3 text-center">
+                            <div class="event-details__speaker__info wow fadeInUp animated" data-wow-duration="1500ms" data-wow-delay="{{ ($index + 1) * 100 }}ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: {{ ($index + 1) * 100 }}ms; animation-name: fadeInUp;">
+                                <div class="event-details__speaker__image">
+                                    <img src="{{ $speaker->image_url }}" alt="{{ $speaker->name }}">
+                                </div><!-- /.event-details__speaker__image -->
+                                <div class="event-details__speaker__content">
+                                    <div class="event-details__speaker__content__inner">
+                                        <div class="event-details__speaker__indentity">
+                                            <h4 class="event-details__speaker__name">{{ $speaker->name }}</h4><!-- /.event-details__speaker__name -->
+                                            <p class="event-details__speaker__designation">{{ $speaker->title ?? 'Guest Speaker' }}</p><!-- /.event-details__speaker__designation -->
+                                        </div><!-- /.event-details__speaker__indentity -->
+                                    </div>
+                                </div><!-- /.event-details__speaker__content -->
+                            </div><!-- /.event-details__speaker__info -->
+                        </div><!-- /.col-md-3 -->
+                        @endforeach
+
+                        {{-- Legacy guest speaker --}}
+                        @if($event->guest_speaker && $event->speakers->count() == 0)
                         <div class="col-md-3 text-center">
                             <div class="event-details__speaker__info wow fadeInUp animated" data-wow-duration="1500ms" data-wow-delay="100ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 100ms; animation-name: fadeInUp;">
                                 <div class="event-details__speaker__image">
@@ -98,7 +139,7 @@
                                     </div>
                                 </div><!-- /.event-details__speaker__content -->
                             </div><!-- /.event-details__speaker__info -->
-                        </div><!-- /.col-md-6 -->
+                        </div><!-- /.col-md-3 -->
                         @endif
                     </div><!-- /.row -->
                 </div><!-- /.event-details__speaker -->
@@ -132,7 +173,13 @@
                                 </div><!-- /.contact-one__info__icon -->
                                 <div class="contact-one__info__content">
                                     <h4 class="contact-one__info__title">Quick Contact</h4>
-                                    <a href="tel:(406)555-0120" class="contact-one__info__text contact-one__info__text--link">(406) 555-0120</a>
+                                    @if($event->contact_phone)
+                                        <a href="tel:{{ $event->contact_phone }}" class="contact-one__info__text contact-one__info__text--link">{{ $event->contact_phone }}</a>
+                                    @elseif($event->contactPerson && $event->contactPerson->phone)
+                                        <a href="tel:{{ $event->contactPerson->phone }}" class="contact-one__info__text contact-one__info__text--link">{{ $event->contactPerson->phone }}</a>
+                                    @else
+                                        <a href="tel:(406)555-0120" class="contact-one__info__text contact-one__info__text--link">(406) 555-0120</a>
+                                    @endif
                                 </div><!-- /.contact-one__info__content -->
                             </div><!-- /.contact-one__info__item -->
                             <div class="contact-one__info__item">
@@ -140,8 +187,20 @@
                                     <span class="icon-envelope"></span>
                                 </div><!-- /.contact-one__info__icon -->
                                 <div class="contact-one__info__content">
-                                    <h4 class="contact-one__info__title">support email</h4>
-                                    <a href="mailto:info@citylifecc.com" class="contact-one__info__text contact-one__info__text--link">info@citylifecc.com</a>
+                                    <h4 class="contact-one__info__title">
+                                        @if($event->contactPerson)
+                                            Contact {{ $event->contactPerson->first_name }}
+                                        @else
+                                            Support Email
+                                        @endif
+                                    </h4>
+                                    @if($event->contact_email)
+                                        <a href="mailto:{{ $event->contact_email }}" class="contact-one__info__text contact-one__info__text--link">{{ $event->contact_email }}</a>
+                                    @elseif($event->contactPerson && $event->contactPerson->email)
+                                        <a href="mailto:{{ $event->contactPerson->email }}" class="contact-one__info__text contact-one__info__text--link">{{ $event->contactPerson->email }}</a>
+                                    @else
+                                        <a href="mailto:info@citylifecc.com" class="contact-one__info__text contact-one__info__text--link">info@citylifecc.com</a>
+                                    @endif
                                 </div><!-- /.contact-one__info__content -->
                             </div><!-- /.contact-one__info__item -->
                         </div><!-- /.contact-one__info -->
