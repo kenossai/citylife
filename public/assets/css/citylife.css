@@ -1033,7 +1033,9 @@ textarea {
     z-index: -1;
     transform: scale(0);
     opacity: 0;
-    transition: transform 300ms ease, opacity 300ms ease;
+    transition:
+        transform 300ms ease,
+        opacity 300ms ease;
     background-color: var(--citylife-purple, #965995);
 }
 .contact-information__phone__icon span {
@@ -1489,7 +1491,9 @@ textarea {
     z-index: -1;
     transform: scale(0);
     opacity: 0;
-    transition: transform 300ms ease, opacity 300ms ease;
+    transition:
+        transform 300ms ease,
+        opacity 300ms ease;
     background-color: var(--citylife-base, #351c42);
 }
 .person-social li a:hover {
@@ -1555,7 +1559,9 @@ textarea {
 .citylife-owl__carousel--with-shadow .owl-item {
     opacity: 0;
     visibility: hidden;
-    transition: opacity 500ms ease, visibility 500ms ease;
+    transition:
+        opacity 500ms ease,
+        visibility 500ms ease;
 }
 .citylife-owl__carousel--with-shadow .owl-item.active {
     opacity: 1;
@@ -2764,7 +2770,9 @@ textarea {
 .event-card-grid__image img {
     width: 100%;
     height: auto;
-    transition: transform 500ms ease, opacity 500ms ease;
+    transition:
+        transform 500ms ease,
+        opacity 500ms ease;
 }
 .event-card-grid:hover .event-card-grid__image img {
     transform: scale(1.05) rotate(1.1deg);
@@ -2960,7 +2968,10 @@ textarea {
     opacity: 0;
     visibility: hidden;
     z-index: 1;
-    transition: transform 400ms ease, visibility 400ms ease, opacity 400ms ease;
+    transition:
+        transform 400ms ease,
+        visibility 400ms ease,
+        opacity 400ms ease;
 }
 .donation-card__image::after {
     content: "";
@@ -2975,7 +2986,10 @@ textarea {
     opacity: 0;
     visibility: hidden;
     z-index: 1;
-    transition: transform 400ms ease, visibility 400ms ease, opacity 400ms ease;
+    transition:
+        transform 400ms ease,
+        visibility 400ms ease,
+        opacity 400ms ease;
 }
 .donation-card__image img {
     transition: 0.5s;
@@ -3190,7 +3204,10 @@ textarea {
     opacity: 0;
     visibility: hidden;
     z-index: 1;
-    transition: transform 400ms ease, visibility 400ms ease, opacity 400ms ease;
+    transition:
+        transform 400ms ease,
+        visibility 400ms ease,
+        opacity 400ms ease;
 }
 .donation-card-four__image::after {
     content: "";
@@ -3205,7 +3222,10 @@ textarea {
     opacity: 0;
     visibility: hidden;
     z-index: 1;
-    transition: transform 400ms ease, visibility 400ms ease, opacity 400ms ease;
+    transition:
+        transform 400ms ease,
+        visibility 400ms ease,
+        opacity 400ms ease;
 }
 .donation-card-four__image img {
     transition: 0.5s;
@@ -3384,7 +3404,10 @@ textarea {
     opacity: 0;
     visibility: hidden;
     z-index: 1;
-    transition: transform 400ms ease, visibility 400ms ease, opacity 400ms ease;
+    transition:
+        transform 400ms ease,
+        visibility 400ms ease,
+        opacity 400ms ease;
 }
 .donation-card-five__image::after {
     content: "";
@@ -3399,7 +3422,10 @@ textarea {
     opacity: 0;
     visibility: hidden;
     z-index: 1;
-    transition: transform 400ms ease, visibility 400ms ease, opacity 400ms ease;
+    transition:
+        transform 400ms ease,
+        visibility 400ms ease,
+        opacity 400ms ease;
 }
 .donation-card-five__image img {
     transition: 0.5s;
@@ -3578,7 +3604,8 @@ textarea {
     letter-spacing: -6px;
     text-transform: capitalize;
     color: RGBA(var(--citylife-base-rgb, 53, 28, 66), 1);
-    text-shadow: 1px 1px 0 var(--citylife-white, #fff),
+    text-shadow:
+        1px 1px 0 var(--citylife-white, #fff),
         -1px -1px 0 var(--citylife-white, #fff),
         1px -1px 0 var(--citylife-white, #fff),
         -1px 1px 0 var(--citylife-white, #fff),
@@ -3858,7 +3885,10 @@ textarea {
     opacity: 0;
     visibility: hidden;
     z-index: 1;
-    transition: transform 500ms ease, visibility 500ms ease, opacity 500ms ease;
+    transition:
+        transform 500ms ease,
+        visibility 500ms ease,
+        opacity 500ms ease;
 }
 .blog-card__image::after {
     content: "";
@@ -3873,7 +3903,10 @@ textarea {
     opacity: 0;
     visibility: hidden;
     z-index: 1;
-    transition: transform 500ms ease, visibility 500ms ease, opacity 500ms ease;
+    transition:
+        transform 500ms ease,
+        visibility 500ms ease,
+        opacity 500ms ease;
 }
 .blog-card__image img {
     transition: 0.5s;
@@ -3927,7 +3960,9 @@ textarea {
     z-index: -1;
     transform: scale(0);
     opacity: 0;
-    transition: transform 400ms ease, opacity 400ms ease;
+    transition:
+        transform 400ms ease,
+        opacity 400ms ease;
     background-color: var(--citylife-secondary, #f6d469);
 }
 .blog-card__date span {
@@ -4023,7 +4058,9 @@ textarea {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: transform 700ms ease, top 700ms ease;
+    transition:
+        transform 700ms ease,
+        top 700ms ease;
     transform: translateY(0%) translateZ(150px) scaleY(0) rotateX(90deg);
     perspective: 300px;
     transform-origin: bottom center;
@@ -4042,7 +4079,9 @@ textarea {
     transition: all 500ms ease;
 }
 .blog-card__link:hover .blog-card__link__back {
-    transition: transform 500ms ease, top 500ms ease;
+    transition:
+        transform 500ms ease,
+        top 500ms ease;
     transform: translateY(0%) translateZ(0px) scaleY(1) rotateX(0deg);
 }
 
@@ -4287,7 +4326,9 @@ textarea {
     z-index: -1;
     transform: scale(0);
     opacity: 0;
-    transition: transform 400ms ease, opacity 400ms ease;
+    transition:
+        transform 400ms ease,
+        opacity 400ms ease;
     background-color: var(--citylife-base, #351c42);
 }
 .blog-card-two__link span {
@@ -4301,7 +4342,9 @@ textarea {
     text-transform: capitalize;
     transform: translateX(-50px);
     opacity: 0;
-    transition: transform 400ms ease, opacity 400ms ease;
+    transition:
+        transform 400ms ease,
+        opacity 400ms ease;
 }
 .blog-card-two__link:hover i {
     color: var(--citylife-secondary, #f6d469);
@@ -4377,7 +4420,10 @@ textarea {
     opacity: 0;
     visibility: hidden;
     z-index: 1;
-    transition: transform 500ms ease, visibility 500ms ease, opacity 500ms ease;
+    transition:
+        transform 500ms ease,
+        visibility 500ms ease,
+        opacity 500ms ease;
 }
 .blog-card-three__image::after {
     content: "";
@@ -4392,7 +4438,10 @@ textarea {
     opacity: 0;
     visibility: hidden;
     z-index: 1;
-    transition: transform 500ms ease, visibility 500ms ease, opacity 500ms ease;
+    transition:
+        transform 500ms ease,
+        visibility 500ms ease,
+        opacity 500ms ease;
 }
 .blog-card-three__image img {
     transition: 0.5s;
@@ -4440,7 +4489,9 @@ textarea {
     z-index: -1;
     transform: scale(0);
     opacity: 0;
-    transition: transform 400ms ease, opacity 400ms ease;
+    transition:
+        transform 400ms ease,
+        opacity 400ms ease;
     background-color: var(--citylife-secondary, #f6d469);
 }
 .blog-card-three__date span {
@@ -4646,7 +4697,9 @@ textarea {
     opacity: 0;
     border-radius: 20px;
     z-index: 1;
-    transition: opacity 500ms ease, transform 500ms ease;
+    transition:
+        opacity 500ms ease,
+        transform 500ms ease;
 }
 .blog-card-five__image__link::before,
 .blog-card-five__image__link::after {
@@ -5772,7 +5825,9 @@ textarea {
     box-shadow: 0px 3px 18px rgba(var(--citylife-dark-rgb, 36, 16, 47), 0.07);
     transition: 0.6s cubic-bezier(0.24, 0.74, 0.58, 1);
     visibility: hidden;
-    transition: transform 500ms ease, visibility 500ms ease;
+    transition:
+        transform 500ms ease,
+        visibility 500ms ease;
 }
 .sticky-header--cloned.sticky-header--two {
     background-color: var(--citylife-secondary, #f6d469);
@@ -5981,7 +6036,10 @@ textarea {
     visibility: hidden;
     transform-origin: top center;
     transform: scaleY(0) translateZ(100px);
-    transition: opacity 500ms ease, visibility 500ms ease, transform 700ms ease;
+    transition:
+        opacity 500ms ease,
+        visibility 500ms ease,
+        transform 700ms ease;
     z-index: 99;
     background-color: var(--citylife-white, #fff);
     box-shadow: 0px 10px 60px 0px
@@ -6126,7 +6184,10 @@ textarea {
     transform: scale(1, 0);
     -webkit-transform-origin: bottom center;
     transform-origin: bottom center;
-    transition: transform 0.7s ease, opacity 0.7s ease, visibility 0.7s ease;
+    transition:
+        transform 0.7s ease,
+        opacity 0.7s ease,
+        visibility 0.7s ease;
     z-index: 999999;
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -6163,7 +6224,10 @@ textarea {
     transform: scale(1, 1);
     opacity: 1;
     visibility: visible;
-    transition: transform 0.7s ease, opacity 0.7s ease, visibility 0.7s ease;
+    transition:
+        transform 0.7s ease,
+        opacity 0.7s ease,
+        visibility 0.7s ease;
 }
 
 body.megamenu-popup-active {
@@ -6287,7 +6351,9 @@ body.megamenu-popup-active .mobile-nav__content {
     align-items: center;
     gap: 15px;
     transform: scale(1, 0);
-    transition: transform 500ms ease, opacity 600ms linear;
+    transition:
+        transform 500ms ease,
+        opacity 600ms linear;
     transform-origin: bottom center;
     opacity: 0;
 }
@@ -6372,7 +6438,9 @@ body.megamenu-popup-active .mobile-nav__content {
     z-index: 999;
     transform: translateX(-100%);
     transform-origin: left center;
-    transition: transform 500ms ease 500ms, visibility 500ms ease 500ms;
+    transition:
+        transform 500ms ease 500ms,
+        visibility 500ms ease 500ms;
     visibility: hidden;
     position: fixed;
 }
@@ -6401,13 +6469,17 @@ body.megamenu-popup-active .mobile-nav__content {
     opacity: 1;
     transform: translateX(0%);
     visibility: visible;
-    transition: transform 500ms ease 0ms, visibility 500ms ease 0ms;
+    transition:
+        transform 500ms ease 0ms,
+        visibility 500ms ease 0ms;
 }
 .mobile-nav__wrapper.expanded .mobile-nav__content {
     opacity: 1;
     visibility: visible;
     transform: translateX(0);
-    transition: opacity 500ms ease 500ms, visibility 500ms ease 500ms,
+    transition:
+        opacity 500ms ease 500ms,
+        visibility 500ms ease 500ms,
         transform 500ms ease 500ms;
 }
 
@@ -6436,7 +6508,9 @@ body.megamenu-popup-active .mobile-nav__content {
     opacity: 0;
     visibility: hidden;
     transform: translateX(-100%);
-    transition: opacity 500ms ease 0ms, visibility 500ms ease 0ms,
+    transition:
+        opacity 500ms ease 0ms,
+        visibility 500ms ease 0ms,
         transform 500ms ease 0ms;
 }
 .mobile-nav__content .main-menu__nav {
@@ -6664,22 +6738,28 @@ body.megamenu-popup-active .mobile-nav__content {
     -ms-transform: translate(-50%, -50%);
     -o-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
-    -webkit-transition: opacity 0.5s 0s,
+    -webkit-transition:
+        opacity 0.5s 0s,
         width 0.8s 0.8s cubic-bezier(0.225, 0.01, 0.475, 1.01),
         transform 0.2s 0s;
-    -khtml-transition: opacity 0.5s 0s,
+    -khtml-transition:
+        opacity 0.5s 0s,
         width 0.8s 0.8s cubic-bezier(0.225, 0.01, 0.475, 1.01),
         transform 0.2s 0s;
-    -moz-transition: opacity 0.5s 0s,
+    -moz-transition:
+        opacity 0.5s 0s,
         width 0.8s 0.8s cubic-bezier(0.225, 0.01, 0.475, 1.01),
         transform 0.2s 0s;
-    -ms-transition: opacity 0.5s 0s,
+    -ms-transition:
+        opacity 0.5s 0s,
         width 0.8s 0.8s cubic-bezier(0.225, 0.01, 0.475, 1.01),
         transform 0.2s 0s;
-    -o-transition: opacity 0.5s 0s,
+    -o-transition:
+        opacity 0.5s 0s,
         width 0.8s 0.8s cubic-bezier(0.225, 0.01, 0.475, 1.01),
         transform 0.2s 0s;
-    transition: opacity 0.5s 0s,
+    transition:
+        opacity 0.5s 0s,
         width 0.8s 0.8s cubic-bezier(0.225, 0.01, 0.475, 1.01),
         transform 0.2s 0s;
     transition-delay: 0s, 0.8s, 0s;
@@ -7230,8 +7310,14 @@ body.megamenu-popup-active .mobile-nav__content {
     -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
     pointer-events: none;
-    -webkit-transition: width 0.3s, height 0.3s, opacity 0.3s;
-    transition: width 0.3s, height 0.3s, opacity 0.3s;
+    -webkit-transition:
+        width 0.3s,
+        height 0.3s,
+        opacity 0.3s;
+    transition:
+        width 0.3s,
+        height 0.3s,
+        opacity 0.3s;
     z-index: 999991;
 }
 .custom-cursor__hover {
@@ -8059,7 +8145,9 @@ body.megamenu-popup-active .mobile-nav__content {
     z-index: -1;
     transform: scale(0);
     opacity: 0;
-    transition: transform 400ms ease, opacity 400ms ease;
+    transition:
+        transform 400ms ease,
+        opacity 400ms ease;
     background-color: var(--citylife-orange, #e76100);
 }
 .footer-four__info__icon span {
@@ -8358,7 +8446,9 @@ body.megamenu-popup-active .mobile-nav__content {
     z-index: -1;
     transform: scale(0);
     opacity: 0;
-    transition: transform 400ms ease, opacity 400ms ease;
+    transition:
+        transform 400ms ease,
+        opacity 400ms ease;
     background-color: var(--citylife-secondary, #f6d469);
 }
 .contact-one__info__icon span {
@@ -8630,7 +8720,9 @@ body.megamenu-popup-active .mobile-nav__content {
     background-repeat: no-repeat;
     background-position: center center;
     transform: scale(1);
-    transition: transform 10000ms ease, -webkit-transform 10000ms ease;
+    transition:
+        transform 10000ms ease,
+        -webkit-transform 10000ms ease;
     overflow: hidden;
 }
 .main-slider-one__shape-one {
@@ -8644,7 +8736,9 @@ body.megamenu-popup-active .mobile-nav__content {
     background-position: top left;
     opacity: 0.35;
     transform: scale(1);
-    transition: transform 1000ms ease, -webkit-transform 1000ms ease;
+    transition:
+        transform 1000ms ease,
+        -webkit-transform 1000ms ease;
     transform: translateX(-100%);
 }
 @media (max-width: 991px) {
@@ -8663,7 +8757,9 @@ body.megamenu-popup-active .mobile-nav__content {
     background-position: bottom right;
     opacity: 0.35;
     transform: scale(1);
-    transition: transform 1000ms ease, -webkit-transform 1000ms ease;
+    transition:
+        transform 1000ms ease,
+        -webkit-transform 1000ms ease;
     transform: translateY(100%);
 }
 @media (max-width: 991px) {
@@ -8698,7 +8794,9 @@ body.megamenu-popup-active .mobile-nav__content {
     padding: 8.5px 14px;
     margin: 0 0 22px;
     opacity: 0;
-    transition: transform 1000ms ease, opacity 1000ms ease;
+    transition:
+        transform 1000ms ease,
+        opacity 1000ms ease;
     transform: translateX(100px);
 }
 @media (max-width: 991px) {
@@ -8715,7 +8813,9 @@ body.megamenu-popup-active .mobile-nav__content {
     letter-spacing: -3.2px;
     margin: 0 0 0;
     opacity: 0;
-    transition: transform 1200ms ease, opacity 1200ms ease;
+    transition:
+        transform 1200ms ease,
+        opacity 1200ms ease;
     transform: translateX(200px);
 }
 @media (max-width: 991px) {
@@ -8790,7 +8890,9 @@ body.megamenu-popup-active .mobile-nav__content {
 }
 .main-slider-one .volunteer-group__link {
     opacity: 0;
-    transition: transform 1200ms ease, opacity 1200ms ease;
+    transition:
+        transform 1200ms ease,
+        opacity 1200ms ease;
     transform: translateX(100px);
 }
 .main-slider-one .active .main-slider-one__shape-one {
@@ -9104,7 +9206,9 @@ body.megamenu-popup-active .mobile-nav__content {
     background-repeat: no-repeat;
     background-position: center center;
     transform: scale(1);
-    transition: transform 10000ms ease, -webkit-transform 10000ms ease;
+    transition:
+        transform 10000ms ease,
+        -webkit-transform 10000ms ease;
     overflow: hidden;
 }
 .main-slider-two__content {
@@ -9129,7 +9233,9 @@ body.megamenu-popup-active .mobile-nav__content {
     height: 66px;
     background-color: RGBA(var(--citylife-white-rgb, 255, 255, 255), 0.5);
     opacity: 0;
-    transition: transform 1200ms ease, opacity 1200ms ease;
+    transition:
+        transform 1200ms ease,
+        opacity 1200ms ease;
     transform: translateX(100px);
 }
 @media (max-width: 767px) {
@@ -9264,7 +9370,9 @@ body.megamenu-popup-active .mobile-nav__content {
     overflow: hidden;
     background-color: var(--citylife-base, #351c42);
     transform: scale(1);
-    transition: transform 10000ms ease, -webkit-transform 10000ms ease;
+    transition:
+        transform 10000ms ease,
+        -webkit-transform 10000ms ease;
 }
 .main-slider-three__bg::after {
     position: absolute;
@@ -9285,7 +9393,9 @@ body.megamenu-popup-active .mobile-nav__content {
     background-repeat: no-repeat;
     background-position: bottom right;
     opacity: 0.25;
-    transition: transform 1000ms ease, -webkit-transform 1000ms ease;
+    transition:
+        transform 1000ms ease,
+        -webkit-transform 1000ms ease;
     transform: translateX(100%);
 }
 @media (max-width: 991px) {
@@ -9352,7 +9462,9 @@ body.megamenu-popup-active .mobile-nav__content {
     line-height: 1;
     opacity: 0;
     margin: 0 0 22px;
-    transition: transform 1000ms ease, opacity 1000ms ease;
+    transition:
+        transform 1000ms ease,
+        opacity 1000ms ease;
     transform: translateX(-200px);
 }
 @media (max-width: 767px) {
@@ -9374,7 +9486,9 @@ body.megamenu-popup-active .mobile-nav__content {
     text-transform: capitalize;
     margin: 0 0 45px;
     opacity: 0;
-    transition: transform 1200ms ease, opacity 1200ms ease;
+    transition:
+        transform 1200ms ease,
+        opacity 1200ms ease;
     transform: translateX(200px);
 }
 @media (max-width: 1199px) {
@@ -9785,7 +9899,9 @@ body.megamenu-popup-active .mobile-nav__content {
     border: 1px solid var(--citylife-brown);
     opacity: 0;
     transform: translateX(100px);
-    transition: transform 1000ms ease, opacity 1000ms ease;
+    transition:
+        transform 1000ms ease,
+        opacity 1000ms ease;
 }
 @media (max-width: 991px) {
     .main-slider-five__sub-title {
@@ -9802,7 +9918,9 @@ body.megamenu-popup-active .mobile-nav__content {
     letter-spacing: -0.04em;
     opacity: 0;
     transform: translateX(200px);
-    transition: transform 1200ms ease, opacity 1200ms ease;
+    transition:
+        transform 1200ms ease,
+        opacity 1200ms ease;
 }
 @media (max-width: 1199px) {
     .main-slider-five__title {
@@ -9882,7 +10000,9 @@ body.megamenu-popup-active .mobile-nav__content {
 .main-slider-five .volunteer-group__title {
     opacity: 0;
     transform: translateX(100px);
-    transition: transform 1200ms ease, opacity 1200ms ease;
+    transition:
+        transform 1200ms ease,
+        opacity 1200ms ease;
 }
 .main-slider-five__shape {
     width: auto !important;
@@ -9893,7 +10013,9 @@ body.megamenu-popup-active .mobile-nav__content {
     bottom: 0;
     opacity: 0;
     transform: translateX(-200px);
-    transition: transform 1200ms ease, opacity 1200ms ease;
+    transition:
+        transform 1200ms ease,
+        opacity 1200ms ease;
 }
 @media (max-width: 991px) {
     .main-slider-five__shape {
@@ -11131,7 +11253,9 @@ body.megamenu-popup-active .mobile-nav__content {
     z-index: -1;
     transform: scale(0);
     opacity: 0;
-    transition: transform 400ms ease, opacity 400ms ease;
+    transition:
+        transform 400ms ease,
+        opacity 400ms ease;
     background-color: var(--citylife-brown);
 }
 .about-five__donate__icon span {
@@ -11193,7 +11317,9 @@ body.megamenu-popup-active .mobile-nav__content {
     z-index: -1;
     transform: scale(0);
     opacity: 0;
-    transition: transform 300ms ease, opacity 300ms ease;
+    transition:
+        transform 300ms ease,
+        opacity 300ms ease;
     background-color: var(--citylife-brown2);
 }
 .about-five .contact-information__phone__icon span {
@@ -12204,7 +12330,8 @@ body.megamenu-popup-active .mobile-nav__content {
     letter-spacing: -6px;
     text-transform: capitalize;
     color: RGBA(var(--citylife-base-rgb, 53, 28, 66), 1);
-    text-shadow: 1px 1px 0 var(--citylife-white, #fff),
+    text-shadow:
+        1px 1px 0 var(--citylife-white, #fff),
         -1px -1px 0 var(--citylife-white, #fff),
         1px -1px 0 var(--citylife-white, #fff),
         -1px 1px 0 var(--citylife-white, #fff),
@@ -12502,7 +12629,9 @@ body.megamenu-popup-active .mobile-nav__content {
     z-index: -1;
     transform: scale(0);
     opacity: 0;
-    transition: transform 400ms ease, opacity 400ms ease;
+    transition:
+        transform 400ms ease,
+        opacity 400ms ease;
     background-color: var(--citylife-purple, #965995);
 }
 .about-info__icon span {
@@ -12780,7 +12909,9 @@ body.megamenu-popup-active .mobile-nav__content {
     z-index: -1;
     transform: scale(0);
     opacity: 0;
-    transition: transform 400ms ease, opacity 400ms ease;
+    transition:
+        transform 400ms ease,
+        opacity 400ms ease;
     background-color: var(--citylife-orange, #e76100);
 }
 .about-info-three__funfact__icon span {
@@ -12951,7 +13082,8 @@ body.megamenu-popup-active .mobile-nav__content {
     min-width: 61px;
     min-height: 25px;
     color: RGBA(var(--citylife-white-rgb, 255, 255, 255), 1);
-    text-shadow: 1px 1px 0 var(--citylife-white3, #d7d3cb),
+    text-shadow:
+        1px 1px 0 var(--citylife-white3, #d7d3cb),
         -1px -1px 0 var(--citylife-white3, #d7d3cb),
         1px -1px 0 var(--citylife-white3, #d7d3cb),
         -1px 1px 0 var(--citylife-white3, #d7d3cb),
@@ -12982,7 +13114,8 @@ body.megamenu-popup-active .mobile-nav__content {
     }
 }
 .service-one__item:hover .service-one__number {
-    text-shadow: 1px 1px 0 var(--citylife-purple, #965995),
+    text-shadow:
+        1px 1px 0 var(--citylife-purple, #965995),
         -1px -1px 0 var(--citylife-purple, #965995),
         1px -1px 0 var(--citylife-purple, #965995),
         -1px 1px 0 var(--citylife-purple, #965995),
@@ -13117,7 +13250,9 @@ body.megamenu-popup-active .mobile-nav__content {
     z-index: -1;
     transform: scale(0);
     opacity: 0;
-    transition: transform 400ms ease, opacity 400ms ease;
+    transition:
+        transform 400ms ease,
+        opacity 400ms ease;
     background-color: var(--citylife-orange, #e76100);
 }
 .service-two__icon span {
@@ -13262,7 +13397,9 @@ body.megamenu-popup-active .mobile-nav__content {
     z-index: -1;
     transform: scale(0);
     opacity: 0;
-    transition: transform 400ms ease, opacity 400ms ease;
+    transition:
+        transform 400ms ease,
+        opacity 400ms ease;
     background-color: var(--citylife-orange, #e76100);
 }
 .service-three__icon span {
@@ -13798,7 +13935,9 @@ body.megamenu-popup-active .mobile-nav__content {
     height: 465px;
     width: 100%;
     transform: scale(1);
-    transition: transform 10000ms ease, -webkit-transform 10000ms ease;
+    transition:
+        transform 10000ms ease,
+        -webkit-transform 10000ms ease;
     overflow: hidden;
     border-radius: 20px;
 }
@@ -13875,7 +14014,9 @@ body.megamenu-popup-active .mobile-nav__content {
 .gallery-one__card img {
     display: block;
     width: 100%;
-    transition: transform 500ms ease, opacity 500ms ease;
+    transition:
+        transform 500ms ease,
+        opacity 500ms ease;
     opacity: 1;
     border-radius: 20px;
 }
@@ -13938,14 +14079,18 @@ body.megamenu-popup-active .mobile-nav__content {
     z-index: 999;
     transform: translateX(100%);
     transform-origin: right center;
-    transition: transform 500ms ease 500ms, visibility 500ms ease 500ms,
+    transition:
+        transform 500ms ease 500ms,
+        visibility 500ms ease 500ms,
         -webkit-transform 500ms ease 500ms;
 }
 .sidebar-one.active {
     opacity: 1;
     transform: translateX(0%);
     visibility: visible;
-    transition: transform 500ms ease 0ms, visibility 500ms ease 0ms,
+    transition:
+        transform 500ms ease 0ms,
+        visibility 500ms ease 0ms,
         -webkit-transform 500ms ease 0ms;
 }
 .sidebar-one__overlay {
@@ -13977,8 +14122,11 @@ body.megamenu-popup-active .mobile-nav__content {
     opacity: 0;
     visibility: hidden;
     transform: translateX(100%);
-    transition: opacity 500ms ease 0ms, visibility 500ms ease 0ms,
-        transform 500ms ease 0ms, -webkit-transform 500ms ease 0ms;
+    transition:
+        opacity 500ms ease 0ms,
+        visibility 500ms ease 0ms,
+        transform 500ms ease 0ms,
+        -webkit-transform 500ms ease 0ms;
     /* hide scrollbar but allow scrolling */
     -ms-overflow-style: none;
     /* IE and Edge */
@@ -13993,8 +14141,11 @@ body.megamenu-popup-active .mobile-nav__content {
     opacity: 1;
     visibility: visible;
     transform: translateX(0);
-    transition: opacity 500ms ease 500ms, visibility 500ms ease 500ms,
-        transform 500ms ease 500ms, -webkit-transform 500ms ease 500ms;
+    transition:
+        opacity 500ms ease 500ms,
+        visibility 500ms ease 500ms,
+        transform 500ms ease 500ms,
+        -webkit-transform 500ms ease 500ms;
 }
 .sidebar-one__close {
     position: absolute;
@@ -14373,7 +14524,9 @@ body.megamenu-popup-active .mobile-nav__content {
     z-index: -1;
     transform: scale(0);
     opacity: 0;
-    transition: transform 400ms ease, opacity 400ms ease;
+    transition:
+        transform 400ms ease,
+        opacity 400ms ease;
     background-color: var(--citylife-secondary, #f6d469);
 }
 li:hover .sidebar__comments__icon {
@@ -14676,7 +14829,9 @@ li:hover .sidebar__comments__icon::after {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: transform 700ms ease, top 700ms ease;
+    transition:
+        transform 700ms ease,
+        top 700ms ease;
     transform: translateY(0%) translateZ(150px) scaleY(0) rotateX(90deg);
     perspective: 300px;
     transform-origin: bottom center;
@@ -14695,7 +14850,9 @@ li:hover .sidebar__comments__icon::after {
     transition: all 500ms ease;
 }
 .blog-five__card__btn:hover .blog-five__card__btn__back {
-    transition: transform 500ms ease, top 500ms ease;
+    transition:
+        transform 500ms ease,
+        top 500ms ease;
     transform: translateY(0%) translateZ(0px) scaleY(1) rotateX(0deg);
 }
 
@@ -15017,7 +15174,9 @@ li:hover .sidebar__comments__icon::after {
     z-index: -1;
     transform: scale(0);
     opacity: 0;
-    transition: transform 400ms ease, opacity 400ms ease;
+    transition:
+        transform 400ms ease,
+        opacity 400ms ease;
     background-color: var(--citylife-white, #fff);
     transform: scale(0.7);
 }
@@ -17333,7 +17492,9 @@ li:hover .sidebar__comments__icon::after {
     z-index: -1;
     transform: scale(0);
     opacity: 0;
-    transition: transform 400ms ease, opacity 400ms ease;
+    transition:
+        transform 400ms ease,
+        opacity 400ms ease;
     background-color: var(--citylife-secondary, #f6d469);
 }
 .pricing-card__image__icon span {
@@ -17461,7 +17622,9 @@ li:hover .sidebar__comments__icon::after {
     z-index: -1;
     transform: scale(0);
     opacity: 0;
-    transition: transform 300ms ease, opacity 300ms ease;
+    transition:
+        transform 300ms ease,
+        opacity 300ms ease;
     background-color: var(--citylife-white, #fff);
 }
 .pricing-card__button:hover {
@@ -17785,7 +17948,8 @@ li:hover .sidebar__comments__icon::after {
 }
 .help-donate-one__text--one {
     color: RGBA(var(--citylife-base-rgb, 53, 28, 66), 1);
-    text-shadow: 2px 2px 0 var(--citylife-white2, #efece7),
+    text-shadow:
+        2px 2px 0 var(--citylife-white2, #efece7),
         -2px -2px 0 var(--citylife-white2, #efece7),
         2px -2px 0 var(--citylife-white2, #efece7),
         -2px 2px 0 var(--citylife-white2, #efece7),
@@ -18192,7 +18356,8 @@ li:hover .sidebar__comments__icon::after {
     line-height: 1;
     text-transform: capitalize;
     color: RGBA(var(--citylife-base-rgb, 53, 28, 66), 1);
-    text-shadow: 1px 1px 0 var(--citylife-white, #fff),
+    text-shadow:
+        1px 1px 0 var(--citylife-white, #fff),
         -1px -1px 0 var(--citylife-white, #fff),
         1px -1px 0 var(--citylife-white, #fff),
         -1px 1px 0 var(--citylife-white, #fff),
@@ -18202,7 +18367,8 @@ li:hover .sidebar__comments__icon::after {
 .story-one__tabs-box .tab-buttons .tab-btn .tab-btn__text:hover,
 .story-one__tabs-box .tab-buttons .tab-btn.active-btn .tab-btn__text {
     color: var(--citylife-secondary, #f6d469);
-    text-shadow: 1px 1px 0 var(--citylife-secondary, #f6d469),
+    text-shadow:
+        1px 1px 0 var(--citylife-secondary, #f6d469),
         -1px -1px 0 var(--citylife-secondary, #f6d469),
         1px -1px 0 var(--citylife-secondary, #f6d469),
         -1px 1px 0 var(--citylife-secondary, #f6d469),
@@ -18520,7 +18686,9 @@ li:hover .sidebar__comments__icon::after {
     opacity: 0;
     -webkit-perspective: 50em;
     perspective: 50em;
-    transition: transform 500ms ease, opacity 500ms ease;
+    transition:
+        transform 500ms ease,
+        opacity 500ms ease;
 }
 .team-single__content__inner {
     width: 100%;
@@ -18557,7 +18725,9 @@ li:hover .sidebar__comments__icon::after {
     z-index: -1;
     transform: scale(0);
     opacity: 0;
-    transition: transform 400ms ease, opacity 400ms ease;
+    transition:
+        transform 400ms ease,
+        opacity 400ms ease;
     background-color: var(--citylife-secondary, #f6d469);
 }
 .team-single__social li a:hover {
@@ -19458,7 +19628,9 @@ li:hover .sidebar__comments__icon::after {
     z-index: -1;
     transform: scale(0);
     opacity: 0;
-    transition: transform 400ms ease, opacity 400ms ease;
+    transition:
+        transform 400ms ease,
+        opacity 400ms ease;
     background-color: var(--citylife-secondary, #f6d469);
 }
 .volunteer-card__social span {
@@ -20911,11 +21083,12 @@ li:hover .sidebar__comments__icon::after {
 }
 .event-details__speaker__info {
     padding: 29px;
-    display: grid;
+    text-align: center;
+    /* display: grid;
     grid-template-columns: 168px auto;
     grid-gap: 25px;
     border-radius: 20px;
-    border: 1px solid var(--citylife-border-color, #d7d3cb);
+    border: 1px solid var(--citylife-border-color, #d7d3cb); */
 }
 @media (max-width: 1199px) {
     .event-details__speaker__info {
@@ -20956,7 +21129,7 @@ li:hover .sidebar__comments__icon::after {
     gap: 30px 20px;
     padding-bottom: 16px;
     margin-bottom: 20px;
-    border-bottom: 1px solid var(--citylife-border-color, #d7d3cb);
+    /* border-bottom: 1px solid var(--citylife-border-color, #d7d3cb); */
 }
 @media (max-width: 575px) {
     .event-details__speaker__content__inner {

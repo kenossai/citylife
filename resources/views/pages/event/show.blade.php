@@ -75,10 +75,7 @@
                                     <h4 class="event-details__speaker__name">{{ $event->event_anchor }}</h4><!-- /.event-details__speaker__name -->
                                     <p class="event-details__speaker__designation">Event Anchor/Host</p><!-- /.event-details__speaker__designation -->
                                 </div><!-- /.event-details__speaker__indentity -->
-                            </div><!-- /.event-details__speaker__content__inner -->
-                            <div class="event-details__speaker__text">
-                                <p>Leading and hosting this event to ensure a smooth and meaningful experience for all attendees.</p>
-                            </div><!-- /.event-details__speaker__text -->
+                            </div>
                         </div><!-- /.event-details__speaker__content -->
                     </div><!-- /.event-details__speaker__info -->
                     @endif

@@ -41,7 +41,7 @@
     <link rel="stylesheet" href="{{ asset('assets/vendors/owl-carousel/css/owl.theme.default.min.css') }}" />
 
     <!-- core styles -->
-    <link rel="stylesheet" href="{{ asset('assets/css/citylife.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/css/citylife.css') }}?v={{ filemtime(public_path('assets/css/citylife.css')) }}" />
 
     @livewireStyles
 
