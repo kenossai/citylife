@@ -18,7 +18,7 @@
             <div class="col-lg-8">
                 <div class="event-details__content">
                     <div class="event-details__image wow fadeInUp animated" data-wow-duration="1500ms" data-wow-delay="00ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 0ms; animation-name: fadeInUp;">
-                        <img src="{{ $event->featured_image_url }}" alt="{{ $event->title }}">
+                        <img src="{{ $event->featured_image }}" alt="{{ $event->title }}">
                         @if($event->location)
                         <div class="event-details__hall">
                             <span>Location:</span>
@@ -46,7 +46,7 @@
                             <div class="citylife-btn__icon-box">
                                 <div class="citylife-btn__icon-box__inner"><span class="icon-duble-arrow"></span></div>
                             </div>
-                            <span class="citylife-btn__text">register </span>
+                            <span class="citylife-btn__text">Register</span>
                         </a><!-- /.contact-information__btn -->
                         @if($event->registration_details)
                             <div class="event-details__registration">
