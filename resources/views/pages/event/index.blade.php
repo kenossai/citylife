@@ -21,7 +21,7 @@
             <div class="col-lg-6 wow fadeInUp animated" data-wow-duration="1500ms" data-wow-delay="{{ ($index % 2) * 200 }}ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: {{ ($index % 2) * 200 }}ms; animation-name: fadeInUp;">
                 <div class="event-card-grid {{ $index % 2 === 1 ? 'event-card-grid--reverse' : '' }}">
                     <a href="{{ route('events.show', $event->slug) }}" class="event-card-grid__image">
-                        <img src="{{ $event->featured_image }}" alt="{{ $event->title }}">
+                        <img src="{{ $event->featured_image_url }}" alt="{{ $event->title }}">
                         <div class="event-card-grid__date-wrapper">
                             <div class="event-card-grid__time">
                                 <span class="event-card-grid__time__icon fa fa-clock"></span>{{ $event->start_date->format('g:i A') }} - {{ $event->end_date->format('g:i A') }}

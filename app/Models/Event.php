@@ -73,6 +73,7 @@ class Event extends Model
             return asset('assets/images/events/event-2-5.jpg'); // default
         }
 
+        // If it's already a full URL, return it
         if (str_starts_with($this->featured_image, 'http://') || str_starts_with($this->featured_image, 'https://')) {
             return $this->featured_image;
         }
@@ -82,8 +83,13 @@ class Event extends Model
             return asset($this->featured_image);
         }
 
-        // Otherwise it's a storage file
-        return asset('storage/' . $this->featured_image);
+        // Otherwise it's a storage file (S3 or local)
+        try {
+            return \Storage::disk('s3')->url($this->featured_image);
+        } catch (\Exception $e) {
+            // Fallback to local storage if S3 fails
+            return asset('storage/' . $this->featured_image);
+        }
     }
 
     public function getFormattedStartDateAttribute()

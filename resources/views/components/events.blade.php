@@ -10,13 +10,13 @@
             @foreach($events as $index => $event)
             <div class="events-one__card card choice {{ $index === 1 ? 'expand' : '' }}">
                 <div class="card-body">
-                    <div class="events-one__card__top" style="background-image: url('{{ $event->featured_image }}'); background-size: cover; background-position: center;">
+                    <div class="events-one__card__top" style="background-image: url('{{ $event->featured_image_url }}'); background-size: cover; background-position: center;">
                         <h4 class="events-one__card__title">{{ $event->title }}</h4>
                         <span class="events-one__card__icon icon-plus"></span><!-- /.accordion-title__icon -->
                     </div><!-- /.accordian-title -->
                     <div class="event-card-two">
                         <a href="{{ route('events.show', $event->slug) }}" class="event-card-two__image">
-                            <img src="{{ $event->featured_image }}" alt="{{ $event->title }}">
+                            <img src="{{ $event->featured_image_url }}" alt="{{ $event->title }}">
                             <div class="event-card-two__time">
                                 <span class="event-card-two__time__icon fa fa-clock"></span>{{ $event->formatted_start_date }}
                             </div><!-- /.event-card-four__time -->
