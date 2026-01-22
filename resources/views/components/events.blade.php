@@ -10,19 +10,19 @@
             @foreach($events as $index => $event)
             <div class="events-one__card card choice {{ $index === 1 ? 'expand' : '' }}">
                 <div class="card-body">
-                    <div class="events-one__card__top" style="background-image: url('{{ $event->featured_image_url }}'); background-size: cover; background-position: center;">
+                    <div class="events-one__card__top" style="background-image: url('{{ $event->featured_image }}'); background-size: cover; background-position: center;">
                         <h4 class="events-one__card__title">{{ $event->title }}</h4>
                         <span class="events-one__card__icon icon-plus"></span><!-- /.accordion-title__icon -->
                     </div><!-- /.accordian-title -->
                     <div class="event-card-two">
-                        <a href="#" class="event-card-two__image">
-                            <img src="{{ $event->featured_image_url }}" alt="{{ $event->title }}">
+                        <a href="{{ route('events.show', $event->slug) }}" class="event-card-two__image">
+                            <img src="{{ $event->featured_image }}" alt="{{ $event->title }}">
                             <div class="event-card-two__time">
                                 <span class="event-card-two__time__icon fa fa-clock"></span>{{ $event->formatted_start_date }}
                             </div><!-- /.event-card-four__time -->
                         </a><!-- /.event-card-four__image -->
                         <div class="event-card-two__content">
-                            <h4 class="event-card-two__title"><a href="#">{{ $event->title }}</a></h4><!-- /.event-card-four__title -->
+                            <h4 class="event-card-two__title"><a href="{{ route('events.show', $event->slug) }}">{{ $event->title }}</a></h4><!-- /.event-card-four__title -->
                             <div class="event-card-two__text">{{ Str::limit($event->description, 100) }}</div><!-- /.event-card-two__text -->
                             <div class="event-card-two__meta">
                                 <h5 class="event-card-two__meta__title">Venue</h5>
