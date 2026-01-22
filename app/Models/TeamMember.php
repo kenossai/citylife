@@ -136,13 +136,8 @@ class TeamMember extends Model
             return asset($this->profile_image);
         }
 
-        // Otherwise it's a storage file (S3 or local)
-        try {
-            return \Storage::disk('s3')->url($this->profile_image);
-        } catch (\Exception $e) {
-            // Fallback to local storage if S3 fails
-            return asset('storage/' . $this->profile_image);
-        }
+        // Otherwise it's a storage file - use the configured default disk
+        return \Storage::disk(config('filesystems.default'))->url($this->profile_image);
     }
 
     public function getFeaturedImageUrlAttribute()
