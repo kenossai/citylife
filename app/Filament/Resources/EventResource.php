@@ -160,6 +160,8 @@ class EventResource extends Resource
                             ->label('Social Media Image')
                             ->helperText('Custom image for social media sharing (leave blank to use featured image)')
                             ->image()
+                            ->disk('s3')
+                            ->visibility('public')
                             ->directory('seo/events')
                             ->imageEditor(),
                     ])->columns(1)->collapsible(),
