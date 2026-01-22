@@ -20,6 +20,7 @@ class EventController extends Controller
     public function show($slug)
     {
         $event = Event::where('slug', $slug)
+            ->with(['eventAnchor', 'contactPerson', 'speakers'])
             ->published()
             ->firstOrFail();
 
