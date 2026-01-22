@@ -5,7 +5,7 @@
     <!-- /.page-header__bg -->
     <div class="container">
         <h2 class="page-header__title">{{ $event->title }}</h2>
-        <p class="section-header__text">{{ $event->description }}</p>
+        <p class="section-header__text text-white">{{ $event->description }}</p>
         <ul class="citylife-breadcrumb list-unstyled">
             <li><i class="icon-home"></i> <a href="{{ route('home') }}">Home</a></li>
             <li><span>Events</span></li>
