@@ -62,42 +62,45 @@
 
             @if($event->event_anchor || $event->guest_speaker)
                 <div class="event-details__speaker">
-                    <h3 class="event-details__speaker__title event-details__title">Event Team</h3><!-- /.event-details__speaker__title -->
+                    <h3 class="event-details__speaker__title event-details__title">Host & Guest Speaker</h3><!-- /.event-details__speaker__title -->
 
-                    @if($event->event_anchor)
-                    <div class="event-details__speaker__info wow fadeInUp animated" data-wow-duration="1500ms" data-wow-delay="00ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 0ms; animation-name: fadeInUp;">
-                        <div class="event-details__speaker__image">
-                            <img src="{{ asset('assets/images/events/event-speaker-1-1.png') }}" alt="{{ $event->event_anchor }}">
-                        </div><!-- /.event-details__speaker__image -->
-                        <div class="event-details__speaker__content">
-                            <div class="event-details__speaker__content__inner">
-                                <div class="event-details__speaker__indentity">
-                                    <h4 class="event-details__speaker__name">{{ $event->event_anchor }}</h4><!-- /.event-details__speaker__name -->
-                                    <p class="event-details__speaker__designation">Event Anchor/Host</p><!-- /.event-details__speaker__designation -->
-                                </div><!-- /.event-details__speaker__indentity -->
-                            </div>
-                        </div><!-- /.event-details__speaker__content -->
-                    </div><!-- /.event-details__speaker__info -->
-                    @endif
+                    <div class="row gutter-y-30">
+                        @if($event->event_anchor)
+                        <div class="col-md-3 text-center">
+                            <div class="event-details__speaker__info wow fadeInUp animated" data-wow-duration="1500ms" data-wow-delay="00ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 0ms; animation-name: fadeInUp;">
+                                <div class="event-details__speaker__image">
+                                    <img src="{{ asset('assets/images/events/event-speaker-1-1.png') }}" alt="{{ $event->event_anchor }}">
+                                </div><!-- /.event-details__speaker__image -->
+                                <div class="event-details__speaker__content">
+                                    <div class="event-details__speaker__content__inner">
+                                        <div class="event-details__speaker__indentity">
+                                            <h4 class="event-details__speaker__name">{{ $event->event_anchor }}</h4><!-- /.event-details__speaker__name -->
+                                            <p class="event-details__speaker__designation">Event Anchor/Host</p><!-- /.event-details__speaker__designation -->
+                                        </div><!-- /.event-details__speaker__indentity -->
+                                    </div>
+                                </div><!-- /.event-details__speaker__content -->
+                            </div><!-- /.event-details__speaker__info -->
+                        </div><!-- /.col-md-6 -->
+                        @endif
 
-                    @if($event->guest_speaker)
-                    <div class="event-details__speaker__info wow fadeInUp animated" data-wow-duration="1500ms" data-wow-delay="100ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 100ms; animation-name: fadeInUp;">
-                        <div class="event-details__speaker__image">
-                            <img src="{{ asset('assets/images/events/event-speaker-1-2.png') }}" alt="{{ $event->guest_speaker }}">
-                        </div><!-- /.event-details__speaker__image -->
-                        <div class="event-details__speaker__content">
-                            <div class="event-details__speaker__content__inner">
-                                <div class="event-details__speaker__indentity">
-                                    <h4 class="event-details__speaker__name">{{ $event->guest_speaker }}</h4><!-- /.event-details__speaker__name -->
-                                    <p class="event-details__speaker__designation">Guest Speaker</p><!-- /.event-details__speaker__designation -->
-                                </div><!-- /.event-details__speaker__indentity -->
-                            </div><!-- /.event-details__speaker__content__inner -->
-                            <div class="event-details__speaker__text">
-                                <p>Special guest speaker bringing inspiration and insight to this event.</p>
-                            </div><!-- /.event-details__speaker__text -->
-                        </div><!-- /.event-details__speaker__content -->
-                    </div><!-- /.event-details__speaker__info -->
-                    @endif
+                        @if($event->guest_speaker)
+                        <div class="col-md-3 text-center">
+                            <div class="event-details__speaker__info wow fadeInUp animated" data-wow-duration="1500ms" data-wow-delay="100ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 100ms; animation-name: fadeInUp;">
+                                <div class="event-details__speaker__image">
+                                    <img src="{{ asset('assets/images/events/event-speaker-1-2.png') }}" alt="{{ $event->guest_speaker }}">
+                                </div><!-- /.event-details__speaker__image -->
+                                <div class="event-details__speaker__content">
+                                    <div class="event-details__speaker__content__inner">
+                                        <div class="event-details__speaker__indentity">
+                                            <h4 class="event-details__speaker__name">{{ $event->guest_speaker }}</h4><!-- /.event-details__speaker__name -->
+                                            <p class="event-details__speaker__designation">Guest Speaker</p><!-- /.event-details__speaker__designation -->
+                                        </div><!-- /.event-details__speaker__indentity -->
+                                    </div>
+                                </div><!-- /.event-details__speaker__content -->
+                            </div><!-- /.event-details__speaker__info -->
+                        </div><!-- /.col-md-6 -->
+                        @endif
+                    </div><!-- /.row -->
                 </div><!-- /.event-details__speaker -->
                 @endif
             </div><!-- /.col-lg-8 -->
