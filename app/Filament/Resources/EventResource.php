@@ -87,18 +87,100 @@ class EventResource extends Resource
                             ->required(),
                     ])->columns(1),
 
-                Forms\Components\Section::make('Event Staff')
+                Forms\Components\Section::make('Event Host')
                     ->schema([
+                        Forms\Components\Select::make('event_anchor_id')
+                            ->label('Event Anchor/Host (Leadership Member)')
+                            ->options(function () {
+                                return \App\Models\TeamMember::query()
+                                    ->where('is_active', true)
+                                    ->orderBy('first_name')
+                                    ->get()
+                                    ->mapWithKeys(fn ($member) => [$member->id => $member->first_name . ' ' . $member->last_name]);
+                            })
+                            ->searchable()
+                            ->nullable()
+                            ->helperText('Select event host'),
+
                         Forms\Components\TextInput::make('event_anchor')
-                            ->label('Event Anchor/Host')
+                            ->label('Event Anchor/Host (Manual Entry)')
                             ->maxLength(255)
+                            ->helperText('Use this if host is not a listed')
                             ->placeholder('Person anchoring/hosting the event'),
+                    ])->columns(2),
+
+                Forms\Components\Section::make('Guest Speakers')
+                    ->schema([
+                        Forms\Components\Repeater::make('speakers')
+                            ->relationship()
+                            ->schema([
+                                Forms\Components\TextInput::make('name')
+                                    ->required()
+                                    ->maxLength(255)
+                                    ->placeholder('Speaker name'),
+
+                                Forms\Components\TextInput::make('title')
+                                    ->maxLength(255)
+                                    ->placeholder('e.g., Pastor, Evangelist, etc.'),
+
+                                Forms\Components\FileUpload::make('image')
+                                    ->label('Speaker Photo')
+                                    ->image()
+                                    ->disk('s3')
+                                    ->visibility('public')
+                                    ->directory('event-speakers')
+                                    ->imageEditor(),
+                            ])
+                            ->orderColumn('sort_order')
+                            ->reorderable()
+                            ->collapsible()
+                            ->itemLabel(fn (array $state): ?string => $state['name'] ?? null)
+                            ->addActionLabel('Add Speaker')
+                            ->columns(2),
 
                         Forms\Components\TextInput::make('guest_speaker')
-                            ->label('Guest Speaker')
+                            ->label('Guest Speaker (Legacy - will be deprecated)')
                             ->maxLength(255)
+                            ->helperText('Use the speakers repeater above instead')
                             ->placeholder('Special guest or speaker for this event'),
-                    ])->columns(2),
+                    ])->columns(1),
+
+                Forms\Components\Section::make('Contact Person')
+                    ->schema([
+                        Forms\Components\Select::make('contact_person_id')
+                            ->label('Contact Person')
+                            ->options(function () {
+                                return \App\Models\Member::query()
+                                    ->orderBy('first_name')
+                                    ->get()
+                                    ->mapWithKeys(fn ($member) => [
+                                        $member->id => $member->first_name . ' ' . $member->last_name . ' (' . $member->email . ')'
+                                    ]);
+                            })
+                            ->searchable()
+                            ->nullable()
+                            ->live()
+                            ->afterStateUpdated(function ($state, Forms\Set $set) {
+                                if ($state) {
+                                    $member = \App\Models\Member::find($state);
+                                    if ($member) {
+                                        $set('contact_email', $member->email);
+                                        $set('contact_phone', $member->phone ?? '');
+                                    }
+                                }
+                            })
+                            ->helperText('Select a church member as contact person'),
+
+                        Forms\Components\TextInput::make('contact_email')
+                            ->email()
+                            ->maxLength(255)
+                            ->placeholder('Contact email for inquiries'),
+
+                        Forms\Components\TextInput::make('contact_phone')
+                            ->tel()
+                            ->maxLength(255)
+                            ->placeholder('Contact phone number'),
+                    ])->columns(3),
 
                 Forms\Components\Section::make('Registration')
                     ->schema([

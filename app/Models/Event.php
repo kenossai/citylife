@@ -20,7 +20,11 @@ class Event extends Model
         'end_date',
         'location',
         'event_anchor',
+        'event_anchor_id',
         'guest_speaker',
+        'contact_person_id',
+        'contact_email',
+        'contact_phone',
         'requires_registration',
         'registration_details',
         'max_attendees',
@@ -95,5 +99,21 @@ class Event extends Model
     public function getFormattedStartDateAttribute()
     {
         return $this->start_date->format('M j, Y @ g:i a');
+    }
+
+    // Relationships
+    public function eventAnchor()
+    {
+        return $this->belongsTo(TeamMember::class, 'event_anchor_id');
+    }
+
+    public function contactPerson()
+    {
+        return $this->belongsTo(Member::class, 'contact_person_id');
+    }
+
+    public function speakers()
+    {
+        return $this->hasMany(EventSpeaker::class)->orderBy('sort_order');
     }
 }
