@@ -24,7 +24,7 @@ class BookResource extends Resource
 
     protected static ?string $navigationGroup = 'Resources';
 
-    protected static ?int $navigationSort = 4;
+    // protected static ?int $navigationSort = 4;
 
     public static function form(Form $form): Form
     {
