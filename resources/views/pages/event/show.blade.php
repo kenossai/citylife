@@ -70,11 +70,7 @@
                         <div class="col-md-3 text-center">
                             <div class="event-details__speaker__info wow fadeInUp animated" data-wow-duration="1500ms" data-wow-delay="00ms" style="visibility: visible; animation-duration: 1500ms; animation-delay: 0ms; animation-name: fadeInUp;">
                                 <div class="event-details__speaker__image">
-                                    @if($event->eventAnchor->profile_image)
-                                        <img src="{{ $event->eventAnchor->profile_image }}" alt="{{ $event->eventAnchor->first_name }} {{ $event->eventAnchor->last_name }}">
-                                    @else
-                                        <img src="{{ asset('assets/images/events/event-speaker-1-1.png') }}" alt="{{ $event->eventAnchor->first_name }} {{ $event->eventAnchor->last_name }}">
-                                    @endif
+                                    <img src="{{ $event->eventAnchor->profile_image_url }}" alt="{{ $event->eventAnchor->first_name }} {{ $event->eventAnchor->last_name }}">
                                 </div><!-- /.event-details__speaker__image -->
                                 <div class="event-details__speaker__content">
                                     <div class="event-details__speaker__content__inner">
@@ -96,7 +92,7 @@
                                     <div class="event-details__speaker__content__inner">
                                         <div class="event-details__speaker__indentity">
                                             <h4 class="event-details__speaker__name">{{ $event->event_anchor }}</h4><!-- /.event-details__speaker__name -->
-                                            <p class="event-details__speaker__designation">Event Host</p><!-- /.event-details__speaker__designation -->
+                                            <p class="event-details__speaker__designation">Host</p><!-- /.event-details__speaker__designation -->
                                         </div><!-- /.event-details__speaker__indentity -->
                                     </div>
                                 </div><!-- /.event-details__speaker__content -->

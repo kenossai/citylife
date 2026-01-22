@@ -119,7 +119,24 @@ class TeamMember extends Model
         if (!$this->profile_image) {
             return asset('assets/images/team/default-team-member.jpg');
         }
-        return asset('storage/' . $this->profile_image);
+
+        // If it's already a full URL, return it
+        if (str_starts_with($this->profile_image, 'http://') || str_starts_with($this->profile_image, 'https://')) {
+            return $this->profile_image;
+        }
+
+        // If the path starts with 'assets/' it's a public asset
+        if (str_starts_with($this->profile_image, 'assets/')) {
+            return asset($this->profile_image);
+        }
+
+        // Otherwise it's a storage file (S3 or local)
+        try {
+            return \Storage::disk('s3')->url($this->profile_image);
+        } catch (\Exception $e) {
+            // Fallback to local storage if S3 fails
+            return asset('storage/' . $this->profile_image);
+        }
     }
 
     public function getFeaturedImageUrlAttribute()
