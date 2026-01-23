@@ -18,7 +18,6 @@
     }
 
     .dashboard-sidebar {
-        /* background: #f8f9fa; */
         padding: 50px 35px;
         border-right: 1px solid #dee2e6;
         min-height: 700px;
