@@ -96,7 +96,7 @@
                             }
                         @endphp
                         @if($videoId)
-                            <iframe src="https://www.youtube.com/embed/{{ $videoId }}" allowfullscreen allow="autoplay; encrypted-media"></iframe>
+                            <iframe src="https://www.youtube.com/embed/{{ $videoId }}" allowfullscreen></iframe>
                         @endif
                     @else
                         {{-- <video src="{{ $series->video_url }}" controls style="width:100%;height:600px;"></video> --}}
