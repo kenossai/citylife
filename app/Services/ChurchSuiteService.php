@@ -5,19 +5,23 @@ namespace App\Services;
 use App\Models\Member;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
 use Exception;
 
 class ChurchSuiteService
 {
     protected $apiUrl;
-    protected $accountName;
-    protected $apiKey;
+    protected $tokenUrl;
+    protected $clientId;
+    protected $clientSecret;
+    protected $accessToken;
 
     public function __construct()
     {
         $this->apiUrl = config('services.churchsuite.api_url');
-        $this->accountName = config('services.churchsuite.account_name');
-        $this->apiKey = config('services.churchsuite.api_key');
+        $this->tokenUrl = config('services.churchsuite.token_url');
+        $this->clientId = config('services.churchsuite.client_id');
+        $this->clientSecret = config('services.churchsuite.client_secret');
     }
 
     /**
@@ -30,15 +34,16 @@ class ChurchSuiteService
     public function transferMember(Member $member): array
     {
         try {
+            // Get OAuth2 access token
+            $token = $this->getAccessToken();
+
             // Prepare member data for ChurchSuite API
             $data = $this->prepareMemberData($member);
 
-            // Send to ChurchSuite
-            $response = Http::withHeaders([
-                'X-Account' => $this->accountName,
-                'X-Auth' => $this->apiKey,
-                'Content-Type' => 'application/json',
-            ])->post("{$this->apiUrl}/contacts", $data);
+            // Send to ChurchSuite v2 API
+            $response = Http::withToken($token)
+                ->acceptJson()
+                ->post("{$this->apiUrl}/addressbook/contacts", $data);
 
             if ($response->successful()) {
                 $churchSuiteContact = $response->json();
@@ -112,13 +117,14 @@ class ChurchSuiteService
         }
 
         try {
+            // Get OAuth2 access token
+            $token = $this->getAccessToken();
+
             $data = $this->prepareMemberData($member);
 
-            $response = Http::withHeaders([
-                'X-Account' => $this->accountName,
-                'X-Auth' => $this->apiKey,
-                'Content-Type' => 'application/json',
-            ])->put("{$this->apiUrl}/contacts/{$member->churchsuite_id}", $data);
+            $response = Http::withToken($token)
+                ->acceptJson()
+                ->put("{$this->apiUrl}/addressbook/contacts/{$member->churchsuite_id}", $data);
 
             if ($response->successful()) {
                 $member->update([
@@ -155,48 +161,63 @@ class ChurchSuiteService
     }
 
     /**
-     * Prepare member data for ChurchSuite API
+     * Prepare member data for ChurchSuite API v2
      *
      * @param Member $member
      * @return array
      */
     protected function prepareMemberData(Member $member): array
     {
-        return [
+        // Build address object only if we have address data
+        $address = null;
+        if ($member->address) {
+            $address = [
+                'line1' => $member->address,
+                'line2' => null,
+                'city' => $member->city,
+                'county' => null,
+                'postcode' => $member->postal_code,
+                'country' => $member->country ?? 'GB', // Default to UK
+            ];
+        }
+
+        // Core ChurchSuite contact fields
+        $data = [
             'first_name' => $member->first_name,
             'last_name' => $member->last_name,
-            'middle_name' => $member->middle_name,
             'email' => $member->email,
             'mobile' => $member->phone,
-            'telephone' => $member->alternative_phone,
-            'address' => [
-                'line1' => $member->address,
-                'city' => $member->city,
-                'postcode' => $member->postal_code,
-                'country' => $member->country,
-            ],
             'sex' => $this->mapGender($member->gender),
+            'date_of_birth' => $member->date_of_birth?->format('d/m/Y'), // ChurchSuite uses DD/MM/YYYY
             'marital' => $this->mapMaritalStatus($member->marital_status),
-            'date_of_birth' => $member->date_of_birth?->format('Y-m-d'),
-            'job' => $member->occupation,
-            'employer' => $member->employer,
-            'custom_fields' => [
-                'membership_number' => $member->membership_number,
-                'membership_status' => $member->membership_status,
-                'first_visit_date' => $member->first_visit_date?->format('Y-m-d'),
-                'membership_date' => $member->membership_date?->format('Y-m-d'),
-                'baptism_status' => $member->baptism_status,
-                'baptism_date' => $member->baptism_date?->format('Y-m-d'),
-                'previous_church' => $member->previous_church,
-                'emergency_contact_name' => $member->emergency_contact_name,
-                'emergency_contact_phone' => $member->emergency_contact_phone,
-                'emergency_contact_relationship' => $member->emergency_contact_relationship,
-            ],
             'communication' => [
                 'general_email' => $member->receives_newsletter ? 1 : 0,
                 'general_sms' => $member->receives_sms ? 1 : 0,
             ],
         ];
+
+        // Add optional fields only if they have values
+        if ($member->middle_name) {
+            $data['middle_name'] = $member->middle_name;
+        }
+
+        if ($member->alternative_phone) {
+            $data['telephone'] = $member->alternative_phone;
+        }
+
+        if ($address) {
+            $data['address'] = $address;
+        }
+
+        if ($member->occupation) {
+            $data['job'] = $member->occupation;
+        }
+
+        if ($member->employer) {
+            $data['employer'] = $member->employer;
+        }
+
+        return $data;
     }
 
     /**
@@ -236,8 +257,9 @@ class ChurchSuiteService
     public function isConfigured(): bool
     {
         return !empty($this->apiUrl) &&
-               !empty($this->accountName) &&
-               !empty($this->apiKey);
+               !empty($this->tokenUrl) &&
+               !empty($this->clientId) &&
+               !empty($this->clientSecret);
     }
 
     /**
@@ -253,10 +275,12 @@ class ChurchSuiteService
                 ];
             }
 
-            $response = Http::withHeaders([
-                'X-Account' => $this->accountName,
-                'X-Auth' => $this->apiKey,
-            ])->get("{$this->apiUrl}/contacts", ['per_page' => 1]);
+            // Get OAuth2 access token
+            $token = $this->getAccessToken();
+
+            $response = Http::withToken($token)
+                ->acceptJson()
+                ->get("{$this->apiUrl}/addressbook/contacts", ['per_page' => 1]);
 
             if ($response->successful()) {
                 return [

@@ -95,9 +95,10 @@ return [
     ],
 
     'churchsuite' => [
-        'api_url' => env('CHURCHSUITE_API_URL', 'https://api.churchsuite.com/v1'),
-        'account_name' => env('CHURCHSUITE_ACCOUNT_NAME'),
-        'api_key' => env('CHURCHSUITE_API_KEY'),
+        'api_url' => env('CHURCHSUITE_API_URL', 'https://api.churchsuite.com/v2'),
+        'token_url' => env('CHURCHSUITE_TOKEN_URL', 'https://login.churchsuite.com/oauth2/token'),
+        'client_id' => env('CHURCHSUITE_CLIENT_ID'),
+        'client_secret' => env('CHURCHSUITE_CLIENT_SECRET'),
     ],
 
 ];

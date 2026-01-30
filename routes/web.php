@@ -279,6 +279,9 @@ Route::get('/media/citylife-music/{music}', [App\Http\Controllers\CityLifeMusicC
 Route::get('/sitemap.xml', [App\Http\Controllers\SEOController::class, 'sitemap'])->name('sitemap');
 Route::get('/robots.txt', [App\Http\Controllers\SEOController::class, 'robots'])->name('robots');
 
+
+// Bible School routes
+// Route::get('/bible-school', [App\Http\Controllers\BibleSchoolController::class, 'index'])->name('bible-school.index');
 // Youth Camping routes
 Route::get('/youth/camping', [App\Http\Controllers\YouthCampingController::class, 'index'])->name('youth-camping.index');
 Route::get('/youth/camping/{youthCamping:slug}', [App\Http\Controllers\YouthCampingController::class, 'show'])->name('youth-camping.show');

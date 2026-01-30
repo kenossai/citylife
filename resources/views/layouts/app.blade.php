@@ -1,6 +1,6 @@
 <x-base-layout>
     <div class="page-wrapper">
-    <x-lighthouse />
+    {{-- <x-lighthouse /> --}}
         <x-header />
 
         {{ $slot }}
