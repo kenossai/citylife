@@ -42,7 +42,7 @@
 
                 <div class="row gutter-y-30">
                     @forelse($teachingSeries as $series)
-                        <div class="col-sm-6">
+                        <div class="col-sm-3">
                             <div class="product-item wow fadeInUp animated" data-wow-duration="1500ms" data-wow-delay="000ms">
                                 <a href="{{ route('teaching-series.show', $series->slug) }}" class="product-item__img" style="position: relative;">
                                     <img src="{{ $series->image_url }}" alt="{{ $series->title }}">
@@ -69,7 +69,7 @@
                                 </a>
                                 <div class="product-item__content">
                                     <h4 class="product-item__title">
-                                        <a href="{{ route('teaching-series.show', $series->slug) }}">{{ $series->title }}</a>
+                                        <a href="{{ route('teaching-series.show', $series->slug) }}" style="font-size: 14px;">{{ $series->title }}</a>
                                         @if($series->is_upcoming)
                                             <span class="badge bg-warning text-dark ms-2" style="font-size: 0.7rem; vertical-align: middle;">Upcoming</span>
                                         @endif
