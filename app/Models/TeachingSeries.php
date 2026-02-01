@@ -34,6 +34,9 @@ class TeachingSeries extends Model
         'is_featured',
         'is_published',
         'sort_order',
+        'youtube_live_url',
+        'auto_fetch_live_stream',
+        'live_stream_checked_at',
     ];
 
     protected $casts = [
@@ -44,6 +47,8 @@ class TeachingSeries extends Model
         'views_count' => 'integer',
         'duration_minutes' => 'integer',
         'sort_order' => 'integer',
+        'auto_fetch_live_stream' => 'boolean',
+        'live_stream_checked_at' => 'datetime',
     ];
 
     protected static function boot()

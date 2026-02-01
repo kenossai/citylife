@@ -137,7 +137,43 @@ class TeachingSeriesResource extends Resource
                                             ->label('Auto-Fetch Live Stream')
                                             ->helperText('Automatically get YouTube live stream URL on Sundays at 11:15 AM')
                                             ->columnSpanFull()
-                                            ->live(),
+                                            ->live()
+                                            ->afterStateUpdated(function ($state, $set, $record) {
+                                                if ($state) {
+                                                    // Trigger immediate check when enabled
+                                                    try {
+                                                        $youtubeService = app(\App\Services\YouTubeService::class);
+                                                        $now = now();
+                                                        $liveStream = $youtubeService->getLiveStreamForDateTime($now);
+                                                        
+                                                        if ($liveStream) {
+                                                            $set('youtube_live_url', $liveStream['url']);
+                                                            $set('video_url', $liveStream['url']);
+                                                            $set('live_stream_checked_at', now());
+                                                            
+                                                            \Filament\Notifications\Notification::make()
+                                                                ->title('Live stream found!')
+                                                                ->body('Found: ' . $liveStream['title'])
+                                                                ->success()
+                                                                ->send();
+                                                        } else {
+                                                            $set('live_stream_checked_at', now());
+                                                            
+                                                            \Filament\Notifications\Notification::make()
+                                                                ->title('No live stream found')
+                                                                ->body('No live or upcoming stream found at this time.')
+                                                                ->warning()
+                                                                ->send();
+                                                        }
+                                                    } catch (\Exception $e) {
+                                                        \Filament\Notifications\Notification::make()
+                                                            ->title('Error checking live stream')
+                                                            ->body($e->getMessage())
+                                                            ->danger()
+                                                            ->send();
+                                                    }
+                                                }
+                                            }),
 
                                         Forms\Components\Placeholder::make('live_stream_info')
                                             ->label('Live Stream Auto-Fetch')
@@ -150,8 +186,8 @@ class TeachingSeriesResource extends Resource
                                             ->url()
                                             ->maxLength(255)
                                             ->placeholder('https://youtube.com/watch?v=...')
-                                            ->helperText(fn (Forms\Get $get): string => 
-                                                $get('auto_fetch_live_stream') 
+                                            ->helperText(fn (Forms\Get $get): string =>
+                                                $get('auto_fetch_live_stream')
                                                     ? 'This will be automatically populated when live stream is detected'
                                                     : 'Enter YouTube or video URL manually'
                                             ),
@@ -166,9 +202,9 @@ class TeachingSeriesResource extends Resource
 
                                         Forms\Components\Placeholder::make('live_stream_checked_at')
                                             ->label('Last Checked')
-                                            ->content(fn ($record): string => 
-                                                $record?->live_stream_checked_at 
-                                                    ? $record->live_stream_checked_at->diffForHumans() 
+                                            ->content(fn ($record): string =>
+                                                $record?->live_stream_checked_at
+                                                    ? $record->live_stream_checked_at->diffForHumans()
                                                     : 'Never'
                                             )
                                             ->visible(fn ($record): bool => !empty($record?->live_stream_checked_at)),

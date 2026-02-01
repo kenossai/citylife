@@ -33,11 +33,11 @@ class YouTubeService
 
             if ($response->successful()) {
                 $data = $response->json();
-                
+
                 if (!empty($data['items'])) {
                     $video = $data['items'][0];
                     $videoId = $video['id']['videoId'];
-                    
+
                     return [
                         'video_id' => $videoId,
                         'url' => "https://www.youtube.com/watch?v={$videoId}",
@@ -73,7 +73,7 @@ class YouTubeService
             if ($response->successful()) {
                 $data = $response->json();
                 $streams = [];
-                
+
                 foreach ($data['items'] ?? [] as $video) {
                     $videoId = $video['id']['videoId'];
                     $streams[] = [
@@ -85,7 +85,7 @@ class YouTubeService
                         'scheduled_start' => $video['snippet']['publishedAt'] ?? null,
                     ];
                 }
-                
+
                 return $streams;
             }
 
@@ -102,11 +102,11 @@ class YouTubeService
     public function getLiveStreamForDateTime(\DateTime $targetDateTime): ?array
     {
         $upcomingStreams = $this->getUpcomingLiveStreams();
-        
+
         foreach ($upcomingStreams as $stream) {
             if ($stream['scheduled_start']) {
                 $scheduledTime = new \DateTime($stream['scheduled_start']);
-                
+
                 // Check if scheduled within 30 minutes of target time
                 $timeDiff = abs($scheduledTime->getTimestamp() - $targetDateTime->getTimestamp());
                 if ($timeDiff <= 1800) { // 30 minutes = 1800 seconds
@@ -114,7 +114,7 @@ class YouTubeService
                 }
             }
         }
-        
+
         return null;
     }
 
@@ -124,12 +124,12 @@ class YouTubeService
     public function cacheLiveStream(): ?string
     {
         $stream = $this->getCurrentLiveStream();
-        
+
         if ($stream) {
             Cache::put('youtube_live_stream', $stream, now()->addHours(4));
             return $stream['url'];
         }
-        
+
         return null;
     }
 

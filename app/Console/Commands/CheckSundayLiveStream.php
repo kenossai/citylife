@@ -16,7 +16,7 @@ class CheckSundayLiveStream extends Command
     public function handle(YouTubeService $youtubeService)
     {
         $now = Carbon::now();
-        
+
         // Only run on Sundays between 10:45 AM and 12:00 PM
         if (!$now->isSunday()) {
             $this->info('Not Sunday - skipping live stream check');
@@ -25,7 +25,7 @@ class CheckSundayLiveStream extends Command
 
         $currentHour = $now->hour;
         $currentMinute = $now->minute;
-        
+
         // Check if we're within the service time window (10:45 - 12:00)
         if ($currentHour < 10 || ($currentHour === 10 && $currentMinute < 45) || $currentHour >= 12) {
             $this->info('Outside service time window - skipping');
@@ -36,10 +36,10 @@ class CheckSundayLiveStream extends Command
 
         // First, check for currently live stream
         $liveStream = $youtubeService->getCurrentLiveStream();
-        
+
         if (!$liveStream) {
             $this->info('No live stream found, checking upcoming streams...');
-            
+
             // Check for upcoming stream scheduled around 11:15 AM
             $targetTime = Carbon::today()->setTime(11, 15);
             $liveStream = $youtubeService->getLiveStreamForDateTime($targetTime);
@@ -59,7 +59,7 @@ class CheckSundayLiveStream extends Command
                     'video_url' => $liveStream['url'],
                     'youtube_live_url' => $liveStream['url'],
                 ]);
-                
+
                 $this->info("Updated teaching series: {$teachingSeries->title}");
                 Log::info("Auto-updated teaching series with live stream", [
                     'series_id' => $teachingSeries->id,
@@ -77,7 +77,7 @@ class CheckSundayLiveStream extends Command
                     'is_published' => false, // Admin can publish later
                     'summary' => 'Live Sunday service',
                 ]);
-                
+
                 $this->info("Created new teaching series: {$teachingSeries->title}");
                 Log::info("Auto-created teaching series with live stream", [
                     'series_id' => $teachingSeries->id,
@@ -87,7 +87,7 @@ class CheckSundayLiveStream extends Command
 
             // Cache the live stream for homepage/banner
             $youtubeService->cacheLiveStream();
-            
+
             return 0;
         }
 
