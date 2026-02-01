@@ -222,7 +222,7 @@
             @if($series->pastor)
                 <div class="dg-author">
                     <div class="dg-author__name">{{ $series->pastor }}</div>
-                    <div class="dg-author__bio">Pastor at City Life International Church</div>
+                    {{-- <div class="dg-author__bio">Pastor at City Life International Church</div> --}}
                 </div>
             @endif
         </article>
