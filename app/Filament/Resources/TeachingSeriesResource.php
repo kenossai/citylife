@@ -142,9 +142,6 @@ class TeachingSeriesResource extends Resource
                                                 if ($state) {
                                                     // Trigger immediate check when enabled
                                                     try {
-                                                        $youtubeService = app(\App\Services\YouTubeService::class);
-                                                        $now = now();
-                                                        
                                                         // First check if API key is configured
                                                         if (empty(config('services.youtube.api_key'))) {
                                                             \Filament\Notifications\Notification::make()
@@ -154,6 +151,9 @@ class TeachingSeriesResource extends Resource
                                                                 ->send();
                                                             return;
                                                         }
+
+                                                        $youtubeService = app(\App\Services\YouTubeService::class);
+                                                        $now = now();
                                                         
                                                         $liveStream = $youtubeService->getLiveStreamForDateTime($now);
                                                         
@@ -176,10 +176,15 @@ class TeachingSeriesResource extends Resource
                                                                 ->warning()
                                                                 ->send();
                                                         }
-                                                    } catch (\Exception $e) {
+                                                    } catch (\Throwable $e) {
+                                                        \Illuminate\Support\Facades\Log::error('YouTube live stream check failed: ' . $e->getMessage(), [
+                                                            'exception' => get_class($e),
+                                                            'trace' => $e->getTraceAsString()
+                                                        ]);
+                                                        
                                                         \Filament\Notifications\Notification::make()
                                                             ->title('Error checking live stream')
-                                                            ->body('Error: ' . $e->getMessage() . ' - Check your API key and channel ID.')
+                                                            ->body('Unable to check YouTube. Check logs for details. Error: ' . $e->getMessage())
                                                             ->danger()
                                                             ->send();
                                                     }

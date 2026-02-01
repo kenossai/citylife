@@ -13,8 +13,26 @@ class YouTubeService
 
     public function __construct()
     {
-        $this->apiKey = config('services.youtube.api_key');
-        $this->channelId = config('services.youtube.channel_id');
+        $this->apiKey = config('services.youtube.api_key') ?? '';
+        $this->channelId = config('services.youtube.channel_id') ?? 'UCTP2_DfFmZfg5ooFu6alMvA';
+    }
+
+    /**
+     * Check if the service is properly configured
+     */
+    protected function isConfigured(): bool
+    {
+        if (empty($this->apiKey)) {
+            Log::warning('YouTube API key is not configured');
+            return false;
+        }
+        
+        if (empty($this->channelId)) {
+            Log::warning('YouTube channel ID is not configured');
+            return false;
+        }
+        
+        return true;
     }
 
     /**
@@ -22,8 +40,12 @@ class YouTubeService
      */
     public function getCurrentLiveStream(): ?array
     {
+        if (!$this->isConfigured()) {
+            return null;
+        }
+
         try {
-            $response = Http::get('https://www.googleapis.com/youtube/v3/search', [
+            $response = Http::timeout(10)->get('https://www.googleapis.com/youtube/v3/search', [
                 'part' => 'snippet',
                 'channelId' => $this->channelId,
                 'eventType' => 'live',
@@ -46,11 +68,18 @@ class YouTubeService
                         'thumbnail' => $video['snippet']['thumbnails']['high']['url'] ?? null,
                     ];
                 }
+            } else {
+                Log::error('YouTube API Error Response', [
+                    'status' => $response->status(),
+                    'body' => $response->body()
+                ]);
             }
 
             return null;
         } catch (\Exception $e) {
-            Log::error('YouTube API Error: ' . $e->getMessage());
+            Log::error('YouTube API Exception in getCurrentLiveStream: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString()
+            ]);
             return null;
         }
     }
@@ -60,8 +89,12 @@ class YouTubeService
      */
     public function getUpcomingLiveStreams(): array
     {
+        if (!$this->isConfigured()) {
+            return [];
+        }
+
         try {
-            $response = Http::get('https://www.googleapis.com/youtube/v3/search', [
+            $response = Http::timeout(10)->get('https://www.googleapis.com/youtube/v3/search', [
                 'part' => 'snippet',
                 'channelId' => $this->channelId,
                 'eventType' => 'upcoming',
@@ -87,11 +120,18 @@ class YouTubeService
                 }
 
                 return $streams;
+            } else {
+                Log::error('YouTube API Error Response in getUpcomingLiveStreams', [
+                    'status' => $response->status(),
+                    'body' => $response->body()
+                ]);
             }
 
             return [];
         } catch (\Exception $e) {
-            Log::error('YouTube API Error: ' . $e->getMessage());
+            Log::error('YouTube API Exception in getUpcomingLiveStreams: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString()
+            ]);
             return [];
         }
     }
@@ -101,28 +141,35 @@ class YouTubeService
      */
     public function getLiveStreamForDateTime(\DateTime $targetDateTime): ?array
     {
-        // First, check if there's a currently live stream
-        $liveStream = $this->getCurrentLiveStream();
-        if ($liveStream) {
-            return $liveStream;
-        }
+        try {
+            // First, check if there's a currently live stream
+            $liveStream = $this->getCurrentLiveStream();
+            if ($liveStream) {
+                return $liveStream;
+            }
 
-        // If no live stream, check upcoming streams
-        $upcomingStreams = $this->getUpcomingLiveStreams();
+            // If no live stream, check upcoming streams
+            $upcomingStreams = $this->getUpcomingLiveStreams();
 
-        foreach ($upcomingStreams as $stream) {
-            if ($stream['scheduled_start']) {
-                $scheduledTime = new \DateTime($stream['scheduled_start']);
+            foreach ($upcomingStreams as $stream) {
+                if ($stream['scheduled_start']) {
+                    $scheduledTime = new \DateTime($stream['scheduled_start']);
 
-                // Check if scheduled within 30 minutes of target time
-                $timeDiff = abs($scheduledTime->getTimestamp() - $targetDateTime->getTimestamp());
-                if ($timeDiff <= 1800) { // 30 minutes = 1800 seconds
-                    return $stream;
+                    // Check if scheduled within 30 minutes of target time
+                    $timeDiff = abs($scheduledTime->getTimestamp() - $targetDateTime->getTimestamp());
+                    if ($timeDiff <= 1800) { // 30 minutes = 1800 seconds
+                        return $stream;
+                    }
                 }
             }
-        }
 
-        return null;
+            return null;
+        } catch (\Exception $e) {
+            Log::error('YouTube API Exception in getLiveStreamForDateTime: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString()
+            ]);
+            return null;
+        }
     }
 
     /**
