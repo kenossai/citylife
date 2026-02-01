@@ -173,8 +173,8 @@
                 @endif
                 @if($series->tags && count($series->tags) > 0)
                     <div>
-                        <span class="dg-meta__label">Topic:</span>
-                        @foreach(array_slice($series->tags, 0, 2) as $tag)
+                        <span class="dg-meta__label">Tags:</span>
+                        @foreach(array_slice($series->tags, 0, 8) as $tag)
                             <a href="{{ route('teaching-series.index', ['search' => $tag]) }}" class="dg-meta__link">{{ $tag }}</a>
                         @endforeach
                     </div>
