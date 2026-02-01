@@ -49,6 +49,11 @@ return [
         ],
     ],
 
+    'youtube' => [
+        'api_key' => env('YOUTUBE_API_KEY'),
+        'channel_id' => env('YOUTUBE_CHANNEL_ID', 'UCTP2_DfFmZfg5ooFu6alMvA'), // CityLife Church
+    ],
+
     // Social Media Integration
     'social_media' => [
         'auto_post_enabled' => env('SOCIAL_MEDIA_AUTO_POST_ENABLED', false),

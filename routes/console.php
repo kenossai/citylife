@@ -55,4 +55,12 @@ if (config('backup.schedule.enabled', true)) {
         ->at('04:00')
         ->name('daily-backup-cleanup')
         ->withoutOverlapping();
+
+    // Check for Sunday live streams every Sunday between 10:45 AM - 12:00 PM
+    Schedule::command('stream:check-sunday')
+        ->everyMinute()
+        ->sundays()
+        ->between('10:45', '12:00')
+        ->name('check-sunday-live-stream')
+        ->withoutOverlapping();
 }
