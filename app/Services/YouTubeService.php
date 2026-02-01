@@ -101,6 +101,13 @@ class YouTubeService
      */
     public function getLiveStreamForDateTime(\DateTime $targetDateTime): ?array
     {
+        // First, check if there's a currently live stream
+        $liveStream = $this->getCurrentLiveStream();
+        if ($liveStream) {
+            return $liveStream;
+        }
+
+        // If no live stream, check upcoming streams
         $upcomingStreams = $this->getUpcomingLiveStreams();
 
         foreach ($upcomingStreams as $stream) {

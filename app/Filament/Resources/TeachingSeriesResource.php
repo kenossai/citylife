@@ -144,6 +144,17 @@ class TeachingSeriesResource extends Resource
                                                     try {
                                                         $youtubeService = app(\App\Services\YouTubeService::class);
                                                         $now = now();
+                                                        
+                                                        // First check if API key is configured
+                                                        if (empty(config('services.youtube.api_key'))) {
+                                                            \Filament\Notifications\Notification::make()
+                                                                ->title('YouTube API not configured')
+                                                                ->body('Please add YOUTUBE_API_KEY to your .env file')
+                                                                ->danger()
+                                                                ->send();
+                                                            return;
+                                                        }
+                                                        
                                                         $liveStream = $youtubeService->getLiveStreamForDateTime($now);
                                                         
                                                         if ($liveStream) {
@@ -161,14 +172,14 @@ class TeachingSeriesResource extends Resource
                                                             
                                                             \Filament\Notifications\Notification::make()
                                                                 ->title('No live stream found')
-                                                                ->body('No live or upcoming stream found at this time.')
+                                                                ->body('No live or upcoming stream found at this time. Make sure your channel has an active live stream.')
                                                                 ->warning()
                                                                 ->send();
                                                         }
                                                     } catch (\Exception $e) {
                                                         \Filament\Notifications\Notification::make()
                                                             ->title('Error checking live stream')
-                                                            ->body($e->getMessage())
+                                                            ->body('Error: ' . $e->getMessage() . ' - Check your API key and channel ID.')
                                                             ->danger()
                                                             ->send();
                                                     }
