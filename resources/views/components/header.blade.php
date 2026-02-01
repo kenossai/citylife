@@ -53,6 +53,15 @@
                         </ul>
                     </li>
 
+                    <li class="dropdown">
+                        <a href="#">Resources</a>
+                        <ul>
+                            <li><a href="{{ route('courses.index') }}">Courses</a></li>
+                            <li><a href="{{ route('books.index') }}">Books</a></li>
+                            <li><a href="{{ route('bible-school-international.index') }}">Bible School</a></li>
+                        </ul>
+                    </li>
+
                     <li>
                         <a href="{{ route('events.index') }}">Events</a>
                     </li>
