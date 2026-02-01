@@ -26,12 +26,12 @@ class YouTubeService
             Log::warning('YouTube API key is not configured');
             return false;
         }
-        
+
         if (empty($this->channelId)) {
             Log::warning('YouTube channel ID is not configured');
             return false;
         }
-        
+
         return true;
     }
 

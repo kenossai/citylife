@@ -154,14 +154,14 @@ class TeachingSeriesResource extends Resource
 
                                                         $youtubeService = app(\App\Services\YouTubeService::class);
                                                         $now = now();
-                                                        
+
                                                         $liveStream = $youtubeService->getLiveStreamForDateTime($now);
-                                                        
+
                                                         if ($liveStream) {
                                                             $set('youtube_live_url', $liveStream['url']);
                                                             $set('video_url', $liveStream['url']);
                                                             $set('live_stream_checked_at', now());
-                                                            
+
                                                             \Filament\Notifications\Notification::make()
                                                                 ->title('Live stream found!')
                                                                 ->body('Found: ' . $liveStream['title'])
@@ -169,7 +169,7 @@ class TeachingSeriesResource extends Resource
                                                                 ->send();
                                                         } else {
                                                             $set('live_stream_checked_at', now());
-                                                            
+
                                                             \Filament\Notifications\Notification::make()
                                                                 ->title('No live stream found')
                                                                 ->body('No live or upcoming stream found at this time. Make sure your channel has an active live stream.')
@@ -181,7 +181,7 @@ class TeachingSeriesResource extends Resource
                                                             'exception' => get_class($e),
                                                             'trace' => $e->getTraceAsString()
                                                         ]);
-                                                        
+
                                                         \Filament\Notifications\Notification::make()
                                                             ->title('Error checking live stream')
                                                             ->body('Unable to check YouTube. Check logs for details. Error: ' . $e->getMessage())
