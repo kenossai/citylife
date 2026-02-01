@@ -108,11 +108,10 @@ class WorshipDepartmentSeeder extends Seeder
                         'worship_department_id' => $department->id,
                         'member_id' => $member->id,
                         'role' => $deptRoles[array_rand($deptRoles)],
-                        'worship_bio' => 'Passionate worship team member with experience in church ministry.',
+                        'skills' => 'Experienced worship team member with passion for ministry.',
                         'joined_date' => now()->subMonths(rand(1, 24)),
                         'is_active' => true,
                         'is_head' => $index === 0, // First member is head
-                        'sort_order' => $index + 1,
                     ]);
                 }
             }

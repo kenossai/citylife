@@ -17,6 +17,7 @@ use App\Http\Controllers\MissionController;
 use App\Http\Controllers\CookieConsentController;
 use App\Http\Controllers\BabyDedicationController;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\BibleSchoolInternationalController;
 
 // Serve storage files with proper CORS headers for Filament previews
 Route::get('/storage/{path}', function ($path) {
@@ -299,5 +300,18 @@ Route::prefix('baby-dedication')->name('baby-dedication.')->group(function () {
 
     // API endpoint for checking member status
     Route::get('/check-member', [BabyDedicationController::class, 'checkMemberStatus'])->name('check-member');
+});
+
+// Bible School International Routes
+Route::prefix('bible-school-international')->name('bible-school-international.')->group(function () {
+    Route::get('/', [BibleSchoolInternationalController::class, 'index'])->name('index');
+    Route::get('/archive/{year}', [BibleSchoolInternationalController::class, 'archive'])->name('archive');
+    Route::get('/event/{id}', [BibleSchoolInternationalController::class, 'event'])->name('event');
+    Route::get('/event/{eventId}/video/{videoId}', [BibleSchoolInternationalController::class, 'video'])->name('video');
+    Route::get('/event/{eventId}/audio/{audioId}', [BibleSchoolInternationalController::class, 'audio'])->name('audio');
+
+    // Access code verification
+    Route::post('/event/{eventId}/verify-code', [BibleSchoolInternationalController::class, 'verifyCode'])->name('verify-code');
+    Route::post('/event/{eventId}/{resourceType}/{resourceId}/verify-code', [BibleSchoolInternationalController::class, 'verifyResourceCode'])->name('verify-resource-code');
 });
 
