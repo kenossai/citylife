@@ -21,7 +21,9 @@ class BibleSchoolEventResource extends Resource
 
     protected static ?string $navigationGroup = 'Bible School';
 
-    protected static ?string $navigationLabel = 'Events';
+    protected static ?string $navigationLabel = 'Sessions/Events';
+
+    protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {
@@ -32,7 +34,8 @@ class BibleSchoolEventResource extends Resource
                         Forms\Components\TextInput::make('title')
                             ->required()
                             ->maxLength(255)
-                            ->placeholder('e.g., Bible School International 2026'),
+                            ->placeholder('e.g., Bible School International 2026')
+                            ->helperText('Event/Session name - groups videos/audios for a teaching series'),
 
                         Forms\Components\RichEditor::make('description')
                             ->label('Description')
@@ -43,7 +46,8 @@ class BibleSchoolEventResource extends Resource
                                 'bulletList',
                                 'orderedList',
                             ])
-                            ->placeholder('Detailed description of the Bible School event'),
+                            ->placeholder('Detailed description of the Bible School event')
+                            ->helperText('This description appears on speaker detail pages'),
 
                         Forms\Components\TextInput::make('year')
                             ->required()
@@ -126,7 +130,7 @@ class BibleSchoolEventResource extends Resource
                                     ->directory('bible-school/speakers')
                                     ->imageEditor(),
                             ])
-                            ->helperText('Select speakers for this event or add new ones')
+                            ->helperText('Select speakers for this event/session. These speakers will be featured on the public resources page.')
                             ->columnSpanFull(),
                     ]),
 
@@ -135,7 +139,7 @@ class BibleSchoolEventResource extends Resource
                         Forms\Components\Toggle::make('is_active')
                             ->label('Active')
                             ->default(true)
-                            ->helperText('Only active events will be visible on the website'),
+                            ->helperText('Only active events will be visible on the speaker pages and resources'),
                     ]),
             ]);
     }

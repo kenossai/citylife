@@ -2,60 +2,78 @@
 
 ## ✅ Implementation Complete
 
-A comprehensive Bible School International system has been successfully implemented with the following components:
+A comprehensive Bible School International system has been successfully implemented with a **speaker-centric public interface** and event-based admin management:
 
-### 🗄️ Database (4 Tables)
-- ✅ `bible_school_events` - Store event information
+## System Architecture
+
+### Public-Facing Pages
+1. **About Page** (`/bible-school-international`) - Introduction to Bible School with Resources button
+2. **Resources Page** (`/bible-school-international/resources`) - Grid of all speakers with year filter sidebar
+3. **Archive by Year** (`/bible-school-international/resources/archive/{year}`) - Speakers filtered by specific year
+4. **Speaker Detail Page** (`/bible-school-international/speaker/{id}`) - Individual speaker with locked video/audio resources
+
+### Admin Management (Filament)
+- **Sessions/Events** - Group teaching resources by event/session
+- **Speakers** - Manage speaker profiles
+- **Videos** - Upload and manage video resources
+- **Audios** - Upload and manage audio resources
+- **Access Codes** - Generate and track student access codes
+
+## 🗄️ Database (5 Tables)
+- ✅ `bible_school_events` - Store event/session information
+- ✅ `bible_school_speakers` - Speaker profiles and information
+- ✅ `bible_school_event_speaker` - Pivot table linking speakers to events
 - ✅ `bible_school_videos` - Video resources with URLs
 - ✅ `bible_school_audios` - Audio resources with URLs
 - ✅ `bible_school_access_codes` - Unique access codes for students
 
-### 🔧 Models (4 Models)
-- ✅ `BibleSchoolEvent` - Event management with relationships
+### 🔧 Models (5 Models)
+- ✅ `BibleSchoolEvent` - Event/session management with relationships
+- ✅ `BibleSchoolSpeaker` - Speaker profiles with event relationships
 - ✅ `BibleSchoolVideo` - Video resource with formatting helpers
 - ✅ `BibleSchoolAudio` - Audio resource with formatting helpers
 - ✅ `BibleSchoolAccessCode` - Code generation and validation
 
-### 🎨 Admin Panel (4 Filament Resources)
-- ✅ Events Management (with image upload)
+### 🎨 Admin Panel (5 Filament Resources)
+- ✅ Sessions/Events Management (with image upload and speaker assignment)
+- ✅ Speakers Management (with photo upload and bio)
 - ✅ Videos Management (with thumbnail upload)
 - ✅ Audios Management
 - ✅ Access Codes Management (with usage tracking)
 
 All grouped under "Bible School" navigation with appropriate icons.
 
-### 🌐 Public Pages (5 Views)
-- ✅ **Index Page** - Browse all events (`/bible-school-international`)
-- ✅ **Archive Page** - Filter events by year (`/bible-school-international/archive/{year}`)
-- ✅ **Event Page** - View event details and resources (`/bible-school-international/event/{id}`)
-- ✅ **Video Detail** - Watch videos with access code protection (`/bible-school-international/event/{eventId}/video/{videoId}`)
-- ✅ **Audio Detail** - Listen to audios with access code protection (`/bible-school-international/event/{eventId}/audio/{audioId}`)
+### 🌐 Public Pages (4 Views)
+- ✅ **About Page** - Introduction to Bible School (`/bible-school-international`)
+- ✅ **Resources Page** - Browse all speakers with archive sidebar (`/bible-school-international/resources`)
+- ✅ **Archive by Year** - Filter speakers by year (`/bible-school-international/resources/archive/{year}`)
+- ✅ **Speaker Detail** - View speaker's videos/audios with access code protection (`/bible-school-international/speaker/{id}`)
 
 ### 🔐 Security Features
-- ✅ Unique access codes per student
-- ✅ Session-based access control
+- ✅ Unique access codes per student/event
+- ✅ Session-based access control at speaker level
 - ✅ Code validation and expiration
 - ✅ Usage tracking (count and timestamps)
 - ✅ Active/inactive status management
+- ✅ Locked resource display until code entry
 
 ### 📱 User Experience
 - ✅ Responsive design with Bootstrap
-- ✅ Access code entry forms
-- ✅ Locked/unlocked resource states
+- ✅ Speaker-centric browsing experience
+- ✅ Access code entry forms on speaker pages
+- ✅ Locked/unlocked resource states with visual indicators
 - ✅ Video player support (YouTube, Vimeo, Direct URLs)
 - ✅ HTML5 audio player
-- ✅ Related content suggestions
-- ✅ Year-based filtering and archives
+- ✅ Year-based archive filtering in sidebar (matching teaching-series layout)
 - ✅ Duration display formatting
+- ✅ Speaker photos and biographical information
 
-### 🛣️ Routes (7 Routes)
-- ✅ GET `/bible-school-international` - Main index
-- ✅ GET `/bible-school-international/archive/{year}` - Year archive
-- ✅ GET `/bible-school-international/event/{id}` - Event details
-- ✅ GET `/bible-school-international/event/{eventId}/video/{videoId}` - Video player
-- ✅ GET `/bible-school-international/event/{eventId}/audio/{audioId}` - Audio player
-- ✅ POST `/bible-school-international/event/{eventId}/verify-code` - Verify event code
-- ✅ POST `/bible-school-international/event/{eventId}/{type}/{id}/verify-code` - Verify resource code
+### 🛣️ Routes (4 Routes)
+- ✅ GET `/bible-school-international` - About page
+- ✅ GET `/bible-school-international/resources` - All speakers
+- ✅ GET `/bible-school-international/resources/archive/{year}` - Speakers by year
+- ✅ GET `/bible-school-international/speaker/{id}` - Speaker detail page
+- ✅ POST `/bible-school-international/speaker/{speakerId}/verify-code` - Verify speaker access code
 
 ### 📚 Documentation
 - ✅ **Full Documentation**: `docs/BIBLE_SCHOOL_INTERNATIONAL.md`
@@ -64,34 +82,39 @@ All grouped under "Bible School" navigation with appropriate icons.
 ## 🎯 Key Features
 
 ### For Administrators
-1. **Event Management**: Create events with year, dates, location, and images
-2. **Content Upload**: Add videos and audios with ordering
-3. **Code Generation**: Auto-generate unique access codes
-4. **Student Tracking**: Monitor code usage and last access
-5. **Filtering**: Filter resources by event, status, and year
+1. **Session/Event Management**: Create events with year, dates, speakers, and images
+2. **Speaker Management**: Add speaker profiles with photos and bios
+3. **Content Upload**: Add videos and audios linked to events
+4. **Code Generation**: Auto-generate unique access codes per event
+5. **Student Tracking**: Monitor code usage and last access
+6. **Filtering**: Filter resources by event, speaker, status, and year
 
 ### For Students
-1. **Browse Events**: View all available Bible School events
-2. **Archive Access**: Browse past events by year
-3. **Secure Access**: Enter unique code to unlock resources
-4. **Media Playback**: Watch videos and listen to audios
-5. **Session Persistence**: Access remains active during session
+1. **Browse Speakers**: View all speakers on the resources page
+2. **Archive Access**: Filter speakers by year using sidebar
+3. **Speaker Detail**: Click on a speaker to see their teaching sessions
+4. **Secure Access**: Enter unique code to unlock all videos/audios for that speaker
+5. **Media Playback**: Watch videos and listen to audios directly
+6. **Session Persistence**: Access remains active during browser session
 
 ## 🚀 How to Use
 
 ### Admin Setup
-1. Navigate to **Bible School → Events** in admin panel
-2. Create a new event with title, year, and details
-3. Add videos via **Bible School → Videos**
-4. Add audios via **Bible School → Audios**
-5. Generate access codes via **Bible School → Access Codes**
-6. Distribute codes to students
+1. Navigate to **Bible School → Sessions/Events** in admin panel
+2. Create a new event/session with title, year, and details
+3. Assign speakers to the event
+4. Add videos via **Bible School → Videos** (linked to event)
+5. Add audios via **Bible School → Audios** (linked to event)
+6. Generate access codes via **Bible School → Access Codes**
+7. Distribute codes to students
 
 ### Student Access
-1. Visit `/bible-school-international`
-2. Select desired event
-3. Enter unique access code
-4. Access all videos and audios for that event
+1. Visit `/bible-school-international` (About page)
+2. Click "Browse Resources" button
+3. Browse speakers or filter by year using sidebar
+4. Click on a speaker to view their sessions
+5. Enter unique access code to unlock resources
+6. Access all videos and audios for that speaker's sessions
 
 ## 📊 Database Schema
 

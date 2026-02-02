@@ -35,7 +35,15 @@ class BibleSchoolAudioResource extends Resource
                             ->relationship('event', 'title')
                             ->required()
                             ->searchable()
-                            ->preload(),
+                            ->preload()
+                            ->live()
+                            ->helperText('Select the event/session this audio belongs to'),
+                        Forms\Components\Select::make('bible_school_speaker_id')
+                            ->label('Speaker')
+                            ->relationship('speaker', 'name')
+                            ->searchable()
+                            ->preload()
+                            ->helperText('Select the speaker for this audio'),
                         Forms\Components\TextInput::make('title')
                             ->required()
                             ->maxLength(255),
@@ -73,16 +81,21 @@ class BibleSchoolAudioResource extends Resource
                 Tables\Columns\TextColumn::make('event.title')
                     ->searchable()
                     ->sortable(),
+                Tables\Columns\TextColumn::make('speaker.name')
+                    ->label('Speaker')
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('title')
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('duration')
                     ->formatStateUsing(fn ($state) => $state ? gmdate('H:i:s', $state) : '-')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('order')
-                    ->sortable(),
                 Tables\Columns\IconColumn::make('is_active')
                     ->boolean(),
+                Tables\Columns\TextColumn::make('order')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -92,6 +105,11 @@ class BibleSchoolAudioResource extends Resource
                 Tables\Filters\SelectFilter::make('bible_school_event_id')
                     ->label('Event')
                     ->relationship('event', 'title')
+                    ->searchable()
+                    ->preload(),
+                Tables\Filters\SelectFilter::make('bible_school_speaker_id')
+                    ->label('Speaker')
+                    ->relationship('speaker', 'name')
                     ->searchable()
                     ->preload(),
                 Tables\Filters\TernaryFilter::make('is_active')

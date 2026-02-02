@@ -12,6 +12,7 @@ class BibleSchoolVideo extends Model
 
     protected $fillable = [
         'bible_school_event_id',
+        'bible_school_speaker_id',
         'title',
         'description',
         'video_url',
@@ -30,6 +31,11 @@ class BibleSchoolVideo extends Model
     public function event(): BelongsTo
     {
         return $this->belongsTo(BibleSchoolEvent::class, 'bible_school_event_id');
+    }
+
+    public function speaker(): BelongsTo
+    {
+        return $this->belongsTo(BibleSchoolSpeaker::class, 'bible_school_speaker_id');
     }
 
     public function scopeActive($query)

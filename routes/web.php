@@ -304,14 +304,12 @@ Route::prefix('baby-dedication')->name('baby-dedication.')->group(function () {
 
 // Bible School International Routes
 Route::prefix('bible-school-international')->name('bible-school-international.')->group(function () {
-    Route::get('/', [BibleSchoolInternationalController::class, 'index'])->name('index');
-    Route::get('/archive/{year}', [BibleSchoolInternationalController::class, 'archive'])->name('archive');
-    Route::get('/event/{id}', [BibleSchoolInternationalController::class, 'event'])->name('event');
-    Route::get('/event/{eventId}/video/{videoId}', [BibleSchoolInternationalController::class, 'video'])->name('video');
-    Route::get('/event/{eventId}/audio/{audioId}', [BibleSchoolInternationalController::class, 'audio'])->name('audio');
+    Route::get('/', [BibleSchoolInternationalController::class, 'about'])->name('about');
+    Route::get('/resources', [BibleSchoolInternationalController::class, 'resources'])->name('resources');
+    Route::get('/resources/archive/{year}', [BibleSchoolInternationalController::class, 'archive'])->name('archive');
+    Route::get('/speaker/{id}', [BibleSchoolInternationalController::class, 'speaker'])->name('speaker');
 
-    // Access code verification
-    Route::post('/event/{eventId}/verify-code', [BibleSchoolInternationalController::class, 'verifyCode'])->name('verify-code');
-    Route::post('/event/{eventId}/{resourceType}/{resourceId}/verify-code', [BibleSchoolInternationalController::class, 'verifyResourceCode'])->name('verify-resource-code');
+    // Access code verification for speaker resources
+    Route::post('/speaker/{speakerId}/verify-code', [BibleSchoolInternationalController::class, 'verifySpeakerCode'])->name('verify-speaker-code');
 });
 

@@ -1,18 +1,17 @@
 <x-app-layout>
-@section('title', $year . ' - Bible School International')
-@section('description', 'Browse Bible School resources from ' . $year)
+@section('title', 'Resources - Bible School International')
+@section('description', 'Browse our collection of teaching resources from renowned speakers.')
 
 <section class="page-header">
     <div class="page-header__bg" style="background-image: url('{{ asset('assets/images/backgrounds/page-header-bg-1-1.jpg') }}');"></div>
     <div class="container">
         <h2 class="text-white">Our Bible School</h2>
-        <h2 class="page-header__title">Resources {{ $year }}</h2>
-        <p class="section-header__text">Teaching sessions from {{ $year }}</p>
+        <h2 class="page-header__title">Teaching Resources</h2>
+        <p class="section-header__text">Browse sessions from our speakers organized by year</p>
         <ul class="citylife-breadcrumb list-unstyled">
             <li><i class="icon-home"></i> <a href="{{ route('home') }}">Home</a></li>
             <li><a href="{{ route('bible-school-international.about') }}">Bible School</a></li>
-            <li><a href="{{ route('bible-school-international.resources') }}">Resources</a></li>
-            <li><span>{{ $year }}</span></li>
+            <li><span>Resources</span></li>
         </ul>
     </div>
 </section>
@@ -24,7 +23,7 @@
                 <div class="product__info-top">
                     <div class="product__showing-text-box">
                         <p class="product__showing-text">
-                            Showing {{ $speakers->count() }} Speakers for {{ $year }}
+                            Showing {{ $speakers->count() }} Speakers
                         </p>
                     </div>
                 </div>
@@ -41,7 +40,8 @@
                             }
                         @endphp
 
-                        <div class="col-lg-3 col-md-4 col-sm-6">
+                        @if($speaker->events->count() > 0)
+                        <div class="col-sm-6">
                             <div class="product-item wow fadeInUp animated" data-wow-duration="1500ms" data-wow-delay="000ms">
                                 <a href="{{ route('bible-school-international.speaker', $speaker->id) }}" class="product-item__img">
                                     @if($speaker->photo)
@@ -69,7 +69,7 @@
                                         </span>
                                         <span class="d-block mt-1">
                                             <small class="text-muted">
-                                                {{ $speaker->events->count() }} {{ Str::plural('Session', $speaker->events->count()) }} in {{ $year }}
+                                                {{ $speaker->events->count() }} {{ Str::plural('Session', $speaker->events->count()) }}
                                             </small>
                                         </span>
                                     </div>
@@ -82,16 +82,17 @@
                                 </div>
                             </div>
                         </div>
+                        @endif
                     @empty
                         <div class="col-12">
                             <div class="text-center py-5">
-                                <h4>No speakers found for {{ $year }}</h4>
-                                <p class="text-muted">Please try another year</p>
-                                <a href="{{ route('bible-school-international.resources') }}" class="citylife-btn mt-3">
+                                <h4>No speakers found</h4>
+                                <p class="text-muted">Please check back later for updates</p>
+                                <a href="{{ route('bible-school-international.about') }}" class="citylife-btn mt-3">
                                     <div class="citylife-btn__icon-box">
                                         <div class="citylife-btn__icon-box__inner"><span class="icon-duble-arrow"></span></div>
                                     </div>
-                                    <span class="citylife-btn__text">View All Resources</span>
+                                    <span class="citylife-btn__text">Back to About</span>
                                 </a>
                             </div>
                         </div>
@@ -106,17 +107,17 @@
                         <ul class="list-unstyled">
                             <li>
                                 <a href="{{ route('bible-school-international.resources') }}"
-                                   class="active"
+                                   class="{{ !request()->is('*archive*') ? 'active' : '' }}"
                                    data-text="All">
                                     <span>All Years</span>
                                 </a>
                             </li>
-                            @foreach($years as $y)
+                            @foreach($years as $year)
                                 <li>
-                                    <a href="{{ route('bible-school-international.archive', $y) }}"
-                                       class="{{ $y == $year ? 'active' : '' }}"
-                                       data-text="{{ $y }}">
-                                        <span>{{ $y }}</span>
+                                    <a href="{{ route('bible-school-international.archive', $year) }}"
+                                       class="{{ request()->is('*archive/' . $year) ? 'active' : '' }}"
+                                       data-text="{{ $year }}">
+                                        <span>{{ $year }}</span>
                                     </a>
                                 </li>
                             @endforeach

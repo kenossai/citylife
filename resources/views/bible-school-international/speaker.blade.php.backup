@@ -1,0 +1,471 @@
+<x-app-layout>
+@section('title', $speaker->name . ' - Bible School International')
+@section('description', $speaker->bio ?? 'View teaching sessions from ' . $speaker->name)
+
+<style>
+    .dg-video-player { background: #000; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
+    .dg-video-player iframe { width: 100%; height: 400px; display: block; border: 0; border-radius: 4px; }
+    .dg-audio-player { background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
+    .dg-audio-player audio { width: 100%; }
+    .dg-controls { display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap; }
+    .dg-btn { padding: 8px 16px; font-size: 13px; font-weight: 500; border: 1px solid #555; background: #333; color: #fff; border-radius: 3px; text-decoration: none; transition: all 0.2s; cursor: pointer; display: inline-block; }
+    .dg-btn:hover { background: #444; color: #fff; }
+    .dg-btn.active { background: #555; border-color: #777; }
+</style>
+
+@if(session('success'))
+<script>
+    window.onload = function() {
+        window.scrollTo(0, 0);
+    };
+</script>
+@endif
+
+<section class="page-header">
+    <div class="page-header__bg" style="background-image: url('{{ asset('assets/images/backgrounds/worship-banner-1.jpg') }}');"></div>
+    <div class="container">
+        <h2 class="page-header__title">{{ $speaker->name }}</h2>
+        <p class="section-header__text text-white">{{ $speaker->title ?? 'Speaker' }}@if($speaker->organization), {{ $speaker->organization }}@endif</p>
+        <ul class="citylife-breadcrumb list-unstyled">
+            <li><i class="icon-home"></i> <a href="{{ route('home') }}">Home</a></li>
+            <li><a href="{{ route('bible-school-international.about') }}">Bible School</a></li>
+            <li><a href="{{ route('bible-school-international.resources') }}">Resources</a></li>
+            <li><span>{{ $speaker->name }}</span></li>
+        </ul>
+    </div>
+</section>
+
+<section class="event-details section-space">
+    <div class="container">
+        <div class="row gutter-y-60">
+            <div class="col-lg-8">
+                <!-- Speaker Info -->
+                <div class="event-details__content">
+                    <div class="row align-items-center mb-4">
+                        <div class="col-md-3">
+                            @if($speaker->photo)
+                                <img src="{{ Storage::url($speaker->photo) }}" alt="{{ $speaker->name }}" class="img-fluid rounded-circle">
+                            @else
+                                <img src="{{ asset('assets/images/events/event-speaker-1-1.png') }}" alt="{{ $speaker->name }}" class="img-fluid rounded-circle">
+                            @endif
+                        </div>
+                        <div class="col-md-9">
+                            <h3 class="event-details__title">{{ $speaker->name }}</h3>
+                            @if($speaker->title)
+                                <p class="text-primary mb-1">{{ $speaker->title }}</p>
+                            @endif
+                            @if($speaker->organization)
+                                <p class="text-muted">{{ $speaker->organization }}</p>
+                            @endif
+                        </div>
+                    </div>
+
+                    @if($speaker->bio)
+                    <div class="event-details__text mb-4">
+                        <h5>About the Speaker</h5>
+                        <p>{{ $speaker->bio }}</p>
+                    </div>
+                    @endif
+                </div>
+
+                <!-- Access Code Section -->
+                @if(!$hasAccess)
+                <div class="event-details__form mb-5">
+                    <div class="alert alert-info">
+                        <i class="icon-lock"></i>
+                        <strong>Access Required:</strong> Enter your access code to view this speaker's teaching resources.
+                    </div>
+
+                    @if(session('error'))
+                        <div class="alert alert-danger alert-dismissible fade show">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            {{ session('error') }}
+                        </div>
+                    @endif
+
+                    @if(session('success'))
+                        <div class="alert alert-success alert-dismissible fade show">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            {{ session('success') }}
+                        </div>
+                    @endif
+
+                    <form action="{{ route('bible-school-international.verify-speaker-code', $speaker->id) }}" method="POST" class="comment-one__form contact-form-validated">
+                        @csrf
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="comment-one__input-box">
+                                    <input type="text"
+                                           placeholder="Enter Access Code"
+                                           name="access_code"
+                                           required
+                                           class="form-control"
+                                           style="text-transform: uppercase;">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <button type="submit" class="citylife-btn w-100">
+                                    <div class="citylife-btn__icon-box">
+                                        <div class="citylife-btn__icon-box__inner"><span class="icon-lock-open"></span></div>
+                                    </div>
+                                    <span class="citylife-btn__text">Unlock</span>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                @endif
+
+                <!-- Teaching Sessions by Event/Year -->
+                @foreach($speaker->events as $event)
+                <div class="event-details__video-resources mb-5">
+                    <h4 class="event-details__title">
+                        {{ $event->title }}
+                        <span class="badge bg-primary">{{ $event->year }}</span>
+                    </h4>
+
+                    @if($event->description && $loop->first)
+                    <p class="text-muted mb-4">{{ Str::limit(strip_tags($event->description), 150) }}</p>
+                    @endif
+
+                    <!-- Videos -->
+                    @if($event->videos->count() > 0)
+                    <h5 class="mt-4 mb-3">
+                        <i class="icon-video"></i> Video Sessions ({{ $event->videos->count() }})
+                    </h5>
+                    <div class="row gutter-y-20">
+                        @foreach($event->videos as $video)
+                        <div class="col-md-12">
+                            <div class="video-card p-3 border rounded {{ !$hasAccess ? 'locked-content' : '' }}">
+                                @if($hasAccess)
+                                    <!-- Video Player -->
+                                    <div class="video-player-container" id="video-{{ $video->id }}" style="display:none;">
+                                        <div class="dg-video-player">
+                                            @if(str_contains($video->video_url, 'youtube.com') || str_contains($video->video_url, 'youtu.be'))
+                                                @php
+                                                    $videoId = '';
+                                                    if (str_contains($video->video_url, 'youtube.com/watch?v=')) {
+                                                        parse_str(parse_url($video->video_url, PHP_URL_QUERY), $vars);
+                                                        $videoId = $vars['v'] ?? '';
+                                                    } elseif (str_contains($video->video_url, 'youtu.be/')) {
+                                                        $videoId = basename(parse_url($video->video_url, PHP_URL_PATH));
+                                                    }
+                                                @endphp
+                                                @if($videoId)
+                                                    <iframe src="https://www.youtube.com/embed/{{ $videoId }}" allowfullscreen></iframe>
+                                                @endif
+                                            @elseif(str_contains($video->video_url, 'vimeo.com'))
+                                                @php
+                                                    $vimeoId = basename(parse_url($video->video_url, PHP_URL_PATH));
+                                                @endphp
+                                                <iframe src="https://player.vimeo.com/video/{{ $vimeoId }}" allowfullscreen></iframe>
+                                            @else
+                                                <video src="{{ $video->video_url }}" controls style="width:100%;height:400px;border-radius:4px;"></video>
+                                            @endif
+                                            <div class="dg-controls">
+                                                <button onclick="closeVideo('{{ $video->id }}')" class="dg-btn">Close Player</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+
+                                <div class="d-flex align-items-start">
+                                    <div class="video-thumbnail me-3">
+                                        @if($hasAccess)
+                                            @if($video->thumbnail)
+                                                <img src="{{ Storage::url($video->thumbnail) }}" alt="{{ $video->title }}" class="img-fluid rounded" style="width: 120px; height: 80px; object-fit: cover;">
+                                            @else
+                                                <div class="bg-primary text-white d-flex align-items-center justify-content-center rounded" style="width: 120px; height: 80px;">
+                                                    <i class="icon-video" style="font-size: 32px;"></i>
+                                                </div>
+                                            @endif
+                                        @else
+                                            <div class="bg-secondary text-white d-flex align-items-center justify-content-center rounded position-relative" style="width: 120px; height: 80px;">
+                                                <i class="icon-lock" style="font-size: 32px;"></i>
+                                            </div>
+                                        @endif
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <h6 class="mb-2">{{ $video->title }}</h6>
+                                        @if($video->duration)
+                                            <small class="text-muted d-block mb-2"><i class="icon-clock"></i> {{ $video->formatted_duration }}</small>
+                                        @endif
+                                        @if($hasAccess && $video->description)
+                                            <p class="mb-2 small text-muted">{{ Str::limit($video->description, 150) }}</p>
+                                        @endif
+                                        @if($hasAccess)
+                                            <div class="mt-2">
+                                                <button onclick="playVideo('{{ $video->id }}')" class="btn btn-sm btn-primary">
+                                                    <i class="icon-play"></i> Watch Now
+                                                </button>
+                                            </div>
+                                        @else
+                                            <div class="mt-2">
+                                                <span class="badge bg-secondary">
+                                                    <i class="icon-lock"></i> Locked
+                                                </span>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                    @endif
+
+                    <!-- Audios -->
+                    @if($event->audios->count() > 0)
+                    <h5 class="mt-4 mb-3">
+                        <i class="icon-music"></i> Audio Sessions ({{ $event->audios->count() }})
+                    </h5>
+                    <div class="row gutter-y-20">
+                        @foreach($event->audios as $audio)
+                        <div class="col-md-12">
+                            <div class="audio-card p-3 border rounded {{ !$hasAccess ? 'locked-content' : '' }}">
+                                @if($hasAccess)
+                                    <!-- Audio Player -->
+                                    <div class="audio-player-container" id="audio-{{ $audio->id }}" style="display:none;">
+                                        <div class="dg-audio-player">
+                                            <div class="mb-2"><strong>{{ $audio->title }}</strong></div>
+                                            <audio controls controlsList="nodownload">
+                                                <source src="{{ $audio->audio_url }}" type="audio/mpeg">
+                                                Your browser does not support the audio element.
+                                            </audio>
+                                            <div class="dg-controls">
+                                                <button onclick="closeAudio('{{ $audio->id }}')" class="dg-btn">Close Player</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+
+                                <div class="d-flex align-items-start">
+                                    <div class="audio-icon me-3">
+                                        @if($hasAccess)
+                                            <div class="bg-info text-white d-flex align-items-center justify-content-center rounded" style="width: 60px; height: 60px;">
+                                                <i class="icon-music" style="font-size: 28px;"></i>
+                                            </div>
+                                        @else
+                                            <div class="bg-secondary text-white d-flex align-items-center justify-content-center rounded" style="width: 60px; height: 60px;">
+                                                <i class="icon-lock" style="font-size: 24px;"></i>
+                                            </div>
+                                        @endif
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <h6 class="mb-2">{{ $audio->title }}</h6>
+                                        @if($audio->duration)
+                                            <small class="text-muted d-block mb-2"><i class="icon-clock"></i> {{ $audio->formatted_duration }}</small>
+                                        @endif
+                                        @if($hasAccess && $audio->description)
+                                            <p class="mb-2 small text-muted">{{ Str::limit($audio->description, 150) }}</p>
+                                        @endif
+                                        @if($hasAccess)
+                                            <div class="mt-2">
+                                                <button onclick="playAudio('{{ $audio->id }}')" class="btn btn-sm btn-info">
+                                                    <i class="icon-play"></i> Listen Now
+                                                </button>
+                                            </div>
+                                        @else
+                                            <div class="mt-2">
+                                                <span class="badge bg-secondary">
+                                                    <i class="icon-lock"></i> Locked
+                                                </span>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                    @endif
+
+                    @if($event->videos->count() == 0 && $event->audios->count() == 0)
+                        <p class="text-muted">No resources available for this session yet.</p>
+                    @endif
+                </div>
+                @endforeach
+
+                @if($speaker->events->count() == 0)
+                    <div class="text-center py-5">
+                        <h5>No teaching sessions available yet</h5>
+                        <p class="text-muted">Please check back later for updates</p>
+                    </div>
+                @endif
+            </div>
+
+            <!-- Sidebar -->
+            <div class="col-lg-4">
+                <aside class="sidebar-event">
+                    <div class="sidebar-event__contact contact-one sidebar-event__item wow fadeInUp animated">
+                        <h3 class="sidebar-event__title">Speaker Information</h3>
+                        <div class="contact-one__info">
+                            @if($speaker->title || $speaker->organization)
+                            <div class="contact-one__info__item">
+                                <div class="contact-one__info__icon">
+                                    <span class="icon-user"></span>
+                                </div>
+                                <div class="contact-one__info__content">
+                                    <h4 class="contact-one__info__title">Position</h4>
+                                    <p class="contact-one__info__text">
+                                        {{ $speaker->title ?? 'Speaker' }}
+                                        @if($speaker->organization)
+                                        <br>{{ $speaker->organization }}
+                                        @endif
+                                    </p>
+                                </div>
+                            </div>
+                            @endif
+
+                            <div class="contact-one__info__item">
+                                <div class="contact-one__info__icon">
+                                    <span class="icon-video"></span>
+                                </div>
+                                <div class="contact-one__info__content">
+                                    <h4 class="contact-one__info__title">Resources</h4>
+                                    <p class="contact-one__info__text">
+                                        @php
+                                            $totalVideos = 0;
+                                            $totalAudios = 0;
+                                            foreach($speaker->events as $event) {
+                                                $totalVideos += $event->videos->count();
+                                                $totalAudios += $event->audios->count();
+                                            }
+                                        @endphp
+                                        {{ $totalVideos }} Videos<br>
+                                        {{ $totalAudios }} Audio Files<br>
+                                        {{ $speaker->events->count() }} Sessions
+                                    </p>
+                                </div>
+                            </div>
+
+                            @if(!$hasAccess)
+                            <div class="contact-one__info__item">
+                                <div class="contact-one__info__icon">
+                                    <span class="icon-lock"></span>
+                                </div>
+                                <div class="contact-one__info__content">
+                                    <h4 class="contact-one__info__title">Access Code</h4>
+                                    <p class="contact-one__info__text">
+                                        Enter your code above to unlock all resources
+                                    </p>
+                                </div>
+                            </div>
+                            @else
+                            <div class="contact-one__info__item">
+                                <div class="contact-one__info__icon text-success">
+                                    <span class="icon-check-mark"></span>
+                                </div>
+                                <div class="contact-one__info__content">
+                                    <h4 class="contact-one__info__title text-success">Access Granted</h4>
+                                    <p class="contact-one__info__text">
+                                        You have full access to all resources
+                                    </p>
+                                </div>
+                            </div>
+                            @endif
+                        </div>
+                    </div>
+
+                    <!-- Back to Resources -->
+                    <div class="sidebar-event__item wow fadeInUp animated" data-wow-duration="1500ms" data-wow-delay="100ms">
+                        <a href="{{ route('bible-school-international.resources') }}" class="citylife-btn w-100">
+                            <div class="citylife-btn__icon-box">
+                                <div class="citylife-btn__icon-box__inner"><span class="icon-duble-arrow"></span></div>
+                            </div>
+                            <span class="citylife-btn__text">Back to Resources</span>
+                        </a>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+function playVideo(videoId) {
+    // Hide all other players
+    document.querySelectorAll('.video-player-container, .audio-player-container').forEach(el => {
+        el.style.display = 'none';
+    });
+    
+    // Show this video player
+    const player = document.getElementById('video-' + videoId);
+    if (player) {
+        player.style.display = 'block';
+        player.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+}
+
+function closeVideo(videoId) {
+    const player = document.getElementById('video-' + videoId);
+    if (player) {
+        player.style.display = 'none';
+        // Stop video by reloading iframe
+        const iframe = player.querySelector('iframe');
+        if (iframe) {
+            const src = iframe.src;
+            iframe.src = '';
+            iframe.src = src;
+        }
+    }
+}
+
+function playAudio(audioId) {
+    // Hide all other players
+    document.querySelectorAll('.video-player-container, .audio-player-container').forEach(el => {
+        el.style.display = 'none';
+    });
+    
+    // Pause all audio players
+    document.querySelectorAll('audio').forEach(audio => {
+        audio.pause();
+    });
+    
+    // Show this audio player
+    const player = document.getElementById('audio-' + audioId);
+    if (player) {
+        player.style.display = 'block';
+        player.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        
+        // Auto-play the audio
+        const audio = player.querySelector('audio');
+        if (audio) {
+            audio.play();
+        }
+    }
+}
+
+function closeAudio(audioId) {
+    const player = document.getElementById('audio-' + audioId);
+    if (player) {
+        const audio = player.querySelector('audio');
+        if (audio) {
+            audio.pause();
+            audio.currentTime = 0;
+        }
+        player.style.display = 'none';
+    }
+}
+</script>
+
+<style>
+.locked-content {
+    background-color: #f8f9fa;
+    opacity: 0.7;
+}
+
+.video-card, .audio-card {
+    transition: all 0.3s ease;
+}
+
+.video-card:hover, .audio-card:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.video-player-container, .audio-player-container {
+    margin-bottom: 15px;
+}
+</script>
+
+</x-app-layout>
