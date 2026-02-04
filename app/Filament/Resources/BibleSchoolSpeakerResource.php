@@ -63,7 +63,6 @@ class BibleSchoolSpeakerResource extends Resource
                         Forms\Components\FileUpload::make('photo')
                             ->image()
                             ->disk('s3')
-                            ->visibility('public')
                             ->directory('bible-school/speakers')
                             ->imageEditor()
                             ->imageEditorAspectRatios([
@@ -86,9 +85,7 @@ class BibleSchoolSpeakerResource extends Resource
             ->columns([
                 Tables\Columns\ImageColumn::make('photo')
                     ->circular()
-                    ->image()
                     ->disk('s3')
-                    ->visibility('public')
                     ->defaultImageUrl(url('/assets/images/team/team-default.jpg')),
 
                 Tables\Columns\TextColumn::make('name')
