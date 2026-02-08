@@ -44,8 +44,8 @@
                     @forelse($teachingSeries as $series)
                         <div class="col-sm-3">
                             <div class="product-item wow fadeInUp animated" data-wow-duration="1500ms" data-wow-delay="000ms">
-                                <a href="{{ route('teaching-series.show', $series->slug) }}" class="product-item__img" style="position: relative;">
-                                    <img src="{{ $series->image_url }}" alt="{{ $series->title }}">
+                                <a href="{{ route('teaching-series.show', $series->slug) }}" class="product-item__img" style="position: relative; display: block;">
+                                    <img src="{{ $series->image_url }}" alt="{{ $series->title }}" style="width: 100%; display: block;">
                                     @if($series->is_upcoming)
                                         <div class="coming-soon-overlay" style="
                                             position: absolute;
@@ -65,27 +65,35 @@
                                             <h4 style="color: white; font-size: 1.5rem; margin: 0; font-weight: 700;">Coming Soon</h4>
                                             <p style="color: white; margin: 0.5rem 0 0 0; font-size: 0.9rem;">{{ $series->series_date->format('M j, Y') }}</p>
                                         </div>
+                                    @else
+                                        <div class="play-overlay" style="
+                                            position: absolute;
+                                            top: 0;
+                                            left: 0;
+                                            right: 0;
+                                            bottom: 0;
+                                            display: flex;
+                                            align-items: center;
+                                            justify-content: center;
+                                            background: rgba(0, 0, 0, 0.3);
+                                            opacity: 0;
+                                            transition: opacity 0.3s ease;
+                                        " onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0'">
+                                            <div style="
+                                                width: 70px;
+                                                height: 70px;
+                                                border-radius: 50%;
+                                                background: rgba(255, 255, 255, 0.9);
+                                                display: flex;
+                                                align-items: center;
+                                                justify-content: center;
+                                                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+                                            ">
+                                                <span class="icon-play" style="font-size: 24px; color: #2c5aa0; margin-left: 4px;"></span>
+                                            </div>
+                                        </div>
                                     @endif
                                 </a>
-                                <div class="product-item__content">
-                                    <h4 class="product-item__title">
-                                        <a href="{{ route('teaching-series.show', $series->slug) }}" style="font-size: 14px;">{{ $series->title }}</a>
-                                        @if($series->is_upcoming)
-                                            <span class="badge bg-warning text-dark ms-2" style="font-size: 0.7rem; vertical-align: middle;">Upcoming</span>
-                                        @endif
-                                    </h4>
-                                    <div class="product-item__meta">
-                                        @if($series->pastor)
-                                            <span class="d-block">{{ $series->pastor }}</span>
-                                        @endif
-                                    </div>
-                                    <a href="{{ route('teaching-series.show', $series->slug) }}" class="citylife-btn citylife-btn--border product-item__link">
-                                        <div class="citylife-btn__icon-box">
-                                            <div class="citylife-btn__icon-box__inner"><span class="icon-play"></span></div>
-                                        </div>
-                                        <span class="citylife-btn__text">Watch/Listen</span>
-                                    </a>
-                                </div>
                             </div>
                         </div>
                     @empty
