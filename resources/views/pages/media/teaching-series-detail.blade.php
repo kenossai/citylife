@@ -46,7 +46,7 @@
     .dg-scripture h4 { margin: 0 0 16px 0; color: #2c5aa0; font-size: 18px; font-weight: 600; }
     .dg-scripture p { font-size: 16px; color: #333; margin: 0; line-height: 1.6; }
 
-    .dg-notes { background: #fafafa; border: 1px solid #e0e0e0; border-radius: 3px; padding: 28px; margin: 40px 0; }
+    .dg-notes { background: #fafafa; border: 1px solid #e0e0e0; border-radius: 3px; padding: 28px; margin: 40px 0; max-height: 500px; overflow-y: auto; }
     .dg-notes h4 { margin: 0 0 20px 0; color: #2c5aa0; font-size: 18px; font-weight: 600; }
     .dg-notes__content { font-size: 16px; line-height: 1.7; color: #333; }
 
