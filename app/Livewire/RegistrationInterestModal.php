@@ -66,7 +66,13 @@ class RegistrationInterestModal extends Component
                 'exception' => $e,
                 'email' => $this->email,
             ]);
-            $this->errorMessage = 'An error occurred. Please try again.';
+            
+            // Show detailed error in development
+            if (config('app.debug')) {
+                $this->errorMessage = 'Error: ' . $e->getMessage();
+            } else {
+                $this->errorMessage = 'An error occurred. Please try again.';
+            }
         }
     }
 
