@@ -62,6 +62,10 @@ class RegistrationInterestModal extends Component
             // Close modal after 3 seconds
             $this->dispatch('interest-submitted');
         } catch (\Exception $e) {
+            \Log::error('Registration interest submission error: ' . $e->getMessage(), [
+                'exception' => $e,
+                'email' => $this->email,
+            ]);
             $this->errorMessage = 'An error occurred. Please try again.';
         }
     }
