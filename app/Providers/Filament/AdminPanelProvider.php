@@ -18,7 +18,6 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Filament\View\PanelsRenderHook;
-use Illuminate\Support\Facades\Blade;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -36,9 +35,9 @@ class AdminPanelProvider extends PanelProvider
                 'primary' => Color::Amber,
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
-            ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
                 Pages\Dashboard::class,
+                \App\Filament\Pages\ChangePassword::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
@@ -60,7 +59,13 @@ class AdminPanelProvider extends PanelProvider
             )
             ->renderHook(
                 PanelsRenderHook::HEAD_END,
-                fn (): string => '<link rel="stylesheet" href="' . asset('css/dashboard-widgets.css') . '">'
+                fn (): string => '<link rel="stylesheet" href="' . asset('css/dashboard-widgets.css') . '">' .
+                                 '<meta name="session-lifetime" content="' . config('session.lifetime') . '">' .
+                                 '<meta name="csrf-token" content="' . csrf_token() . '">'
+            )
+            ->renderHook(
+                PanelsRenderHook::BODY_END,
+                fn (): string => '<script src="' . asset('js/session-timeout.js') . '"></script>'
             )
             ->middleware([
                 EncryptCookies::class,
@@ -72,6 +77,7 @@ class AdminPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+                \App\Http\Middleware\CheckSessionTimeout::class,
                 \App\Http\Middleware\ForcePasswordChange::class,
             ])
             ->authMiddleware([

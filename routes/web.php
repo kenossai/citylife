@@ -18,6 +18,27 @@ use App\Http\Controllers\CookieConsentController;
 use App\Http\Controllers\BabyDedicationController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\BibleSchoolInternationalController;
+use App\Http\Controllers\SessionController;
+
+// Admin Lock Screen - accessible even with expired session if user was authenticated
+Route::middleware(['web'])->prefix('admin')->group(function () {
+    Route::get('/lock-screen', function () {
+        // Check if user is locked out OR was previously authenticated
+        if (!session()->has('lock_screen') && !session()->has('locked_user_id') && !Auth::check()) {
+            // No lock screen flag and not authenticated - redirect to admin login
+            return redirect('/admin/login');
+        }
+
+        return view('lock-screen-full');
+    })->name('admin.lock-screen');
+});
+
+// Admin Session Management Routes
+Route::middleware(['web', 'auth'])->prefix('admin')->group(function () {
+    Route::post('/ping', [SessionController::class, 'ping'])->name('admin.session.ping');
+    Route::post('/lock', [SessionController::class, 'lock'])->name('admin.session.lock');
+    Route::get('/session-check', [SessionController::class, 'checkSession'])->name('admin.session.check');
+});
 
 // Serve storage files with proper CORS headers for Filament previews
 Route::get('/storage/{path}', function ($path) {

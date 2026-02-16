@@ -23,5 +23,20 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        // Handle CSRF token mismatch / session expired errors
+        $exceptions->respond(function (\Symfony\Component\HttpFoundation\Response $response, \Throwable $exception, \Illuminate\Http\Request $request) {
+            // Check if it's a 419 error (CSRF token expired/session expired)
+            if ($response->getStatusCode() === 419) {
+                // If it's an admin route and user is authenticated, redirect to lock screen
+                if ($request->is('admin/*') && auth()->check()) {
+                    session(['lock_screen' => true]);
+                    return redirect()->route('filament.admin.pages.lock-screen');
+                }
+
+                // Otherwise, show the default 419 error page
+                return $response;
+            }
+
+            return $response;
+        });
     })->create();

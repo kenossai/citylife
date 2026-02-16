@@ -59,8 +59,6 @@ class Dashboard extends BaseDashboard
 
     protected function getHeaderActions(): array
     {
-        return [
-            // You can add actions here if needed
-        ];
+        return [];
     }
 }
