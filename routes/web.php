@@ -330,7 +330,8 @@ Route::prefix('bible-school-international')->name('bible-school-international.')
     Route::get('/resources/archive/{year}', [BibleSchoolInternationalController::class, 'archive'])->name('archive');
     Route::get('/speaker/{id}', [BibleSchoolInternationalController::class, 'speaker'])->name('speaker');
 
-    // Access code verification for speaker resources
-    Route::post('/speaker/{speakerId}/verify-code', [BibleSchoolInternationalController::class, 'verifySpeakerCode'])->name('verify-speaker-code');
+    // Access code verification for speaker resources (2-step: email → OTP)
+    Route::post('/speaker/{speakerId}/send-code', [BibleSchoolInternationalController::class, 'sendEmailCode'])->name('send-speaker-code');
+    Route::post('/speaker/{speakerId}/verify-email-code', [BibleSchoolInternationalController::class, 'verifyEmailCode'])->name('verify-email-code');
 });
 

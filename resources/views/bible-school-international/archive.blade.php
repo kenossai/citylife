@@ -43,7 +43,7 @@
 
                         <div class="col-lg-3 col-md-4 col-sm-6">
                             <div class="product-item wow fadeInUp animated" data-wow-duration="1500ms" data-wow-delay="000ms">
-                                <a href="{{ route('bible-school-international.speaker', $speaker->id) }}" class="product-item__img">
+                                <a href="{{ route('bible-school-international.speaker', $speaker->id) . '?year=' . $year }}" class="product-item__img">
                                     @if($speaker->photo)
                                         <img src="{{ Storage::url($speaker->photo) }}" alt="{{ $speaker->name }}" style="object-fit: cover; height: 300px;">
                                     @else
@@ -52,7 +52,7 @@
                                 </a>
                                 <div class="product-item__content">
                                     <h4 class="product-item__title">
-                                        <a href="{{ route('bible-school-international.speaker', $speaker->id) }}">{{ $speaker->name }}</a>
+                                        <a href="{{ route('bible-school-international.speaker', $speaker->id) . '?year=' . $year }}">{{ $speaker->name }}</a>
                                     </h4>
                                     <div class="product-item__meta">
                                         @if($speaker->title)
@@ -73,7 +73,12 @@
                                             </small>
                                         </span>
                                     </div>
-                                    <a href="{{ route('bible-school-international.speaker', $speaker->id) }}" class="citylife-btn citylife-btn--border product-item__link">
+                                    @if(session()->has("bible_school_year_access_{$year}"))
+                                        <span class="badge bg-success mb-2"><i class="fas fa-unlock-alt me-1"></i> Unlocked {{ $year }}</span>
+                                    @else
+                                        <span class="badge bg-secondary mb-2"><i class="fas fa-lock me-1"></i> Locked</span>
+                                    @endif
+                                    <a href="{{ route('bible-school-international.speaker', $speaker->id) . '?year=' . $year }}" class="citylife-btn citylife-btn--border product-item__link">
                                         <div class="citylife-btn__icon-box">
                                             <div class="citylife-btn__icon-box__inner"><span class="icon-play"></span></div>
                                         </div>

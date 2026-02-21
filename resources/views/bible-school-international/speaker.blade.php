@@ -14,59 +14,207 @@
         left: 0;
         width: 100%;
         height: 600px;
-        background: linear-gradient(135deg, rgba(44, 90, 160, 0.95) 0%, rgba(26, 53, 96, 0.95) 100%);
+        background: linear-gradient(160deg, #0d1b3e 0%, #1a3a6e 50%, #0d2a52 100%);
         display: flex;
         align-items: center;
         justify-content: center;
-        flex-direction: column;
-        color: #fff;
-        text-align: center;
         z-index: 10;
+        overflow: hidden;
     }
-    .dg-locked-overlay__icon { font-size: 72px; margin-bottom: 28px; opacity: 0.9; }
-    .dg-locked-overlay__title { font-size: 36px; font-weight: 600; margin-bottom: 16px; }
-    .dg-locked-overlay__text { font-size: 18px; opacity: 0.9; max-width: 500px; padding: 0 20px; }
-    .dg-locked-overlay__form { margin-top: 30px; max-width: 500px; width: 100%; padding: 0 20px; }
-    .dg-locked-overlay__form input {
+    /* Decorative background circles */
+    .dg-locked-overlay::before {
+        content: '';
+        position: absolute;
+        width: 500px;
+        height: 500px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.03);
+        top: -150px;
+        right: -150px;
+        pointer-events: none;
+    }
+    .dg-locked-overlay::after {
+        content: '';
+        position: absolute;
+        width: 300px;
+        height: 300px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.03);
+        bottom: -100px;
+        left: -80px;
+        pointer-events: none;
+    }
+    .dg-lock-card {
+        position: relative;
+        z-index: 2;
+        background: rgba(255,255,255,0.07);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255,255,255,0.12);
+        border-radius: 20px;
+        padding: 44px 40px 36px;
         width: 100%;
-        padding: 15px;
-        font-size: 16px;
-        border: 2px solid rgba(255,255,255,0.3);
-        background: rgba(255,255,255,0.1);
-        color: #fff;
-        border-radius: 4px;
-        text-transform: uppercase;
+        max-width: 480px;
+        margin: 0 20px;
+        box-shadow: 0 24px 60px rgba(0,0,0,0.5);
         text-align: center;
-        margin-bottom: 15px;
+        color: #fff;
     }
-    .dg-locked-overlay__form input::placeholder { color: rgba(255,255,255,0.6); }
-    .dg-locked-overlay__form input:focus {
-        outline: none;
-        border-color: rgba(255,255,255,0.6);
-        background: rgba(255,255,255,0.15);
+    .dg-lock-card__badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(255,193,7,0.15);
+        border: 1px solid rgba(255,193,7,0.4);
+        color: #ffc107;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        padding: 6px 14px;
+        border-radius: 20px;
+        margin-bottom: 24px;
     }
-    .dg-locked-overlay__form button {
+    .dg-lock-card__icon-wrap {
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, rgba(255,193,7,0.2), rgba(255,193,7,0.05));
+        border: 1px solid rgba(255,193,7,0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+    }
+    .dg-lock-card__icon-wrap i { font-size: 28px; color: #ffc107; }
+    .dg-lock-card__title { font-size: 24px; font-weight: 700; margin-bottom: 10px; line-height: 1.2; }
+    .dg-lock-card__sub { font-size: 14px; color: rgba(255,255,255,0.65); margin-bottom: 28px; line-height: 1.6; }
+    .dg-lock-card__sub strong { color: rgba(255,255,255,0.9); }
+
+    .dg-lock-input {
         width: 100%;
-        padding: 15px;
-        font-size: 16px;
-        font-weight: 600;
+        box-sizing: border-box;
+        padding: 13px 16px;
+        font-size: 15px;
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,255,255,0.18);
+        border-radius: 10px;
+        color: #fff;
+        margin-bottom: 12px;
+        transition: border-color 0.2s, background 0.2s;
+    }
+    .dg-lock-input::placeholder { color: rgba(255,255,255,0.4); }
+    .dg-lock-input:focus {
+        outline: none;
+        border-color: rgba(255,193,7,0.6);
+        background: rgba(255,255,255,0.11);
+    }
+    .dg-lock-input--code {
+        text-transform: uppercase;
+        letter-spacing: 5px;
+        font-size: 20px;
+        font-family: 'Courier New', Courier, monospace;
+        text-align: center;
+        font-weight: 700;
+    }
+
+    .dg-consent-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 10px;
+        padding: 12px 14px;
+        margin-bottom: 16px;
+        text-align: left;
+    }
+    .dg-consent-row input[type="checkbox"] {
+        width: 16px;
+        height: 16px;
+        margin-top: 2px;
+        flex-shrink: 0;
+        accent-color: #ffc107;
+        cursor: pointer;
+    }
+    .dg-consent-row label {
+        font-size: 12px;
+        color: rgba(255,255,255,0.65);
+        line-height: 1.5;
+        cursor: pointer;
+    }
+    .dg-consent-row label a { color: #ffc107; text-decoration: underline; }
+
+    .dg-lock-btn {
+        width: 100%;
+        padding: 14px;
+        font-size: 15px;
+        font-weight: 700;
         border: none;
-        background: #ffc107;
+        background: linear-gradient(135deg, #ffc107, #ffab00);
         color: #000;
-        border-radius: 4px;
+        border-radius: 10px;
         cursor: pointer;
         transition: all 0.2s;
+        letter-spacing: 0.3px;
+        box-shadow: 0 4px 20px rgba(255,193,7,0.35);
+        margin-top: 4px;
     }
-    .dg-locked-overlay__form button:hover { background: #ffca28; transform: translateY(-2px); }
+    .dg-lock-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(255,193,7,0.5); }
+    .dg-lock-btn:active { transform: translateY(0); }
+    .dg-lock-btn i { margin-right: 6px; }
 
-    .dg-alert {
-        background: rgba(255,255,255,0.2);
-        padding: 12px 20px;
-        border-radius: 4px;
-        margin-bottom: 15px;
-        border-left: 4px solid #ffc107;
+    .dg-lock-alert {
+        padding: 10px 14px;
+        border-radius: 8px;
+        margin-bottom: 12px;
+        font-size: 13px;
+        text-align: left;
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
-    .dg-alert.error { border-left-color: #f44336; background: rgba(244, 67, 54, 0.2); }
+    .dg-lock-alert.error {
+        background: rgba(244, 67, 54, 0.18);
+        border: 1px solid rgba(244,67,54,0.35);
+        color: #ffcdd2;
+    }
+    .dg-lock-alert.success {
+        background: rgba(76, 175, 80, 0.18);
+        border: 1px solid rgba(76,175,80,0.35);
+        color: #c8e6c9;
+    }
+    .dg-lock-footer {
+        margin-top: 20px;
+        font-size: 12px;
+        color: rgba(255,255,255,0.35);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+    }
+    .dg-lock-divider {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 20px 0 16px;
+        color: rgba(255,255,255,0.25);
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    .dg-lock-divider::before, .dg-lock-divider::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: rgba(255,255,255,0.1);
+    }
+    .dg-resend-link {
+        font-size: 13px;
+        color: rgba(255,255,255,0.5);
+    }
+    .dg-resend-link a { color: #ffc107; text-decoration: none; font-weight: 600; }
+    .dg-resend-link a:hover { text-decoration: underline; }
 
     .dg-main { background: #fff; }
     .dg-container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
@@ -107,22 +255,32 @@
     .dg-resource-meta { font-size: 14px; color: #666; margin-bottom: 12px; }
 
     @media (max-width: 768px) {
-        .dg-video-wrapper iframe, .dg-locked-overlay { height: 300px; }
+        .dg-video-wrapper iframe, .dg-locked-overlay { height: auto; min-height: 520px; position: relative; }
         .dg-video-hero { padding: 20px 10px 0; }
         .dg-title { font-size: 32px; padding-bottom: 30px; }
         .dg-content p { font-size: 16px; }
         .dg-controls { gap: 8px; padding: 16px 0; }
         .dg-btn { font-size: 13px; padding: 8px 16px; }
-        .dg-locked-overlay__title { font-size: 24px; }
-        .dg-locked-overlay__icon { font-size: 48px; }
+        .dg-lock-card { padding: 32px 24px 28px; border-radius: 16px; }
+        .dg-lock-card__title { font-size: 20px; }
     }
 </style>
 
 @php
-    // Get first video and audio for hero section
+    // Check whether the speaker has ANY media at all (drives the hero wrapper)
+    $hasAnyMedia = false;
+    foreach($speaker->events as $event) {
+        if ($event->videos->count() > 0 || $event->audios->count() > 0) {
+            $hasAnyMedia = true;
+            break;
+        }
+    }
+
+    // First video/audio for the hero player – only from years the user has access to
     $firstVideo = null;
     $firstAudio = null;
     foreach($speaker->events as $event) {
+        if (!in_array($event->year, $accessibleYears->all())) continue;
         if (!$firstVideo && $event->videos->count() > 0) {
             $firstVideo = $event->videos->first();
         }
@@ -135,9 +293,9 @@
 
 <div>
     <!-- Video/Audio Hero -->
-    @if($firstVideo || $firstAudio)
+    @if($hasAnyMedia)
         <div class="dg-video-hero">
-            @if($hasAccess)
+            @if($hasAccess && ($firstVideo || $firstAudio))
                 <!-- Video Player (Unlocked) -->
                 @if($firstVideo)
                     <div class="dg-video-wrapper" id="videoPlayer">
@@ -202,33 +360,129 @@
                     }
                 </script>
             @else
-                <!-- Locked State -->
+                <!-- Locked State – 2-step: email → BS###### code -->
                 <div class="dg-video-wrapper">
-                    <div style="width:100%;height:600px;background:#1a1a1a;"></div>
+                    <div style="width:100%;height:600px;background:#0d1b3e;"></div>
                     <div class="dg-locked-overlay">
-                        <div class="dg-locked-overlay__icon">
-                            <i class="fas fa-lock"></i>
-                        </div>
-                        <h2 class="dg-locked-overlay__title">Content Locked</h2>
-                        <p class="dg-locked-overlay__text">
-                            Enter your access code to unlock {{ $speaker->name }}'s teaching sessions
-                        </p>
+                        <div class="dg-lock-card">
 
-                        <form action="{{ route('bible-school-international.verify-speaker-code', $speaker->id) }}" method="POST" class="dg-locked-overlay__form">
-                            @csrf
-                            @if(session('error'))
-                                <div class="dg-alert error">{{ session('error') }}</div>
+                            @if(session('bsi_step') === 'verify')
+                                {{-- ── Step 2: Enter the BS###### code ─────────────────── --}}
+                                <div class="dg-lock-card__badge">
+                                    <i class="fas fa-paper-plane"></i> Code Sent
+                                </div>
+                                <div class="dg-lock-card__icon-wrap">
+                                    <i class="fas fa-envelope-open-text"></i>
+                                </div>
+                                <h2 class="dg-lock-card__title">Check Your Inbox</h2>
+                                <p class="dg-lock-card__sub">
+                                    We emailed your access code to<br>
+                                    <strong>{{ session('bsi_pending_email') }}</strong><br>
+                                    @if(session('bsi_pending_year'))
+                                        <span style="color: rgba(255,193,7,0.9); font-size: 13px;">
+                                            <i class="fas fa-calendar-alt"></i> Unlocking {{ session('bsi_pending_year') }} resources
+                                        </span>
+                                    @endif
+                                </p>
+
+                                <form action="{{ route('bible-school-international.verify-email-code', $speaker->id) }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="email" value="{{ session('bsi_pending_email') }}">
+                                    <input type="hidden" name="year" value="{{ session('bsi_pending_year', $requestedYear ?? '') }}">
+
+                                    @if(session('error'))
+                                        <div class="dg-lock-alert error">
+                                            <i class="fas fa-exclamation-circle"></i>
+                                            {{ session('error') }}
+                                        </div>
+                                    @endif
+                                    @if(session('success'))
+                                        <div class="dg-lock-alert success">
+                                            <i class="fas fa-check-circle"></i>
+                                            {{ session('success') }}
+                                        </div>
+                                    @endif
+
+                                    <input type="text"
+                                           class="dg-lock-input dg-lock-input--code"
+                                           name="otp"
+                                           placeholder="BS000000"
+                                           maxlength="10"
+                                           required
+                                           autocomplete="one-time-code"
+                                           autofocus>
+
+                                    <button type="submit" class="dg-lock-btn">
+                                        <i class="fas fa-unlock-alt"></i> Unlock Resources
+                                    </button>
+                                </form>
+
+                                <div class="dg-lock-divider">didn't receive the code?</div>
+                                <p class="dg-resend-link">
+                                    Check your spam folder or
+                                    <a href="{{ route('bible-school-international.speaker', $speaker->id) . '?year=' . session('bsi_pending_year', $requestedYear ?? '') }}">try a different email</a>
+                                </p>
+
+                            @else
+                                {{-- ── Step 1: Enter email ──────────────────────────────── --}}
+                                <div class="dg-lock-card__badge">
+                                    <i class="fas fa-graduation-cap"></i> Bible School International
+                                </div>
+                                <div class="dg-lock-card__icon-wrap">
+                                    <i class="fas fa-lock"></i>
+                                </div>
+                                <h2 class="dg-lock-card__title">Access Teaching Resources</h2>
+                                <p class="dg-lock-card__sub">
+                                    Enter your email to receive a one-time code and unlock all of
+                                    {{ $speaker->name }}'s
+                                    @if($requestedYear) <strong style="color: rgba(255,193,7,0.9);">{{ $requestedYear }}</strong> @endif
+                                    sessions.
+                                </p>
+
+                                <form action="{{ route('bible-school-international.send-speaker-code', $speaker->id) }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="year" value="{{ $requestedYear ?? $speaker->events->max('year') }}">
+                                    @if(session('error'))
+                                        <div class="dg-lock-alert error">
+                                            <i class="fas fa-exclamation-circle"></i>
+                                            {{ session('error') }}
+                                        </div>
+                                    @endif
+                                    @error('consent')
+                                        <div class="dg-lock-alert error">
+                                            <i class="fas fa-exclamation-circle"></i>
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+
+                                    <input type="email"
+                                           class="dg-lock-input"
+                                           name="email"
+                                           placeholder="your@email.com"
+                                           required
+                                           autocomplete="email"
+                                           value="{{ old('email') }}">
+
+                                    <div class="dg-consent-row">
+                                        <input type="checkbox" name="consent" id="bsi_consent" value="1" {{ old('consent') ? 'checked' : '' }}>
+                                        <label for="bsi_consent">
+                                            I agree to my email being stored to verify access to Bible School International resources.
+                                            We will not use it for any other purpose.
+                                        </label>
+                                    </div>
+
+                                    <button type="submit" class="dg-lock-btn">
+                                        <i class="fas fa-paper-plane"></i> Send Me the Code
+                                    </button>
+                                </form>
                             @endif
-                            @if(session('success'))
-                                <div class="dg-alert">{{ session('success') }}</div>
-                            @endif
-                            <input type="text"
-                                   name="access_code"
-                                   placeholder="ENTER ACCESS CODE"
-                                   required
-                                   autocomplete="off">
-                            <button type="submit">Unlock Resources</button>
-                        </form>
+
+                            <div class="dg-lock-footer">
+                                <i class="fas fa-shield-alt"></i>
+                                Secure &bull; One-time code &bull; Expires in 10 minutes
+                            </div>
+
+                        </div>
                     </div>
                 </div>
             @endif
@@ -288,9 +542,9 @@
         </article>
 
         @if($hasAccess && $speaker->events->count() > 0)
-            <!-- Teaching Sessions Resources List -->
+            <!-- Teaching Sessions Resources List (accessible years only) -->
             <div class="dg-resources-list">
-                @foreach($speaker->events as $event)
+                @foreach($speaker->events->filter(fn($e) => $accessibleYears->contains($e->year)) as $event)
                     <div class="dg-resources-section">
                         <h3>
                             {{ $event->title }}
@@ -415,9 +669,9 @@
             </script>
         @elseif(!$hasAccess)
             <div class="dg-content" style="text-align: center; padding: 60px 20px;">
-                <i class="fas fa-lock" style="font-size: 48px; color: #ccc; margin-bottom: 20px;"></i>
-                <h3 style="color: #666; margin-bottom: 15px;">Enter Access Code Above</h3>
-                <p style="color: #999;">Unlock access to view all teaching sessions and resources from {{ $speaker->name }}</p>
+                <i class="fas fa-envelope" style="font-size: 48px; color: #ccc; margin-bottom: 20px;"></i>
+                <h3 style="color: #666; margin-bottom: 15px;">Enter Your Email Above</h3>
+                <p style="color: #999;">We'll send you a one-time code to unlock all teaching sessions and resources from {{ $speaker->name }}</p>
                 <div style="margin-top: 30px;">
                     <a href="{{ route('bible-school-international.resources') }}" class="dg-btn">
                         <i class="fas fa-arrow-left"></i> Back to Resources

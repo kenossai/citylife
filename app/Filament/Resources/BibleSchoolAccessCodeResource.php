@@ -22,7 +22,12 @@ class BibleSchoolAccessCodeResource extends Resource
 
     protected static ?string $navigationGroup = 'Bible School';
 
-    protected static ?string $navigationLabel = 'Access Codes';
+    protected static ?string $navigationLabel = 'Access Codes (Legacy)';
+
+    /**
+     * Hidden – access codes are now email-based OTP tokens (BibleSchoolOtpToken).
+     */
+    protected static bool $shouldRegisterNavigation = false;
 
     public static function form(Form $form): Form
     {
