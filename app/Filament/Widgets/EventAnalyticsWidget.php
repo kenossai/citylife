@@ -6,37 +6,51 @@ use App\Models\Event;
 use App\Models\ContactSubmission;
 use App\Models\VolunteerApplication;
 use Filament\Widgets\ChartWidget;
+use Illuminate\Support\Facades\Cache;
 
 class EventAnalyticsWidget extends ChartWidget
 {
     protected static ?string $heading = 'Event & Engagement Analytics';
     protected static ?int $sort = 3;
+    protected static bool $isLazy = true;
 
     protected function getData(): array
     {
-        // Get event data for the last 6 months
+        return Cache::remember('widget.event_analytics', now()->addMinutes(15), function () {
+            return $this->buildChartData();
+        });
+    }
+
+    private function buildChartData(): array
+    {
+        $since = now()->subMonths(5)->startOfMonth();
+
+        // 3 queries instead of 18
+        $eventRows = Event::selectRaw("DATE_FORMAT(start_date, '%Y-%m') as month, COUNT(*) as count")
+            ->where('is_published', true)
+            ->where('start_date', '>=', $since)
+            ->groupBy('month')
+            ->pluck('count', 'month');
+
+        $contactRows = ContactSubmission::selectRaw("DATE_FORMAT(created_at, '%Y-%m') as month, COUNT(*) as count")
+            ->where('created_at', '>=', $since)
+            ->groupBy('month')
+            ->pluck('count', 'month');
+
+        $volunteerRows = VolunteerApplication::selectRaw("DATE_FORMAT(created_at, '%Y-%m') as month, COUNT(*) as count")
+            ->where('created_at', '>=', $since)
+            ->groupBy('month')
+            ->pluck('count', 'month');
+
         $eventData = collect();
         $contactData = collect();
         $volunteerData = collect();
 
         for ($i = 5; $i >= 0; $i--) {
-            $month = now()->subMonths($i);
-            $startOfMonth = $month->copy()->startOfMonth();
-            $endOfMonth = $month->copy()->endOfMonth();
-
-            $eventCount = Event::whereBetween('start_date', [$startOfMonth, $endOfMonth])
-                ->where('is_published', true)
-                ->count();
-
-            $contactCount = ContactSubmission::whereBetween('created_at', [$startOfMonth, $endOfMonth])
-                ->count();
-
-            $volunteerCount = VolunteerApplication::whereBetween('created_at', [$startOfMonth, $endOfMonth])
-                ->count();
-
-            $eventData->push($eventCount);
-            $contactData->push($contactCount);
-            $volunteerData->push($volunteerCount);
+            $key = now()->subMonths($i)->format('Y-m');
+            $eventData->push($eventRows->get($key, 0));
+            $contactData->push($contactRows->get($key, 0));
+            $volunteerData->push($volunteerRows->get($key, 0));
         }
 
         return [

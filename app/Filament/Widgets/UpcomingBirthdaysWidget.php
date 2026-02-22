@@ -16,6 +16,7 @@ class UpcomingBirthdaysWidget extends BaseWidget
     protected int | string | array $columnSpan = 'full';
 
     protected static ?int $sort = 3;
+    protected static bool $isLazy = true;
 
     public function table(Table $table): Table
     {
@@ -211,7 +212,6 @@ class UpcomingBirthdaysWidget extends BaseWidget
                     ->openUrlInNewTab(false),
             ])
             ->paginated(false)
-            ->poll('30s')
             ->emptyStateHeading('No upcoming birthdays')
             ->emptyStateDescription('No member birthdays in the next 30 days.')
             ->emptyStateIcon('heroicon-o-cake');

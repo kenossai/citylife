@@ -6,28 +6,45 @@ use App\Models\Member;
 use App\Models\CourseEnrollment;
 use Filament\Widgets\ChartWidget;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
 
 class MemberAnalyticsWidget extends ChartWidget
 {
     protected static ?string $heading = 'Member Registration Trends';
     protected static ?int $sort = 2;
+    protected static bool $isLazy = true;
 
     protected function getData(): array
     {
-        // Get member registrations for the last 12 months
+        return Cache::remember('widget.member_analytics', now()->addMinutes(15), function () {
+            return $this->buildChartData();
+        });
+    }
+
+    private function buildChartData(): array
+    {
+        $since = now()->subMonths(11)->startOfMonth();
+
+        // 2 queries instead of 24
+        $memberRows = Member::selectRaw("DATE_FORMAT(created_at, '%Y-%m') as month, COUNT(*) as count")
+            ->where('created_at', '>=', $since)
+            ->groupBy('month')
+            ->orderBy('month')
+            ->pluck('count', 'month');
+
+        $enrollmentRows = CourseEnrollment::selectRaw("DATE_FORMAT(enrollment_date, '%Y-%m') as month, COUNT(*) as count")
+            ->where('enrollment_date', '>=', $since)
+            ->groupBy('month')
+            ->orderBy('month')
+            ->pluck('count', 'month');
+
         $memberData = collect();
         $enrollmentData = collect();
 
         for ($i = 11; $i >= 0; $i--) {
-            $month = now()->subMonths($i);
-            $startOfMonth = $month->copy()->startOfMonth();
-            $endOfMonth = $month->copy()->endOfMonth();
-
-            $memberCount = Member::whereBetween('created_at', [$startOfMonth, $endOfMonth])->count();
-            $enrollmentCount = CourseEnrollment::whereBetween('enrollment_date', [$startOfMonth, $endOfMonth])->count();
-
-            $memberData->push($memberCount);
-            $enrollmentData->push($enrollmentCount);
+            $key = now()->subMonths($i)->format('Y-m');
+            $memberData->push($memberRows->get($key, 0));
+            $enrollmentData->push($enrollmentRows->get($key, 0));
         }
 
         return [
